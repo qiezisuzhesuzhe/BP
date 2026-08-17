@@ -993,20 +993,30 @@ function removeTyping() {
 function cleanTextForSpeech(text) {
   return text
     .replace(/\*\*/g, '')
-    .replace(/[•·▪◆●○■□]/g, '，')
+    .replace(/[•·▪◆●○■□]/g, '。')
     .replace(/[📚📖💊🩺🥣🥗🍲🧘🚶🌱🌙📋📊🏊🏃🕉️🍵🍱🥐🥘😴💪👏💯🔥⭐⚠️✅❌➕➡️]/gu, '')
-    .replace(/[1-9]\d?\./g, m => m.replace('.', '，'))
+    .replace(/(\d+)\./g, '$1，')
+    .replace(/[；;]/g, '。')
     .replace(/\n{2,}/g, '。')
-    .replace(/\n/g, '，')
+    .replace(/\n/g, '。')
     .replace(/[，。][，。]+/g, '。')
     .replace(/\s+/g, ' ')
     .trim();
+}
+
+function splitSentences(text) {
+  return text
+    .split(/(?<=[。！？!?])/)
+    .map(s => s.trim())
+    .filter(Boolean);
 }
 
 function pickZhVoice() {
   const voices = state.synth ? state.synth.getVoices() : [];
   const zh = voices.filter(v => v.lang && v.lang.toLowerCase().startsWith('zh'));
   if (!zh.length) return null;
+  const natural = zh.find(v => /natural|在线|online|neural/i.test(v.name));
+  if (natural) return natural;
   const preference = [
     'xiaoxiao', 'yunxi', 'yunyang', 'xiaoyi',
     'huihui', 'yaoyao', 'kangkang',
@@ -1020,22 +1030,48 @@ function pickZhVoice() {
   return cn || zh[0];
 }
 
+let speakQueue = [];
+let speakCanceled = false;
+
 function speakText(text) {
   if (!state.speechOn || !state.synth) return;
   state.synth.cancel();
+  speakCanceled = true;
   const cleaned = cleanTextForSpeech(text);
   if (!cleaned) return;
-  const utter = new SpeechSynthesisUtterance(cleaned);
-  utter.lang = 'zh-CN';
-  utter.rate = 0.98;
-  utter.pitch = 1.02;
-  utter.volume = 1.0;
+  const sentences = splitSentences(cleaned);
+  if (!sentences.length) return;
   const zhVoice = pickZhVoice();
+  speakCanceled = false;
+  speakQueue = sentences.slice();
+  speakNextSentence(zhVoice, 0);
+}
+
+function speakNextSentence(zhVoice, index) {
+  if (speakCanceled || index >= speakQueue.length) return;
+  const sentence = speakQueue[index];
+  const utter = new SpeechSynthesisUtterance(sentence);
+  utter.lang = 'zh-CN';
+  const isQuestion = /[？?]$/.test(sentence);
+  const isShort = sentence.length <= 8;
+  utter.rate = 0.92 + Math.random() * 0.08;
+  utter.pitch = isQuestion ? 1.12 : (1.0 + (Math.random() - 0.5) * 0.06);
+  utter.volume = 1.0;
   if (zhVoice) utter.voice = zhVoice;
+  utter.onend = () => {
+    if (speakCanceled) return;
+    const gap = isShort ? 180 : 280;
+    setTimeout(() => speakNextSentence(zhVoice, index + 1), gap);
+  };
+  utter.onerror = () => {
+    if (speakCanceled) return;
+    speakNextSentence(zhVoice, index + 1);
+  };
   state.synth.speak(utter);
 }
 
 function stopSpeaking() {
+  speakCanceled = true;
   if (state.synth) state.synth.cancel();
 }
 

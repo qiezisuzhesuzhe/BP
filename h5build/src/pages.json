@@ -1,1 +1,124 @@
-/workspace/uniapp-health/pages.json
+{
+  "easycom": {
+    "autoscan": true,
+    "custom": {
+      "^hm-(.*)": "@/components/hm-$1/hm-$1.vue"
+    }
+  },
+  "pages": [
+    {
+      "path": "pages/index/index",
+      "style": {
+        "navigationBarTitleText": "安康健康管理",
+        "navigationStyle": "custom",
+        "enablePullDownRefresh": false
+      }
+    },
+    {
+      "path": "pages/service/detail",
+      "style": {
+        "navigationBarTitleText": "服务详情",
+        "navigationStyle": "custom"
+      }
+    },
+    {
+      "path": "pages/pay/pay",
+      "style": {
+        "navigationBarTitleText": "订单支付",
+        "navigationStyle": "custom"
+      }
+    },
+    {
+      "path": "pages/rights/rights",
+      "style": {
+        "navigationBarTitleText": "我的权益",
+        "navigationStyle": "custom"
+      }
+    },
+    {
+      "path": "pages/rights/detail",
+      "style": {
+        "navigationBarTitleText": "权益详情",
+        "navigationStyle": "custom"
+      }
+    },
+    {
+      "path": "pages/chat/chat",
+      "style": {
+        "navigationBarTitleText": "AI健康助手",
+        "navigationStyle": "custom"
+      }
+    },
+    {
+      "path": "pages/message/message",
+      "style": {
+        "navigationBarTitleText": "消息",
+        "navigationStyle": "custom"
+      }
+    },
+    {
+      "path": "pages/mine/mine",
+      "style": {
+        "navigationBarTitleText": "我的",
+        "navigationStyle": "custom"
+      }
+    },
+    {
+      "path": "pages/mine/profile",
+      "style": {
+        "navigationBarTitleText": "个人资料",
+        "navigationStyle": "custom"
+      }
+    },
+    {
+      "path": "pages/mine/orders",
+      "style": {
+        "navigationBarTitleText": "我的订单",
+        "navigationStyle": "custom"
+      }
+    },
+    {
+      "path": "pages/mine/agreement",
+      "style": {
+        "navigationBarTitleText": "用户协议",
+        "navigationStyle": "custom"
+      }
+    }
+  ],
+  "globalStyle": {
+    "navigationBarTextStyle": "black",
+    "navigationBarTitleText": "安康健康管理",
+    "navigationBarBackgroundColor": "#FBFAF7",
+    "backgroundColor": "#FBFAF7"
+  },
+  "tabBar": {
+    "color": "#94a8aa",
+    "selectedColor": "#1a7d82",
+    "backgroundColor": "#ffffff",
+    "borderStyle": "white",
+    "height": "54px",
+    "fontSize": "10px",
+    "iconWidth": "22px",
+    "spacing": "3px",
+    "list": [
+      {
+        "pagePath": "pages/index/index",
+        "text": "首页",
+        "iconPath": "static/tab/home.png",
+        "selectedIconPath": "static/tab/home-active.png"
+      },
+      {
+        "pagePath": "pages/message/message",
+        "text": "消息",
+        "iconPath": "static/tab/msg.png",
+        "selectedIconPath": "static/tab/msg-active.png"
+      },
+      {
+        "pagePath": "pages/mine/mine",
+        "text": "我的",
+        "iconPath": "static/tab/mine.png",
+        "selectedIconPath": "static/tab/mine-active.png"
+      }
+    ]
+  }
+}

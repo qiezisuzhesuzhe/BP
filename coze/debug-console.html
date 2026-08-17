@@ -1,0 +1,345 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>高血压专家Agent · 三套问卷对话流调试台</title>
+<style>
+:root{
+  --teal:#1a7d82;--teal-dark:#0d4f52;--teal-light:#e0f4f5;
+  --sage:#6ba584;--sage-light:#e8f4ec;
+  --coral:#e07a5f;--coral-light:#fde8e3;
+  --ink:#1a2b2c;--ink-2:#3d5456;--ink-3:#6b8082;--ink-4:#c4d2d3;
+  --bg:#fbfaf7;--panel:#fff;--border:#ebe7df;
+  --radius-lg:16px;--radius-md:10px;--radius-sm:6px;
+  --shadow:0 6px 24px rgba(20,10,10,.06);
+}
+*{box-sizing:border-box}
+html,body{height:100%;margin:0}
+body{
+  font-family:-apple-system,'PingFang SC','Microsoft YaHei','Segoe UI',sans-serif;
+  color:var(--ink);background:var(--bg);font-size:14px;line-height:1.6;
+}
+.app{display:grid;grid-template-columns:1fr 380px;height:100vh;gap:16px;padding:16px}
+.left-panel,.right-panel{
+  background:var(--panel);border-radius:var(--radius-lg);box-shadow:var(--shadow);
+  display:flex;flex-direction:column;overflow:hidden;
+}
+.tabs{display:flex;border-bottom:1px solid var(--border);background:#fdfcf9;flex-shrink:0}
+.tab{
+  flex:1;padding:14px 12px;text-align:center;cursor:pointer;font-weight:600;color:var(--ink-3);
+  border-bottom:3px solid transparent;transition:.2s;font-size:13px;
+}
+.tab.active{color:var(--teal-dark);border-color:var(--teal);background:var(--panel)}
+.tab .badge{display:inline-block;min-width:20px;height:20px;padding:0 6px;border-radius:10px;background:var(--teal-light);color:var(--teal-dark);font-size:11px;margin-left:6px;line-height:20px}
+.chat{flex:1;overflow-y:auto;padding:20px;display:flex;flex-direction:column;gap:14px;background:linear-gradient(180deg,#fbfaf7 0%,#f7faf6 100%)}
+.msg{display:flex;gap:10px;max-width:85%}
+.msg.ai{align-self:flex-start}
+.msg.user{align-self:flex-end;flex-direction:row-reverse}
+.avatar{width:36px;height:36px;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-weight:700;font-size:14px;color:#fff}
+.msg.ai .avatar{background:linear-gradient(135deg,#1a7d82,#6ba584)}
+.msg.user .avatar{background:linear-gradient(135deg,#e07a5f,#f2a89a)}
+.bubble{padding:12px 16px;border-radius:14px;box-shadow:0 1px 3px rgba(0,0,0,.04)}
+.msg.ai .bubble{background:#fff;border:1px solid var(--border);border-top-left-radius:4px}
+.msg.user .bubble{background:linear-gradient(135deg,#1a7d82,#14666a);color:#fff;border-top-right-radius:4px}
+.bubble.options{display:flex;flex-direction:column;gap:6px;padding:10px 10px 14px;background:transparent;box-shadow:none;border:none}
+.opt{
+  padding:9px 14px;border-radius:10px;background:#fff;border:1px solid var(--border);cursor:pointer;
+  transition:.15s;font-size:13px;color:var(--ink-2);text-align:left;width:100%;
+}
+.opt:hover{border-color:var(--teal);background:var(--teal-light);color:var(--teal-dark);transform:translateY(-1px)}
+.opt.active{background:var(--teal-light);border-color:var(--teal);color:var(--teal-dark);font-weight:600}
+.input-group{padding:14px 16px;border-top:1px solid var(--border);background:#fff;display:flex;gap:10px;flex-shrink:0}
+.input-group input,.input-group textarea{
+  flex:1;padding:10px 14px;border:1px solid var(--border);border-radius:10px;font:inherit;outline:none;resize:vertical;min-height:42px;
+}
+.input-group input:focus,.input-group textarea:focus{border-color:var(--teal);box-shadow:0 0 0 3px var(--teal-light)}
+.input-group .num-row{display:grid;grid-template-columns:1fr 1fr;gap:8px;flex:1}
+.btn{
+  padding:10px 18px;border:none;border-radius:10px;background:linear-gradient(135deg,#1a7d82,#14666a);color:#fff;font-weight:600;cursor:pointer;
+  transition:.15s;white-space:nowrap;font-size:13px;
+}
+.btn:hover{transform:translateY(-1px);box-shadow:0 4px 12px rgba(26,125,130,.25)}
+.btn.ghost{background:#fff;color:var(--teal-dark);border:1px solid var(--teal-light)}
+.btn.warn{background:linear-gradient(135deg,#e07a5f,#c26a53)}
+.quick-actions{display:flex;gap:8px;padding:0 16px 12px;flex-wrap:wrap;flex-shrink:0}
+.qa{padding:6px 12px;border-radius:20px;background:var(--sage-light);color:#2d5240;font-size:12px;cursor:pointer;border:1px solid transparent;transition:.15s}
+.qa:hover{border-color:var(--sage);transform:translateY(-1px)}
+.right-panel .header{
+  padding:16px 18px;border-bottom:1px solid var(--border);font-weight:700;color:var(--teal-dark);
+  display:flex;align-items:center;justify-content:space-between;flex-shrink:0;
+}
+.right-panel .header .dot{width:8px;height:8px;border-radius:50%;background:var(--sage);display:inline-block;margin-right:6px;box-shadow:0 0 0 3px var(--sage-light)}
+.right-panel .body{flex:1;overflow-y:auto;padding:14px 18px}
+.section{margin-bottom:22px}
+.section-title{font-size:12px;font-weight:700;color:var(--ink-3);text-transform:uppercase;letter-spacing:.5px;margin-bottom:10px;display:flex;align-items:center;gap:8px}
+.section-title::before{content:"";width:3px;height:12px;background:var(--teal);border-radius:2px}
+.data-grid{display:grid;grid-template-columns:110px 1fr;gap:6px 12px;font-size:13px}
+.data-grid .k{color:var(--ink-3)}
+.data-grid .v{color:var(--ink);font-weight:600;word-break:break-all}
+.data-grid .v.bad{color:var(--coral)}
+.data-grid .v.good{color:var(--sage)}
+.risk-tag{display:inline-block;padding:3px 10px;border-radius:12px;font-size:12px;font-weight:700}
+.risk-low{background:#e8f4ec;color:#2d5240}
+.risk-med{background:#fff3dc;color:#8a6d1f}
+.risk-high{background:#fde8e3;color:#a5432a}
+.risk-vhigh{background:#e5c8c8;color:#8a2020}
+.report-card{background:linear-gradient(160deg,#fbfaf7,#e0f4f5);border-radius:12px;padding:16px;border:1px solid var(--teal-light)}
+.report-card h4{margin:0 0 10px;color:var(--teal-dark);font-size:14px}
+.report-card .row{padding:6px 0;border-bottom:1px dashed var(--ink-4);font-size:12.5px;display:flex;gap:8px}
+.report-card .row:last-child{border-bottom:none}
+.report-card .row b{flex-shrink:0;min-width:80px;color:var(--ink-2)}
+.disclaimer{padding:10px 12px;background:#fff3dc;border-left:3px solid #d9a23c;border-radius:6px;font-size:11.5px;color:#6a5418;margin-top:8px}
+.side-effect-card{background:#fff;border:1px solid var(--border);border-radius:10px;padding:10px;margin-top:8px;font-size:12px}
+.side-effect-card b{color:var(--teal-dark);font-size:12.5px}
+.tag{display:inline-block;padding:2px 8px;border-radius:10px;background:var(--bg);border:1px solid var(--border);font-size:11px;margin:2px 4px 2px 0}
+.tag.active{background:var(--teal-light);border-color:var(--teal);color:var(--teal-dark);font-weight:600}
+.symptom-match{background:#fde8e3;border:1px solid #f2a89a;border-radius:8px;padding:10px;font-size:12.5px;margin-top:8px}
+.symptom-match b{color:var(--coral)}
+::-webkit-scrollbar{width:8px;height:8px}
+::-webkit-scrollbar-thumb{background:var(--ink-4);border-radius:4px}
+::-webkit-scrollbar-thumb:hover{background:var(--ink-3)}
+@media(max-width:960px){.app{grid-template-columns:1fr;height:auto}.right-panel{max-height:450px}}
+</style>
+</head>
+<body>
+<div class="app">
+  <div class="left-panel">
+    <div class="tabs">
+      <div class="tab active" data-tab="1">问卷一 · 初次分型评估 <span class="badge">25题</span></div>
+      <div class="tab" data-tab="2">问卷二 · 用药情况采集 <span class="badge">4类</span></div>
+      <div class="tab" data-tab="3">问卷三 · 日常康复+晚间评估 <span class="badge">6维</span></div>
+    </div>
+    <div class="chat" id="chat"></div>
+    <div class="quick-actions" id="quickActions"></div>
+    <div class="input-group" id="inputArea"></div>
+  </div>
+  <div class="right-panel">
+    <div class="header"><span><span class="dot"></span>实时采集数据面板（调试用）</span><button class="btn ghost" style="padding:6px 12px;font-size:11px" onclick="resetAll()">重置全部</button></div>
+    <div class="body" id="debugPanel">
+      <div class="section">
+        <div class="section-title">状态</div>
+        <div class="data-grid">
+          <div class="k">当前 Tab</div><div class="v" id="d_tab">问卷一</div>
+          <div class="k">当前问题</div><div class="v" id="d_cursor">-</div>
+          <div class="k">已采集数</div><div class="v" id="d_count">0</div>
+        </div>
+      </div>
+      <div class="section" id="panelSec1">
+        <div class="section-title">问卷一 · 基础与风险</div>
+        <div class="data-grid" id="d_assess"></div>
+      </div>
+      <div class="section" id="reportSec" style="display:none">
+        <div class="section-title">问卷一 · 7段式评估报告</div>
+        <div class="report-card" id="d_report"></div>
+      </div>
+      <div class="section" id="panelSec2">
+        <div class="section-title">问卷二 · 用药清单</div>
+        <div id="d_med"></div>
+      </div>
+      <div class="section" id="panelSec3">
+        <div class="section-title">问卷三 · 日常康复数据</div>
+        <div class="data-grid" id="d_daily"></div>
+      </div>
+    </div>
+  </div>
+</div>
+<script>
+var state={tab:1,assess:{cursor:0,data:{},score:0,factors:[],bpGrade:'',bpGradeLv:0,subtype:'原发性高血压',riskLevel:'',report:null,complete:false},med:{drugs:[],other:'',health:'',tcm:'',adherence:''},daily:{bp:[],meds:[],symptoms:[],diet:[],exercise:[],sleepPsych:[],eveningQ:[]},tab3Mode:'free',eveningCursor:0};
+document.querySelectorAll('.tab').forEach(function(t){t.onclick=function(){document.querySelectorAll('.tab').forEach(function(x){x.classList.remove('active')});t.classList.add('active');state.tab=parseInt(t.dataset.tab);startTab();}});
+function startTab(){
+  document.getElementById('chat').innerHTML='';document.getElementById('quickActions').innerHTML='';document.getElementById('inputArea').innerHTML='';
+  document.getElementById('panelSec1').style.display=state.tab==1?'block':'none';
+  document.getElementById('reportSec').style.display='none';
+  document.getElementById('panelSec2').style.display=state.tab==2?'block':'none';
+  document.getElementById('panelSec3').style.display=state.tab==3?'block':'none';
+  document.getElementById('d_tab').textContent='问卷'+['一','二','三'][state.tab-1];
+  if(state.tab===1)startAssess();if(state.tab===2)startMed();if(state.tab===3)startDaily();renderPanel();
+}
+function aiMsg(html,opts){
+  var wrap=document.createElement('div');wrap.className='msg ai';
+  wrap.innerHTML='<div class="avatar">康</div><div class="bubble">'+html+'</div>';
+  document.getElementById('chat').appendChild(wrap);
+  if(opts&&opts.length){
+    var optWrap=document.createElement('div');optWrap.className='msg ai';
+    var bb='<div class="avatar" style="visibility:hidden">康</div><div class="bubble options">';
+    opts.forEach(function(o){var label=typeof o==='string'?o:o.label;bb+='<button class="opt" onclick="'+(o.onclick||'void(0)')+'">'+label+'</button>';});
+    bb+='</div>';optWrap.innerHTML=bb;document.getElementById('chat').appendChild(optWrap);
+  }
+  scrollBottom();
+}
+function userMsg(txt){var wrap=document.createElement('div');wrap.className='msg user';wrap.innerHTML='<div class="avatar">我</div><div class="bubble">'+txt+'</div>';document.getElementById('chat').appendChild(wrap);scrollBottom();}
+function scrollBottom(){var c=document.getElementById('chat');setTimeout(function(){c.scrollTop=c.scrollHeight},50);}
+function setInput(type,cb,placeholder){
+  var area=document.getElementById('inputArea');area.innerHTML='';
+  if(type==='text'){area.innerHTML='<input id="inp" placeholder="'+(placeholder||'请输入…')+'" /><button class="btn" id="btn">发送</button>';document.getElementById('btn').onclick=function(){var v=document.getElementById('inp').value.trim();if(!v)return;cb(v);};document.getElementById('inp').onkeydown=function(e){if(e.key==='Enter')document.getElementById('btn').click();};
+  }else if(type==='num2'){area.innerHTML='<div class="num-row"><input id="i1" placeholder="'+(placeholder[0]||'')+'" type="number" /><input id="i2" placeholder="'+(placeholder[1]||'')+'" type="number" /></div><button class="btn" id="btn">下一步</button>';document.getElementById('btn').onclick=function(){cb(document.getElementById('i1').value.trim(),document.getElementById('i2').value.trim());};
+  }else if(type==='txt2'){area.innerHTML='<div class="num-row"><input id="i1" placeholder="'+(placeholder[0]||'')+'" /><input id="i2" placeholder="'+(placeholder[1]||'')+'" /></div><button class="btn" id="btn">下一步</button>';document.getElementById('btn').onclick=function(){cb(document.getElementById('i1').value.trim(),document.getElementById('i2').value.trim());};
+  }else if(type==='num'){area.innerHTML='<input id="inp" placeholder="'+(placeholder||'请输入数字')+'" type="number" /><button class="btn" id="btn">下一步</button>';document.getElementById('btn').onclick=function(){cb(document.getElementById('inp').value.trim())};
+  }
+}
+function setQuick(list){var el=document.getElementById('quickActions');el.innerHTML='';list.forEach(function(it){var b=document.createElement('div');b.className='qa';b.textContent=it.label;b.onclick=it.onclick;el.appendChild(b);});}
+
+// 问卷一
+var QUESTIONS=[
+  {id:'Q101',phase:'P1基础信息',title:'Q1. 请问您的性别是？',type:'opts',opts:[{label:'男',v:'male'},{label:'女',v:'female'}],store:function(v){state.assess.data.gender=v;}},
+  {id:'Q102',phase:'P1基础信息',title:'Q2. 请问您的年龄是？（岁）',type:'num',ph:'例如 52',store:function(v){state.assess.data.age=parseInt(v)||0;var add=((state.assess.data.gender==='male'&&state.assess.data.age>55)||(state.assess.data.gender==='female'&&state.assess.data.age>65))?1:0;if(add)addFactor('年龄（男>55/女>65）',1);}},
+  {id:'Q103',phase:'P1基础信息',title:'Q3. 请输入身高(cm)和体重(kg)，用于计算BMI',type:'num2',ph:['身高 172','体重 75'],store:function(h,w){h=parseFloat(h)||0;w=parseFloat(w)||0;state.assess.data.height=h;state.assess.data.weight=w;var bmi=h?(w/((h/100)*(h/100))):0;state.assess.data.bmi=Math.round(bmi*10)/10;if(bmi>=28)addFactor('肥胖(BMI≥28)',2);else if(bmi>=24)addFactor('超重(BMI 24-27.9)',1);}},
+  {id:'Q104',phase:'P1基础信息',title:'Q4. 腰围约多少厘米？（判断腹型肥胖，不知道可跳过）',type:'num',ph:'例如 88（可跳过直接点下一步）',store:function(v){state.assess.data.waistline=parseFloat(v)||0;var w=state.assess.data.waistline;if(w&&((state.assess.data.gender==='male'&&w>=90)||(state.assess.data.gender==='female'&&w>=85)))addFactor('腹型肥胖（腰男≥90/女≥85）',1);},optional:true},
+  {id:'Q105',phase:'P1基础信息',title:'Q5. 是否有高血压/心血管病家族史？（一级亲属）',type:'opts',opts:[{label:'有，且发病<50岁（早发）',v:'early',score:1,tag:'早发家族史'},{label:'有，但发病≥50岁',v:'family'},{label:'不清楚是否有',v:'unknown'},{label:'没有',v:'none'}],store:function(v,o){state.assess.data.family_history=v;if(o.score)addFactor('早发CVD家族史（<50岁）',o.score);}},
+  {id:'Q201',phase:'P2血压分级',title:'Q6. 最近一次血压值？(SBP/DBP，mmHg)',type:'num2',ph:['收缩压 145','舒张压 92'],store:function(s,d){s=parseInt(s)||0;d=parseInt(d)||0;state.assess.data.sbp=s;state.assess.data.dbp=d;var gr='',lv=0,note='',subT='原发性高血压';if(s>=140&&d<90){gr='单纯收缩期高血压';lv=2;note='常见于老年，动脉硬化为主';subT='老年单纯收缩期高血压';}else if(s<140&&d>=90){gr='单纯舒张期高血压';lv=2;note='常见于中青年，肥胖/交感兴奋';subT='中青年单纯舒张期高血压';}else if(s>=180||d>=110){gr='3级高血压（重度）';lv=4;}else if(s>=160||d>=100){gr='2级高血压（中度）';lv=3;}else if(s>=140||d>=90){gr='1级高血压（轻度）';lv=2;}else if(s>=120||d>=80){gr='正常高值';lv=1;}else{gr='正常血压';lv=0;}state.assess.bpGrade=gr;state.assess.bpGradeLv=lv;state.assess.bpNote=note;state.assess.subtype=subT;}},
+  {id:'Q202',phase:'P2血压分级',title:'Q7. 这个血压值是在哪里测量的？',type:'opts',opts:[{label:'医院/诊所（连续3次）',v:'clinic'},{label:'家庭自测（连续5-7天均值）',v:'home'},{label:'24小时动态血压',v:'abpm'},{label:'只测过1-2次，暂不确定',v:'occasional'}],store:function(v){state.assess.data.bp_place=v;}},
+  {id:'Q203',phase:'P2血压分级',title:'Q8. 是否已确诊为高血压？',type:'opts',opts:[{label:'是，已确诊多年',v:'long',score:2},{label:'是，刚确诊不久',v:'new',score:2},{label:'还没确诊，但血压偏高',v:'suspected',score:1},{label:'没有，只是想了解预防',v:'healthy'}],store:function(v,o){state.assess.data.diagnosed=v;if(o.score)state.assess.score+=o.score;}},
+  {id:'Q301',phase:'P3危险因素',title:'Q9. 您的吸烟情况？（含二手烟）',type:'opts',opts:[{label:'从不吸+很少二手烟',v:'never',s:0},{label:'已戒烟',v:'quit',s:0},{label:'常吸二手烟/偶尔吸烟',v:'sh',s:1,tag:'吸烟/二手烟'},{label:'每天<10支',v:'light',s:1,tag:'吸烟'},{label:'每天≥10支',v:'heavy',s:2,tag:'大量吸烟'}],store:function(v,o){state.assess.data.smoking=v;if(o.s){state.assess.score+=o.s;if(o.tag)addFactor(o.tag,o.s>=2?2:1);}}},
+  {id:'Q302',phase:'P3危险因素',title:'Q10. 饮酒情况？',type:'opts',opts:[{label:'从不饮酒',v:'never',s:0},{label:'偶尔少量',v:'rare',s:0},{label:'每周1-2次中等量',v:'light',s:1,tag:'过量饮酒'},{label:'每周≥3次或每次大量',v:'heavy',s:2,tag:'大量饮酒'}],store:function(v,o){state.assess.data.alcohol=v;if(o.s){state.assess.score+=o.s;if(o.tag)addFactor(o.tag,o.s);}}},
+  {id:'Q303',phase:'P3危险因素',title:'Q11. 日常饮食口味偏咸吗？（每天盐摄入）',type:'opts',opts:[{label:'很清淡<5g/天',v:'vl',s:0},{label:'清淡5-7g',v:'lo',s:0},{label:'适中7-10g',v:'mid',s:1,tag:'高盐饮食'},{label:'偏重10-15g',v:'hi',s:2,tag:'高盐饮食'},{label:'很咸>15g（腌制品多）',v:'vh',s:2,tag:'高盐饮食'}],store:function(v,o){state.assess.data.salt=v;if(o.s){state.assess.score+=o.s;if(o.tag)addFactor(o.tag,o.s);}}},
+  {id:'Q304',phase:'P3危险因素',title:'Q12. 每周有氧运动情况？',type:'opts',opts:[{label:'几乎不运动',v:'none',s:2,tag:'缺乏运动'},{label:'每周1-2次<20min',v:'rare',s:1,tag:'缺乏运动'},{label:'每周3-4次20-30min',v:'mid',s:0},{label:'几乎每天≥30min',v:'freq',s:0}],store:function(v,o){state.assess.data.exercise=v;if(o.s){state.assess.score+=o.s;if(o.tag)addFactor(o.tag,o.s);}}},
+  {id:'Q305',phase:'P3危险因素',title:'Q13. 蔬菜水果摄入情况？（富钾食物）',type:'opts',opts:[{label:'≥500g菜+≥200g果/天',v:'suf',s:0},{label:'300-500g菜+100-200g果',v:'mid',s:0},{label:'<300g菜+<100g果',v:'ins',s:1,tag:'蔬果摄入不足（低钾）'},{label:'几乎不吃',v:'rare',s:2,tag:'蔬果摄入严重不足'}],store:function(v,o){state.assess.data.fruitVeg=v;if(o.s){state.assess.score+=o.s;if(o.tag)addFactor(o.tag,o.s);}}},
+  {id:'Q306',phase:'P3危险因素',title:'Q14. 静息心率大概是？（安静状态下，次/分）',type:'opts',opts:[{label:'<60次/分（偏慢）',v:'lo',s:0},{label:'60-80（正常）',v:'nm',s:0},{label:'80-100（偏快）',v:'hi',s:1,tag:'心率增快>80'},{label:'>100或不清楚',v:'vh',s:1,tag:'心率增快'}],store:function(v,o){state.assess.data.hr=v;if(o.s){state.assess.score+=o.s;if(o.tag)addFactor(o.tag,o.s);}}},
+  {id:'Q307',phase:'P3危险因素',title:'Q15. 是否有以下疾病/检查异常？（多选）',type:'multi',opts:[{label:'血脂异常（TC/LDL-C偏高）',v:'dys',s:1,tag:'血脂异常'},{label:'血糖异常/糖尿病前期',v:'predm',s:1,tag:'糖耐量受损'},{label:'已确诊糖尿病',v:'dm',s:3,tag:'糖尿病',special:'dm'},{label:'高尿酸血症/痛风',v:'hua',s:1,tag:'高尿酸血症'},{label:'高同型半胱氨酸血症',v:'hcy',s:1,tag:'高同型半胱氨酸'},{label:'✅ 以上都没有，继续',v:'none',s:0}],store:function(arr){state.assess.data.comorbidities=arr.map(function(x){return x.v}).join(',');arr.forEach(function(o){if(o.v!=='none'){state.assess.score+=o.s;if(o.tag)addFactor(o.tag,o.s);if(o.special==='dm')state.assess.hasDiabetes=true;}});}},
+  {id:'Q401',phase:'P4靶器官损害(HMOD)',title:'Q16. 是否有以下心血管/肾脏问题？（多选）',type:'multi',opts:[{label:'左心室肥厚(LVH)（心电图/超声）',v:'lvh',s:2,tag:'左心室肥厚（HMOD）',hmod:true},{label:'颈动脉斑块/IMT≥0.9mm',v:'plaque',s:2,tag:'颈动脉粥样硬化（HMOD）',hmod:true},{label:'PWV增快（血管硬化）',v:'pwv',s:2,tag:'血管硬化（HMOD）',hmod:true},{label:'慢性肾脏病CKD（蛋白尿/肌酐高）',v:'ckd',s:3,tag:'CKD（直接升级）',hmod:true,special:'ckd3'},{label:'✅ 以上都没有/不清楚',v:'none',s:0}],store:function(arr){state.assess.data.hmod=arr.map(function(x){return x.v}).join(',');arr.forEach(function(o){if(o.v!=='none'){state.assess.score+=o.s;if(o.hmod){state.assess.hasHMOD=true;if(o.tag)addFactor(o.tag,o.s);}if(o.special==='ckd3')state.assess.hasCKD3=true;}});}},
+  {id:'Q402',phase:'P4并发症',title:'Q17. 是否有以下严重并发症病史？（多选）',type:'multi',opts:[{label:'脑卒中（脑出血/脑梗/TIA）',v:'stroke',s:4,tag:'脑卒中',comp:true},{label:'冠心病（心梗/心绞痛/支架）',v:'cor',s:4,tag:'冠心病',comp:true},{label:'心力衰竭',v:'hf',s:4,tag:'心力衰竭',comp:true},{label:'房颤',v:'afib',s:4,tag:'房颤',comp:true},{label:'外周动脉疾病',v:'pad',s:4,tag:'外周动脉病',comp:true},{label:'糖尿病伴并发症',v:'dmc',s:4,tag:'糖尿病伴并发症',comp:true,special:'dm_comp'},{label:'✅ 以上都没有',v:'none',s:0}],store:function(arr){state.assess.data.comps=arr.map(function(x){return x.v}).join(',');arr.forEach(function(o){if(o.v!=='none'){state.assess.score+=o.s;if(o.comp)state.assess.hasComplications=true;if(o.special==='dm_comp')state.assess.hasDMComp=true;if(o.tag)addFactor(o.tag,4);}});}},
+  {id:'Q403',phase:'P4继发性线索',title:'Q18. 是否有继发性高血压线索？（多选，可选跳过）',type:'multi',optional:true,opts:[{label:'肾炎史/肾功能异常史 → 肾性高血压',v:'renal',sub:'肾性高血压线索'},{label:'打鼾严重+夜间憋醒 → OSA相关',v:'osa',sub:'阻塞性睡眠呼吸暂停相关高血压'},{label:'甲亢/内分泌病史 → 内分泌性',v:'endo',sub:'内分泌性高血压线索'},{label:'突发/短期血压急升 → 建议筛查',v:'sudden',sub:'建议筛查继发性高血压'},{label:'✅ 无以上情况',v:'none'}],store:function(arr){var subs=arr.filter(function(x){return x.sub}).map(function(x){return x.sub});state.assess.data.secondary=subs.join('、')||'无';if(subs.length)state.assess.subtype='疑似继发性高血压（'+subs.join('；')+'）建议专科筛查';}},
+  {id:'Q501',phase:'P5用药/作息/喜好',title:'Q19. 目前的降压药物服用情况？',type:'opts',opts:[{label:'遵医嘱规律服药，从不漏服（依从性⭐⭐⭐）',v:'regular',adh:3},{label:'基本规律，偶尔漏服每月≤1-2次（⭐⭐）',v:'mostly',adh:2},{label:'服药不规律，经常漏服（⭐）',v:'irregular',adh:1},{label:'开了药没怎么吃/不想吃（0星）',v:'no',adh:0},{label:'还没开始吃药，先调理生活方式',v:'notstart',adh:0}],store:function(v,o){state.assess.data.adherence=v;state.med.adherence=v;state.assess.data.adhLv=o.adh;}},
+  {id:'Q502',phase:'P5用药/作息/喜好',title:'Q20. 目前服用的是哪类降压药？（多选，没吃药就选最后一个）',type:'multi',opts:[{label:'XX地平（氨氯地平/硝苯地平）- CCB类',v:'CCB',cls:'钙通道阻滞剂'},{label:'XX普利（依那普利/贝那普利）- ACEI类',v:'ACEI',cls:'血管紧张素转换酶抑制剂'},{label:'XX沙坦（缬沙坦/氯沙坦）- ARB类',v:'ARB',cls:'血管紧张素II受体拮抗剂'},{label:'XX噻嗪/利尿剂（氢氯噻嗪/吲达帕胺）',v:'Diuretic',cls:'利尿剂'},{label:'XX洛尔（美托洛尔/比索洛尔）- β阻滞剂',v:'BetaBlocker',cls:'β受体阻滞剂'},{label:'复方制剂（缬沙坦氨氯地平/依叶等）',v:'FDC',cls:'单片复方制剂'},{label:'✅ 不清楚药名/没吃药',v:'none'}],store:function(arr){state.assess.data.med_types=arr.map(function(x){return x.v}).join('、')||'未服用/不清楚';arr.forEach(function(x){if(x.v!=='none')state.med.drugs.push({name:'（Q20选定）'+x.label,class:x.v,cls:x.cls});});}},
+  {id:'Q503',phase:'P5用药/作息/喜好',title:'Q21. 最近睡眠质量？',type:'opts',opts:[{label:'很好（7-8h，入睡易，不夜醒）',v:'good',s:0},{label:'一般，偶尔问题<3次/周',v:'fair',s:1},{label:'经常失眠/早醒≥3次/周',v:'poor',s:2},{label:'严重睡眠问题，几乎每天睡不好',v:'vpoor',s:3}],store:function(v,o){state.assess.data.sleep=v;state.assess.score+=o.s;}},
+  {id:'Q504',phase:'P5用药/作息/喜好',title:'Q22. 最近精神压力/情绪状态？',type:'opts',opts:[{label:'心态平和，没什么压力',v:'good',s:0},{label:'偶尔焦虑紧张，但能调节',v:'fair',s:1},{label:'经常焦虑烦躁/情绪低落',v:'poor',s:2},{label:'长期高压，身心俱疲',v:'vpoor',s:3}],store:function(v,o){state.assess.data.mental=v;state.assess.score+=o.s;}},
+  {id:'Q505',phase:'P5用药/作息/喜好',title:'Q23. 日常饮食喜好/禁忌？（开放题，越详细→计划越个性化；可跳过）',type:'text',ph:'例如：爱川菜/不喝奶/海鲜过敏/素食/常吃外卖/乳糖不耐...',store:function(v){state.assess.data.dietPref=v||'无特殊喜好禁忌';},optional:true},
+  {id:'Q506',phase:'P5用药/作息/喜好',title:'Q24. 喜欢/方便做的运动？身体限制？（开放题；可跳过）',type:'text',ph:'例如：快走/太极/膝盖不好不能跑/有瑜伽垫/晚上才有时间/哮喘...',store:function(v){state.assess.data.exPref=v||'无特殊偏好或限制';},optional:true},
+  {id:'Q507',phase:'P5用药/作息/喜好',title:'Q25. 通常的作息时间？（起床/睡觉，用于生成时间线计划）',type:'txt2',ph:['起床时间 如 07:00','睡觉时间 如 23:00'],store:function(a,b){state.assess.data.wake=a||'07:00';state.assess.data.sleep_time=b||'23:00';}}
+];
+function addFactor(name,score){if(!state.assess.factors.find(function(x){return x.name===name}))state.assess.factors.push({name:name,score:score});}
+function startAssess(){
+  if(state.assess.complete){aiMsg('<b>📋 初次评估已完成！</b><br>当前结果：<span class="risk-tag risk-'+riskKey(state.assess.riskLevel)+'">'+state.assess.riskLevel+'</span><br>是否需要重新做一遍评估？',[{label:'🔄 重新开始评估',onclick:'resetAssess()'},{label:'📄 查看7段式评估报告',onclick:'showReport()'}]);return;}
+  aiMsg('🩺 <b>开始问卷一：初次分型评估（共25题，分5阶段）</b><br>我会一步步问您，每次一个问题，做完自动给出「高血压分级 + 分型 + 危险分层 + 7段式报告」');
+  askAssess();
+}
+function resetAssess(){state.assess={cursor:0,data:{},score:0,factors:[],bpGrade:'',bpGradeLv:0,subtype:'原发性高血压',riskLevel:'',report:null,complete:false};startAssess();renderPanel();}
+function askAssess(){
+  if(state.assess.cursor>=QUESTIONS.length){finishAssess();return;}
+  var q=QUESTIONS[state.assess.cursor];
+  document.getElementById('d_cursor').textContent=(state.assess.cursor+1)+'/'+QUESTIONS.length+' '+q.phase+' '+q.id;
+  var title='<b>'+q.title+'</b>'+(q.optional?' <span style="color:var(--ink-3);font-size:12px">（选填，可跳过）</span>':'');
+  if(q.type==='opts'){aiMsg(title,q.opts.map(function(o,i){return{label:o.label,onclick:'pickOpt('+state.assess.cursor+','+i+')'};}));
+  }else if(q.type==='multi'){
+    aiMsg(title+'<br><span style="color:var(--teal);font-size:12px">💡 多选：逐个点击添加，选完点击下面的确认按钮</span>');
+    var div=document.createElement('div');div.className='msg ai';
+    var html='<div class="avatar" style="visibility:hidden">康</div><div class="bubble options">';
+    q.opts.forEach(function(o,i){html+='<button class="opt multiOpt" data-v="'+i+'" onclick="toggleMulti(this)">'+o.label+'</button>';});
+    html+='<button class="btn" style="margin-top:6px;align-self:flex-end" onclick="confirmMulti('+state.assess.cursor+')">✅ 确认并继续</button>';
+    if(q.optional)html+='<button class="btn ghost" style="margin-top:4px;align-self:flex-end" onclick="skipMulti('+state.assess.cursor+')">跳过此题</button>';
+    html+='</div>';div.innerHTML=html;document.getElementById('chat').appendChild(div);scrollBottom();
+  }else if(q.type==='num'){aiMsg(title);setInput('num',function(v){q.store(v);userMsg(v||'(跳过)');nextQ();renderPanel();},q.ph||'请输入数字');if(q.optional)setQuick([{label:'⏭️ 跳过此题',onclick:function(){q.store('');userMsg('(跳过)');nextQ();renderPanel();}}]);else setQuick([]);
+  }else if(q.type==='num2'){aiMsg(title);setInput('num2',function(a,b){q.store(a,b);userMsg(a+' + '+b);nextQ();renderPanel();},q.ph||['数值1','数值2']);setQuick([]);
+  }else if(q.type==='txt2'){aiMsg(title);setInput('txt2',function(a,b){q.store(a,b);userMsg(a+' / '+b);nextQ();renderPanel();},q.ph||['字段1','字段2']);setQuick([]);
+  }else if(q.type==='text'){aiMsg(title);setInput('text',function(v){q.store(v);userMsg(v||'(跳过)');nextQ();renderPanel();},q.ph||'请输入文字');if(q.optional)setQuick([{label:'⏭️ 跳过此题',onclick:function(){q.store('');userMsg('(跳过)');nextQ();renderPanel();}}]);else setQuick([]);
+  }
+  renderPanel();
+}
+function nextQ(){state.assess.cursor++;askAssess();}
+function pickOpt(qi,oi){var q=QUESTIONS[qi];var o=q.opts[oi];userMsg(o.label);q.store(o.v,o);state.assess.score+=(o.score||o.s||0);nextQ();renderPanel();}
+function toggleMulti(btn){btn.classList.toggle('active');}
+function confirmMulti(qi){
+  var opts=document.querySelectorAll('.multiOpt.active');var q=QUESTIONS[qi];var picked=[];var labels=[];
+  opts.forEach(function(b){var idx=parseInt(b.dataset.v);picked.push(q.opts[idx]);labels.push(q.opts[idx].label);});
+  if(!picked.length){picked=[q.opts[q.opts.length-1]];labels.push(picked[0].label);}
+  userMsg(labels.join('；'));q.store(picked);
+  document.querySelectorAll('.multiOpt').forEach(function(x){var p=x.closest('.msg');if(p)p.remove();});
+  document.getElementById('quickActions').innerHTML='';setInput('none');nextQ();renderPanel();
+}
+function skipMulti(qi){userMsg('(跳过此题)');document.querySelectorAll('.multiOpt').forEach(function(x){var p=x.closest('.msg');if(p)p.remove();});var q=QUESTIONS[qi];q.store([]);nextQ();renderPanel();}
+function finishAssess(){
+  var lv=state.assess.bpGradeLv;var nFact=state.assess.factors.length;
+  var hmod=!!state.assess.hasHMOD||!!state.assess.hasCKD3;var comp=!!state.assess.hasComplications||!!state.assess.hasDMComp;var dm=!!state.assess.hasDiabetes;
+  var level='低危',key='low';
+  function pick(c0,c12,c3,cc){if(comp)return cc;if(nFact>=3||hmod||dm)return c3;if(nFact>=1&&nFact<=2)return c12;return c0;}
+  if(lv>=4)level=pick('高危','很高危','很高危','很高危');
+  else if(lv===3){level=pick('中危','中-高危','高危','很高危');if(level==='中-高危')level='高危';}
+  else if(lv===2)level=pick('低危','中危','高危','很高危');
+  else if(lv===1){level=pick('低危','低危','中-高危','高-很高危');if(level==='中-高危')level='中危';if(level==='高-很高危')level='高危';}
+  else level=(comp||hmod)?'高危':(nFact>=3?'中危':'低危');
+  if(comp)level='很高危';
+  if(level==='很高危')key='vhigh';else if(level==='高危')key='high';else if(level==='中危')key='med';else key='low';
+  state.assess.riskLevel=level;state.assess.riskKey=key;
+  var bpRange=state.assess.data.sbp+'/'+state.assess.data.dbp+' mmHg';
+  var timing='',target='';
+  if(key==='vhigh'||key==='high'){timing='立即启动降压药物治疗（I类推荐，A级证据）；同时强化生活方式干预。';target='一般<140/90，能耐受者<130/80；4-12周内达标。';}
+  else if(key==='med'){timing='先进行4~12周严格的生活方式干预；如血压仍≥140/90mmHg则尽早启动药物治疗（I类推荐）。';target='<140/90；能耐受者可<130/80。';}
+  else{timing='无需立即启动药物治疗，但必须持续进行生活方式干预（I类推荐）。';target='<130/80；每3-6个月复测血压。';}
+  var factorList=state.assess.factors.length?state.assess.factors.map(function(x){return '⚠️ '+x.name}).join('<br>'):'✅ 无明确心血管危险因素';
+  var hmodList=state.assess.data.hmod&&state.assess.data.hmod!=='none'?state.assess.data.hmod:'✅ 未见明确靶器官损害';
+  var compList=state.assess.data.comps&&state.assess.data.comps!=='none'?state.assess.data.comps:'✅ 无临床并发症病史';
+  state.assess.report='<h4>📋 高血压个体化评估报告</h4>'+
+  '<div class="row"><b>① 血压分级：</b>'+state.assess.bpGrade+'（'+bpRange+'）'+(state.assess.bpNote||'')+'</div>'+
+  '<div class="row"><b>② 分型提示：</b>'+state.assess.subtype+'</div>'+
+  '<div class="row"><b>③ 危险因素：</b>'+factorList+'</div>'+
+  '<div class="row"><b>④ HMOD/并发症：</b>靶器官损害：'+hmodList+'<br>&nbsp;&nbsp;&nbsp;并发症：'+compList+'<br>&nbsp;&nbsp;&nbsp;继发性线索：'+(state.assess.data.secondary||'无')+'</div>'+
+  '<div class="row"><b>⑤ 危险分层：</b><span class="risk-tag risk-'+key+'">'+level+'</span>（10年心血管事件绝对风险：'+riskRange(key)+'）</div>'+
+  '<div class="row"><b>⑥ 治疗时机+目标：</b>'+timing+'<br>控制目标：'+target+'</div>'+
+  '<div class="row"><b>⑦ 下一步行动：</b>1️⃣ 建议尽快到心内科/高血压专科就诊（很高危/高危立即）；<br>2️⃣ 生活方式重点突破：<b>减盐(<5g)+每周≥150min有氧+减重(如BMI≥24)+富钾蔬果</b>；<br>3️⃣ 开始早晚家庭自测血压，带记录本就诊</div>'+
+  '<div class="disclaimer">⚠️ 本报告依据《中国高血压防治指南2024》和您输入数据生成，仅供健康管理参考，不替代医师诊断/处方。血压≥180/110+头痛/胸痛/肢体麻木/言语不清请立即急诊就医。</div>';
+  state.assess.complete=true;document.getElementById('d_cursor').textContent='已完成 ✓';
+  aiMsg('🎉 所有问题回答完毕！正在依据《中国高血压防治指南2024》计算您的心血管危险分层…');
+  setTimeout(function(){
+    var wrap=document.createElement('div');wrap.className='msg ai';
+    wrap.innerHTML='<div class="avatar">康</div><div class="bubble"><div class="report-card">'+state.assess.report+'</div></div>';
+    document.getElementById('chat').appendChild(wrap);
+    aiMsg('评估完成！接下来您可以：',[{label:'📅 生成我的3天时间线康复计划（模拟）',onclick:'mockPlan()'},{label:'🔄 重新做一遍评估',onclick:'resetAssess()'},{label:'💊 跳到【问卷二：用药情况采集】',onclick:'gotoTab(2)'},{label:'📊 跳到【问卷三：日常康复反馈】',onclick:'gotoTab(3)'}]);
+    document.getElementById('reportSec').style.display='block';scrollBottom();renderPanel();
+  },700);
+}
+function showReport(){if(!state.assess.report)return;var wrap=document.createElement('div');wrap.className='msg ai';wrap.innerHTML='<div class="avatar">康</div><div class="bubble"><div class="report-card">'+state.assess.report+'</div></div>';document.getElementById('chat').appendChild(wrap);scrollBottom();}
+function riskKey(x){var m={'低危':'low','中危':'med','高危':'high','很高危':'vhigh'};return m[x]||'low';}
+function riskRange(k){var m={low:'<15%',med:'15%~20%',high:'20%~30%',vhigh:'>30%'};return m[k]||'';}
+function mockPlan(){aiMsg('💾 已把评估结果灌入【个性化康复计划生成器】<br>👉 时间线计划完整输出逻辑详见 <code>timeline-plan-template.json</code><br>此处调试台已展示了「评估→分型→分层→7段报告」的全部变量流转。继续切到 Tab2 / Tab3 调试其他问卷吧。');}
+function gotoTab(n){document.querySelector('.tab[data-tab="'+n+'"]').click();}
+
+// 问卷二
+var DRUG_CLASSES={
+  CCB:{name:'钙通道阻滞剂（地平类）',side:'⚠️常见：脚踝轻度水肿、面部潮红、头痛、反射性心率快\n💡应对：抬高下肢+穿弹力袜；联用ACEI/ARB可减轻；避免西柚/西柚汁；起身缓慢'},
+  ACEI:{name:'ACEI（普利类）',side:'⚠️干咳（发生率10-20%，最常见）、皮疹、高血钾\n💡应对：轻微干咳含润喉糖；频繁干咳→建议就医换ARB类（沙坦）；定期查血钾肌酐'},
+  ARB:{name:'ARB（沙坦类）',side:'⚠️轻微头晕、罕见高血钾、极罕见血管性水肿\n💡应对：副作用比ACEI少，是干咳不耐受首选替代品；定期复查血钾'},
+  Diuretic:{name:'利尿剂（噻嗪类）',side:'⚠️血钾降低、血尿酸升高（痛风慎用）、血糖轻度升高、血钠降低\n💡应对：建议早晨服药防夜尿；多吃香蕉/菠菜补钾；定期查血钾+尿酸'},
+  BetaBlocker:{name:'β受体阻滞剂（洛尔类）',side:'⚠️心动过缓、乏力、手脚发冷、糖脂代谢轻微影响、哮喘慎用\n💡应对：静息心率<55或伴头晕→就医调量；避免突然停药（反跳性心率快）'},
+  FDC:{name:'单片复方制剂 SPC',side:'⚠️副作用=两类单药副作用的并集\n💡应对：依从性优于分开服药，主流推荐；依叶（含叶酸0.8mg）特别适合H型高血压（高同型半胱氨酸）'}
+};
+function startMed(){aiMsg('💊 <b>开始问卷二：用药情况采集（4大类）</b><br>完整采集后，「时间线计划」里的用药提醒才会有【类别专属注意事项 + 依从性鼓励 + 药物相互作用警示】。请选择要录入的内容：',[{label:'➕ 添加降压药（结构化卡片）',onclick:'addDrug()'},{label:'📝 录入其他长期药物',onclick:'addOther("other")'},{label:'💊 录入保健品/补剂',onclick:'addOther("health")'},{label:'🌿 录入中药/中成药',onclick:'addOther("tcm")'},{label:'👀 查看六大类降压药副作用速查',onclick:'showSideFx()'},{label:'✅ 采集完成，预览时间线里的【用药提醒】输出',onclick:'previewMedReminder()'}]);setInput('none');renderPanel();}
+function addDrug(){setQuick([]);var div=document.createElement('div');div.className='msg ai';div.innerHTML='<div class="avatar">康</div><div class="bubble options"><button class="opt" onclick="pickDrug(\'CCB\')">➕ XX地平 — 钙通道阻滞剂(CCB)</button><button class="opt" onclick="pickDrug(\'ACEI\')">➕ XX普利 — ACEI类</button><button class="opt" onclick="pickDrug(\'ARB\')">➕ XX沙坦 — ARB类</button><button class="opt" onclick="pickDrug(\'Diuretic\')">➕ XX噻嗪/利尿剂</button><button class="opt" onclick="pickDrug(\'BetaBlocker\')">➕ XX洛尔 — β阻滞剂</button><button class="opt" onclick="pickDrug(\'FDC\')">➕ 复方制剂（如缬沙坦氨氯地平/依叶）</button></div></div>';document.getElementById('chat').appendChild(div);scrollBottom();}
+function pickDrug(cls){var c=DRUG_CLASSES[cls];aiMsg('您选择了 <b>'+c.name+'</b>。请依次告诉我：<br>①药品名（通用名或商品名均可）<br>②每次剂量mg<br>③服用频率（每日一次/两次等）<br>④服药时间（晨起空腹/睡前等）<br>⑤近一周漏服几次？<br>⑥有无不适副作用？<br>👉 直接按格式输入，例如：<code>苯磺酸氨氯地平，5mg，每日一次，晨起空腹，漏服0次，脚踝轻微水肿</code>');setInput('text',function(v){var fields=v.split(/[,，\s]+/).filter(Boolean);var d={name:fields[0]||('（'+cls+'类药）'),class:cls,cls:c.name,dosage:fields[1]||'按处方',freq:fields[2]||'每日一次',time:fields[3]||'晨起空腹',missed:fields[4]||'0次',side:fields[5]||'无'};state.med.drugs.push(d);userMsg(v);aiMsg('✅ 已记录降压药卡片：<br><b>'+d.name+'</b>（'+d.cls+'）'+d.dosage+' '+d.freq+' '+d.time+'<br>漏服：'+d.missed+'；副作用：'+d.side,[{label:'➕ 再加一种降压药',onclick:'addDrug()'},{label:'🔙 返回录入主菜单',onclick:'backMed()'},{label:'👀 查看该类药物注意事项',onclick:'showSideFx("'+cls+'")'}]);renderPanel();setInput('none');},'格式：药名,剂量,频率,时间,漏服次数,副作用');}
+function addOther(kind){var map={other:'其他长期药物',health:'保健品/补剂',tcm:'中药/中成药'};var kd=map[kind];aiMsg('请输入您的<b>'+kd+'</b>清单（自然语言即可）：<br>例如：<code>阿托伐他汀20mg每晚1片+阿司匹林100mg每天</code>');setInput('text',function(v){state.med[kind]=(state.med[kind]?state.med[kind]+'；':'')+v;userMsg(v);aiMsg('✅ 已记录'+kd+'：'+v,[{label:'🔙 返回录入主菜单',onclick:'backMed()'}]);setInput('none');renderPanel();},'例如：阿托伐他汀20mg每晚1片');}
+function showSideFx(cls){var html='<b>📖 六大类降压药副作用速查 · 直接对应【时间线用药提醒】的注意事项内容</b><br><br>';var list=cls?[{k:cls,v:DRUG_CLASSES[cls]}]:Object.keys(DRUG_CLASSES).map(function(k){return{k:k,v:DRUG_CLASSES[k]}});list.forEach(function(it){html+='<div class="side-effect-card"><b>🟢 '+it.v.name+'（'+it.k+'）</b><br><span style="white-space:pre-line">'+it.v.side+'</span></div>';});aiMsg(html);}
+function backMed(){startMed();}
+function previewMedReminder(){if(!state.med.drugs.length&&!state.med.other&&!state.med.health&&!state.med.tcm){aiMsg('⚠️ 还没有录入任何药品/保健品哦，先添加一下吧！');return;}var html='<b>💊 时间线计划 · 【07:30 用药提醒】预览（将出现在康复计划中）</b><br><br>';if(state.med.drugs.length){state.med.drugs.forEach(function(d,i){html+='<div class="side-effect-card" style="border-color:var(--teal-light)">';html+='<b>🟢 第'+(i+1)+'种：'+d.name+'</b> <span class="tag">'+d.cls+'</span><br>';html+='• 剂量与服法：<b>'+d.dosage+' · '+d.freq+' · '+d.time+'</b>（温水送服）<br>';html+='• 类别专属注意事项：<span style="white-space:pre-line">'+DRUG_CLASSES[d.class].side+'</span><br>';html+='• 依从性鼓励：近周漏服'+(d.missed||'0次')+'→'+(parseInt(d.missed)>1?'⚠️ 建议手机闹钟提醒；漏服时间距下次>4h可补，不要加倍':'⭐ 棒！继续保持规律服药。')+'<br>';html+='• 不良反应反馈：您录入的「'+(d.side||'无')+'」'+(d.side&&d.side!=='无'?'→建议就诊告知医生调整':'')+'</div>';});}if(state.med.other)html+='<div class="side-effect-card"><b>💊 其他合并用药</b><br>'+state.med.other+'<br>💡 注意合并用药相互作用，阿司匹林+高剂量鱼油=出血风险增加</div>';if(state.med.health)html+='<div class="side-effect-card"><b>🧴 保健品/补剂</b><br>'+state.med.health+'<br>⚠️ 甘草升血压；不建议自行补钾片（高钾风险）</div>';if(state.med.tcm)html+='<div class="side-effect-card"><b>🌿 中药/中成药</b><br>'+state.med.tcm+'</div>';html+='<div class="disclaimer">⚠️ 以上内容为AI生成健康管理提醒，不替代医师处方/用药方案。药物调整务必遵医嘱。</div>';aiMsg(html);}
+
+// 问卷三
+var EVENING_7Q=[{q:'1. 早晨+睡前的血压是多少？（没测的话说「没测」）',k:'bp'},{q:'2. 今天的降压药按时吃了吗？漏服/有不舒服吗？',k:'med'},{q:'3. 今天做了什么运动？大概多久？感觉怎么样？',k:'ex'},{q:'4. 今天三餐有没有吃咸菜/腌制品/外卖/饮酒等超量的情况？',k:'diet'},{q:'5. 今天身体有什么感觉吗？（头晕/心慌/头痛/乏力/心情差等）',k:'sym'},{q:'6. 昨晚睡眠质量打几分（1-10分）？有失眠/打鼾吗？',k:'sl'},{q:'7. 今天整体血压管理的完成度，你给自己打几分（1-10分）？',k:'score'}];
+function startDaily(){state.tab3Mode='free';state.eveningCursor=0;aiMsg('🌈 <b>开始问卷三：日常康复反馈采集（6大维度）</b><br>两种使用方式：<br>① <b>自由输入模式</b>：像聊天一样随便说，我自动提取为结构化数据<br>② <b>晚间评估7问</b>：每日20:30固定引导，输出「数据对比+亮点肯定+根因分析+明日Top3行动」4要素反馈<br>选择今天的调试场景：',[{label:'🧪 模拟自然语言输入（测试6维度识别）',onclick:'showFreeSamples()'},{label:'🌙 启动【晚间康复评估7问】完整流程',onclick:'startEvening()'},{label:'📊 查看症状映射表（头晕/心慌/干咳/水肿/失眠）',onclick:'showSymptomMap()'},{label:'✅ 生成晚间评估反馈预览（4要素）',onclick:'previewEveningFeedback()'}]);}
+function showFreeSamples(){setQuick([{label:'「今早135/85心率76，吃药前」',onclick:function(){addSample('bp','今早135/85心率76，吃药前','⏰ 晨起未服药');}},{label:'「今早忘吃药，9点才补上，有点咳嗽」',onclick:function(){addSample('meds','今早漏服，9点补服，咳嗽','💊 服药+副作用');}},{label:'「下午快走了40分钟，4.2公里」',onclick:function(){addSample('exercise','快走40分钟，4.2km','🏃 运动');}},{label:'「中午酸菜鱼，感觉挺咸，还喝了3瓶啤酒」',onclick:function(){addSample('diet','中午酸菜鱼+啤酒3瓶','⚠️ 高盐+饮酒');}},{label:'「今天头晕了一阵，下午心慌」',onclick:function(){addSample('symptoms','头晕+下午心慌','🩺 症状');}},{label:'「昨晚只睡了5小时，失眠，今天压力分8」',onclick:function(){addSample('sleepPsych','睡5小时失眠，压力分8','😴 睡眠+心理');}}]);aiMsg('🧪 请点击下方的示例语句，模拟用户随便说的自然语言。右侧面板会自动提取对应维度的结构化数据。');}
+function addSample(k,text,label){userMsg(text);var item={time:new Date().toLocaleTimeString('zh-CN',{hour12:false}),text:text,tag:label};state.daily[k].push(item);
+  if(k==='bp'){var m=text.match(/(\d{2,3})[/:_\s-]+(\d{2,3})/);var hr=text.match(/心率\s*(\d+)/);item.parsed=m?('SBP '+m[1]+' / DBP '+m[2]+(hr?' / HR '+hr[1]:'')):'';if(m&&(parseInt(m[1])>=180||parseInt(m[2])>=110)){aiMsg('<div style="color:#8a2020"><b>⚠️ 紧急提醒：血压≥180/110mmHg（3级）！</b><br>请立即静坐休息10分钟复测；若仍高+头痛/胸痛/肢体麻木/言语不清，立即拨打120或急诊。</div>');}else{aiMsg('✅ 已记录'+label+'血压数据：'+item.parsed+'<br><br><b>解读：</b>家庭血压≥135/85=未达标；<130/80=达标良好');}}else if(k==='symptoms'){var map={'头晕':{c:['血压波动/体位性低血压/CCB副作用/睡眠差'],a:['先测血压','起身坐30秒站30秒再走','CCB水肿头痛可调药']},'心慌':{c:['心率快/早搏/房颤/血压低/甲亢/短效CCB反射性心率快'],a:['立即测血压+数脉搏1分钟','心率>100不缓解伴胸痛→就医','试试4-4-6呼吸法']},'干咳':{c:['ACEI类药物干咳(10-20%)/感冒/过敏'],a:['如服普利类+无感染→就医换ARB类','含润喉糖+多喝水']},'水肿':{c:['CCB类常见副作用/心/肾功能不全/静脉回流差'],a:['抬高下肢+弹力袜+联用ACEI/ARB可缓解','单侧突发肿→排除血栓']},'失眠':{c:['夜间血压未控制/焦虑/OSA/睡前咖啡/屏幕/β阻滞剂少数人失眠'],a:['睡前测血压','严重打鼾→筛查睡眠呼吸暂停OSA']}};var html='';Object.keys(map).forEach(function(k2){if(text.indexOf(k2)>=0){var d=map[k2];html+='<div class="symptom-match"><b>'+k2+' 可能原因 Top3：</b><br>• '+d.c.join('<br>• ')+'<br><br><b>✅ 立即可做的3条：</b><br>• '+d.a.join('<br>• ')+'</div>';}});aiMsg('🩺 【症状映射库自动匹配结果】<br>'+html);}else if(k==='diet'){aiMsg('✅ 已记录'+label+'饮食反馈<br>⚠️ <b>风险提示：</b>酸菜鱼汤底约含盐15-20g/份；3瓶啤酒≈酒精60g>推荐上限15g/日<br>📅 明日调整建议：① 中午替换为清蒸/清炒菜；② 加大饮水量1500ml+富钾水果；③ 监测次日晨起血压');}else{aiMsg('✅ 已记录'+label+'：'+text);}renderPanel();}
+function showSymptomMap(){var html='<b>📖 症状映射匹配库（T8）</b><br>用户随便说，AI自动识别→Top3可能原因→3条可操作建议';var map={'头晕/眩晕':['血压波动（过高或过低）、体位性低血压、CCB副作用、睡眠差','先测血压；起身慢三步（坐30s→站30s→走）；CCB水肿头痛可调药'],'心慌/心悸':['心率快（交感兴奋）、早搏/房颤、血压低、甲亢、短效CCB反射性心率快','测血压+数脉搏1分钟；心率>100持续不缓解或伴胸痛→就医；4-4-6呼吸法'],'干咳':['ACEI类药物干咳(10-20%)、感冒/过敏','如服普利类+无感染→就医换ARB；含润喉糖+多喝水'],'脚踝水肿':['CCB地平类常见副作用、心功能不全、肾功能不全、静脉回流差','抬高下肢+联用ACEI/ARB；单侧突发肿→排除血栓'],'失眠':['血压未控制(夜间高)、焦虑压力、打鼾/OSA、睡前咖啡/屏幕、β阻滞剂少数人失眠','睡前测血压；严重打鼾→查睡眠监测；建立90分钟睡眠仪式']};Object.keys(map).forEach(function(k){html+='<div class="symptom-match"><b>'+k+'</b><br><b>🔍 可能原因：</b>'+map[k][0]+'<br><b>✅ 建议：</b>'+map[k][1]+'</div>';});aiMsg(html);}
+function startEvening(){state.tab3Mode='evening';state.eveningCursor=0;state.daily.eveningQ=[];askEvening();}
+function askEvening(){if(state.eveningCursor>=EVENING_7Q.length){finishEvening();return;}var q=EVENING_7Q[state.eveningCursor];aiMsg('🌙 <b>晚间康复评估 · 第'+(state.eveningCursor+1)+'/7 问</b><br>'+q.q);setInput('text',function(v){state.daily.eveningQ.push({k:q.k,v:v});userMsg(v);state.eveningCursor++;askEvening();renderPanel();},'请简单回答…');}
+function finishEvening(){aiMsg('✅ 晚间7问采集完成！正在生成【反馈4要素】：1.数据对比 2.亮点肯定 3.未达标根因分析+明日调整 4.明日Top3行动');setTimeout(function(){previewEveningFeedback(true);},600);}
+function previewEveningFeedback(){var e=state.daily.eveningQ;var bpToday=138;var score=e.length?(parseInt(e[6]&&e[6].v)||7):8;var med=e.length?(e[1]&&e[1].v||'按时吃了'):'按时服药';var ex=e.length?(e[2]&&e[2].v||'没做运动'):'快走40分钟';var diet=e.length?(e[3]&&e[3].v||'正常'):'中午吃了酸菜鱼偏咸';var sym=e.length?(e[4]&&e[4].v||'无'):'下午轻微头晕';var sl=e.length?(e[5]&&e[5].v||'6分'):'7分，睡得还可以';var html='<div class="report-card"><h4>📊 晚间康复评估 · 反馈4要素</h4>';html+='<div class="row"><b>① 数据对比解读：</b>今日晨均血压<b>'+bpToday+'/88</b> → 较昨日 <span class="v good">↓4/4 mmHg 👏</span><br>本周达标率：57%（目标≥70%）</div>';html+='<div class="row"><b>② 执行亮点肯定：</b>1️⃣ <b>'+med+'</b>，依从性保持住！<br>2️⃣ <b>'+ex+'</b>，本周已累计运动130分钟（目标150分钟/周），明天再来20分钟就完成周目标啦！<br>3️⃣ 完成了晚间复盘，数据意识很棒 💯</div>';html+='<div class="row"><b>③ 未达标根因分析 + 明日调整：</b>未达标根因分析Top3：<br>⚠️ <b>高盐摄入（'+diet+'）</b>→ 建议明日中午替换为「清蒸套餐」<br>⚠️ <b>睡眠不足（'+sl+'）</b>→ 今晚22:00启动90分钟助眠仪式<br>⚠️ 轻微头晕（'+sym+'）→ 起床前先做静坐30秒+3次深呼吸再起身</div>';html+='<div class="row"><b>④ 明日 Top3 关键行动（可量化）：</b>1️⃣ <b>07:00 按时服药</b>（手机闹钟确认）<br>2️⃣ <b>午餐：清蒸鱼+清炒西兰花套餐</b>（避开咸菜/酸菜鱼）<br>3️⃣ <b>傍晚：20分钟骑行</b>（完成本周150分钟有氧目标）</div>';html+='<div class="row"><b>今日完成度总评分：'+score+' / 10</b> → '+(score>=8?'💚 保持住，血压会越来越稳！':'💪 再注意一下Top3项，明天肯定能过8分！')+'</div>';html+='<div class="disclaimer">本反馈为AI健康管理辅助，不替代医疗建议。</div></div>';aiMsg(html);}
+
+// 右侧面板
+function renderPanel(){
+  var a=state.assess;var d=a.data;
+  var rows1=[['性别',d.gender||'-'],['年龄',d.age?d.age+' 岁':'-'],['身高/体重/BMI',(d.height&&d.weight?d.height+'cm/'+d.weight+'kg / BMI '+d.bmi:'-')],['腰围',d.waistline?d.waistline+'cm':'-'],['早发家族史',d.family_history||'-'],['血压值',d.sbp?d.sbp+'/'+d.dbp+' mmHg':'-'],['血压分级',a.bpGrade||'-'],['高血压分型',a.subtype||'-'],['测量场景',d.bp_place||'-'],['是否确诊',d.diagnosed||'-'],['心血管危险因素',a.factors.length?a.factors.length+' 项：<br>• '+a.factors.map(function(x){return x.name+'(+'+x.score+')'}).join('<br>• '):'无'],['累计分值+并发症','分 '+a.score+'；HMOD：'+(a.hasHMOD?'✅':'❌')+'；并发症：'+(a.hasComplications?'✅':'❌')+'；DM：'+(a.hasDiabetes?'✅':'❌')],['心血管危险分层',a.riskLevel?'<span class="risk-tag risk-'+a.riskKey+'">'+a.riskLevel+'</span>（10年风险 '+riskRange(a.riskKey)+'）':'-'],['用药依从性',d.adhLv!=null?('⭐'.repeat(d.adhLv)+'☆'.repeat(3-d.adhLv)):'-'],['作息（起床/睡觉）',d.wake?(d.wake+' / '+d.sleep_time):'-'],['饮食偏好',d.dietPref||'-'],['运动偏好',d.exPref||'-']];
+  document.getElementById('d_assess').innerHTML=rows1.map(function(r){return '<div class="k">'+r[0]+'</div><div class="v">'+r[1]+'</div>';}).join('');
+  document.getElementById('d_count').textContent=Object.keys(d).filter(function(x){return d[x]!==undefined&&d[x]!==''&&d[x]!==null}).length+' 个变量';
+  if(a.report)document.getElementById('d_report').innerHTML=a.report;else document.getElementById('d_report').innerHTML='<div style="color:var(--ink-3);font-size:12px">完成评估后这里将展示完整7段式报告 ⬆️</div>';
+  var html2='';
+  if(state.med.drugs.length){state.med.drugs.forEach(function(d,i){html2+='<div class="side-effect-card"><b>💊 #'+(i+1)+' '+d.name+'</b> <span class="tag'+(d.class?' active':'')+'">'+(d.cls||'未识别类别')+'</span><br>剂量：'+d.dosage+' · 频率：'+d.freq+' · 时间：'+d.time+'<br>漏服：'+d.missed+' · 副作用：'+d.side+'</div>';});}else html2+='<div style="color:var(--ink-3);font-size:12px">暂无降压药记录，请在左侧 Tab2 添加 ⬆️</div>';
+  ['other','health','tcm'].forEach(function(k){var label={other:'📋 其他合并用药',health:'🧴 保健品/补剂',tcm:'🌿 中药/中成药'}[k];if(state.med[k])html2+='<div class="side-effect-card"><b>'+label+'</b><br>'+state.med[k]+'</div>';});
+  document.getElementById('d_med').innerHTML=html2;
+  function countLabel(arr){return arr.length?('<span class="tag active">'+arr.length+'条</span>'):'<span style="color:var(--ink-3)">0条</span>';}
+  var rows3=[['血压记录',countLabel(state.daily.bp)+'<br>'+state.daily.bp.map(function(x){return '• '+x.time+' '+x.parsed+'<br>'}).join('')],['用药执行',countLabel(state.daily.meds)+'<br>'+state.daily.meds.map(function(x){return '• '+x.time+' '+x.text+'<br>'}).join('')],['症状感受',countLabel(state.daily.symptoms)+'<br>'+state.daily.symptoms.map(function(x){return '• '+x.time+' '+x.text+'<br>'}).join('')],['饮食情况',countLabel(state.daily.diet)+'<br>'+state.daily.diet.map(function(x){return '• '+x.time+' '+x.text+'<br>'}).join('')],['运动情况',countLabel(state.daily.exercise)+'<br>'+state.daily.exercise.map(function(x){return '• '+x.time+' '+x.text+'<br>'}).join('')],['睡眠+心理',countLabel(state.daily.sleepPsych)+'<br>'+state.daily.sleepPsych.map(function(x){return '• '+x.time+' '+x.text+'<br>'}).join('')],['晚间评估7问',state.daily.eveningQ.length?('<span class="tag active">'+state.daily.eveningQ.length+'/7 已完成</span>'):'<span style="color:var(--ink-3)">未开始</span>']];
+  document.getElementById('d_daily').innerHTML=rows3.map(function(r){return '<div class="k">'+r[0]+'</div><div class="v">'+r[1]+'</div>'}).join('');
+}
+function resetAll(){state={tab:1,assess:{cursor:0,data:{},score:0,factors:[],bpGrade:'',bpGradeLv:0,subtype:'原发性高血压',riskLevel:'',report:null,complete:false},med:{drugs:[],other:'',health:'',tcm:'',adherence:''},daily:{bp:[],meds:[],symptoms:[],diet:[],exercise:[],sleepPsych:[],eveningQ:[]},tab3Mode:'free',eveningCursor:0};document.querySelector('.tab[data-tab="1"]').click();renderPanel();}
+startTab();
+</script>
+</body>
+</html>

@@ -990,16 +990,47 @@ function removeTyping() {
 /* ═════════════════════════════════════════════
    Speech Synthesis
    ═════════════════════════════════════════════ */
+function cleanTextForSpeech(text) {
+  return text
+    .replace(/\*\*/g, '')
+    .replace(/[•·▪◆●○■□]/g, '，')
+    .replace(/[📚📖💊🩺🥣🥗🍲🧘🚶🌱🌙📋📊🏊🏃🕉️🍵🍱🥐🥘😴💪👏💯🔥⭐⚠️✅❌➕➡️]/gu, '')
+    .replace(/[1-9]\d?\./g, m => m.replace('.', '，'))
+    .replace(/\n{2,}/g, '。')
+    .replace(/\n/g, '，')
+    .replace(/[，。][，。]+/g, '。')
+    .replace(/\s+/g, ' ')
+    .trim();
+}
+
+function pickZhVoice() {
+  const voices = state.synth ? state.synth.getVoices() : [];
+  const zh = voices.filter(v => v.lang && v.lang.toLowerCase().startsWith('zh'));
+  if (!zh.length) return null;
+  const preference = [
+    'xiaoxiao', 'yunxi', 'yunyang', 'xiaoyi',
+    'huihui', 'yaoyao', 'kangkang',
+    'tingting', 'sinji', 'meijia'
+  ];
+  for (const name of preference) {
+    const hit = zh.find(v => v.name.toLowerCase().replace(/[\s_-]/g, '').includes(name));
+    if (hit) return hit;
+  }
+  const cn = zh.find(v => v.lang.toLowerCase().includes('zh-cn'));
+  return cn || zh[0];
+}
+
 function speakText(text) {
   if (!state.speechOn || !state.synth) return;
   state.synth.cancel();
-  const utter = new SpeechSynthesisUtterance(text);
+  const cleaned = cleanTextForSpeech(text);
+  if (!cleaned) return;
+  const utter = new SpeechSynthesisUtterance(cleaned);
   utter.lang = 'zh-CN';
-  utter.rate = 0.95;
-  utter.pitch = 1.0;
+  utter.rate = 0.98;
+  utter.pitch = 1.02;
   utter.volume = 1.0;
-  const voices = state.synth.getVoices();
-  const zhVoice = voices.find(v => v.lang.includes('zh'));
+  const zhVoice = pickZhVoice();
   if (zhVoice) utter.voice = zhVoice;
   state.synth.speak(utter);
 }

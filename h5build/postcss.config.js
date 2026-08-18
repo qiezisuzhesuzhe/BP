@@ -10,6 +10,7 @@ module.exports = {
         return id
       }
     }),
-    require('autoprefixer')({ remove: false })
+    require('autoprefixer')({ remove: process.env.UNI_PLATFORM !== 'h5' }),
+    require('@dcloudio/vue-cli-plugin-uni/packages/postcss')
   ]
 }

@@ -1,0 +1,201 @@
+const { JSDOM, VirtualConsole } = require('jsdom')
+
+const jsdomErrors = []
+const vc = new VirtualConsole()
+vc.on('jsdomError', (e) => jsdomErrors.push(e.message))
+
+const sleep = (ms) => new Promise((r) => setTimeout(r, ms))
+
+function polyfill(w) {
+  const ctx = {
+    canvas: null, save() {}, restore() {}, scale() {}, rotate() {}, translate() {},
+    transform() {}, setTransform() {}, resetTransform() {}, clearRect() {}, fillRect() {},
+    strokeRect() {}, beginPath() {}, closePath() {}, moveTo() {}, lineTo() {},
+    bezierCurveTo() {}, quadraticCurveTo() {}, arc() {}, arcTo() {}, ellipse() {},
+    rect() {}, fill() {}, stroke() {}, clip() {}, isPointInPath: () => false,
+    fillText() {}, strokeText() {}, measureText: () => ({ width: 0 }),
+    drawImage() {}, createLinearGradient: () => ({ addColorStop() {} }),
+    createRadialGradient: () => ({ addColorStop() {} }),
+    createPattern: () => null, getImageData: () => ({ data: new Uint8ClampedArray(4) }),
+    putImageData() {}, createImageData: () => ({ data: new Uint8ClampedArray(4) }),
+    setLineDash() {}, getLineDash: () => [], backingStorePixelRatio: 1
+  }
+  w.HTMLCanvasElement.prototype.getContext = function () { ctx.canvas = this; return ctx }
+  w.HTMLCanvasElement.prototype.toDataURL = () => 'data:image/png;base64,'
+  w.CanvasRenderingContext2D = function () {}
+  w.CanvasRenderingContext2D.prototype = ctx
+  w.Path2D = function () {}
+  w.matchMedia = function (q) {
+    return {
+      media: q || '',
+      matches: false,
+      onchange: null,
+      addListener() {}, removeListener() {},
+      addEventListener() {}, removeEventListener() {},
+      dispatchEvent() { return false }
+    }
+  }
+  if (!w.ResizeObserver) {
+    w.ResizeObserver = function () {
+      return { observe() {}, unobserve() {}, disconnect() {} }
+    }
+  }
+  if (!w.IntersectionObserver) {
+    w.IntersectionObserver = function () {
+      return { observe() {}, unobserve() {}, disconnect() {}, takeRecords: () => [] }
+    }
+  }
+}
+
+function cssOf(doc) {
+  return [...doc.querySelectorAll('style')].map((s) => s.textContent).join('\n')
+}
+
+const TOKENS = ['0d4f52', '14666a', '1a7d82', '2da5aa', '7dc8cc', 'e0f4f5', '6ba584',
+  'e8f4ec', 'e07a5f', 'fde8e3', 'd9a05b', 'faf0e0', 'fbfaf7', 'f5f3ee',
+  '1a2b2c', '3d5456', '6b8082', 'c4d2d3']
+
+function report(doc, w, label, keys) {
+  const all = cssOf(doc)
+  const ph = (all.match(/%\?[0-9.]+\?%/g) || []).length
+  const rpx = (all.match(/[0-9]rpx/g) || []).length
+  const px = (all.match(/:\s*[0-9.]+px/g) || []).length
+  console.log(`\n───── ${label} ─────`)
+  console.log(`  <style>=${doc.querySelectorAll('style').length}  CSS=${all.length}B  残留占位符=${ph}  残留rpx=${rpx}  已换算px声明=${px}`)
+  let ok = 0
+  for (const k of keys) {
+    const esc = k.replace(/([.*+?^${}()|[\]\\])/g, '\\$1')
+    const scoped = (all.match(new RegExp('\\.' + esc + '\\[data-v-[a-z0-9]{8}\\]', 'g')) || []).length
+    const global = (all.match(new RegExp('\\.' + esc + '(?![\\w-])[^{]{0,30}\\{', 'g')) || []).length
+    const hits = Math.max(scoped, global)
+    const el = doc.querySelector('.' + k)
+    let cs = ''
+    if (el) {
+      const s = w.getComputedStyle(el)
+      const bits = []
+      const pick = ['padding', 'borderRadius', 'fontSize', 'height', 'backgroundColor']
+      for (const p of pick) {
+        const v = s[p]
+        if (v && v !== '' && v !== 'rgba(0, 0, 0, 0)' && v !== '0px' && v !== 'normal') {
+          bits.push(p + '=' + v)
+        }
+      }
+      cs = bits.slice(0, 3).join('  ')
+    }
+    if (hits > 0 && el) ok++
+    const flag = hits > 0 && el ? 'OK  ' : (el ? '样式缺 ' : '未渲染')
+    console.log(`    ${flag} ${k.padEnd(18)} 规则=${String(hits).padStart(2)}  ${cs}`)
+  }
+  console.log(`  ▸ ${label.slice(0, 4)} 类名样式命中 ${ok}/${keys.length}`)
+  return { ph, rpx, px, size: all.length, ok, total: keys.length }
+}
+
+async function waitFor(fn, timeout = 25000, step = 300) {
+  const t0 = Date.now()
+  while (Date.now() - t0 < timeout) {
+    try { if (fn()) return true } catch (e) {}
+    await sleep(step)
+  }
+  return false
+}
+
+async function waitStyleGrow(doc, before) {
+  await waitFor(() => cssOf(doc).length > before)
+  await sleep(1200)
+}
+
+async function nav(doc, w, url) {
+  const before = cssOf(doc).length
+  w.uni.navigateTo({ url })
+  await waitStyleGrow(doc, before)
+}
+async function tab(doc, w, url) {
+  const before = cssOf(doc).length
+  w.uni.switchTab({ url })
+  await waitStyleGrow(doc, before)
+}
+
+;(async () => {
+  const dom = await JSDOM.fromURL('http://127.0.0.1:8090/index.html', {
+    resources: 'usable',
+    runScripts: 'dangerously',
+    pretendToBeVisual: true,
+    virtualConsole: vc,
+    beforeParse: polyfill
+  })
+  const w = dom.window
+  const doc = w.document
+
+  const booted = await waitFor(() => w.uni && w.__uniRoutes && cssOf(doc).length > 2000 && doc.querySelector('.hero'), 40000)
+  console.log('启动完成=' + booted + '  uni=' + typeof w.uni + ' __uniRoutes=' + typeof w.__uniRoutes)
+  await sleep(1500)
+
+  const stats = []
+
+  stats.push(report(doc, w, '① 首页 pages/index/index',
+    ['hm-page', 'hero', 'hero__hello', 'hero__stat-v', 'hero__bell', 'day-switch', 'hm-sec-title', 'wrap']))
+
+  // 播种订单 + 权益，保证后续页面有数据可渲染
+  let store = null
+  for (const sel of ['uni-app', 'uni-page', 'body > *']) {
+    for (const el of doc.querySelectorAll(sel)) {
+      const vm = el.__vue__
+      if (vm && vm.$store) { store = vm.$store; break }
+      if (vm && vm.$root && vm.$root.$store) { store = vm.$root.$store; break }
+    }
+    if (store) break
+  }
+  console.log('store 获取: ' + (store ? 'OK' : 'FAIL'))
+  const order = await store.dispatch('createOrder', 'hbp3m')
+  await store.dispatch('payOrder', order.orderNo)
+  await sleep(1500)
+
+  await nav(doc, w, '/pages/service/detail?id=hbp3m')
+  stats.push(report(doc, w, '② 服务详情 pages/service/detail',
+    ['buybar', 'buybar__btn', 'buybar__price', 'buybar__origin', 'card', 'ds__img', 'faq']))
+
+  await nav(doc, w, '/pages/pay/pay?orderNo=' + order.orderNo)
+  stats.push(report(doc, w, '③ 支付 pages/pay/pay',
+    ['hm-page', 'card', 'bar-holder', 'hm-sec-title', 'foot-tip']))
+
+  await nav(doc, w, '/pages/rights/rights')
+  stats.push(report(doc, w, '④ 我的权益 pages/rights/rights',
+    ['card', 'card__head', 'card__cta', 'card__rows', 'card__row-v', 'card__status', 'card__emoji', 'prog__fill']))
+
+  const rightId = store.getters.activeRight ? store.getters.activeRight.id : ''
+  await nav(doc, w, '/pages/rights/detail?id=' + rightId)
+  stats.push(report(doc, w, '⑤ 权益详情 pages/rights/detail', ['hm-page', 'top', 'top__t']))
+
+  await tab(doc, w, '/pages/message/message')
+  stats.push(report(doc, w, '⑥ 消息 pages/message/message',
+    ['hm-page', 'group', 'group__t', 'msg', 'msg__cat', 'msg__content', 'list']))
+
+  await tab(doc, w, '/pages/mine/mine')
+  stats.push(report(doc, w, '⑦ 我的 pages/mine/mine',
+    ['hm-page', 'hm-card', 'cur', 'cur__name', 'cur__icon', 'foot__t', 'hm-sec-title']))
+
+  await nav(doc, w, '/pages/mine/orders')
+  stats.push(report(doc, w, '⑧ 我的订单 pages/mine/orders',
+    ['hm-page', 'ord', 'ord__head', 'ord__price', 'ord__origin', 'ord__cta', 'tabs', 'tab__t']))
+
+  await nav(doc, w, '/pages/mine/agreement')
+  stats.push(report(doc, w, '⑨ 用户协议 pages/mine/agreement', ['hm-page']))
+
+  const all = cssOf(doc)
+  const hitTokens = TOKENS.filter((t) => all.toLowerCase().includes(t))
+  console.log('\n══════ 汇总 ══════')
+  console.log('累计注入 <style>      : ' + doc.querySelectorAll('style').length)
+  console.log('累计运行时 CSS 体积   : ' + all.length + ' B')
+  console.log('残留占位符 %?n?%      : ' + (all.match(/%\?[0-9.]+\?%/g) || []).length)
+  console.log('残留字面量 rpx        : ' + (all.match(/[0-9]rpx/g) || []).length)
+  console.log('已换算 px 声明        : ' + (all.match(/:\s*[0-9.]+px/g) || []).length)
+  console.log('设计令牌命中          : ' + hitTokens.length + '/' + TOKENS.length + '  ' + hitTokens.map((t) => '#' + t).join(' '))
+  const okSum = stats.reduce((a, s) => a + s.ok, 0)
+  const totSum = stats.reduce((a, s) => a + s.total, 0)
+  console.log('各页类名样式命中合计  : ' + okSum + '/' + totSum)
+  console.log('upx2px(750)/(40)/(24) : ' + w.uni.upx2px(750) + ' / ' + w.uni.upx2px(40) + ' / ' + w.uni.upx2px(24))
+  console.log('jsdomError 数         : ' + jsdomErrors.length)
+  if (jsdomErrors.length) console.log(jsdomErrors.slice(0, 3).join('\n'))
+  dom.window.close()
+  process.exit(0)
+})()

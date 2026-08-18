@@ -35,21 +35,21 @@
       </view>
     </view>
 
-    <!-- 我的权益（仅购买服务包后显示） -->
-    <view v-if="activeRight" class="wrap">
+    <!-- 我的权益（始终展示，购买后解锁完整权益） -->
+    <view class="wrap">
       <view class="sec-head">
         <text class="hm-sec-title">我的权益</text>
-        <text class="hm-sec-sub">{{ activeRight.name }}</text>
+        <text class="hm-sec-sub">{{ activeRight ? activeRight.name : '开通服务包，解锁全部权益' }}</text>
       </view>
 
-      <view class="rights" @tap="goRightDetail(activeRight.id)">
+      <view class="rights" @tap="onRightsTap">
         <view class="rights__head">
           <view class="rights__head-l">
-            <text class="rights__level">{{ activeRight.level }}</text>
-            <text class="rights__date">有效期 {{ activeRight.startAt }} ~ {{ activeRight.endAt }}</text>
+            <text class="rights__level">{{ activeRight ? activeRight.level : '基础会员' }}</text>
+            <text class="rights__date">{{ activeRight ? ('有效期 ' + activeRight.startAt + ' ~ ' + activeRight.endAt) : '未开通健康管理服务包' }}</text>
           </view>
           <view class="rights__pts">
-            <text class="rights__pts-v">{{ activeRight.points }}</text>
+            <text class="rights__pts-v">{{ activeRight ? activeRight.points : 0 }}</text>
             <text class="rights__pts-l">剩余积分</text>
           </view>
         </view>
@@ -57,7 +57,7 @@
           <view v-for="e in rightEntries" :key="e.key" class="rights__item">
             <view class="rights__item-icon" :style="{ background: e.bg }">
               <text class="rights__item-icon-t" :class="e.icon" :style="{ color: e.color }"></text>
-              <text v-if="e.quota" class="rights__item-badge">{{ e.quota }}</text>
+              <text v-if="activeRight && e.quota" class="rights__item-badge">{{ e.quota }}</text>
             </view>
             <text class="rights__item-t">{{ e.label }}</text>
           </view>
@@ -228,6 +228,13 @@ export default {
     },
     goRightDetail(id) {
       uni.navigateTo({ url: '/pages/rights/detail?id=' + id })
+    },
+    onRightsTap() {
+      if (this.activeRight) {
+        this.goRightDetail(this.activeRight.id)
+      } else {
+        uni.navigateTo({ url: '/pages/service/detail?id=hbp3m' })
+      }
     },
     goMsg() {
       uni.switchTab({ url: '/pages/message/message' })

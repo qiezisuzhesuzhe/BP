@@ -16,16 +16,16 @@ export const PACKAGES = [
     tagline: '中国高血压防治指南 2024 标准',
     accent: '#389a82',
     accentSoft: '#d4f5ee',
-    icon: '🩺',
+    icon: 'fa-solid fa-stethoscope',
     sold: 2847,
     rating: '4.9',
     heroImg: img('医疗健康服务电商详情页主图，微笑的中年亚洲男性在明亮家中客厅使用上臂式电子血压计测量血压，桌上有新鲜蔬果与温水，青绿色与暖白配色，晨光柔和，专业温暖的医疗关怀氛围，干净留白，高级商业摄影，浅景深'),
     tags: ['24h AI 陪伴', '医师团队审核', '指南级危险分层', '按天时间线'],
     highlights: [
-      { icon: '🧬', title: '指南级危险分层', desc: '依据《中国高血压防治指南2024》表8，25题精准评估低危/中危/高危/很高危' },
-      { icon: '📅', title: '每日时间线方案', desc: '监测/用药/营养/运动/心理/睡眠 六维日程，到点提醒不遗漏' },
-      { icon: '💊', title: '六大类用药答疑', desc: '地平、普利、沙坦、利尿剂、洛尔、复方制剂副作用与应对全覆盖' },
-      { icon: '📈', title: '双周方案迭代', desc: '晚间7问采集依从性数据，方案随身体反馈动态调整' }
+      { icon: 'fa-solid fa-dna', title: '指南级危险分层', desc: '依据《中国高血压防治指南2024》表8，25题精准评估低危/中危/高危/很高危' },
+      { icon: 'fa-solid fa-calendar-days', title: '每日时间线方案', desc: '监测/用药/营养/运动/心理/睡眠 六维日程，到点提醒不遗漏' },
+      { icon: 'fa-solid fa-pills', title: '六大类用药答疑', desc: '地平、普利、沙坦、利尿剂、洛尔、复方制剂副作用与应对全覆盖' },
+      { icon: 'fa-solid fa-arrow-trend-up', title: '双周方案迭代', desc: '晚间7问采集依从性数据，方案随身体反馈动态调整' }
     ],
     services: [
       { name: 'AI 健康助手对话', spec: '不限次数', unit: '次' },
@@ -76,16 +76,16 @@ export const PACKAGES = [
     tagline: '中国2型糖尿病防治指南 2024 标准',
     accent: '#4ab89e',
     accentSoft: '#d8f8fa',
-    icon: '🩸',
+    icon: 'fa-solid fa-droplet',
     sold: 1936,
     rating: '4.8',
     heroImg: img('医疗健康服务电商详情页主图，中年亚洲女性在家中用血糖仪测指尖血糖，旁边有全谷物食品和绿叶蔬菜，蓝绿色与暖白配色，柔和自然光，专业温暖的医疗关怀氛围，干净留白，高级商业摄影'),
     tags: ['血糖曲线分析', '营养师配餐', 'GI/GL 双控', '并发症筛查提醒'],
     highlights: [
-      { icon: '📉', title: '七点血糖谱解读', desc: '空腹/三餐后2h/睡前/夜间，识别黎明现象与餐后高峰' },
-      { icon: '🥗', title: '低GI 配餐方案', desc: '注册营养师按您的口味与三餐习惯定制，主食替换有具体克数' },
-      { icon: '🏃', title: '餐后运动窗口', desc: '餐后30-60分钟黄金降糖窗，给到具体运动类型与强度' },
-      { icon: '🔍', title: '并发症筛查日历', desc: '眼底、尿微量白蛋白、足部、糖化血红蛋白 到期自动提醒' }
+      { icon: 'fa-solid fa-arrow-trend-down', title: '七点血糖谱解读', desc: '空腹/三餐后2h/睡前/夜间，识别黎明现象与餐后高峰' },
+      { icon: 'fa-solid fa-leaf', title: '低GI 配餐方案', desc: '注册营养师按您的口味与三餐习惯定制，主食替换有具体克数' },
+      { icon: 'fa-solid fa-person-running', title: '餐后运动窗口', desc: '餐后30-60分钟黄金降糖窗，给到具体运动类型与强度' },
+      { icon: 'fa-solid fa-magnifying-glass', title: '并发症筛查日历', desc: '眼底、尿微量白蛋白、足部、糖化血红蛋白 到期自动提醒' }
     ],
     services: [
       { name: 'AI 健康助手对话', spec: '不限次数', unit: '次' },
@@ -130,80 +130,80 @@ export const PACKAGES = [
 export const TIMELINE = {
   hbp: {
     0: [
-      { time: '07:00', cat: 'monitor', title: '晨起血压监测', desc: '晨起静坐5分钟后测量血压，记录数值', tag: '每日监测', icon: '🩺' },
-      { time: '07:30', cat: 'medication', title: '降压药物服用', desc: '按时服用医生开具的降压药，不可自行停药', tag: '用药提醒', icon: '💊' },
-      { time: '08:00', cat: 'nutrition', title: '营养早餐建议', desc: '燕麦粥+水煮蛋+凉拌菠菜，控制盐分<2g', tag: '饮食管理', icon: '🥣' },
-      { time: '10:00', cat: 'exercise', title: '太极拳练习', desc: '24式简化太极拳，在舒缓音乐中练习30分钟', tag: '运动处方', icon: '🧘' },
-      { time: '12:30', cat: 'nutrition', title: '低盐午餐', desc: '糙米饭+清蒸鲈鱼+西兰花，使用限盐勺', tag: '饮食管理', icon: '🥗' },
-      { time: '15:00', cat: 'psychology', title: '正念呼吸练习', desc: '吸气4秒-屏息4秒-呼气6秒，循环5分钟', tag: '心理调适', icon: '🌱' },
-      { time: '18:00', cat: 'exercise', title: '快走运动', desc: '傍晚凉爽时段快走30分钟，步速适中', tag: '运动处方', icon: '🚶' },
-      { time: '19:00', cat: 'nutrition', title: '清淡晚餐', desc: '杂粮饭+番茄豆腐汤+炒时蔬，少油少盐', tag: '饮食管理', icon: '🍲' },
-      { time: '20:30', cat: 'assessment', title: '康复情况评估', desc: '记录今日血压值、身体感受和情绪状态', tag: '康复评估', icon: '📋' },
-      { time: '22:00', cat: 'sleep', title: '睡前正念冥想', desc: '10分钟睡前引导冥想，帮助身心放松入眠', tag: '睡眠管理', icon: '🌙' }
+      { time: '07:00', cat: 'monitor', title: '晨起血压监测', desc: '晨起静坐5分钟后测量血压，记录数值', tag: '每日监测', icon: 'fa-solid fa-stethoscope' },
+      { time: '07:30', cat: 'medication', title: '降压药物服用', desc: '按时服用医生开具的降压药，不可自行停药', tag: '用药提醒', icon: 'fa-solid fa-pills' },
+      { time: '08:00', cat: 'nutrition', title: '营养早餐建议', desc: '燕麦粥+水煮蛋+凉拌菠菜，控制盐分<2g', tag: '饮食管理', icon: 'fa-solid fa-bowl-food' },
+      { time: '10:00', cat: 'exercise', title: '太极拳练习', desc: '24式简化太极拳，在舒缓音乐中练习30分钟', tag: '运动处方', icon: 'fa-solid fa-spa' },
+      { time: '12:30', cat: 'nutrition', title: '低盐午餐', desc: '糙米饭+清蒸鲈鱼+西兰花，使用限盐勺', tag: '饮食管理', icon: 'fa-solid fa-leaf' },
+      { time: '15:00', cat: 'psychology', title: '正念呼吸练习', desc: '吸气4秒-屏息4秒-呼气6秒，循环5分钟', tag: '心理调适', icon: 'fa-solid fa-seedling' },
+      { time: '18:00', cat: 'exercise', title: '快走运动', desc: '傍晚凉爽时段快走30分钟，步速适中', tag: '运动处方', icon: 'fa-solid fa-person-walking' },
+      { time: '19:00', cat: 'nutrition', title: '清淡晚餐', desc: '杂粮饭+番茄豆腐汤+炒时蔬，少油少盐', tag: '饮食管理', icon: 'fa-solid fa-utensils' },
+      { time: '20:30', cat: 'assessment', title: '康复情况评估', desc: '记录今日血压值、身体感受和情绪状态', tag: '康复评估', icon: 'fa-solid fa-clipboard-list' },
+      { time: '22:00', cat: 'sleep', title: '睡前正念冥想', desc: '10分钟睡前引导冥想，帮助身心放松入眠', tag: '睡眠管理', icon: 'fa-solid fa-moon' }
     ],
     1: [
-      { time: '07:00', cat: 'monitor', title: '晨起血压监测', desc: '晨起静坐5分钟后测量血压，记录数值', tag: '每日监测', icon: '🩺' },
-      { time: '07:30', cat: 'medication', title: '降压药物服用', desc: '按时服用降压药，注意药物副作用', tag: '用药提醒', icon: '💊' },
-      { time: '08:00', cat: 'nutrition', title: '营养早餐', desc: '全麦面包+无糖豆浆+水煮蛋，健康开启新一天', tag: '饮食管理', icon: '🥐' },
-      { time: '09:30', cat: 'exercise', title: '八段锦练习', desc: '传统养生功法八段锦全套，强身健体', tag: '运动处方', icon: '🧘' },
-      { time: '12:30', cat: 'nutrition', title: '午餐营养搭配', desc: '杂粮饭+番茄牛腩+清炒芦笋，营养均衡', tag: '饮食管理', icon: '🍱' },
-      { time: '14:30', cat: 'psychology', title: '渐进式肌肉放松', desc: '从头到脚逐段绷紧再放松，释放身心压力', tag: '心理调适', icon: '🌱' },
-      { time: '17:30', cat: 'exercise', title: '游泳或散步', desc: '30分钟中等强度有氧运动，避免血压高峰', tag: '运动处方', icon: '🏊' },
-      { time: '19:00', cat: 'nutrition', title: '低盐晚餐', desc: '紫薯+冬瓜汤+白灼菜心，清淡易消化', tag: '饮食管理', icon: '🥘' },
-      { time: '20:00', cat: 'monitor', title: '晚间血压监测', desc: '睡前1小时测量血压，记录并对比早间数值', tag: '每日监测', icon: '🩺' },
-      { time: '21:00', cat: 'assessment', title: '每日康复评估', desc: '总结当日身体状况，记录血压和情绪变化', tag: '康复评估', icon: '📋' },
-      { time: '22:00', cat: 'sleep', title: '助眠冥想', desc: '15分钟深度放松冥想，改善睡眠质量', tag: '睡眠管理', icon: '🌙' }
+      { time: '07:00', cat: 'monitor', title: '晨起血压监测', desc: '晨起静坐5分钟后测量血压，记录数值', tag: '每日监测', icon: 'fa-solid fa-stethoscope' },
+      { time: '07:30', cat: 'medication', title: '降压药物服用', desc: '按时服用降压药，注意药物副作用', tag: '用药提醒', icon: 'fa-solid fa-pills' },
+      { time: '08:00', cat: 'nutrition', title: '营养早餐', desc: '全麦面包+无糖豆浆+水煮蛋，健康开启新一天', tag: '饮食管理', icon: 'fa-solid fa-croissant' },
+      { time: '09:30', cat: 'exercise', title: '八段锦练习', desc: '传统养生功法八段锦全套，强身健体', tag: '运动处方', icon: 'fa-solid fa-spa' },
+      { time: '12:30', cat: 'nutrition', title: '午餐营养搭配', desc: '杂粮饭+番茄牛腩+清炒芦笋，营养均衡', tag: '饮食管理', icon: 'fa-solid fa-bowl-food' },
+      { time: '14:30', cat: 'psychology', title: '渐进式肌肉放松', desc: '从头到脚逐段绷紧再放松，释放身心压力', tag: '心理调适', icon: 'fa-solid fa-seedling' },
+      { time: '17:30', cat: 'exercise', title: '游泳或散步', desc: '30分钟中等强度有氧运动，避免血压高峰', tag: '运动处方', icon: 'fa-solid fa-person-swimming' },
+      { time: '19:00', cat: 'nutrition', title: '低盐晚餐', desc: '紫薯+冬瓜汤+白灼菜心，清淡易消化', tag: '饮食管理', icon: 'fa-solid fa-utensils' },
+      { time: '20:00', cat: 'monitor', title: '晚间血压监测', desc: '睡前1小时测量血压，记录并对比早间数值', tag: '每日监测', icon: 'fa-solid fa-stethoscope' },
+      { time: '21:00', cat: 'assessment', title: '每日康复评估', desc: '总结当日身体状况，记录血压和情绪变化', tag: '康复评估', icon: 'fa-solid fa-clipboard-list' },
+      { time: '22:00', cat: 'sleep', title: '助眠冥想', desc: '15分钟深度放松冥想，改善睡眠质量', tag: '睡眠管理', icon: 'fa-solid fa-moon' }
     ],
     2: [
-      { time: '07:00', cat: 'monitor', title: '晨起血压监测', desc: '晨起静坐5分钟后测量血压，连续监测对比', tag: '每日监测', icon: '🩺' },
-      { time: '07:30', cat: 'medication', title: '降压药物服用', desc: '按时服药，如有不适及时记录', tag: '用药提醒', icon: '💊' },
-      { time: '08:00', cat: 'nutrition', title: '营养早餐', desc: '小米南瓜粥+蒸蛋+凉拌苦瓜，清爽开胃', tag: '饮食管理', icon: '🍵' },
-      { time: '10:00', cat: 'exercise', title: '慢跑或快走', desc: '公园慢跑30分钟，感受清晨新鲜空气', tag: '运动处方', icon: '🏃' },
-      { time: '12:30', cat: 'nutrition', title: '营养午餐', desc: '糙米饭+清蒸带鱼+蒜蓉西兰花，低油低盐', tag: '饮食管理', icon: '🍲' },
-      { time: '15:00', cat: 'psychology', title: '正念冥想练习', desc: '引导式正念冥想10分钟，提升觉察力', tag: '心理调适', icon: '🧘' },
-      { time: '18:00', cat: 'exercise', title: '舒缓瑜伽', desc: '基础瑜伽30分钟，拉伸筋骨，平静心绪', tag: '运动处方', icon: '🧘' },
-      { time: '19:00', cat: 'nutrition', title: '健康晚餐', desc: '藜麦沙拉+鸡胸肉蔬菜卷，营养低脂', tag: '饮食管理', icon: '🥗' },
-      { time: '20:30', cat: 'assessment', title: '阶段性康复评估', desc: '三日总结评估，对比前后变化，调整方案', tag: '康复评估', icon: '📊' },
-      { time: '22:00', cat: 'sleep', title: '睡前放松冥想', desc: '引导式入眠冥想，帮助快速入睡', tag: '睡眠管理', icon: '🌙' }
+      { time: '07:00', cat: 'monitor', title: '晨起血压监测', desc: '晨起静坐5分钟后测量血压，连续监测对比', tag: '每日监测', icon: 'fa-solid fa-stethoscope' },
+      { time: '07:30', cat: 'medication', title: '降压药物服用', desc: '按时服药，如有不适及时记录', tag: '用药提醒', icon: 'fa-solid fa-pills' },
+      { time: '08:00', cat: 'nutrition', title: '营养早餐', desc: '小米南瓜粥+蒸蛋+凉拌苦瓜，清爽开胃', tag: '饮食管理', icon: 'fa-solid fa-mug-hot' },
+      { time: '10:00', cat: 'exercise', title: '慢跑或快走', desc: '公园慢跑30分钟，感受清晨新鲜空气', tag: '运动处方', icon: 'fa-solid fa-person-running' },
+      { time: '12:30', cat: 'nutrition', title: '营养午餐', desc: '糙米饭+清蒸带鱼+蒜蓉西兰花，低油低盐', tag: '饮食管理', icon: 'fa-solid fa-utensils' },
+      { time: '15:00', cat: 'psychology', title: '正念冥想练习', desc: '引导式正念冥想10分钟，提升觉察力', tag: '心理调适', icon: 'fa-solid fa-spa' },
+      { time: '18:00', cat: 'exercise', title: '舒缓瑜伽', desc: '基础瑜伽30分钟，拉伸筋骨，平静心绪', tag: '运动处方', icon: 'fa-solid fa-spa' },
+      { time: '19:00', cat: 'nutrition', title: '健康晚餐', desc: '藜麦沙拉+鸡胸肉蔬菜卷，营养低脂', tag: '饮食管理', icon: 'fa-solid fa-leaf' },
+      { time: '20:30', cat: 'assessment', title: '阶段性康复评估', desc: '三日总结评估，对比前后变化，调整方案', tag: '康复评估', icon: 'fa-solid fa-chart-column' },
+      { time: '22:00', cat: 'sleep', title: '睡前放松冥想', desc: '引导式入眠冥想，帮助快速入睡', tag: '睡眠管理', icon: 'fa-solid fa-moon' }
     ]
   },
   dm: {
     0: [
-      { time: '06:50', cat: 'monitor', title: '空腹血糖监测', desc: '起床后未进食测量，识别是否存在黎明现象', tag: '每日监测', icon: '🩸' },
-      { time: '07:30', cat: 'medication', title: '口服降糖药提醒', desc: '二甲双胍随餐服用可减轻胃肠道反应', tag: '用药提醒', icon: '💊' },
-      { time: '08:00', cat: 'nutrition', title: '低GI 早餐', desc: '蛋白质先行：鸡蛋+无糖豆浆+荞麦馒头半个', tag: '饮食管理', icon: '🥣' },
-      { time: '10:00', cat: 'monitor', title: '餐后2h 血糖', desc: '与餐前对比，增幅超过 3.0 mmol/L 需调整主食量', tag: '每日监测', icon: '📈' },
-      { time: '12:30', cat: 'nutrition', title: '控糖午餐', desc: '杂粮饭 100g+清蒸鱼+两份绿叶菜，先菜后饭', tag: '饮食管理', icon: '🥗' },
-      { time: '13:30', cat: 'exercise', title: '餐后快走', desc: '餐后30分钟快走 20 分钟，压平餐后血糖峰', tag: '运动处方', icon: '🚶' },
-      { time: '16:00', cat: 'psychology', title: '压力管理练习', desc: '皮质醇升高会拉高血糖，做5分钟呼吸放松', tag: '心理调适', icon: '🌱' },
-      { time: '19:00', cat: 'nutrition', title: '控糖晚餐', desc: '主食减半，增加优质蛋白与膳食纤维', tag: '饮食管理', icon: '🍲' },
-      { time: '19:30', cat: 'exercise', title: '黄金降糖窗运动', desc: '餐后30-60分钟中等强度运动30分钟', tag: '运动处方', icon: '🏃' },
-      { time: '21:00', cat: 'assessment', title: '控糖情况评估', desc: '汇总今日血糖谱、饮食与运动完成度', tag: '康复评估', icon: '📋' },
-      { time: '21:30', cat: 'sleep', title: '睡前血糖与低血糖自检', desc: '睡前血糖<5.6 需加餐，预防夜间低血糖', tag: '睡眠管理', icon: '🌙' }
+      { time: '06:50', cat: 'monitor', title: '空腹血糖监测', desc: '起床后未进食测量，识别是否存在黎明现象', tag: '每日监测', icon: 'fa-solid fa-droplet' },
+      { time: '07:30', cat: 'medication', title: '口服降糖药提醒', desc: '二甲双胍随餐服用可减轻胃肠道反应', tag: '用药提醒', icon: 'fa-solid fa-pills' },
+      { time: '08:00', cat: 'nutrition', title: '低GI 早餐', desc: '蛋白质先行：鸡蛋+无糖豆浆+荞麦馒头半个', tag: '饮食管理', icon: 'fa-solid fa-bowl-food' },
+      { time: '10:00', cat: 'monitor', title: '餐后2h 血糖', desc: '与餐前对比，增幅超过 3.0 mmol/L 需调整主食量', tag: '每日监测', icon: 'fa-solid fa-arrow-trend-up' },
+      { time: '12:30', cat: 'nutrition', title: '控糖午餐', desc: '杂粮饭 100g+清蒸鱼+两份绿叶菜，先菜后饭', tag: '饮食管理', icon: 'fa-solid fa-leaf' },
+      { time: '13:30', cat: 'exercise', title: '餐后快走', desc: '餐后30分钟快走 20 分钟，压平餐后血糖峰', tag: '运动处方', icon: 'fa-solid fa-person-walking' },
+      { time: '16:00', cat: 'psychology', title: '压力管理练习', desc: '皮质醇升高会拉高血糖，做5分钟呼吸放松', tag: '心理调适', icon: 'fa-solid fa-seedling' },
+      { time: '19:00', cat: 'nutrition', title: '控糖晚餐', desc: '主食减半，增加优质蛋白与膳食纤维', tag: '饮食管理', icon: 'fa-solid fa-utensils' },
+      { time: '19:30', cat: 'exercise', title: '黄金降糖窗运动', desc: '餐后30-60分钟中等强度运动30分钟', tag: '运动处方', icon: 'fa-solid fa-person-running' },
+      { time: '21:00', cat: 'assessment', title: '控糖情况评估', desc: '汇总今日血糖谱、饮食与运动完成度', tag: '康复评估', icon: 'fa-solid fa-clipboard-list' },
+      { time: '21:30', cat: 'sleep', title: '睡前血糖与低血糖自检', desc: '睡前血糖<5.6 需加餐，预防夜间低血糖', tag: '睡眠管理', icon: 'fa-solid fa-moon' }
     ],
     1: [
-      { time: '06:50', cat: 'monitor', title: '空腹血糖监测', desc: '连续记录第2天，观察空腹血糖趋势', tag: '每日监测', icon: '🩸' },
-      { time: '07:30', cat: 'medication', title: '降糖药提醒', desc: '按医嘱服药，如有低血糖症状及时记录', tag: '用药提醒', icon: '💊' },
-      { time: '08:00', cat: 'nutrition', title: '低GI 早餐', desc: '燕麦（非速溶）+鸡蛋+一小把坚果', tag: '饮食管理', icon: '🥐' },
-      { time: '09:30', cat: 'exercise', title: '抗阻训练', desc: '弹力带上肢+靠墙静蹲，提升肌肉葡萄糖摄取', tag: '运动处方', icon: '💪' },
-      { time: '12:30', cat: 'nutrition', title: '控糖午餐', desc: '藜麦饭+鸡胸肉+凉拌木耳，控制精制碳水', tag: '饮食管理', icon: '🍱' },
-      { time: '14:30', cat: 'monitor', title: '餐后2h 血糖', desc: '目标 <10.0 mmol/L，理想 <7.8', tag: '每日监测', icon: '📈' },
-      { time: '17:30', cat: 'exercise', title: '有氧运动', desc: '游泳或骑行30分钟，随身携带糖块', tag: '运动处方', icon: '🏊' },
-      { time: '19:00', cat: 'nutrition', title: '控糖晚餐', desc: '冬瓜虾仁+杂粮饭80g+白灼菜心', tag: '饮食管理', icon: '🥘' },
-      { time: '21:00', cat: 'assessment', title: '每日控糖评估', desc: '记录血糖波动、饮食偏差与身体感受', tag: '康复评估', icon: '📋' },
-      { time: '22:00', cat: 'sleep', title: '助眠放松', desc: '睡眠不足会显著升高次日空腹血糖', tag: '睡眠管理', icon: '🌙' }
+      { time: '06:50', cat: 'monitor', title: '空腹血糖监测', desc: '连续记录第2天，观察空腹血糖趋势', tag: '每日监测', icon: 'fa-solid fa-droplet' },
+      { time: '07:30', cat: 'medication', title: '降糖药提醒', desc: '按医嘱服药，如有低血糖症状及时记录', tag: '用药提醒', icon: 'fa-solid fa-pills' },
+      { time: '08:00', cat: 'nutrition', title: '低GI 早餐', desc: '燕麦（非速溶）+鸡蛋+一小把坚果', tag: '饮食管理', icon: 'fa-solid fa-croissant' },
+      { time: '09:30', cat: 'exercise', title: '抗阻训练', desc: '弹力带上肢+靠墙静蹲，提升肌肉葡萄糖摄取', tag: '运动处方', icon: 'fa-solid fa-dumbbell' },
+      { time: '12:30', cat: 'nutrition', title: '控糖午餐', desc: '藜麦饭+鸡胸肉+凉拌木耳，控制精制碳水', tag: '饮食管理', icon: 'fa-solid fa-bowl-food' },
+      { time: '14:30', cat: 'monitor', title: '餐后2h 血糖', desc: '目标 <10.0 mmol/L，理想 <7.8', tag: '每日监测', icon: 'fa-solid fa-arrow-trend-up' },
+      { time: '17:30', cat: 'exercise', title: '有氧运动', desc: '游泳或骑行30分钟，随身携带糖块', tag: '运动处方', icon: 'fa-solid fa-person-swimming' },
+      { time: '19:00', cat: 'nutrition', title: '控糖晚餐', desc: '冬瓜虾仁+杂粮饭80g+白灼菜心', tag: '饮食管理', icon: 'fa-solid fa-utensils' },
+      { time: '21:00', cat: 'assessment', title: '每日控糖评估', desc: '记录血糖波动、饮食偏差与身体感受', tag: '康复评估', icon: 'fa-solid fa-clipboard-list' },
+      { time: '22:00', cat: 'sleep', title: '助眠放松', desc: '睡眠不足会显著升高次日空腹血糖', tag: '睡眠管理', icon: 'fa-solid fa-moon' }
     ],
     2: [
-      { time: '06:50', cat: 'monitor', title: '空腹血糖监测', desc: '第3天数据，形成初步血糖谱', tag: '每日监测', icon: '🩸' },
-      { time: '07:30', cat: 'medication', title: '降糖药提醒', desc: '注意用药与进餐时间的配合', tag: '用药提醒', icon: '💊' },
-      { time: '08:00', cat: 'nutrition', title: '低GI 早餐', desc: '全麦吐司+牛油果+煎蛋，优质脂肪延缓吸收', tag: '饮食管理', icon: '🍵' },
-      { time: '10:00', cat: 'exercise', title: '快走或慢跑', desc: '中等强度30分钟，心率控制在最大心率60-70%', tag: '运动处方', icon: '🏃' },
-      { time: '12:30', cat: 'nutrition', title: '控糖午餐', desc: '荞麦面+瘦牛肉+菠菜，先喝汤再吃菜后吃面', tag: '饮食管理', icon: '🍲' },
-      { time: '15:00', cat: 'psychology', title: '正念减压', desc: '10分钟正念冥想，稳定情绪与血糖', tag: '心理调适', icon: '🧘' },
-      { time: '18:00', cat: 'exercise', title: '舒缓拉伸', desc: '瑜伽拉伸30分钟，改善外周血液循环', tag: '运动处方', icon: '🧘' },
-      { time: '19:00', cat: 'nutrition', title: '控糖晚餐', desc: '蒸南瓜（替代主食）+清蒸鲈鱼+芦笋', tag: '饮食管理', icon: '🥗' },
-      { time: '20:30', cat: 'assessment', title: '三日血糖谱分析', desc: '汇总三日七点血糖，识别高峰时段并调整方案', tag: '康复评估', icon: '📊' },
-      { time: '22:00', cat: 'sleep', title: '睡前冥想', desc: '引导式入眠冥想，保障 7 小时睡眠', tag: '睡眠管理', icon: '🌙' }
+      { time: '06:50', cat: 'monitor', title: '空腹血糖监测', desc: '第3天数据，形成初步血糖谱', tag: '每日监测', icon: 'fa-solid fa-droplet' },
+      { time: '07:30', cat: 'medication', title: '降糖药提醒', desc: '注意用药与进餐时间的配合', tag: '用药提醒', icon: 'fa-solid fa-pills' },
+      { time: '08:00', cat: 'nutrition', title: '低GI 早餐', desc: '全麦吐司+牛油果+煎蛋，优质脂肪延缓吸收', tag: '饮食管理', icon: 'fa-solid fa-mug-hot' },
+      { time: '10:00', cat: 'exercise', title: '快走或慢跑', desc: '中等强度30分钟，心率控制在最大心率60-70%', tag: '运动处方', icon: 'fa-solid fa-person-running' },
+      { time: '12:30', cat: 'nutrition', title: '控糖午餐', desc: '荞麦面+瘦牛肉+菠菜，先喝汤再吃菜后吃面', tag: '饮食管理', icon: 'fa-solid fa-utensils' },
+      { time: '15:00', cat: 'psychology', title: '正念减压', desc: '10分钟正念冥想，稳定情绪与血糖', tag: '心理调适', icon: 'fa-solid fa-spa' },
+      { time: '18:00', cat: 'exercise', title: '舒缓拉伸', desc: '瑜伽拉伸30分钟，改善外周血液循环', tag: '运动处方', icon: 'fa-solid fa-spa' },
+      { time: '19:00', cat: 'nutrition', title: '控糖晚餐', desc: '蒸南瓜（替代主食）+清蒸鲈鱼+芦笋', tag: '饮食管理', icon: 'fa-solid fa-leaf' },
+      { time: '20:30', cat: 'assessment', title: '三日血糖谱分析', desc: '汇总三日七点血糖，识别高峰时段并调整方案', tag: '康复评估', icon: 'fa-solid fa-chart-column' },
+      { time: '22:00', cat: 'sleep', title: '睡前冥想', desc: '引导式入眠冥想，保障 7 小时睡眠', tag: '睡眠管理', icon: 'fa-solid fa-moon' }
     ]
   }
 }
@@ -275,10 +275,10 @@ export const QUESTIONS_DM = [
 ]
 
 export const KNOWLEDGE = [
-  { icon: '📚', title: '我国成人高血压患病率约 27.5%', desc: '有效控压可显著降低心脑血管并发症风险' },
-  { icon: '🎯', title: '一般人群目标血压 <140/90 mmHg', desc: '能耐受者可进一步降至 <130/80 mmHg' },
-  { icon: '🥗', title: 'DASH 饮食原则', desc: '低盐（<5g/天）、高钾、低脂、多蔬果全谷物' },
-  { icon: '🏃', title: '每周 3-5 次中等强度有氧运动', desc: '每次 30 分钟，快走、慢跑、太极拳、八段锦均可' }
+  { icon: 'fa-solid fa-book', title: '我国成人高血压患病率约 27.5%', desc: '有效控压可显著降低心脑血管并发症风险' },
+  { icon: 'fa-solid fa-bullseye', title: '一般人群目标血压 <140/90 mmHg', desc: '能耐受者可进一步降至 <130/80 mmHg' },
+  { icon: 'fa-solid fa-leaf', title: 'DASH 饮食原则', desc: '低盐（<5g/天）、高钾、低脂、多蔬果全谷物' },
+  { icon: 'fa-solid fa-person-running', title: '每周 3-5 次中等强度有氧运动', desc: '每次 30 分钟，快走、慢跑、太极拳、八段锦均可' }
 ]
 
 export function makeOrderNo() {

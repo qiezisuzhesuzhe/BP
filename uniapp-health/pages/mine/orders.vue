@@ -15,7 +15,7 @@
     </view>
 
     <view v-if="filtered.length === 0" class="empty">
-      <text class="empty__icon">🧾</text>
+      <text class="empty__icon fa-solid fa-receipt"></text>
       <text class="empty__t">暂无订单记录</text>
       <text class="empty__d">选购健康管理服务包后，订单会显示在这里</text>
       <view class="empty__btn" @tap="goHome">

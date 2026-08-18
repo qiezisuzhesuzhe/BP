@@ -2,7 +2,7 @@
   <view class="hm-page">
     <view v-if="!right" class="miss">
       <hm-navbar title="权益详情" />
-      <text class="miss__icon">🔍</text>
+      <text class="miss__icon fa-solid fa-magnifying-glass"></text>
       <text class="miss__t">未找到该权益记录</text>
       <view class="miss__btn" @tap="goRights">
         <text class="miss__btn-t">返回我的权益</text>

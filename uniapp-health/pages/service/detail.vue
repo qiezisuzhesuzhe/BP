@@ -26,11 +26,11 @@
         <text class="intro__sub">{{ pkg.subtitle }}</text>
 
         <view class="intro__meta">
-          <text class="intro__meta-t">⭐ {{ pkg.rating }} 分</text>
+          <text class="intro__meta-t"><text class="fa-solid fa-star intro__star"></text> {{ pkg.rating }} 分</text>
           <text class="intro__meta-dot">·</text>
           <text class="intro__meta-t">已服务 {{ pkg.sold }} 人</text>
           <text class="intro__meta-dot">·</text>
-          <text class="intro__meta-t">{{ pkg.icon }} 医师团队审核</text>
+          <text class="intro__meta-t"><text :class="pkg.icon"></text> 医师团队审核</text>
         </view>
 
         <view class="intro__price">
@@ -53,7 +53,7 @@
       </view>
       <view v-for="(h, i) in pkg.highlights" :key="i" class="card hl">
         <view class="hl__icon" :style="{ background: pkg.accentSoft }">
-          <text class="hl__icon-t">{{ h.icon }}</text>
+          <text class="hl__icon-t" :class="h.icon"></text>
         </view>
         <view class="hl__main">
           <text class="hl__t">{{ h.title }}</text>
@@ -279,6 +279,11 @@ export default {
 .intro__meta-t {
   font-size: $font-size-2xs;
   color: $text-disabled;
+}
+
+.intro__star {
+  color: $warning;
+  margin-right: $space-1;
 }
 
 .intro__meta-dot {

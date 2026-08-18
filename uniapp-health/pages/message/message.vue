@@ -25,7 +25,7 @@
     </scroll-view>
 
     <view v-if="filtered.length === 0" class="empty">
-      <text class="empty__icon">📭</text>
+      <text class="empty__icon fa-solid fa-envelope-open"></text>
       <text class="empty__t">这里还没有消息</text>
       <text class="empty__d">开通服务后，订单通知与每日健康提醒都会出现在这里</text>
     </view>
@@ -37,7 +37,7 @@
         </view>
         <view v-for="m in g.items" :key="m.id" class="msg" :class="{ 'msg--unread': !m.read }" @tap="onTap(m)">
           <view class="msg__icon" :style="{ background: soft(m.color) }">
-            <text class="msg__icon-t">{{ m.icon }}</text>
+            <text class="msg__icon-t" :class="m.icon"></text>
           </view>
           <view class="msg__main">
             <view class="msg__head">

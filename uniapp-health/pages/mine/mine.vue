@@ -55,7 +55,7 @@
     <view class="hm-card menu">
       <view v-for="(it, i) in menu" :key="i" class="mi" :class="{ 'mi--last': i === menu.length - 1 }" @tap="onMenu(it)">
         <view class="mi__icon" :style="{ background: it.bg }">
-          <text class="mi__icon-t">{{ it.icon }}</text>
+          <text class="mi__icon-t" :class="it.icon"></text>
         </view>
         <view class="mi__main">
           <text class="mi__t">{{ it.label }}</text>
@@ -72,7 +72,7 @@
     <view class="hm-card menu">
       <view v-for="(it, i) in about" :key="i" class="mi" :class="{ 'mi--last': i === about.length - 1 }" @tap="onMenu(it)">
         <view class="mi__icon" :style="{ background: it.bg }">
-          <text class="mi__icon-t">{{ it.icon }}</text>
+          <text class="mi__icon-t" :class="it.icon"></text>
         </view>
         <view class="mi__main">
           <text class="mi__t">{{ it.label }}</text>
@@ -95,9 +95,9 @@ export default {
   data() {
     return {
       about: [
-        { key: 'agreement', icon: '📄', bg: '#f2f7fa', label: '用户协议与隐私政策', desc: '服务条款、健康数据使用说明' },
-        { key: 'service', icon: '☎️', bg: '#ddf7ed', label: '联系客服', desc: '工作日 09:00 - 21:00' },
-        { key: 'reset', icon: '♻️', bg: '#fdf4ed', label: '清空演示数据', desc: '恢复到初始状态，便于重新体验' }
+        { key: 'agreement', icon: 'fa-solid fa-file-lines', bg: '#f2f7fa', label: '用户协议与隐私政策', desc: '服务条款、健康数据使用说明' },
+        { key: 'service', icon: 'fa-solid fa-phone', bg: '#ddf7ed', label: '联系客服', desc: '工作日 09:00 - 21:00' },
+        { key: 'reset', icon: 'fa-solid fa-recycle', bg: '#fdf4ed', label: '清空演示数据', desc: '恢复到初始状态，便于重新体验' }
       ]
     }
   },
@@ -125,12 +125,12 @@ export default {
     },
     menu() {
       return [
-        { key: 'profile', icon: '👤', bg: '#d4f5ee', label: '个人资料', desc: '姓名、性别、身高体重等健康档案' },
-        { key: 'orders', icon: '🧾', bg: '#d8f8fa', label: '我的订单', desc: '共 ' + this.orderCount + ' 笔订单记录' },
-        { key: 'rights', icon: '🎫', bg: '#ddf7ed', label: '我的权益', desc: '已开通 ' + this.rightsCount + ' 项健康管理服务' },
+        { key: 'profile', icon: 'fa-solid fa-user', bg: '#d4f5ee', label: '个人资料', desc: '姓名、性别、身高体重等健康档案' },
+        { key: 'orders', icon: 'fa-solid fa-receipt', bg: '#d8f8fa', label: '我的订单', desc: '共 ' + this.orderCount + ' 笔订单记录' },
+        { key: 'rights', icon: 'fa-solid fa-ticket', bg: '#ddf7ed', label: '我的权益', desc: '已开通 ' + this.rightsCount + ' 项健康管理服务' },
         {
           key: 'chat',
-          icon: '💬',
+          icon: 'fa-solid fa-comment-dots',
           bg: '#fdf4ed',
           label: '健康对话',
           desc: this.activeRight ? '继续与 AI 健康助手对话' : '开通服务后可使用',

@@ -52,7 +52,7 @@ function buildDefaultMessages() {
     {
       id: uid('m'),
       type: 'activity',
-      icon: '🎁',
+      icon: 'fa-solid fa-gift',
       color: '#f2c94c',
       title: '新人专享礼包',
       content: '首次购买健康管理服务包立减 100 元，可与限时折扣叠加使用。',
@@ -63,7 +63,7 @@ function buildDefaultMessages() {
     {
       id: uid('m'),
       type: 'doctor',
-      icon: '🩺',
+      icon: 'fa-solid fa-stethoscope',
       color: '#389a82',
       title: '医师团队提示',
       content: '您上次填写的血压值偏高（148/95 mmHg），建议尽快开始系统化管理。',
@@ -260,7 +260,7 @@ const store = new Vuex.Store({
         {
           id: uid('m'),
           type: 'order',
-          icon: '✅',
+          icon: 'fa-solid fa-circle-check',
           color: '#27ae60',
           title: '支付成功',
           content:
@@ -272,7 +272,7 @@ const store = new Vuex.Store({
         {
           id: uid('m'),
           type: 'service',
-          icon: '👋',
+          icon: 'fa-solid fa-hand-wave',
           color: '#389a82',
           title: '专属健康管理师已就位',
           content: '请到「我的权益」点击立即使用，添加企业微信后即可开始首次健康问询。',
@@ -318,7 +318,7 @@ const store = new Vuex.Store({
         {
           id: uid('m'),
           type: 'report',
-          icon: '📋',
+          icon: 'fa-solid fa-clipboard-list',
           color: '#f2c94c',
           title: '个性化健康方案已生成',
           content: '基于您的首次问询结果，已生成 ' + right.duration + '专属管理方案，可在首页查看今日健康指导。',

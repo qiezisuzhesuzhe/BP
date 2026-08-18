@@ -61,6 +61,8 @@
 | 令牌 | 值 | 用途 |
 | --- | --- | --- |
 | `--font-family-base` | `"PingFang SC", -apple-system, BlinkMacSystemFont, "Hiragino Sans GB", "Microsoft YaHei", sans-serif` | 默认字体 |
+| `--icon-font-family` | `"Font Awesome 6 Free"` | 图标字体族，通过 BootCDN 国内 CDN 加载（font-awesome 6.4.2） |
+| `--icon-font-family-brands` | `"Font Awesome 6 Brands"` | 品牌图标字体族（微信/支付宝等） |
 | `--font-size-2xs` | `10px` | 微型说明、底部导航文字 |
 | `--font-size-xs` | `12px` | 辅助说明、角标、次要模块标题 |
 | `--font-size-sm` | `14px` | 次级正文、标签、列表副标题 |
@@ -216,6 +218,13 @@
 - 图标使用圆形或胶囊形，圆角 `--radius-full`。
 - 图标内部使用主色 `--color-brand-primary` 或青色 `--color-brand-cyan`。
 - 文字标题使用 `--font-size-md`，说明文字使用 `--font-size-xs`。
+
+### 图标
+
+- 禁止使用 emoji 作为 UI 图标（Windows 等系统会渲染为方框）。
+- 统一使用 Font Awesome 6（`--icon-font-family`）图标字体：Solid 图标用 `fa-solid fa-xxx`，品牌图标用 `fa-brands fa-xxx`。
+- 图标继承所在元素 `font-size` 与 `color`，通过设计令牌控制尺寸与颜色。
+- 数据驱动的图标（列表项、菜单、消息）以 class 字符串形式存于数据层，模板用 `:class` 绑定。
 
 ### 空状态
 

@@ -3,14 +3,14 @@
     <hm-navbar title="" bg-color="transparent">
       <template #right>
         <view class="chat__voice" @tap="toggleVoice">
-          <text class="chat__voice-icon">{{ voiceOn ? '🔊' : '🔇' }}</text>
+          <text class="chat__voice-icon" :class="voiceOn ? 'fa-solid fa-volume-high' : 'fa-solid fa-volume-xmark'"></text>
         </view>
       </template>
     </hm-navbar>
 
     <view class="chat__head">
       <view class="chat__head-avatar">
-        <text class="chat__head-emoji">🩺</text>
+        <text class="chat__head-emoji fa-solid fa-stethoscope"></text>
       </view>
       <view class="chat__head-main">
         <text class="chat__head-name">安康 · AI健康助手</text>
@@ -29,7 +29,7 @@
 
         <view v-for="(m, i) in messages" :key="m.id || i" class="msg" :class="'msg--' + m.role">
           <view v-if="m.role === 'ai'" class="msg__avatar">
-            <text class="msg__avatar-t">🩺</text>
+            <text class="msg__avatar-t fa-solid fa-stethoscope"></text>
           </view>
 
           <view class="msg__body">
@@ -39,7 +39,7 @@
 
             <view v-else-if="m.kind === 'report'" class="report">
               <view class="report__head">
-                <text class="report__icon">📋</text>
+                <text class="report__icon fa-solid fa-clipboard-list"></text>
                 <view class="report__head-main">
                   <text class="report__title">首次评估结论</text>
                   <text class="report__sub">{{ m.report.pkgName }}</text>
@@ -85,7 +85,7 @@
 
         <view v-if="typing" class="msg msg--ai">
           <view class="msg__avatar">
-            <text class="msg__avatar-t">🩺</text>
+            <text class="msg__avatar-t fa-solid fa-stethoscope"></text>
           </view>
           <view class="msg__body">
             <view class="bubble bubble--ai typing">
@@ -98,7 +98,7 @@
 
         <view v-if="phase === 'generating'" class="msg msg--ai">
           <view class="msg__avatar">
-            <text class="msg__avatar-t">🩺</text>
+            <text class="msg__avatar-t fa-solid fa-stethoscope"></text>
           </view>
           <view class="msg__body">
             <view class="gen">
@@ -151,7 +151,7 @@
           @confirm="send"
         />
         <view class="bar__mic" @tap="onMic">
-          <text class="bar__mic-t">🎤</text>
+          <text class="bar__mic-t fa-solid fa-microphone"></text>
         </view>
         <view class="bar__send" :class="{ 'bar__send--off': !canSend }" @tap="send">
           <text class="bar__send-t">发送</text>
@@ -328,7 +328,7 @@ export default {
     finishGenerating() {
       this.phase = 'done'
       const report = this.buildReport()
-      this.push({ role: 'ai', kind: 'text', text: '方案已生成 ✅ 下面是您的首次评估结论，请先看一下关键判断与目标值。' })
+      this.push({ role: 'ai', kind: 'text', text: '方案已生成，下面是您的首次评估结论，请先看一下关键判断与目标值。' })
       this.push({ role: 'ai', kind: 'report', report: report })
       this.delay(700, () => {
         this.push({ role: 'ai', kind: 'text', text: '这是为您安排的第一天日程，按时间点执行即可，完成后我会陪您复盘。' })

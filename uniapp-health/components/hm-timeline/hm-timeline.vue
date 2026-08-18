@@ -3,7 +3,7 @@
     <view v-for="(item, idx) in items" :key="idx" class="tl__row">
       <view class="tl__rail">
         <view class="tl__dot" :style="{ background: meta(item.cat).color }">
-          <text class="tl__dot-icon">{{ item.icon }}</text>
+          <text class="tl__dot-icon" :class="item.icon"></text>
         </view>
         <view v-if="idx < items.length - 1" class="tl__line"></view>
       </view>

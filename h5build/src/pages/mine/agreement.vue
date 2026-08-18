@@ -15,7 +15,7 @@
     </view>
 
     <view class="hm-card warn">
-      <text class="warn__icon">⚠️</text>
+      <text class="warn__icon fa-solid fa-triangle-exclamation"></text>
       <view class="warn__main">
         <text class="warn__t">重要提示</text>
         <text class="warn__d">本平台提供健康管理与生活方式干预服务，不属于医疗诊疗行为，不能替代医院就诊、检查与医师处方。出现急症表现请立即就近急诊或拨打 120。</text>

@@ -5,7 +5,7 @@
       <hm-navbar title="" :show-back="false" bg-color="transparent">
         <template #right>
           <view class="hero__bell" @tap="goMsg">
-            <text class="hero__bell-icon">🔔</text>
+            <text class="hero__bell-icon fa-solid fa-bell"></text>
             <view v-if="unreadCount > 0" class="hero__badge">
               <text class="hero__badge-t">{{ unreadCount > 99 ? '99+' : unreadCount }}</text>
             </view>
@@ -52,7 +52,7 @@
       </view>
 
       <view v-else class="notice">
-        <text class="notice__icon">💡</text>
+        <text class="notice__icon fa-solid fa-lightbulb"></text>
         <view class="notice__main">
           <text class="notice__t">您还没有开通健康管理服务</text>
           <text class="notice__d">下方为体验版今日指导，开通后获得专属方案</text>
@@ -103,7 +103,7 @@
             <text class="pkg__name">{{ pkg.name }}</text>
             <text class="pkg__sub">{{ pkg.subtitle }}</text>
           </view>
-          <text class="pkg__emoji">{{ pkg.icon }}</text>
+          <text class="pkg__emoji" :class="pkg.icon"></text>
         </view>
 
         <view class="pkg__body">
@@ -124,7 +124,7 @@
           </view>
 
           <view class="pkg__sold">
-            <text class="pkg__sold-t">⭐ {{ pkg.rating }} 分 · 已服务 {{ pkg.sold }} 人</text>
+            <text class="pkg__sold-t"><text class="fa-solid fa-star pkg__sold-star"></text>{{ pkg.rating }} 分 · 已服务 {{ pkg.sold }} 人</text>
           </view>
         </view>
       </view>
@@ -140,7 +140,7 @@
       </view>
       <view class="kn">
         <view v-for="(k, i) in knowledge" :key="i" class="kn__item">
-          <text class="kn__icon">{{ k.icon }}</text>
+          <text class="kn__icon" :class="k.icon"></text>
           <view class="kn__main">
             <text class="kn__t">{{ k.title }}</text>
             <text class="kn__d">{{ k.desc }}</text>
@@ -602,6 +602,11 @@ export default {
 .pkg__sold-t {
   font-size: $font-size-2xs;
   color: $text-disabled;
+}
+
+.pkg__sold-star {
+  color: $warning;
+  margin-right: $space-1;
 }
 
 .kn {

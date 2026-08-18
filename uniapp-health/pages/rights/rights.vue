@@ -9,7 +9,7 @@
     </view>
 
     <view v-if="rights.length === 0" class="empty">
-      <text class="empty__icon">🗂️</text>
+      <text class="empty__icon fa-solid fa-folder-open"></text>
       <text class="empty__t">还没有已开通的服务</text>
       <text class="empty__d">开通健康管理服务包，获得专属医师团队与 AI 助手陪伴</text>
       <view class="empty__btn" @tap="goHome">
@@ -68,7 +68,7 @@
     </view>
 
     <view class="tips">
-      <text class="tips__t">💡 服务期内如需调整方案，可在对话中随时告知健康管理师</text>
+      <text class="tips__t"><text class="fa-solid fa-lightbulb"></text> 服务期内如需调整方案，可在对话中随时告知健康管理师</text>
     </view>
     <view class="hm-safe-bottom"></view>
 
@@ -76,7 +76,7 @@
     <view v-if="wecom.show" class="mask">
       <view class="sheet">
         <view v-if="wecom.step === 1" class="sheet__pane">
-          <text class="sheet__icon">👨‍⚕️</text>
+          <text class="sheet__icon fa-solid fa-user-doctor"></text>
           <text class="sheet__t">添加您的专属健康管理师</text>
           <text class="sheet__d">添加企业微信后，管理师将协助您完成首次健康问询，并全程跟踪服务方案</text>
 

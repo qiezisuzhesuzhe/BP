@@ -64,7 +64,7 @@
             :class="{ 'pay__item--on': payMethod === m.key }"
             @tap="choose(m.key)"
           >
-            <text class="pay__icon">{{ m.icon }}</text>
+            <text class="pay__icon" :class="m.icon"></text>
             <view class="pay__main">
               <text class="pay__name">{{ m.name }}</text>
               <text class="pay__desc">{{ m.desc }}</text>
@@ -91,7 +91,7 @@
     </block>
 
     <view v-else class="empty">
-      <text class="empty__icon">📦</text>
+      <text class="empty__icon fa-solid fa-box"></text>
       <text class="empty__t">订单不存在或已失效</text>
       <view class="empty__btn" @tap="goHome">
         <text class="empty__btn-t">返回首页</text>
@@ -135,9 +135,9 @@ export default {
       stage: 0,
       timers: [],
       methods: [
-        { key: 'wx', name: '微信支付', desc: '亿万用户的选择，更快更安全', icon: '💚' },
-        { key: 'alipay', name: '支付宝', desc: '数亿用户在用，安全可托付', icon: '🔵' },
-        { key: 'unionpay', name: '云闪付', desc: '银行卡支付，享银联优惠', icon: '🔴' }
+        { key: 'wx', name: '微信支付', desc: '亿万用户的选择，更快更安全', icon: 'fa-brands fa-weixin' },
+        { key: 'alipay', name: '支付宝', desc: '数亿用户在用，安全可托付', icon: 'fa-brands fa-alipay' },
+        { key: 'unionpay', name: '云闪付', desc: '银行卡支付，享银联优惠', icon: 'fa-solid fa-credit-card' }
       ]
     }
   },

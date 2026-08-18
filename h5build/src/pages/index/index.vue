@@ -126,24 +126,7 @@
       </view>
     </view>
 
-    <!-- 健康知识 -->
-    <view class="wrap">
-      <view class="sec-head">
-        <view>
-          <text class="hm-sec-title">健康小知识</text>
-          <text class="hm-sec-sub">来自权威指南的实用建议</text>
-        </view>
-      </view>
-      <view class="kn">
-        <view v-for="(k, i) in knowledge" :key="i" class="kn__item">
-          <text class="kn__icon" :class="k.icon"></text>
-          <view class="kn__main">
-            <text class="kn__t">{{ k.title }}</text>
-            <text class="kn__d">{{ k.desc }}</text>
-          </view>
-        </view>
-      </view>
-    </view>
+    <!-- 健康小知识：已按需求移除 -->
 
     <view class="foot-tip">
       <text class="foot-tip__t">本服务为健康管理与生活方式干预，不替代医疗诊断与处方</text>
@@ -153,12 +136,9 @@
 </template>
 
 <script>
-import { KNOWLEDGE } from '@/common/mock.js'
-
 export default {
   data() {
     return {
-      knowledge: KNOWLEDGE,
       dayTabs: ['今天', '明天', '后天']
     }
   },
@@ -590,48 +570,6 @@ export default {
 .pkg__sold-star {
   color: $warning;
   margin-right: $space-1;
-}
-
-.kn {
-  background: $bg-surface;
-  border-radius: $radius-card;
-  box-shadow: $shadow-sm;
-  padding: $space-1 $space-3;
-}
-
-.kn__item {
-  display: flex;
-  align-items: flex-start;
-  padding: $space-3 0;
-  border-bottom: 1rpx solid $border-subtle;
-}
-
-.kn__item:last-child {
-  border-bottom: none;
-}
-
-.kn__icon {
-  font-size: $size-icon-xs;
-  margin-right: $space-2;
-  color: $icon-ink;
-}
-
-.kn__main {
-  flex: 1;
-}
-
-.kn__t {
-  display: block;
-  font-size: $font-size-sm;
-  font-weight: $font-weight-semibold;
-  color: $text-primary;
-}
-
-.kn__d {
-  display: block;
-  font-size: $font-size-xs;
-  color: $text-muted;
-  margin-top: $space-1;
 }
 
 .foot-tip {

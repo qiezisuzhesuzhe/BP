@@ -36,7 +36,7 @@
 | `--color-warning` | `#F2C94C` | 警告、提醒状态 |
 | `--color-danger` | `#EB5757` | 错误、危险、删除操作 |
 | `--color-badge` | `#F15533` | 消息红点、角标、未读提醒 |
-| `--color-bg-page` | `linear-gradient(45deg, #DDF7ED 0%, #E9FAF5 42%, #F5FAFF 76%, #F5FAFF 100%)` | 页面顶部斜 45 度背景渐变 |
+| `--color-bg-page` | `linear-gradient(180deg, #DDF7ED 0%, #E9FAF5 32%, #F5FAFF 62%, #F5FAFF 100%)` | 页面顶部垂直渐变（末端与 `--color-bg-page-base` 一致，62% 处即到底色，向下无缝衔接） |
 | `--color-bg-page-fade` | `linear-gradient(180deg, rgba(245, 250, 255, 0) 0%, #F5FAFF 88%)` | 页面顶部渐变到底色的柔和过渡层 |
 | `--color-bg-page-height` | `800px` | 页面顶部渐变固定高度 |
 | `--color-bg-page-base` | `#F5FAFF` | 页面基础底色 |
@@ -270,7 +270,7 @@
   --color-warning: #F2C94C;
   --color-danger: #EB5757;
   --color-badge: #F15533;
-  --color-bg-page: linear-gradient(45deg, #DDF7ED 0%, #E9FAF5 42%, #F5FAFF 76%, #F5FAFF 100%);
+  --color-bg-page: linear-gradient(180deg, #DDF7ED 0%, #E9FAF5 32%, #F5FAFF 62%, #F5FAFF 100%);
   --color-bg-page-fade: linear-gradient(180deg, rgba(245, 250, 255, 0) 0%, #F5FAFF 88%);
   --color-bg-page-height: 800px;
   --color-bg-page-base: #F5FAFF;

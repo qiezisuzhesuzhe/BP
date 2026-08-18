@@ -51,9 +51,10 @@
             </view>
             <text v-if="activeRight" class="rights__date">有效期 {{ activeRight.startAt }} ~ {{ activeRight.endAt }}</text>
           </view>
-          <view class="rights__pts">
+          <view class="rights__pts" @tap.stop="goMall">
             <text class="rights__pts-l">剩余积分</text>
             <text class="rights__pts-v">{{ activeRight ? activeRight.points : 500 }}</text>
+            <text class="fa-solid fa-angle-right rights__pts-arrow"></text>
           </view>
         </view>
         <view class="rights__grid">
@@ -111,13 +112,11 @@
     <view class="wrap" id="shop">
       <view class="sec-head">
         <text class="hm-sec-title">健康管理服务包</text>
-        <text class="hm-sec-sub">三甲医师团队 + AI 助手全程陪伴</text>
       </view>
 
       <view v-for="pkg in packages" :key="pkg.id" class="pkg" @tap="goDetail(pkg.id)">
         <view class="pkg__banner" :style="{ background: pkg.accentSoft }">
           <view class="pkg__banner-l">
-            <text class="pkg__badge">{{ pkg.tagline }}</text>
             <text class="pkg__name">{{ pkg.name }}</text>
             <text class="pkg__sub">{{ pkg.subtitle }}</text>
           </view>
@@ -136,10 +135,9 @@
               <text class="pkg__origin">¥{{ pkg.originPrice }}</text>
               <text class="pkg__dur">/ {{ pkg.duration }}</text>
             </view>
-          </view>
-
-          <view class="pkg__sold">
-            <text class="pkg__sold-t"><text class="fa-solid fa-star pkg__sold-star"></text>{{ pkg.rating }} 分 · 已服务 {{ pkg.sold }} 人</text>
+            <view class="pkg__sold">
+              <text class="pkg__sold-t"><text class="fa-solid fa-star pkg__sold-star"></text>{{ pkg.rating }} 分 · 已服务 {{ pkg.sold }} 人</text>
+            </view>
           </view>
         </view>
       </view>
@@ -210,9 +208,9 @@ export default {
     syncBadge() {
       const n = this.unreadCount
       if (n > 0) {
-        uni.setTabBarBadge({ index: 1, text: n > 99 ? '99+' : '' + n, fail() {} })
+        uni.setTabBarBadge({ index: 2, text: n > 99 ? '99+' : '' + n, fail() {} })
       } else {
-        uni.removeTabBarBadge({ index: 1, fail() {} })
+        uni.removeTabBarBadge({ index: 2, fail() {} })
       }
     },
     setDay(i) {
@@ -238,6 +236,9 @@ export default {
       } else {
         uni.navigateTo({ url: '/pages/service/detail?id=hbp3m' })
       }
+    },
+    goMall() {
+      uni.switchTab({ url: '/pages/mall/mall' })
     },
     goMsg() {
       uni.switchTab({ url: '/pages/message/message' })
@@ -355,26 +356,27 @@ export default {
 .rights {
   position: relative;
   overflow: hidden;
-  background: linear-gradient(165deg, $bg-surface 0%, $brand-green-soft 100%);
-  border: 1rpx solid $label-soft-border;
+  background: linear-gradient(135deg, #0e4a41 0%, #165e5a 55%, #1a7d82 100%);
   border-radius: $radius-card;
-  box-shadow: $shadow-md, inset 0 2rpx 0 rgba(255, 255, 255, 0.85);
-  padding: $space-4 $space-3 $space-3;
+  box-shadow: $shadow-lg;
+  padding: $space-4 $space-3 $space-4;
 }
 
-/* 顶部细高光线：提升卡片精致度 */
-.rights::before {
+/* 右上角柔光晕：深色卡的品质细节 */
+.rights::after {
   content: '';
   position: absolute;
-  top: 0;
-  left: $space-4;
-  right: $space-4;
-  height: 2rpx;
-  background: linear-gradient(90deg, transparent, $brand-primary, transparent);
-  opacity: 0.9;
+  top: -140rpx;
+  right: -100rpx;
+  width: 360rpx;
+  height: 360rpx;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(125, 212, 188, 0.42) 0%, rgba(125, 212, 188, 0) 70%);
 }
 
 .rights__head {
+  position: relative;
+  z-index: 1;
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -391,33 +393,34 @@ export default {
   align-items: center;
   padding: $space-1 $space-3;
   border-radius: $radius-full;
-  background: linear-gradient(135deg, $brand-soft 0%, rgba(255, 255, 255, 0.92) 100%);
-  border: 1rpx solid $label-soft-border;
-  box-shadow: $shadow-sm;
+  background: rgba(255, 255, 255, 0.14);
+  border: 1rpx solid rgba(255, 255, 255, 0.22);
 }
 
 .rights__level-icon {
   font-size: $font-size-xs;
-  color: $brand-primary-active;
+  color: $brand-primary;
   margin-right: $space-1;
 }
 
 .rights__level-t {
   font-size: $font-size-sm;
   font-weight: $font-weight-heavy;
-  color: $text-primary;
+  color: $text-inverse;
   letter-spacing: 2rpx;
 }
 
 .rights__date {
   display: block;
   font-size: $font-size-xs;
-  color: $text-muted;
+  color: rgba(255, 255, 255, 0.72);
   margin-top: $space-2;
   font-family: $font-family-en;
 }
 
 .rights__pts {
+  position: relative;
+  z-index: 1;
   display: flex;
   align-items: baseline;
   flex-shrink: 0;
@@ -426,19 +429,27 @@ export default {
 
 .rights__pts-l {
   font-size: $font-size-xs;
-  color: $text-muted;
+  color: rgba(255, 255, 255, 0.72);
   margin-right: $space-1;
 }
 
 .rights__pts-v {
   font-size: $font-size-2xl;
   font-weight: $font-weight-heavy;
-  color: $brand-primary-active;
+  color: $text-inverse;
   line-height: $line-height-tight;
   font-family: $font-family-en;
 }
 
+.rights__pts-arrow {
+  font-size: $font-size-sm;
+  color: rgba(255, 255, 255, 0.72);
+  margin-left: $space-1;
+}
+
 .rights__grid {
+  position: relative;
+  z-index: 1;
   margin-top: $space-4;
   display: flex;
   flex-wrap: wrap;
@@ -460,6 +471,7 @@ export default {
   display: flex;
   align-items: center;
   justify-content: center;
+  background: rgba(255, 255, 255, 0.96);
   box-shadow: $shadow-sm;
 }
 
@@ -474,18 +486,19 @@ export default {
   min-width: $size-badge-md;
   height: $size-badge-md;
   border-radius: $radius-full;
-  background: $badge;
-  color: $text-inverse;
+  background: $warning;
+  color: $text-primary;
   font-size: $font-size-2xs;
   line-height: $size-badge-md;
   text-align: center;
   padding: 0 $space-1;
   box-shadow: $shadow-sm;
+  font-family: $font-family-en;
 }
 
 .rights__item-t {
   font-size: $font-size-min;
-  color: $text-secondary;
+  color: rgba(255, 255, 255, 0.9);
   margin-top: $space-1;
 }
 
@@ -610,22 +623,13 @@ export default {
   overflow: hidden;
 }
 
-.pkg__badge {
-  display: inline-block;
-  font-size: $font-size-2xs;
-  color: $label-soft-text;
-  background: $bg-surface;
-  padding: 4rpx $space-2;
-  border-radius: $radius-full;
-}
-
 .pkg__name {
   display: block;
   color: $text-primary;
   font-size: $font-size-lg;
   font-weight: $font-weight-heavy;
   line-height: $line-height-tight;
-  margin-top: $space-2;
+  margin-top: 0;
   letter-spacing: 1rpx;
 }
 
@@ -660,7 +664,7 @@ export default {
 
 .pkg__foot {
   display: flex;
-  align-items: center;
+  align-items: flex-end;
   justify-content: space-between;
   margin-top: $space-2;
 }
@@ -698,11 +702,12 @@ export default {
 }
 
 .pkg__sold {
-  margin-top: $space-2;
+  flex-shrink: 0;
+  padding-bottom: $space-1;
 }
 
 .pkg__sold-t {
-  font-size: $font-size-2xs;
+  font-size: $font-size-min;
   color: $text-disabled;
 }
 

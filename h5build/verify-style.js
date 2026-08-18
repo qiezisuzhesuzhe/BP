@@ -175,7 +175,7 @@ async function tab(doc, w, url) {
 
   stats.push(report(doc, w, '① 首页 pages/index/index',
     ['hm-page', 'hero', 'hero__hello', 'hero__stat-v', 'hero__bell', 'day-switch', 'hm-sec-title', 'wrap', 'tl__action', 'tl__cover',
-      'rights', 'rights__head', 'rights__level', 'rights__level-icon', 'rights__level-t', 'rights__date', 'rights__pts', 'rights__pts-l', 'rights__pts-v', 'rights__grid', 'rights__item', 'rights__item-badge']))
+      'rights', 'rights__head', 'rights__level', 'rights__level-icon', 'rights__level-t', 'rights__date', 'rights__pts', 'rights__pts-l', 'rights__pts-v', 'rights__pts-arrow', 'rights__grid', 'rights__item', 'rights__item-badge']))
 
   await nav(doc, w, '/pages/service/detail?id=hbp3m')
   stats.push(report(doc, w, '② 服务详情 pages/service/detail',
@@ -207,6 +207,13 @@ async function tab(doc, w, url) {
 
   await nav(doc, w, '/pages/mine/agreement')
   stats.push(report(doc, w, '⑨ 用户协议 pages/mine/agreement', ['hm-page']))
+
+  // 健康商城栏目页（tabBar 第 2 项）
+  await tab(doc, w, '/pages/mall/mall')
+  stats.push(report(doc, w, '⑨b 健康商城 pages/mall/mall',
+    ['hm-page', 'banner', 'banner__t', 'banner__d', 'banner__pts', 'banner__pts-v', 'good', 'good__icon', 'good__name', 'good__desc', 'good__price', 'good__pts', 'good__act']))
+  const mallGoods = doc.querySelectorAll('.good').length
+  console.log('  商城商品卡数量: ' + mallGoods)
 
   // ── 设备功能验证 ──
   await tab(doc, w, '/pages/device/device')

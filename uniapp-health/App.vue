@@ -10,10 +10,11 @@ export default {
   methods: {
     syncBadge() {
       const n = this.$store.getters.unreadCount
+      // tabBar 顺序：首页(0)/健康商城(1)/消息(2)/设备(3)/我的(4)
       if (n > 0) {
-        uni.setTabBarBadge({ index: 1, text: n > 99 ? '99+' : '' + n, fail() {} })
+        uni.setTabBarBadge({ index: 2, text: n > 99 ? '99+' : '' + n, fail() {} })
       } else {
-        uni.removeTabBarBadge({ index: 1, fail() {} })
+        uni.removeTabBarBadge({ index: 2, fail() {} })
       }
     }
   }

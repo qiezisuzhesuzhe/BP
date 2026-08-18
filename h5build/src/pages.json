@@ -85,6 +85,13 @@
       }
     },
     {
+      "path": "pages/mall/mall",
+      "style": {
+        "navigationBarTitleText": "健康商城",
+        "navigationStyle": "custom"
+      }
+    },
+    {
       "path": "pages/device/device",
       "style": {
         "navigationBarTitleText": "我的设备",
@@ -127,6 +134,12 @@
         "text": "首页",
         "iconPath": "static/tab/home.png",
         "selectedIconPath": "static/tab/home-active.png"
+      },
+      {
+        "pagePath": "pages/mall/mall",
+        "text": "健康商城",
+        "iconPath": "static/tab/mall.png",
+        "selectedIconPath": "static/tab/mall-active.png"
       },
       {
         "pagePath": "pages/message/message",

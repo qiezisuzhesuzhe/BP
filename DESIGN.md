@@ -36,6 +36,11 @@
 | `--color-warning` | `#F2C94C` | 警告、提醒状态 |
 | `--color-danger` | `#EB5757` | 错误、危险、删除操作 |
 | `--color-badge` | `#F15533` | 消息红点、角标、未读提醒 |
+| `--color-gold` | `#B8932E` | 金色主色：尊享级别徽章、积分数字、装饰线 |
+| `--color-gold-deep` | `#9A7420` | 金色深色：渐变末端、强调 |
+| `--color-gold-soft` | `#FAF3E0` | 金色浅色背景：尊享卡片渐变底 |
+| `--color-gold-line` | `rgba(184, 147, 46, 0.35)` | 金色描边：徽章、卡片边框 |
+| `--color-gold-glow` | `rgba(184, 147, 46, 0.14)` | 金色柔光：卡片角落光晕 |
 | `--color-bg-page` | `linear-gradient(135deg, #DDF7ED, #F3F3F3)` | 页面背景斜向渐变：左上(#DDF7ED)→右下(#F3F3F3)，固定于视口、不随页面滚动 |
 | `--color-bg-page-fade` | `linear-gradient(180deg, rgba(243, 243, 243, 0) 0%, #F3F3F3 88%)` | 页面顶部渐变到底色的柔和过渡层 |
 | `--color-bg-page-height` | `1600px` | 兼容保留（fixed 模式下渐变以 `100% 100%` 铺满视口） |
@@ -277,6 +282,11 @@
   --color-warning: #F2C94C;
   --color-danger: #EB5757;
   --color-badge: #F15533;
+  --color-gold: #B8932E;
+  --color-gold-deep: #9A7420;
+  --color-gold-soft: #FAF3E0;
+  --color-gold-line: rgba(184, 147, 46, 0.35);
+  --color-gold-glow: rgba(184, 147, 46, 0.14);
   --color-bg-page: linear-gradient(135deg, #DDF7ED, #F3F3F3);
   --color-bg-page-fade: linear-gradient(180deg, rgba(243, 243, 243, 0) 0%, #F3F3F3 88%);
   --color-bg-page-height: 1600px;

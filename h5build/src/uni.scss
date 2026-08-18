@@ -32,6 +32,13 @@ $warning: #f2c94c;
 $danger: #eb5757;
 $badge: #f15533;
 
+/* ---------- 金色（尊享装饰） ---------- */
+$gold: #b8932e;
+$gold-deep: #9a7420;
+$gold-soft: #faf3e0;
+$gold-line: rgba(184, 147, 46, 0.35);
+$gold-glow: rgba(184, 147, 46, 0.14);
+
 /* ---------- 背景 ---------- */
 /* 斜向两色渐变：左上(#ddf7ed) → 右下(#f3f3f3)，末端即底色；
    配合 App.vue 中 background-attachment: fixed 铺满视口固定，不随页面滚动/变长 */

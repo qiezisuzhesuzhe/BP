@@ -46,7 +46,7 @@
         <view class="rights__head">
           <view class="rights__head-l">
             <view class="rights__level">
-              <text class="fa-solid fa-shield-halved rights__level-icon"></text>
+              <text class="fa-solid fa-crown rights__level-icon"></text>
               <text class="rights__level-t">{{ activeRight ? activeRight.level : '基础会员' }}</text>
             </view>
             <text v-if="activeRight" class="rights__date">有效期 {{ activeRight.startAt }} ~ {{ activeRight.endAt }}</text>
@@ -356,13 +356,27 @@ export default {
 .rights {
   position: relative;
   overflow: hidden;
-  background: linear-gradient(135deg, #0e4a41 0%, #165e5a 55%, #1a7d82 100%);
+  background: linear-gradient(160deg, $bg-surface 0%, $gold-soft 100%);
+  border: 1rpx solid $gold-line;
   border-radius: $radius-card;
-  box-shadow: $shadow-lg;
+  box-shadow: $shadow-md, inset 0 2rpx 0 rgba(255, 255, 255, 0.9);
   padding: $space-4 $space-3 $space-4;
 }
 
-/* 右上角柔光晕：深色卡的品质细节 */
+/* 顶部金色高光线：尊享感 */
+.rights::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: $space-4;
+  right: $space-4;
+  height: 3rpx;
+  border-radius: $radius-full;
+  background: linear-gradient(90deg, transparent, $gold 35%, $gold-deep 50%, $gold 65%, transparent);
+  opacity: 0.9;
+}
+
+/* 右上角金色柔光 */
 .rights::after {
   content: '';
   position: absolute;
@@ -371,7 +385,7 @@ export default {
   width: 360rpx;
   height: 360rpx;
   border-radius: 50%;
-  background: radial-gradient(circle, rgba(125, 212, 188, 0.42) 0%, rgba(125, 212, 188, 0) 70%);
+  background: radial-gradient(circle, $gold-glow 0%, rgba(184, 147, 46, 0) 70%);
 }
 
 .rights__head {
@@ -393,27 +407,28 @@ export default {
   align-items: center;
   padding: $space-1 $space-3;
   border-radius: $radius-full;
-  background: rgba(255, 255, 255, 0.14);
-  border: 1rpx solid rgba(255, 255, 255, 0.22);
+  background: linear-gradient(135deg, $gold-soft 0%, $bg-surface 100%);
+  border: 1rpx solid $gold-line;
+  box-shadow: $shadow-sm;
 }
 
 .rights__level-icon {
   font-size: $font-size-xs;
-  color: $brand-primary;
+  color: $gold;
   margin-right: $space-1;
 }
 
 .rights__level-t {
   font-size: $font-size-sm;
   font-weight: $font-weight-heavy;
-  color: $text-inverse;
+  color: $text-primary;
   letter-spacing: 2rpx;
 }
 
 .rights__date {
   display: block;
   font-size: $font-size-xs;
-  color: rgba(255, 255, 255, 0.72);
+  color: $text-muted;
   margin-top: $space-2;
   font-family: $font-family-en;
 }
@@ -429,21 +444,24 @@ export default {
 
 .rights__pts-l {
   font-size: $font-size-xs;
-  color: rgba(255, 255, 255, 0.72);
+  color: $text-muted;
   margin-right: $space-1;
 }
 
 .rights__pts-v {
   font-size: $font-size-2xl;
   font-weight: $font-weight-heavy;
-  color: $text-inverse;
   line-height: $line-height-tight;
   font-family: $font-family-en;
+  background: linear-gradient(135deg, $gold 0%, $gold-deep 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
 }
 
 .rights__pts-arrow {
   font-size: $font-size-sm;
-  color: rgba(255, 255, 255, 0.72);
+  color: $gold;
   margin-left: $space-1;
 }
 
@@ -471,7 +489,6 @@ export default {
   display: flex;
   align-items: center;
   justify-content: center;
-  background: rgba(255, 255, 255, 0.96);
   box-shadow: $shadow-sm;
 }
 
@@ -498,7 +515,7 @@ export default {
 
 .rights__item-t {
   font-size: $font-size-min;
-  color: rgba(255, 255, 255, 0.9);
+  color: $text-secondary;
   margin-top: $space-1;
 }
 

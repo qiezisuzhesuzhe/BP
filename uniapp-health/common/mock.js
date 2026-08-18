@@ -292,16 +292,16 @@ export const RIGHT_ENTRIES = [
   { key: 'nurse', label: '上门换药', icon: 'fa-solid fa-house-medical', color: '#64748b', bg: '#f2f7fa' }
 ]
 
-// 健康商城商品（积分换购：price 现金价 / points 所需积分）
+// 健康商城商品（积分换购：price 现金价 / points 所需积分 / img 商品图）
 export const SHOP_GOODS = [
-  { id: 'g1', name: '上臂式电子血压计', desc: '国标认证 · 双人记忆 · 智能语音播报', icon: 'fa-solid fa-heart-pulse', color: '#389a82', bg: '#d4f5ee', price: 299, points: 1299, tag: '热卖' },
-  { id: 'g2', name: '智能体脂秤', desc: '14 项身体数据 · APP 同步趋势', icon: 'fa-solid fa-weight-scale', color: '#4ab89e', bg: '#d8f8fa', price: 199, points: 899, tag: '新品' },
-  { id: 'g3', name: '低盐调味礼盒', desc: '控盐勺 + 低钠酱油 + 海盐整月用量', icon: 'fa-solid fa-jar', color: '#f15533', bg: '#fdf4ed', price: 89, points: 399, tag: '' },
-  { id: 'g4', name: '助眠香薰精油', desc: '薰衣草配方 · 睡前放松助眠', icon: 'fa-solid fa-spa', color: '#8dcdd8', bg: '#e2f2f6', price: 69, points: 299, tag: '' },
-  { id: 'g5', name: '血糖试纸（50支）', desc: '与主流血糖仪通用 · 单片独立包装', icon: 'fa-solid fa-droplet', color: '#27ae60', bg: '#ddf7ed', price: 129, points: 599, tag: '' },
-  { id: 'g6', name: '智能恒温杯', desc: '55°C 恒温提示 · USB 充电', icon: 'fa-solid fa-mug-hot', color: '#f2c94c', bg: '#fdf4ed', price: 159, points: 699, tag: '积分特惠' },
-  { id: 'g7', name: '弹力带训练套装', desc: '3 档阻力 · 居家运动必备', icon: 'fa-solid fa-dumbbell', color: '#64748b', bg: '#f2f7fa', price: 39, points: 159, tag: '' },
-  { id: 'g8', name: '一周分装药盒', desc: '早中晚三格 · 防潮密封', icon: 'fa-solid fa-pills', color: '#389a82', bg: '#d4f5ee', price: 29, points: 99, tag: '积分特惠' }
+  { id: 'g1', name: '上臂式电子血压计', desc: '国标认证 · 双人记忆 · 智能语音播报', icon: 'fa-solid fa-heart-pulse', color: '#389a82', bg: '#d4f5ee', price: 299, points: 1299, tag: '热卖', img: '/static/img/mall/g1.svg' },
+  { id: 'g2', name: '智能体脂秤', desc: '14 项身体数据 · APP 同步趋势', icon: 'fa-solid fa-weight-scale', color: '#4ab89e', bg: '#d8f8fa', price: 199, points: 899, tag: '新品', img: '/static/img/mall/g2.svg' },
+  { id: 'g3', name: '低盐调味礼盒', desc: '控盐勺 + 低钠酱油 + 海盐整月用量', icon: 'fa-solid fa-jar', color: '#f15533', bg: '#fdf4ed', price: 89, points: 399, tag: '', img: '/static/img/mall/g3.svg' },
+  { id: 'g4', name: '助眠香薰精油', desc: '薰衣草配方 · 睡前放松助眠', icon: 'fa-solid fa-spa', color: '#8dcdd8', bg: '#e2f2f6', price: 69, points: 299, tag: '', img: '/static/img/mall/g4.svg' },
+  { id: 'g5', name: '血糖试纸（50支）', desc: '与主流血糖仪通用 · 单片独立包装', icon: 'fa-solid fa-droplet', color: '#27ae60', bg: '#ddf7ed', price: 129, points: 599, tag: '', img: '/static/img/mall/g5.svg' },
+  { id: 'g6', name: '智能恒温杯', desc: '55°C 恒温提示 · USB 充电', icon: 'fa-solid fa-mug-hot', color: '#f2c94c', bg: '#fdf4ed', price: 159, points: 699, tag: '积分特惠', img: '/static/img/mall/g6.svg' },
+  { id: 'g7', name: '弹力带训练套装', desc: '3 档阻力 · 居家运动必备', icon: 'fa-solid fa-dumbbell', color: '#64748b', bg: '#f2f7fa', price: 39, points: 159, tag: '', img: '/static/img/mall/g7.svg' },
+  { id: 'g8', name: '一周分装药盒', desc: '早中晚三格 · 防潮密封', icon: 'fa-solid fa-pills', color: '#389a82', bg: '#d4f5ee', price: 29, points: 99, tag: '积分特惠', img: '/static/img/mall/g8.svg' }
 ]
 
 export function makeOrderNo() {

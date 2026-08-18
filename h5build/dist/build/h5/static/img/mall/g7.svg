@@ -1,0 +1,23 @@
+<svg width="640" height="480" viewBox="0 0 640 480" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#f4f7fb"/>
+      <stop offset="1" stop-color="#e2eaf3"/>
+    </linearGradient>
+    <filter id="sh" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="0" dy="10" stdDeviation="13" flood-color="#41536a" flood-opacity="0.15"/>
+    </filter>
+  </defs>
+  <rect width="640" height="480" fill="url(#bg)"/>
+  <circle cx="526" cy="88" r="124" fill="#ffffff" opacity="0.4"/>
+  <circle cx="106" cy="428" r="92" fill="#c3d4e8" opacity="0.26"/>
+  <g filter="url(#sh)">
+    <rect x="180" y="190" width="52" height="34" rx="17" fill="#ffffff" stroke="#c9d8e8" stroke-width="3"/>
+    <rect x="408" y="190" width="52" height="34" rx="17" fill="#ffffff" stroke="#c9d8e8" stroke-width="3"/>
+  </g>
+  <path d="M232 222 q-6 78 42 128" stroke="#8fb3d8" stroke-width="13" fill="none" stroke-linecap="round"/>
+  <path d="M330 222 q-4 58 26 100" stroke="#b7cfe6" stroke-width="13" fill="none" stroke-linecap="round"/>
+  <path d="M408 222 q6 78 -42 128" stroke="#8fb3d8" stroke-width="13" fill="none" stroke-linecap="round"/>
+  <path d="M300 210 q-3 46 16 78" stroke="#d3e2f0" stroke-width="11" fill="none" stroke-linecap="round"/>
+  <text x="330" y="168" font-family="Arial, sans-serif" font-size="22" font-weight="bold" fill="#64748b" text-anchor="middle">弹力带 · 3 档阻力</text>
+</svg>

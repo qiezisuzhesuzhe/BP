@@ -10,21 +10,6 @@
       </view>
     </view>
 
-    <!-- 促销横幅 -->
-    <view class="wrap">
-      <view class="banner">
-        <view class="banner__l">
-          <text class="banner__tag">积分换购</text>
-          <text class="banner__t">健康好物 积分当钱花</text>
-          <text class="banner__d">现金价或积分均可兑换，下单即得积分</text>
-        </view>
-        <view class="banner__pts">
-          <text class="fa-solid fa-coins banner__coins"></text>
-          <text class="banner__pts-v">{{ myPoints }}</text>
-        </view>
-      </view>
-    </view>
-
     <!-- 金刚区 -->
     <view class="wrap">
       <view class="quicks">
@@ -46,8 +31,8 @@
 
       <view class="goods">
         <view v-for="g in goods" :key="g.id" class="good" @tap="redeem(g)">
-          <view class="good__pic" :style="{ background: g.bg }">
-            <text class="good__pic-icon" :class="g.icon" :style="{ color: g.color }"></text>
+          <view class="good__pic">
+            <image class="good__pic-img" :src="g.img" mode="aspectFill" @error="onImgErr(g)"></image>
             <text v-if="g.tag" class="good__pic-tag">{{ g.tag }}</text>
           </view>
           <view class="good__body">
@@ -75,6 +60,8 @@
 <script>
 import { SHOP_GOODS } from '@/common/mock.js'
 
+const FALLBACK_IMG = '/static/img/placeholder.png'
+
 export default {
   data() {
     return {
@@ -96,6 +83,10 @@ export default {
     }
   },
   methods: {
+    // 商品图加载失败时兜底为本地占位图
+    onImgErr(g) {
+      if (g.img !== FALLBACK_IMG) this.$set(g, 'img', FALLBACK_IMG)
+    },
     redeem(g) {
       uni.showToast({ title: '「' + g.name + '」积分兑换（演示）', icon: 'none' })
     },
@@ -127,85 +118,6 @@ export default {
 .search__ph {
   font-size: $font-size-xs;
   color: $text-disabled;
-}
-
-/* 促销横幅（金色促销感） */
-.banner {
-  position: relative;
-  overflow: hidden;
-  background: linear-gradient(135deg, $gold 0%, $gold-deep 100%);
-  border-radius: $radius-card;
-  box-shadow: $shadow-lg;
-  padding: $space-4 $space-4 $space-5;
-  margin-top: $space-3;
-}
-
-.banner::after {
-  content: '';
-  position: absolute;
-  top: -120rpx;
-  right: -80rpx;
-  width: 320rpx;
-  height: 320rpx;
-  border-radius: 50%;
-  background: radial-gradient(circle, rgba(255, 255, 255, 0.28) 0%, rgba(255, 255, 255, 0) 70%);
-}
-
-.banner__l {
-  position: relative;
-  z-index: 1;
-  padding-right: $space-4;
-}
-
-.banner__tag {
-  display: inline-block;
-  font-size: $font-size-2xs;
-  color: $gold-deep;
-  background: rgba(255, 255, 255, 0.92);
-  padding: $space-1 $space-2;
-  border-radius: $radius-full;
-  font-weight: $font-weight-bold;
-}
-
-.banner__t {
-  display: block;
-  font-size: $font-size-lg;
-  font-weight: $font-weight-heavy;
-  color: $text-inverse;
-  line-height: $line-height-tight;
-  letter-spacing: 2rpx;
-  margin-top: $space-2;
-}
-
-.banner__d {
-  display: block;
-  font-size: $font-size-xs;
-  color: rgba(255, 255, 255, 0.85);
-  line-height: $line-height-normal;
-  margin-top: $space-2;
-}
-
-.banner__pts {
-  position: absolute;
-  z-index: 1;
-  right: $space-4;
-  bottom: $space-5;
-  display: flex;
-  align-items: baseline;
-}
-
-.banner__coins {
-  font-size: $font-size-sm;
-  color: #ffe9a8;
-  margin-right: $space-1;
-}
-
-.banner__pts-v {
-  font-size: $font-size-xl;
-  font-weight: $font-weight-heavy;
-  color: $text-inverse;
-  line-height: $line-height-tight;
-  font-family: $font-family-en;
 }
 
 /* 金刚区 */
@@ -244,7 +156,7 @@ export default {
   margin-top: $space-2;
 }
 
-/* 商品两列瀑布流 */
+/* 商品两列瀑布流：垂直间距按设计令牌 $space-data-list-gap */
 .goods {
   display: flex;
   flex-wrap: wrap;
@@ -257,19 +169,20 @@ export default {
   border-radius: $radius-card-child;
   box-shadow: $shadow-sm;
   overflow: hidden;
-  margin-bottom: $space-3;
+  margin-bottom: $space-data-list-gap;
 }
 
 .good__pic {
   position: relative;
   height: 220rpx;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  overflow: hidden;
+  background: $bg-subtle;
 }
 
-.good__pic-icon {
-  font-size: $size-icon-xl;
+.good__pic-img {
+  width: 100%;
+  height: 100%;
+  display: block;
 }
 
 .good__pic-tag {
@@ -286,7 +199,7 @@ export default {
 }
 
 .good__body {
-  padding: $space-2 $space-2 $space-3;
+  padding: $space-2 $space-3 $space-3;
 }
 
 .good__name {

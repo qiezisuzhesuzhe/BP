@@ -1,6 +1,6 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
-import { PACKAGES, TIMELINE, makeOrderNo, deviceType, makeDeviceSnapshot } from '@/common/mock.js'
+import { PACKAGES, TIMELINE, RIGHT_ENTRIES, makeOrderNo, deviceType, makeDeviceSnapshot } from '@/common/mock.js'
 
 Vue.use(Vuex)
 
@@ -130,6 +130,9 @@ const store = new Vuex.Store({
     },
     devices(state) {
       return state.devices
+    },
+    rightEntries() {
+      return RIGHT_ENTRIES
     },
     deviceById(state) {
       return function (id) {
@@ -269,6 +272,8 @@ const store = new Vuex.Store({
         subtitle: pkg ? pkg.subtitle : '',
         services: pkg ? pkg.services : [],
         price: order.price,
+        level: '尊享版',
+        points: 2680,
         status: 'active',
         startAt: fmtDate(startTs),
         endAt: fmtDate(endTs),

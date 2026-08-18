@@ -35,6 +35,36 @@
       </view>
     </view>
 
+    <!-- 我的权益（仅购买服务包后显示） -->
+    <view v-if="activeRight" class="wrap">
+      <view class="sec-head">
+        <text class="hm-sec-title">我的权益</text>
+        <text class="hm-sec-sub">{{ activeRight.name }}</text>
+      </view>
+
+      <view class="rights" @tap="goRightDetail(activeRight.id)">
+        <view class="rights__head">
+          <view class="rights__head-l">
+            <text class="rights__level">{{ activeRight.level }}</text>
+            <text class="rights__date">有效期 {{ activeRight.startAt }} ~ {{ activeRight.endAt }}</text>
+          </view>
+          <view class="rights__pts">
+            <text class="rights__pts-v">{{ activeRight.points }}</text>
+            <text class="rights__pts-l">剩余积分</text>
+          </view>
+        </view>
+        <view class="rights__grid">
+          <view v-for="e in rightEntries" :key="e.key" class="rights__item">
+            <view class="rights__item-icon" :style="{ background: e.bg }">
+              <text class="rights__item-icon-t" :class="e.icon" :style="{ color: e.color }"></text>
+              <text v-if="e.quota" class="rights__item-badge">{{ e.quota }}</text>
+            </view>
+            <text class="rights__item-t">{{ e.label }}</text>
+          </view>
+        </view>
+      </view>
+    </view>
+
     <!-- 进行中的服务 -->
     <view class="wrap">
       <view v-if="activeRight" class="ongoing" @tap="goRightDetail(activeRight.id)">
@@ -140,6 +170,9 @@ export default {
     },
     activeRight() {
       return this.$store.getters.activeRight
+    },
+    rightEntries() {
+      return this.$store.getters.rightEntries
     },
     todayTimeline() {
       return this.$store.getters.todayTimeline
@@ -307,6 +340,112 @@ export default {
 
 .wrap {
   padding: $space-4 $space-4 0;
+}
+
+.rights {
+  background: $bg-surface;
+  border-radius: $radius-card;
+  box-shadow: $shadow-md;
+  padding: $space-4 $space-3 $space-3;
+}
+
+.rights__head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 $space-1;
+}
+
+.rights__head-l {
+  flex: 1;
+  overflow: hidden;
+}
+
+.rights__level {
+  display: block;
+  font-size: $font-size-lg;
+  font-weight: $font-weight-heavy;
+  color: $text-primary;
+  line-height: $line-height-tight;
+}
+
+.rights__date {
+  display: block;
+  font-size: $font-size-2xs;
+  color: $text-muted;
+  margin-top: $space-1;
+}
+
+.rights__pts {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  flex-shrink: 0;
+  margin-left: $space-3;
+}
+
+.rights__pts-v {
+  font-size: $font-size-xl;
+  font-weight: $font-weight-heavy;
+  color: $brand-primary-active;
+  line-height: $line-height-tight;
+}
+
+.rights__pts-l {
+  font-size: $font-size-2xs;
+  color: $text-muted;
+  margin-top: $space-1;
+}
+
+.rights__grid {
+  margin-top: $space-4;
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.rights__item {
+  width: 25%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: $space-3;
+}
+
+.rights__item-icon {
+  position: relative;
+  width: $size-icon-lg;
+  height: $size-icon-lg;
+  border-radius: $radius-card-child;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: $shadow-sm;
+}
+
+.rights__item-icon-t {
+  font-size: $font-size-md;
+}
+
+.rights__item-badge {
+  position: absolute;
+  top: -6rpx;
+  right: -6rpx;
+  min-width: $size-badge-md;
+  height: $size-badge-md;
+  border-radius: $radius-full;
+  background: $badge;
+  color: $text-inverse;
+  font-size: $font-size-2xs;
+  line-height: $size-badge-md;
+  text-align: center;
+  padding: 0 $space-1;
+  box-shadow: $shadow-sm;
+}
+
+.rights__item-t {
+  font-size: $font-size-2xs;
+  color: $text-secondary;
+  margin-top: $space-1;
 }
 
 .ongoing {

@@ -281,6 +281,17 @@ export const KNOWLEDGE = [
   { icon: 'fa-solid fa-person-running', title: '每周 3-5 次中等强度有氧运动', desc: '每次 30 分钟，快走、慢跑、太极拳、八段锦均可' }
 ]
 
+// 首页"我的权益"入口（quota 表示剩余次数，无则不限）
+export const RIGHT_ENTRIES = [
+  { key: 'ai', label: 'AI自测', icon: 'fa-solid fa-robot', color: '#389a82', bg: '#d4f5ee' },
+  { key: 'consult', label: '免费问诊', icon: 'fa-solid fa-comments', color: '#4ab89e', bg: '#d8f8fa' },
+  { key: 'expert', label: '专家预约', icon: 'fa-solid fa-user-doctor', color: '#f15533', bg: '#fdf4ed', quota: 3 },
+  { key: 'video', label: '视频问诊', icon: 'fa-solid fa-video', color: '#8dcdd8', bg: '#e2f2f6', quota: 6 },
+  { key: 'accompany', label: '陪诊', icon: 'fa-solid fa-hand-holding-heart', color: '#f2c94c', bg: '#fdf4ed', quota: 12 },
+  { key: 'psycho', label: '心理评估', icon: 'fa-solid fa-heart-pulse', color: '#27ae60', bg: '#ddf7ed' },
+  { key: 'nurse', label: '上门换药', icon: 'fa-solid fa-house-medical', color: '#64748b', bg: '#f2f7fa' }
+]
+
 export function makeOrderNo() {
   const d = new Date()
   const p = (n) => (n < 10 ? '0' + n : '' + n)

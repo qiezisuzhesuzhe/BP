@@ -135,16 +135,16 @@
         "selectedIconPath": "static/tab/msg-active.png"
       },
       {
-        "pagePath": "pages/mine/mine",
-        "text": "我的",
-        "iconPath": "static/tab/mine.png",
-        "selectedIconPath": "static/tab/mine-active.png"
-      },
-      {
         "pagePath": "pages/device/device",
         "text": "设备",
         "iconPath": "static/tab/device.png",
         "selectedIconPath": "static/tab/device-active.png"
+      },
+      {
+        "pagePath": "pages/mine/mine",
+        "text": "我的",
+        "iconPath": "static/tab/mine.png",
+        "selectedIconPath": "static/tab/mine-active.png"
       }
     ]
   }

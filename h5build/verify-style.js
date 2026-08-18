@@ -174,7 +174,8 @@ async function tab(doc, w, url) {
   await sleep(1500)
 
   stats.push(report(doc, w, '① 首页 pages/index/index',
-    ['hm-page', 'hero', 'hero__hello', 'hero__stat-v', 'hero__bell', 'day-switch', 'hm-sec-title', 'wrap', 'tl__action', 'tl__cover']))
+    ['hm-page', 'hero', 'hero__hello', 'hero__stat-v', 'hero__bell', 'day-switch', 'hm-sec-title', 'wrap', 'tl__action', 'tl__cover',
+      'rights', 'rights__head', 'rights__level', 'rights__date', 'rights__pts', 'rights__grid', 'rights__item', 'rights__item-badge']))
 
   await nav(doc, w, '/pages/service/detail?id=hbp3m')
   stats.push(report(doc, w, '② 服务详情 pages/service/detail',
@@ -217,9 +218,10 @@ async function tab(doc, w, url) {
   stats.push(report(doc, w, '⑪ 设备列表(已添加) pages/device/device',
     ['hm-page', 'wrap', 'dev', 'dev__icon', 'dev__name', 'dev__sn', 'dev__status', 'add-bar', 'add-bar__t']))
 
+  // 注：scan-line 仅在相机开启(camState==='on')时渲染，jsdom 无摄像头环境无法验证
   await nav(doc, w, '/pages/device/scan')
   stats.push(report(doc, w, '⑫ 扫码添加 pages/device/scan',
-    ['scan-page', 'scan-frame', 'scan-frame__inner', 'scan-frame__icon', 'scan-line', 'scan-tip', 'scan-btn', 'scan-btn__t']))
+    ['scan-page', 'scan-frame', 'scan-frame__inner', 'scan-frame__icon', 'scan-tip', 'scan-btn', 'scan-btn__t']))
 
   // 触发模拟识别，验证底部确认弹层（沿 DOM 父链查找页面 vm）
   let scanVm = null

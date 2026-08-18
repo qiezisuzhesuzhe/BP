@@ -7,16 +7,16 @@
       <view class="scan-frame__corner scan-frame__corner--tr"></view>
       <view class="scan-frame__corner scan-frame__corner--bl"></view>
       <view class="scan-frame__corner scan-frame__corner--br"></view>
-      <view class="scan-line"></view>
-      <view class="scan-frame__inner">
-        <text class="fa-solid fa-qrcode scan-frame__icon"></text>
+      <view class="scan-line" v-if="camState === 'on'"></view>
+      <view class="scan-frame__inner" ref="frame">
+        <text v-if="camState !== 'on'" class="fa-solid fa-qrcode scan-frame__icon"></text>
       </view>
     </view>
-    <text class="scan-tip">将设备机身上的二维码对准扫描框</text>
+    <text class="scan-tip">{{ camTip }}</text>
 
     <view class="scan-btn" @tap="simulate">
       <text class="fa-solid fa-qrcode scan-btn__icon"></text>
-      <text class="scan-btn__t">模拟扫描识别</text>
+      <text class="scan-btn__t">{{ camState === 'on' ? '模拟识别（演示）' : '模拟扫码识别' }}</text>
     </view>
 
     <!-- 识别结果确认 -->
@@ -46,7 +46,7 @@
 </template>
 
 <script>
-import { DEVICE_TYPES } from '@/common/mock.js'
+import { DEVICE_TYPES, deviceType } from '@/common/mock.js'
 
 let scanSeq = 0
 
@@ -55,21 +55,157 @@ export default {
     return {
       types: DEVICE_TYPES,
       result: null,
-      fakeSn: ''
+      fakeSn: '',
+      // 相机状态：idle 准备中 / starting 启动中 / on 已开启 / fail 不可用
+      camState: 'idle',
+      stream: null,
+      scanTimer: null,
+      videoEl: null,
+      canvasEl: null
     }
   },
+  computed: {
+    camTip() {
+      const tips = {
+        idle: '正在准备扫码…',
+        starting: '正在启动相机…',
+        on: '将设备机身上的二维码对准扫描框，自动识别',
+        fail: '未检测到可用相机，可点击下方按钮模拟识别'
+      }
+      return tips[this.camState] || ''
+    }
+  },
+  onShow() {
+    this.startCamera()
+  },
+  onHide() {
+    this.stopCamera()
+  },
+  onUnload() {
+    this.stopCamera()
+  },
   methods: {
-    // 原型模拟扫码：loading 后随机识别一种设备（依次轮换 4 种，方便体验）
+    // 加载 jsQR（main.js 已预加载本地库，此处兜底确保就绪）
+    ensureJsQR() {
+      if (typeof window === 'undefined') return Promise.reject(new Error('no window'))
+      if (window.jsQR) return Promise.resolve()
+      return new Promise((resolve, reject) => {
+        const s = document.createElement('script')
+        s.src = './static/lib/jsqr.js'
+        s.onload = () => resolve()
+        s.onerror = () => reject(new Error('jsQR 加载失败'))
+        document.head.appendChild(s)
+      })
+    },
+    async startCamera() {
+      // 非 H5 或浏览器不支持摄像头时降级为模拟
+      if (typeof document === 'undefined' || !navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
+        this.camState = 'fail'
+        return
+      }
+      try {
+        await this.ensureJsQR()
+      } catch (e) {
+        this.camState = 'fail'
+        return
+      }
+      this.camState = 'starting'
+      const v = document.createElement('video')
+      v.setAttribute('playsinline', '')
+      v.setAttribute('muted', '')
+      v.muted = true
+      v.playsInline = true
+      // 动态创建的 video 不在模板中，scoped 样式无法命中，直接内联
+      v.style.width = '100%'
+      v.style.height = '100%'
+      v.style.objectFit = 'cover'
+      v.style.display = 'block'
+      v.style.borderRadius = 'inherit'
+      this.videoEl = v
+      const frame = this.$refs.frame
+      if (frame && frame.$el) {
+        frame.$el.appendChild(v)
+      } else if (frame) {
+        frame.appendChild(v)
+      }
+      try {
+        const stream = await navigator.mediaDevices.getUserMedia({
+          video: { facingMode: 'environment' }
+        })
+        this.stream = stream
+        v.srcObject = stream
+        await v.play()
+        this.camState = 'on'
+        this.startScanLoop()
+      } catch (e) {
+        this.camState = 'fail'
+        this.teardownVideo()
+      }
+    },
+    // 定时截帧交给 jsQR 识别
+    startScanLoop() {
+      this.stopScanLoop()
+      const canvas = document.createElement('canvas')
+      this.canvasEl = canvas
+      this.scanTimer = setInterval(() => {
+        const v = this.videoEl
+        if (!v || !v.videoWidth || this.result) return
+        const w = Math.min(v.videoWidth, 640)
+        const h = Math.round((w / v.videoWidth) * v.videoHeight)
+        canvas.width = w
+        canvas.height = h
+        const ctx = canvas.getContext('2d')
+        if (!ctx) return
+        ctx.drawImage(v, 0, 0, w, h)
+        const img = ctx.getImageData(0, 0, w, h)
+        const code = window.jsQR(img.data, w, h, { inversionAttempts: 'dontInvert' })
+        if (code && code.data) this.handleCode(code.data)
+      }, 220)
+    },
+    stopScanLoop() {
+      if (this.scanTimer) {
+        clearInterval(this.scanTimer)
+        this.scanTimer = null
+      }
+    },
+    teardownVideo() {
+      this.stopScanLoop()
+      if (this.videoEl && this.videoEl.parentNode) this.videoEl.parentNode.removeChild(this.videoEl)
+      this.videoEl = null
+      this.canvasEl = null
+    },
+    stopCamera() {
+      this.stopScanLoop()
+      if (this.stream) {
+        this.stream.getTracks().forEach((t) => t.stop())
+        this.stream = null
+      }
+      if (this.videoEl) {
+        this.videoEl.srcObject = null
+        if (this.videoEl.parentNode) this.videoEl.parentNode.removeChild(this.videoEl)
+        this.videoEl = null
+      }
+      this.canvasEl = null
+    },
+    // 解析设备机身二维码：ankang://device?type=xxx&sn=xxx
+    handleCode(text) {
+      if (this.result) return false
+      const m = String(text || '').match(/ankang:\/\/device\?type=([a-z0-9-]+)(?:&sn=([A-Za-z0-9-]+))?/i)
+      if (!m) return false
+      const type = deviceType(m[1])
+      if (!type) return false
+      this.stopScanLoop()
+      this.fakeSn = m[2] || 'AK-' + String(100000 + Math.floor(Math.random() * 899999))
+      this.result = type
+      return true
+    },
+    // 原型演示：生成一张设备机身二维码内容，走与相机相同的识别流程
     simulate() {
       if (this.result) return
-      uni.showLoading({ title: '识别中…', mask: true })
-      setTimeout(() => {
-        uni.hideLoading()
-        const type = this.types[scanSeq % this.types.length]
-        scanSeq++
-        this.fakeSn = 'AK-' + String(100000 + Math.floor(Math.random() * 899999))
-        this.result = type
-      }, 1200)
+      const type = this.types[scanSeq % this.types.length]
+      scanSeq++
+      this.fakeSn = 'AK-' + String(100000 + Math.floor(Math.random() * 899999))
+      this.handleCode('ankang://device?type=' + type.key + '&sn=' + this.fakeSn)
     },
     async confirm() {
       const type = this.result
@@ -166,6 +302,7 @@ export default {
   background: linear-gradient(90deg, transparent, $brand-primary, transparent);
   box-shadow: 0 0 24rpx rgba(125, 212, 188, 0.9);
   animation: scan-move 2.4s ease-in-out infinite;
+  z-index: 1;
 }
 
 @keyframes scan-move {
@@ -188,6 +325,9 @@ export default {
   font-size: $font-size-xs;
   color: rgba(255, 255, 255, 0.72);
   letter-spacing: 2rpx;
+  text-align: center;
+  padding: 0 $space-6;
+  line-height: $line-height-relaxed;
 }
 
 .scan-btn {

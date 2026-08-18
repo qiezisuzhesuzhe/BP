@@ -17,6 +17,12 @@ if (typeof document !== 'undefined') {
   fa.rel = 'stylesheet'
   fa.href = 'https://cdn.bootcdn.net/ajax/libs/font-awesome/6.4.2/css/all.min.css'
   document.head.appendChild(fa)
+
+  // H5：加载本地 jsQR 扫码库（设备页真实相机扫码使用），
+  // 随构建产物一同发布，不依赖外网 CDN 可达性。
+  const jsqr = document.createElement('script')
+  jsqr.src = './static/lib/jsqr.js'
+  document.head.appendChild(jsqr)
 }
 
 Vue.config.productionTip = false

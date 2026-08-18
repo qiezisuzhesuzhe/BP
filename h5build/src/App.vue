@@ -51,7 +51,9 @@ view {
   background: $bg-page-base;
   background-image: $bg-page;
   background-repeat: no-repeat;
-  background-size: 100% $bg-page-height;
+  /* 背景固定于视口：渐变铺满视口，页面滚动/变长时背景不随之移动 */
+  background-size: 100% 100%;
+  background-attachment: fixed;
 }
 
 .hm-card {

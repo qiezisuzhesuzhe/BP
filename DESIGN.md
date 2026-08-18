@@ -36,10 +36,10 @@
 | `--color-warning` | `#F2C94C` | 警告、提醒状态 |
 | `--color-danger` | `#EB5757` | 错误、危险、删除操作 |
 | `--color-badge` | `#F15533` | 消息红点、角标、未读提醒 |
-| `--color-bg-page` | `linear-gradient(135deg, #DDF7ED, #F5FAFF)` | 页面顶部斜向渐变：左上(#DDF7ED)→右下(#F5FAFF)，末端即底色、无缝衔接 |
-| `--color-bg-page-fade` | `linear-gradient(180deg, rgba(245, 250, 255, 0) 0%, #F5FAFF 88%)` | 页面顶部渐变到底色的柔和过渡层 |
-| `--color-bg-page-height` | `1600px` | 页面顶部渐变固定高度 |
-| `--color-bg-page-base` | `#F5FAFF` | 页面基础底色 |
+| `--color-bg-page` | `linear-gradient(135deg, #DDF7ED, #ECECEC)` | 页面背景斜向渐变：左上(#DDF7ED)→右下(#ECECEC)，固定于视口、不随页面滚动 |
+| `--color-bg-page-fade` | `linear-gradient(180deg, rgba(236, 236, 236, 0) 0%, #ECECEC 88%)` | 页面顶部渐变到底色的柔和过渡层 |
+| `--color-bg-page-height` | `1600px` | 兼容保留（fixed 模式下渐变以 `100% 100%` 铺满视口） |
+| `--color-bg-page-base` | `#ECECEC` | 页面基础底色 |
 | `--color-back-subpage-bg` | `var(--color-bg-page-base)` | 带返回子页面背景底色 |
 | `--color-back-subpage-header-bg` | `var(--color-bg-surface)` | 带返回子页面头部承载背景 |
 | `--color-back-subpage-back-bg` | `var(--color-bg-surface)` | 带返回子页面返回按钮背景 |
@@ -196,7 +196,7 @@
 ### 带返回子页面
 
 - 所有带返回按钮的二级/详情页必须使用统一 `back-subpage` 页面样式。
-- 页面背景使用 `--color-bg-page-base`、`--color-bg-page`、`--color-bg-page-fade` 和 `--color-bg-page-height`。
+- 页面背景使用 `--color-bg-page-base`、`--color-bg-page` 和 `--color-bg-page-fade`；背景 `background-attachment: fixed` 固定于视口，不随页面滚动或变长。
 - 返回头部最小高度使用 `--size-back-subpage-header-min-height`，顶部区域保持透明，不再使用独立深色或渐变标题卡。
 - 返回按钮尺寸使用 `--size-back-subpage-back`，背景使用 `--color-back-subpage-back-bg`，箭头颜色使用 `--color-back-subpage-back-text`，圆角使用 `--radius-full`。
 - 返回页标题使用页面标题排版令牌：`--typography-page-title-size`、`--typography-page-title-weight`、`--typography-page-title-line-height`。
@@ -270,10 +270,10 @@
   --color-warning: #F2C94C;
   --color-danger: #EB5757;
   --color-badge: #F15533;
-  --color-bg-page: linear-gradient(135deg, #DDF7ED, #F5FAFF);
-  --color-bg-page-fade: linear-gradient(180deg, rgba(245, 250, 255, 0) 0%, #F5FAFF 88%);
+  --color-bg-page: linear-gradient(135deg, #DDF7ED, #ECECEC);
+  --color-bg-page-fade: linear-gradient(180deg, rgba(236, 236, 236, 0) 0%, #ECECEC 88%);
   --color-bg-page-height: 1600px;
-  --color-bg-page-base: #F5FAFF;
+  --color-bg-page-base: #ECECEC;
   --color-back-subpage-bg: var(--color-bg-page-base);
   --color-back-subpage-header-bg: var(--color-bg-surface);
   --color-back-subpage-back-bg: var(--color-bg-surface);

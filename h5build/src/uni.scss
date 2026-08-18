@@ -53,6 +53,7 @@ $text-muted: #64748b;
 $text-disabled: #94a3b8;
 $text-hint: #c6d2de;
 $text-inverse: #ffffff;
+$icon-ink: rgba(0, 0, 0, 0.5);
 $back-subpage-back-text: $text-primary;
 
 /* ---------- 描边 / 遮罩 ---------- */
@@ -125,6 +126,8 @@ $size-badge-sm: 12rpx;
 $size-badge-md: 36rpx;
 $size-input-height: 88rpx;
 $size-stat-card-height: 180rpx;
+$size-hero-image-height: 420rpx;
+$size-detail-image-height: 320rpx;
 
 /* ---------- 圆角 ---------- */
 $radius-xs: 12rpx;

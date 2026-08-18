@@ -229,6 +229,7 @@ export default {
 }
 
 .top__emoji {
+  color: $icon-ink;
   width: $size-avatar-md;
   height: $size-avatar-md;
   border-radius: $radius-card-child;

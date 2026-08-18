@@ -546,6 +546,7 @@ export default {
 
 .chat__voice-icon {
   font-size: $font-size-md;
+  color: $icon-ink;
 }
 
 .chat__head {
@@ -846,6 +847,7 @@ export default {
 .report__icon {
   font-size: $size-icon-sm;
   margin-right: $space-2;
+  color: $icon-ink;
 }
 
 .report__head-main {
@@ -1076,6 +1078,7 @@ export default {
 
 .bar__mic-t {
   font-size: $font-size-md;
+  color: $icon-ink;
 }
 
 .bar__send {

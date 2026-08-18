@@ -397,6 +397,7 @@ export default {
 
 .mi__icon-t {
   font-size: $size-icon-xs;
+  color: $icon-ink;
 }
 
 .mi__main {

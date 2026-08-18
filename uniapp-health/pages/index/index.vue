@@ -261,6 +261,7 @@ export default {
 
 .hero__bell-icon {
   font-size: $font-size-lg;
+  color: $icon-ink;
 }
 
 .hero__badge {
@@ -364,6 +365,7 @@ export default {
 
 .ongoing__icon-t {
   font-size: $font-size-xl;
+  color: $icon-ink;
 }
 
 .ongoing__main {
@@ -410,6 +412,7 @@ export default {
 .notice__icon {
   font-size: $font-size-lg;
   margin-right: $space-2;
+  color: $icon-ink;
 }
 
 .notice__main {
@@ -527,6 +530,7 @@ export default {
 .pkg__emoji {
   font-size: $size-icon-xl;
   margin-left: $space-2;
+  color: $icon-ink;
 }
 
 .pkg__body {
@@ -630,6 +634,7 @@ export default {
 .kn__icon {
   font-size: $size-icon-xs;
   margin-right: $space-2;
+  color: $icon-ink;
 }
 
 .kn__main {

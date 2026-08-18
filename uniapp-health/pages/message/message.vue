@@ -319,6 +319,7 @@ export default {
 
 .msg__icon-t {
   font-size: $font-size-lg;
+  color: $icon-ink;
 }
 
 .msg__main {

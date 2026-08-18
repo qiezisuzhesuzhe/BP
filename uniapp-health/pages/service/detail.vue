@@ -9,7 +9,7 @@
     </view>
 
     <view class="hero">
-      <image class="hero__img" :src="pkg.heroImg" mode="widthFix" />
+      <image class="hero__img" :src="pkg.heroImg" mode="aspectFill" />
       <view class="hero__mask"></view>
     </view>
 
@@ -87,7 +87,7 @@
         <text class="hm-sec-title">{{ section.title }}</text>
       </view>
       <view class="card ds">
-        <image class="ds__img" :src="section.img" mode="widthFix" />
+        <image class="ds__img" :src="section.img" mode="aspectFill" />
         <view class="ds__body">
           <view v-for="(p, j) in section.points" :key="j" class="ds__point">
             <text class="ds__idx" :style="{ color: pkg.accent, background: pkg.accentSoft }">{{ j + 1 }}</text>
@@ -201,6 +201,7 @@ export default {
 
 .hero__img {
   width: 100%;
+  height: $size-hero-image-height;
   display: block;
 }
 
@@ -371,6 +372,7 @@ export default {
 
 .hl__icon-t {
   font-size: $size-icon-sm;
+  color: $icon-ink;
 }
 
 .hl__main {
@@ -456,7 +458,9 @@ export default {
 
 .ds__img {
   width: 100%;
+  height: $size-detail-image-height;
   display: block;
+  border-radius: $radius-card-child $radius-card-child 0 0;
 }
 
 .ds__body {

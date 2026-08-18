@@ -39,18 +39,21 @@
     <view class="wrap">
       <view class="sec-head">
         <text class="hm-sec-title">我的权益</text>
-        <text class="hm-sec-sub">{{ activeRight ? activeRight.name : '开通服务包，解锁全部权益' }}</text>
+        <text v-if="activeRight" class="hm-sec-sub">{{ activeRight.name }}</text>
       </view>
 
       <view class="rights" @tap="onRightsTap">
         <view class="rights__head">
           <view class="rights__head-l">
-            <text class="rights__level">{{ activeRight ? activeRight.level : '基础会员' }}</text>
-            <text class="rights__date">{{ activeRight ? ('有效期 ' + activeRight.startAt + ' ~ ' + activeRight.endAt) : '未开通健康管理服务包' }}</text>
+            <view class="rights__level">
+              <text class="fa-solid fa-shield-halved rights__level-icon"></text>
+              <text class="rights__level-t">{{ activeRight ? activeRight.level : '基础会员' }}</text>
+            </view>
+            <text v-if="activeRight" class="rights__date">有效期 {{ activeRight.startAt }} ~ {{ activeRight.endAt }}</text>
           </view>
           <view class="rights__pts">
-            <text class="rights__pts-v">{{ activeRight ? activeRight.points : 0 }}</text>
             <text class="rights__pts-l">剩余积分</text>
+            <text class="rights__pts-v">{{ activeRight ? activeRight.points : 500 }}</text>
           </view>
         </view>
         <view class="rights__grid">
@@ -350,10 +353,25 @@ export default {
 }
 
 .rights {
-  background: $bg-surface;
+  position: relative;
+  overflow: hidden;
+  background: linear-gradient(165deg, $bg-surface 0%, $brand-green-soft 100%);
+  border: 1rpx solid $label-soft-border;
   border-radius: $radius-card;
-  box-shadow: $shadow-md;
+  box-shadow: $shadow-md, inset 0 2rpx 0 rgba(255, 255, 255, 0.85);
   padding: $space-4 $space-3 $space-3;
+}
+
+/* 顶部细高光线：提升卡片精致度 */
+.rights::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: $space-4;
+  right: $space-4;
+  height: 2rpx;
+  background: linear-gradient(90deg, transparent, $brand-primary, transparent);
+  opacity: 0.9;
 }
 
 .rights__head {
@@ -369,39 +387,55 @@ export default {
 }
 
 .rights__level {
-  display: block;
-  font-size: $font-size-lg;
+  display: inline-flex;
+  align-items: center;
+  padding: $space-1 $space-3;
+  border-radius: $radius-full;
+  background: linear-gradient(135deg, $brand-soft 0%, rgba(255, 255, 255, 0.92) 100%);
+  border: 1rpx solid $label-soft-border;
+  box-shadow: $shadow-sm;
+}
+
+.rights__level-icon {
+  font-size: $font-size-xs;
+  color: $brand-primary-active;
+  margin-right: $space-1;
+}
+
+.rights__level-t {
+  font-size: $font-size-sm;
   font-weight: $font-weight-heavy;
   color: $text-primary;
-  line-height: $line-height-tight;
+  letter-spacing: 2rpx;
 }
 
 .rights__date {
   display: block;
-  font-size: $font-size-2xs;
+  font-size: $font-size-xs;
   color: $text-muted;
-  margin-top: $space-1;
+  margin-top: $space-2;
+  font-family: $font-family-en;
 }
 
 .rights__pts {
   display: flex;
-  flex-direction: column;
-  align-items: flex-end;
+  align-items: baseline;
   flex-shrink: 0;
   margin-left: $space-3;
 }
 
+.rights__pts-l {
+  font-size: $font-size-xs;
+  color: $text-muted;
+  margin-right: $space-1;
+}
+
 .rights__pts-v {
-  font-size: $font-size-xl;
+  font-size: $font-size-2xl;
   font-weight: $font-weight-heavy;
   color: $brand-primary-active;
   line-height: $line-height-tight;
-}
-
-.rights__pts-l {
-  font-size: $font-size-2xs;
-  color: $text-muted;
-  margin-top: $space-1;
+  font-family: $font-family-en;
 }
 
 .rights__grid {
@@ -450,7 +484,7 @@ export default {
 }
 
 .rights__item-t {
-  font-size: $font-size-2xs;
+  font-size: $font-size-min;
   color: $text-secondary;
   margin-top: $space-1;
 }

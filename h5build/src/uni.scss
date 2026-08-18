@@ -77,6 +77,11 @@ $font-size-2xl: 56rpx;
 $font-size-3xl: 72rpx;
 $font-size-4xl: 120rpx;
 
+/* 移动端最小舒适字号（可读正文下限）：
+   说明/入口/数据标签等可读文字不得小于 12px(24rpx)；
+   $font-size-2xs(10px) 仅限角标、徽标、装饰性元素 */
+$font-size-min: 24rpx;
+
 $line-height-tight: 1.1;
 $line-height-normal: 1.4;
 $line-height-relaxed: 1.6;

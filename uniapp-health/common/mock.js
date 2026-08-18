@@ -283,7 +283,7 @@ export const KNOWLEDGE = [
 
 // 首页"我的权益"入口（quota 表示剩余次数，无则不限）
 export const RIGHT_ENTRIES = [
-  { key: 'ai', label: 'AI自测', icon: 'fa-solid fa-robot', color: '#389a82', bg: '#d4f5ee' },
+  { key: 'ai', label: 'AI自测', icon: 'fa-solid fa-tongue', color: '#389a82', bg: '#d4f5ee' },
   { key: 'consult', label: '免费问诊', icon: 'fa-solid fa-comments', color: '#4ab89e', bg: '#d8f8fa' },
   { key: 'expert', label: '专家预约', icon: 'fa-solid fa-user-doctor', color: '#f15533', bg: '#fdf4ed', quota: 3 },
   { key: 'video', label: '视频问诊', icon: 'fa-solid fa-video', color: '#8dcdd8', bg: '#e2f2f6', quota: 6 },

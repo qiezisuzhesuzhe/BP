@@ -65,7 +65,8 @@
 | `--font-family-en` | `"DIN Pro", "DIN Alternate", "Helvetica Neue", Arial, sans-serif` | 纯英文/数字场景字体 |
 | `--icon-font-family` | `"Font Awesome 6 Free"` | 图标字体族，通过 BootCDN 国内 CDN 加载（font-awesome 6.4.2） |
 | `--icon-font-family-brands` | `"Font Awesome 6 Brands"` | 品牌图标字体族（微信/支付宝等） |
-| `--font-size-2xs` | `10px` | 微型说明、底部导航文字 |
+| `--font-size-min` | `12px` | 移动端最小舒适字号，可读正文/入口/标签不得小于该值 |
+| `--font-size-2xs` | `10px` | 微型说明、底部导航文字（仅限角标、徽标、装饰性元素，不作为可读正文） |
 | `--font-size-xs` | `12px` | 辅助说明、角标、次要模块标题 |
 | `--font-size-sm` | `14px` | 次级正文、标签、列表副标题 |
 | `--font-size-md` | `16px` | 默认正文、主入口文字、列表标题 |
@@ -195,6 +196,7 @@
 - 同一内容列表内的相邻卡片应保持紧凑连续，默认使用 `--space-data-list-gap`；除非是跨区块内容，不应使用大于 `--space-4` 的间距。
 - 当列表外层已使用 `gap` 管理间距时，列表卡片之间不得再叠加 `margin-top`，避免间距过大。
 - 卡片内小标题使用 `--font-size-lg`、`--font-weight-heavy` 和 `--line-height-tight`，并与下方说明保持至少 `--space-2` 间距。
+- 移动端最小舒适字号为 `--font-size-min`（12px）：功能入口文字、数据标签、说明类可读正文一律不得小于该值；`--font-size-2xs`（10px）仅限角标、徽标、装饰性元素。
 - 卡片左上角小标签使用 `--color-label-soft-bg`、`--color-label-soft-border`、`--color-label-soft-text`，内边距使用 `--space-1`/`--space-2`，并与下方内容保持至少 `--space-2` 间距。
 - 浅色卡片小标题使用 `--color-text-primary`；深色或品牌渐变背景小标题必须使用 `--color-text-inverse`，不得使用深色文字。
 
@@ -296,6 +298,7 @@
   --color-border-subtle: rgba(15, 61, 53, 0.06);
   --color-overlay: rgba(15, 61, 53, 0.10);
   --font-family-base: "PingFang SC", -apple-system, BlinkMacSystemFont, "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+  --font-size-min: 12px;
   --font-size-2xs: 10px;
   --font-size-xs: 12px;
   --font-size-sm: 14px;

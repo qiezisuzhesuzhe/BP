@@ -175,7 +175,7 @@ async function tab(doc, w, url) {
 
   stats.push(report(doc, w, '① 首页 pages/index/index',
     ['hm-page', 'hero', 'hero__hello', 'hero__stat-v', 'hero__bell', 'day-switch', 'hm-sec-title', 'wrap', 'tl__action', 'tl__cover',
-      'rights', 'rights__head', 'rights__level', 'rights__date', 'rights__pts', 'rights__grid', 'rights__item', 'rights__item-badge']))
+      'rights', 'rights__head', 'rights__level', 'rights__level-icon', 'rights__level-t', 'rights__date', 'rights__pts', 'rights__pts-l', 'rights__pts-v', 'rights__grid', 'rights__item', 'rights__item-badge']))
 
   await nav(doc, w, '/pages/service/detail?id=hbp3m')
   stats.push(report(doc, w, '② 服务详情 pages/service/detail',

@@ -33,10 +33,12 @@ $danger: #eb5757;
 $badge: #f15533;
 
 /* ---------- 背景 ---------- */
-/* 垂直渐变：末端颜色与 $bg-page-base 一致，且 62% 处即到达底色，向下无分界线，与底部背景完美衔接 */
-$bg-page: linear-gradient(180deg, #ddf7ed 0%, #e9faf5 32%, #f5faff 62%, #f5faff 100%);
+/* 斜向渐变：左上(深 #ddf7ed) → 右下(浅 #f5faff)，末端 48% 前即达底色；
+   渐变盒内左下/右上角的渐变位置均 ≥48%（手机≈69%、常规桌面≈60%），
+   因此整个盒体下缘与页面底色 $bg-page-base 完全一致，向下无缝衔接 */
+$bg-page: linear-gradient(135deg, #ddf7ed 0%, #e9faf5 26%, #f5faff 48%, #f5faff 100%);
 $bg-page-fade: linear-gradient(180deg, rgba(245, 250, 255, 0) 0%, #f5faff 88%);
-$bg-page-height: 1600rpx;
+$bg-page-height: 3200rpx;
 $bg-page-base: #f5faff;
 $bg-surface: #ffffff;
 $bg-glass-nav: rgba(255, 255, 255, 0.78);

@@ -9,7 +9,7 @@
     </view>
 
     <view class="hero">
-      <image class="hero__img" :src="pkg.heroImg" mode="aspectFill" />
+      <image class="hero__img" :src="pkg.heroImg" mode="aspectFill" @error="onHeroErr" />
       <view class="hero__mask"></view>
     </view>
 
@@ -87,7 +87,7 @@
         <text class="hm-sec-title">{{ section.title }}</text>
       </view>
       <view class="card ds">
-        <image class="ds__img" :src="section.img" mode="aspectFill" />
+        <image class="ds__img" :src="section.img" mode="aspectFill" @error="onSectionErr(i)" />
         <view class="ds__body">
           <view v-for="(p, j) in section.points" :key="j" class="ds__point">
             <text class="ds__idx" :style="{ color: pkg.accent, background: pkg.accentSoft }">{{ j + 1 }}</text>
@@ -139,6 +139,8 @@
 </template>
 
 <script>
+const FALLBACK_IMG = '/static/img/placeholder.png'
+
 export default {
   data() {
     return {
@@ -171,6 +173,18 @@ export default {
   methods: {
     toggleFaq(i) {
       this.openFaq = this.openFaq === i ? -1 : i
+    },
+    // 远端图片生成 API 会话失效时，兜底为本地占位图，避免破图
+    onHeroErr() {
+      if (this.pkg && this.pkg.heroImg !== FALLBACK_IMG) {
+        this.$set(this.pkg, 'heroImg', FALLBACK_IMG)
+      }
+    },
+    onSectionErr(i) {
+      const s = this.pkg && this.pkg.detailSections[i]
+      if (s && s.img !== FALLBACK_IMG) {
+        this.$set(s, 'img', FALLBACK_IMG)
+      }
     },
     buy() {
       this.$store.dispatch('createOrder', this.pkg.id).then((order) => {

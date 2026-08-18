@@ -20,7 +20,7 @@
 
         <!-- 运动：视频封面缩略图 -->
         <view v-if="item.cat === 'exercise'" class="tl__cover" @tap="playVideo(item.title)">
-          <image class="tl__cover-img" :src="exerciseCover(item.title)" mode="aspectFill"></image>
+          <image class="tl__cover-img" :src="item._coverFail ? FALLBACK_IMG : exerciseCover(item.title)" mode="aspectFill" @error="onCoverErr(item)"></image>
           <view class="tl__cover-mask"></view>
           <view class="tl__cover-play">
             <text class="fa-solid fa-play tl__cover-play-icon"></text>
@@ -62,6 +62,8 @@ const COVER_WALK =
   encodeURIComponent('video cover of a middle-aged man brisk walking on a tree-lined path, golden hour, health lifestyle, clean composition') +
   '&image_size=landscape_16_9'
 
+const FALLBACK_IMG = '/static/img/placeholder.png'
+
 export default {
   name: 'hm-timeline',
   props: {
@@ -75,6 +77,10 @@ export default {
   methods: {
     meta(cat) {
       return CAT_META[cat] || { label: '指导', color: '#389a82', bg: '#d4f5ee' }
+    },
+    // 视频封面加载失败时兜底为本地占位图
+    onCoverErr(item) {
+      this.$set(item, '_coverFail', true)
     },
     // 面性图标对比度规则：深色底用浅色图标(#fff)，浅色底用 $icon-ink(透明黑 alpha=0.1)
     iconColor(cat) {

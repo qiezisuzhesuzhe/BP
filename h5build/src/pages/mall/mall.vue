@@ -98,6 +98,11 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+/* 页面内容容器：遵循全站规范 */
+.wrap {
+  padding: $space-4 $space-4 0;
+}
+
 /* 搜索栏 */
 .search {
   display: flex;
@@ -120,10 +125,18 @@ export default {
   color: $text-disabled;
 }
 
+/* 区块标题：遵循全站规范（上远下近，标题左、小字右） */
+.sec-head {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  margin-top: $space-sec-head-top;
+  margin-bottom: $space-sec-head-bottom;
+}
+
 /* 金刚区 */
 .quicks {
   display: flex;
-  margin-top: $space-3;
   background: $bg-surface;
   border-radius: $radius-card;
   box-shadow: $shadow-sm;

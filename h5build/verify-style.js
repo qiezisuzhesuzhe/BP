@@ -75,7 +75,7 @@ function stripComments(css) {
 
 const TOKENS = ['7dd4bc', '4ab89e', '389a82', 'd4f5ee', '61e0e5', 'd8f8fa', '84e8c2',
   'ddf7ed', '8dcdd8', 'e2f2f6', 'e8c4a4', 'fdf4ed', '27ae60', 'f2c94c',
-  'eb5757', 'f15533', 'ececec', 'edf5f2', 'f2f7fa', '1a2a3c', '334155',
+  'eb5757', 'f15533', 'f3f3f3', 'edf5f2', 'f2f7fa', '1a2a3c', '334155',
   '64748b', '94a3b8', 'c6d2de']
 
 const inlineSeen = []

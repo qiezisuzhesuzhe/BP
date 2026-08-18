@@ -2,21 +2,19 @@
   <view class="hm-page">
     <!-- 顶部渐变头 -->
     <view class="hero">
-      <hm-navbar title="" :show-back="false" bg-color="transparent" :sticky="false">
-        <template #right>
+      <hm-navbar title="" :show-back="false" bg-color="transparent" :sticky="false"></hm-navbar>
+
+      <view class="hero__body">
+        <text class="hero__org">新华保险北京分公司</text>
+        <view class="hero__title">
+          <text class="hero__hello">{{ greeting }}，{{ profile.name }}</text>
           <view class="hero__bell" @tap="goMsg">
             <text class="hero__bell-icon fa-solid fa-bell"></text>
             <view v-if="unreadCount > 0" class="hero__badge">
               <text class="hero__badge-t">{{ unreadCount > 99 ? '99+' : unreadCount }}</text>
             </view>
           </view>
-        </template>
-      </hm-navbar>
-
-      <view class="hero__body">
-        <text class="hero__org">新华保险北京分公司</text>
-        <text class="hero__hello">{{ greeting }}，{{ profile.name }}</text>
-        <text class="hero__slogan">今天也要好好照顾自己</text>
+        </view>
 
         <view v-if="activeRight" class="hero__stats">
           <view class="hero__stat">
@@ -252,6 +250,7 @@ export default {
 
 .hero__body {
   padding: $space-1 $space-4 0;
+  text-align: center;
 }
 
 .hero__org {
@@ -262,20 +261,18 @@ export default {
   margin-bottom: $space-1;
 }
 
+.hero__title {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
 .hero__hello {
-  display: block;
   color: $page-title-color;
   font-size: $page-title-size;
   font-weight: $page-title-weight;
   line-height: $page-title-line-height;
   letter-spacing: 2rpx;
-}
-
-.hero__slogan {
-  display: block;
-  color: $text-muted;
-  font-size: $font-size-xs;
-  margin-top: $space-2;
 }
 
 .hero__stats {
@@ -413,7 +410,7 @@ export default {
   border-radius: $radius-card;
   overflow: hidden;
   box-shadow: $shadow-sm;
-  margin-bottom: $space-3;
+  margin-bottom: $space-4;
 }
 
 .pkg__banner {

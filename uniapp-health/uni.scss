@@ -33,12 +33,12 @@ $danger: #eb5757;
 $badge: #f15533;
 
 /* ---------- 背景 ---------- */
-/* 斜向两色渐变：左上(#ddf7ed) → 右下(#ececec)，末端即底色；
+/* 斜向两色渐变：左上(#ddf7ed) → 右下(#f3f3f3)，末端即底色；
    配合 App.vue 中 background-attachment: fixed 铺满视口固定，不随页面滚动/变长 */
-$bg-page: linear-gradient(135deg, #ddf7ed, #ececec);
-$bg-page-fade: linear-gradient(180deg, rgba(236, 236, 236, 0) 0%, #ececec 88%);
+$bg-page: linear-gradient(135deg, #ddf7ed, #f3f3f3);
+$bg-page-fade: linear-gradient(180deg, rgba(243, 243, 243, 0) 0%, #f3f3f3 88%);
 $bg-page-height: 3200rpx;
-$bg-page-base: #ececec;
+$bg-page-base: #f3f3f3;
 $bg-surface: #ffffff;
 $bg-glass-nav: rgba(255, 255, 255, 0.78);
 $bg-subtle: #edf5f2;

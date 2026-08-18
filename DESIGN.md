@@ -36,10 +36,10 @@
 | `--color-warning` | `#F2C94C` | 警告、提醒状态 |
 | `--color-danger` | `#EB5757` | 错误、危险、删除操作 |
 | `--color-badge` | `#F15533` | 消息红点、角标、未读提醒 |
-| `--color-bg-page` | `linear-gradient(135deg, #DDF7ED, #ECECEC)` | 页面背景斜向渐变：左上(#DDF7ED)→右下(#ECECEC)，固定于视口、不随页面滚动 |
-| `--color-bg-page-fade` | `linear-gradient(180deg, rgba(236, 236, 236, 0) 0%, #ECECEC 88%)` | 页面顶部渐变到底色的柔和过渡层 |
+| `--color-bg-page` | `linear-gradient(135deg, #DDF7ED, #F3F3F3)` | 页面背景斜向渐变：左上(#DDF7ED)→右下(#F3F3F3)，固定于视口、不随页面滚动 |
+| `--color-bg-page-fade` | `linear-gradient(180deg, rgba(243, 243, 243, 0) 0%, #F3F3F3 88%)` | 页面顶部渐变到底色的柔和过渡层 |
 | `--color-bg-page-height` | `1600px` | 兼容保留（fixed 模式下渐变以 `100% 100%` 铺满视口） |
-| `--color-bg-page-base` | `#ECECEC` | 页面基础底色 |
+| `--color-bg-page-base` | `#F3F3F3` | 页面基础底色 |
 | `--color-back-subpage-bg` | `var(--color-bg-page-base)` | 带返回子页面背景底色 |
 | `--color-back-subpage-header-bg` | `var(--color-bg-surface)` | 带返回子页面头部承载背景 |
 | `--color-back-subpage-back-bg` | `var(--color-bg-surface)` | 带返回子页面返回按钮背景 |
@@ -270,10 +270,10 @@
   --color-warning: #F2C94C;
   --color-danger: #EB5757;
   --color-badge: #F15533;
-  --color-bg-page: linear-gradient(135deg, #DDF7ED, #ECECEC);
-  --color-bg-page-fade: linear-gradient(180deg, rgba(236, 236, 236, 0) 0%, #ECECEC 88%);
+  --color-bg-page: linear-gradient(135deg, #DDF7ED, #F3F3F3);
+  --color-bg-page-fade: linear-gradient(180deg, rgba(243, 243, 243, 0) 0%, #F3F3F3 88%);
   --color-bg-page-height: 1600px;
-  --color-bg-page-base: #ECECEC;
+  --color-bg-page-base: #F3F3F3;
   --color-back-subpage-bg: var(--color-bg-page-base);
   --color-back-subpage-header-bg: var(--color-bg-surface);
   --color-back-subpage-back-bg: var(--color-bg-surface);

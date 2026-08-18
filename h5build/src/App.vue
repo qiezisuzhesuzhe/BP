@@ -73,7 +73,7 @@ view {
 .hm-sec-sub {
   font-size: $font-size-xs;
   color: $text-muted;
-  margin-top: $space-1;
+  margin-top: $space-2;
 }
 
 .hm-divider {

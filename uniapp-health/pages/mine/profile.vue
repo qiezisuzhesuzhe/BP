@@ -324,6 +324,9 @@ export default {
 
 .sec {
   padding: $space-5 $space-4 $space-2;
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
 }
 
 .bmi {

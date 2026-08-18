@@ -350,7 +350,8 @@ export default {
   display: flex;
   align-items: baseline;
   justify-content: space-between;
-  margin-bottom: $space-3;
+  margin-top: $space-sec-head-top;
+  margin-bottom: $space-sec-head-bottom;
 }
 
 .hl {

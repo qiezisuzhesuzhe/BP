@@ -107,6 +107,8 @@
 | `--space-10` | `40px` | 页面级区块间距 |
 | `--space-12` | `48px` | 大型视觉区块间距、大号数字底部间距 |
 | `--space-data-list-gap` | `var(--space-2)` | 数据列表内相邻卡片间距 |
+| `--space-section-head-top` | `4px` | 区块标题额外上间距（叠加页面容器顶部 `--space-4` 后共 40px） |
+| `--space-section-head-bottom` | `16px` | 区块标题下间距（标题上远下近） |
 
 ## 尺寸令牌
 
@@ -187,6 +189,9 @@
 - 卡片内边距使用 `--space-4`、`--space-5` 或 `--space-6`。
 - 统计卡片背景使用 `--color-bg-section`，圆角使用 `--radius-card`。
 - 页面首个大标题卡片与下方内容区需保持清晰区块距离，默认使用 `--space-6`，不得贴近列表或筛选栏。
+- 区块大标题（`hm-sec-title`）间距遵循"上远下近"：标题距上方内容使用 `--space-section-head-top`（叠加页面容器顶部间距后共 40px），距下方内容使用 `--space-section-head-bottom`（16px），即上间距始终大于下间距。
+- 区块标题行（标题 + 副标题）左右分别对齐：大标题左对齐，小字右对齐；副标题带交互组件（如日期切换器）时，小字与组件同放右侧一行。
+- 首页问候区：机构名与问候语左对齐，右上消息图标右对齐（`justify-content: space-between`），不使用居中排版。
 - 同一内容列表内的相邻卡片应保持紧凑连续，默认使用 `--space-data-list-gap`；除非是跨区块内容，不应使用大于 `--space-4` 的间距。
 - 当列表外层已使用 `gap` 管理间距时，列表卡片之间不得再叠加 `margin-top`，避免间距过大。
 - 卡片内小标题使用 `--font-size-lg`、`--font-weight-heavy` 和 `--line-height-tight`，并与下方说明保持至少 `--space-2` 间距。
@@ -322,6 +327,8 @@
   --space-8: 32px;
   --space-10: 40px;
   --space-12: 48px;
+  --space-section-head-top: 4px;
+  --space-section-head-bottom: 16px;
   --size-page-max-width: 480px;
   --size-header-height: 64px;
   --size-tab-height: 48px;

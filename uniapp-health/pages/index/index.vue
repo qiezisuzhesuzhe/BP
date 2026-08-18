@@ -54,19 +54,19 @@
     <!-- 今日健康指导（仅成功购买服务包后显示） -->
     <view v-if="activeRight" class="wrap">
       <view class="sec-head">
-        <view>
-          <text class="hm-sec-title">今日健康指导</text>
+        <text class="hm-sec-title">今日健康指导</text>
+        <view class="sec-head__side">
           <text class="hm-sec-sub">{{ todayLabel }} · 共 {{ todayTimeline.items.length }} 项安排</text>
-        </view>
-        <view class="day-switch">
-          <view
-            v-for="(d, i) in dayTabs"
-            :key="i"
-            class="day-switch__item"
-            :class="{ 'day-switch__item--on': currentDayIndex === i }"
-            @tap="setDay(i)"
-          >
-            <text class="day-switch__t">{{ d }}</text>
+          <view class="day-switch">
+            <view
+              v-for="(d, i) in dayTabs"
+              :key="i"
+              class="day-switch__item"
+              :class="{ 'day-switch__item--on': currentDayIndex === i }"
+              @tap="setDay(i)"
+            >
+              <text class="day-switch__t">{{ d }}</text>
+            </view>
           </view>
         </view>
       </view>
@@ -77,10 +77,8 @@
     <!-- 健康管理服务包 -->
     <view class="wrap" id="shop">
       <view class="sec-head">
-        <view>
-          <text class="hm-sec-title">健康管理服务包</text>
-          <text class="hm-sec-sub">三甲医师团队 + AI 助手全程陪伴</text>
-        </view>
+        <text class="hm-sec-title">健康管理服务包</text>
+        <text class="hm-sec-sub">三甲医师团队 + AI 助手全程陪伴</text>
       </view>
 
       <view v-for="pkg in packages" :key="pkg.id" class="pkg" @tap="goDetail(pkg.id)">
@@ -250,7 +248,6 @@ export default {
 
 .hero__body {
   padding: $space-1 $space-4 0;
-  text-align: center;
 }
 
 .hero__org {
@@ -264,7 +261,7 @@ export default {
 .hero__title {
   display: flex;
   align-items: center;
-  justify-content: center;
+  justify-content: space-between;
 }
 
 .hero__hello {
@@ -375,7 +372,19 @@ export default {
   display: flex;
   align-items: flex-end;
   justify-content: space-between;
-  margin-bottom: $space-3;
+  margin-top: $space-sec-head-top;
+  margin-bottom: $space-sec-head-bottom;
+}
+
+.sec-head__side {
+  display: flex;
+  align-items: center;
+  flex-shrink: 0;
+}
+
+.sec-head__side .hm-sec-sub {
+  margin-right: $space-2;
+  margin-bottom: 0;
 }
 
 .day-switch {

@@ -3,7 +3,7 @@
     <view v-for="(item, idx) in items" :key="idx" class="tl__row">
       <view class="tl__rail">
         <view class="tl__dot" :style="{ background: meta(item.cat).color }">
-          <text class="tl__dot-icon" :class="item.icon"></text>
+          <text class="tl__dot-icon" :class="item.icon" :style="{ color: iconColor(item.cat) }"></text>
         </view>
         <view v-if="idx < items.length - 1" class="tl__line"></view>
       </view>
@@ -35,6 +35,15 @@ export default {
   methods: {
     meta(cat) {
       return CAT_META[cat] || { label: '指导', color: '#389a82', bg: '#d4f5ee' }
+    },
+    // 面性图标对比度规则：深色底用浅色图标，浅色底用深色图标
+    // 依据分类色亮度阈值选择 $text-inverse / $text-primary
+    iconColor(cat) {
+      const hex = (this.meta(cat).color || '').replace('#', '')
+      if (!/^[0-9a-f]{6}$/i.test(hex)) return '#ffffff'
+      const n = parseInt(hex, 16)
+      const lum = (0.299 * ((n >> 16) & 255) + 0.587 * ((n >> 8) & 255) + 0.114 * (n & 255)) / 255
+      return lum > 0.55 ? '#1a2a3c' : '#ffffff'
     }
   }
 }

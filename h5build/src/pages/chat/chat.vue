@@ -569,6 +569,7 @@ export default {
 
 .chat__head-emoji {
   font-size: $size-icon-xs;
+  color: $text-inverse;
 }
 
 .chat__head-main {
@@ -667,6 +668,7 @@ export default {
 
 .msg__avatar-t {
   font-size: $font-size-md;
+  color: $text-inverse;
 }
 
 .msg__body {

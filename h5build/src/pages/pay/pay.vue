@@ -366,6 +366,7 @@ export default {
 .pay__icon {
   font-size: $size-icon-sm;
   margin-right: $space-2;
+  color: $text-primary;
 }
 
 .pay__main {

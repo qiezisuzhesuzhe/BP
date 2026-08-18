@@ -288,3 +288,106 @@ export function makeOrderNo() {
     p(d.getHours()) + p(d.getMinutes()) + p(d.getSeconds()) +
     Math.floor(Math.random() * 900 + 100)
 }
+
+/* ---------- 智能设备 ---------- */
+// 每种设备的可展示实时指标：key/label/unit/icon
+export const DEVICE_TYPES = [
+  {
+    key: 'band',
+    name: '智能手环',
+    model: '安康手环 S1',
+    icon: 'fa-solid fa-hand-holding-heart',
+    color: '#389a82',
+    accentSoft: '#d4f5ee',
+    desc: '全天候心率、步数与睡眠监测',
+    fields: [
+      { key: 'heartRate', label: '心率', unit: 'bpm', icon: 'fa-solid fa-heart-pulse' },
+      { key: 'steps', label: '今日步数', unit: '步', icon: 'fa-solid fa-shoe-prints' },
+      { key: 'sleep', label: '睡眠时长', unit: 'h', icon: 'fa-solid fa-moon' },
+      { key: 'battery', label: '电量', unit: '%', icon: 'fa-solid fa-battery-three-quarters' }
+    ]
+  },
+  {
+    key: 'band-bp',
+    name: '智能手环 - 血压款',
+    model: '安康手环 BP',
+    icon: 'fa-solid fa-heart-circle-check',
+    color: '#f15533',
+    accentSoft: '#fdf4ed',
+    desc: '腕式血压 + 心率 + 步数监测',
+    fields: [
+      { key: 'sys', label: '收缩压', unit: 'mmHg', icon: 'fa-solid fa-heart-pulse' },
+      { key: 'dia', label: '舒张压', unit: 'mmHg', icon: 'fa-solid fa-heart-pulse' },
+      { key: 'heartRate', label: '心率', unit: 'bpm', icon: 'fa-solid fa-heart' },
+      { key: 'steps', label: '今日步数', unit: '步', icon: 'fa-solid fa-shoe-prints' }
+    ]
+  },
+  {
+    key: 'radar',
+    name: '睡眠监测仪 - 毫米波雷达款',
+    model: '安康雷达 R1',
+    icon: 'fa-solid fa-satellite-dish',
+    color: '#8dcdd8',
+    accentSoft: '#e2f2f6',
+    desc: '非接触式呼吸、体动与离床监测',
+    fields: [
+      { key: 'respRate', label: '呼吸频率', unit: '次/分', icon: 'fa-solid fa-wind' },
+      { key: 'bodyMove', label: '体动次数', unit: '次', icon: 'fa-solid fa-person-walking' },
+      { key: 'bedOff', label: '离床次数', unit: '次', icon: 'fa-solid fa-bed' },
+      { key: 'stay', label: '床内时长', unit: 'h', icon: 'fa-solid fa-moon' }
+    ]
+  },
+  {
+    key: 'bed',
+    name: '睡眠监测仪 - 床上款',
+    model: '安康床垫 B1',
+    icon: 'fa-solid fa-bed-pulse',
+    color: '#f2c94c',
+    accentSoft: '#fdf4ed',
+    desc: '床垫式睡眠质量与生命体征监测',
+    fields: [
+      { key: 'sleepScore', label: '睡眠评分', unit: '分', icon: 'fa-solid fa-star' },
+      { key: 'heartRate', label: '心率', unit: 'bpm', icon: 'fa-solid fa-heart' },
+      { key: 'turn', label: '翻身次数', unit: '次', icon: 'fa-solid fa-rotate' },
+      { key: 'deepSleep', label: '深睡时长', unit: 'h', icon: 'fa-solid fa-moon' }
+    ]
+  }
+]
+
+export function deviceType(key) {
+  return DEVICE_TYPES.find((t) => t.key === key) || DEVICE_TYPES[0]
+}
+
+// 生成设备实时数据快照（原型模拟）
+export function makeDeviceSnapshot(type, prev) {
+  const d = {}
+  const p = prev || {}
+  const rnd = (min, max, fix) => +(min + Math.random() * (max - min)).toFixed(fix == null ? 0 : fix)
+  switch (type.key) {
+    case 'band':
+      d.heartRate = rnd(62, 92)
+      d.steps = (p.steps || 0) + rnd(0, 18)
+      d.sleep = +((p.sleep || 6.4) + rnd(-0.1, 0.1, 2)).toFixed(2)
+      d.battery = Math.max(5, Math.min(100, (p.battery == null ? 86 : p.battery) - rnd(0, 1)))
+      break
+    case 'band-bp':
+      d.sys = rnd(118, 148)
+      d.dia = rnd(74, 92)
+      d.heartRate = rnd(62, 92)
+      d.steps = (p.steps || 0) + rnd(0, 18)
+      break
+    case 'radar':
+      d.respRate = rnd(14, 20)
+      d.bodyMove = (p.bodyMove || 0) + rnd(0, 2)
+      d.bedOff = (p.bedOff || 0) + rnd(0, 1)
+      d.stay = +((p.stay || 7.2) + rnd(-0.05, 0.05, 2)).toFixed(2)
+      break
+    case 'bed':
+      d.sleepScore = rnd(72, 96)
+      d.heartRate = rnd(58, 76)
+      d.turn = (p.turn || 0) + rnd(0, 3)
+      d.deepSleep = +((p.deepSleep || 2.1) + rnd(-0.05, 0.05, 2)).toFixed(2)
+      break
+  }
+  return d
+}

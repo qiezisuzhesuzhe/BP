@@ -1,6 +1,6 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
-import { PACKAGES, TIMELINE, makeOrderNo } from '@/common/mock.js'
+import { PACKAGES, TIMELINE, makeOrderNo, deviceType, makeDeviceSnapshot } from '@/common/mock.js'
 
 Vue.use(Vuex)
 
@@ -91,6 +91,7 @@ const store = new Vuex.Store({
     rights: (cache && cache.rights) || [],
     messages: (cache && cache.messages) || buildDefaultMessages(),
     chats: (cache && cache.chats) || {},
+    devices: (cache && cache.devices) || [],
     currentDayIndex: 0
   },
 
@@ -125,6 +126,14 @@ const store = new Vuex.Store({
         pkgKey: key,
         preview: !r,
         items: days[state.currentDayIndex] || days[0]
+      }
+    },
+    devices(state) {
+      return state.devices
+    },
+    deviceById(state) {
+      return function (id) {
+        return state.devices.find((d) => d.id === id) || null
       }
     }
   },
@@ -172,10 +181,25 @@ const store = new Vuex.Store({
     SAVE_CHAT(state, payload) {
       state.chats = Object.assign({}, state.chats, { [payload.rightId]: payload.data })
     },
+    ADD_DEVICE(state, device) {
+      state.devices.unshift(device)
+    },
+    UPDATE_DEVICE_DATA(state, payload) {
+      const d = state.devices.find((x) => x.id === payload.id)
+      if (d) {
+        d.data = payload.data
+        d.lastSync = payload.lastSync || fmtDateTime(now())
+        d.online = true
+      }
+    },
+    REMOVE_DEVICE(state, id) {
+      state.devices = state.devices.filter((x) => x.id !== id)
+    },
     RESET_ALL(state) {
       state.orders = []
       state.rights = []
       state.chats = {}
+      state.devices = []
       state.messages = buildDefaultMessages()
       state.profile = defaultProfile
     }
@@ -192,7 +216,8 @@ const store = new Vuex.Store({
             orders: s.orders,
             rights: s.rights,
             messages: s.messages,
-            chats: s.chats
+            chats: s.chats,
+            devices: s.devices
           })
         )
       } catch (e) {}
@@ -332,6 +357,56 @@ const store = new Vuex.Store({
 
     saveChat(context, payload) {
       context.commit('SAVE_CHAT', payload)
+      context.dispatch('persist')
+    },
+
+    // 扫码添加设备：生成设备记录 + 初始数据快照 + 通知消息
+    addDevice(context, payload) {
+      const type = deviceType(payload.typeKey)
+      if (!type) return null
+      const id = uid('d')
+      const device = {
+        id: id,
+        typeKey: type.key,
+        name: payload.name || type.name,
+        model: type.model,
+        sn: payload.sn || 'SN' + Math.floor(Math.random() * 900000 + 100000),
+        addedAt: fmtDateTime(now()),
+        lastSync: fmtDateTime(now()),
+        online: true,
+        data: makeDeviceSnapshot(type, null)
+      }
+      context.commit('ADD_DEVICE', device)
+      context.commit('ADD_MESSAGES', [
+        {
+          id: uid('m'),
+          type: 'device',
+          icon: 'fa-solid fa-plug-circle-plus',
+          color: type.color,
+          title: '设备添加成功',
+          content: '「' + type.name + '」（' + device.sn + '）已与账号绑定，开始同步健康数据。',
+          time: fmtDateTime(now()),
+          read: false,
+          link: '/pages/device/detail?id=' + id
+        }
+      ])
+      context.dispatch('persist')
+      return device
+    },
+
+    // 定时拉取设备最新数据（原型模拟实时）
+    updateDeviceData(context, id) {
+      const d = context.state.devices.find((x) => x.id === id)
+      if (!d) return null
+      const type = deviceType(d.typeKey)
+      const data = makeDeviceSnapshot(type, d.data)
+      context.commit('UPDATE_DEVICE_DATA', { id, data, lastSync: fmtDateTime(now()) })
+      context.dispatch('persist')
+      return data
+    },
+
+    removeDevice(context, id) {
+      context.commit('REMOVE_DEVICE', id)
       context.dispatch('persist')
     },
 

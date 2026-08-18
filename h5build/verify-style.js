@@ -207,6 +207,61 @@ async function tab(doc, w, url) {
   await nav(doc, w, '/pages/mine/agreement')
   stats.push(report(doc, w, '⑨ 用户协议 pages/mine/agreement', ['hm-page']))
 
+  // ── 设备功能验证 ──
+  await tab(doc, w, '/pages/device/device')
+  stats.push(report(doc, w, '⑩ 设备列表(空状态) pages/device/device',
+    ['hm-page', 'wrap', 'empty', 'empty__icon', 'empty__t', 'empty__d', 'empty__btn']))
+
+  const dev = await store.dispatch('addDevice', { typeKey: 'band', sn: 'AK-100001' })
+  await sleep(800)
+  stats.push(report(doc, w, '⑪ 设备列表(已添加) pages/device/device',
+    ['hm-page', 'wrap', 'dev', 'dev__icon', 'dev__name', 'dev__sn', 'dev__status', 'add-bar', 'add-bar__t']))
+
+  await nav(doc, w, '/pages/device/scan')
+  stats.push(report(doc, w, '⑫ 扫码添加 pages/device/scan',
+    ['scan-page', 'scan-frame', 'scan-frame__inner', 'scan-frame__icon', 'scan-line', 'scan-tip', 'scan-btn', 'scan-btn__t']))
+
+  // 触发模拟识别，验证底部确认弹层（沿 DOM 父链查找页面 vm）
+  let scanVm = null
+  let cursor = doc.querySelector('.scan-page')
+  while (cursor && cursor !== doc.body && cursor !== doc) {
+    if (cursor.__vue__ && typeof cursor.__vue__.simulate === 'function') { scanVm = cursor.__vue__; break }
+    cursor = cursor.parentElement
+  }
+  if (!scanVm) {
+    for (const el of doc.querySelectorAll('*')) {
+      if (el.__vue__ && typeof el.__vue__.simulate === 'function') { scanVm = el.__vue__; break }
+    }
+  }
+  if (scanVm) {
+    scanVm.simulate()
+    const sheetShown = await waitFor(() => doc.querySelector('.sheet'), 15000)
+    console.log('\n───── ⑫b 扫码识别结果 ─────')
+    console.log('  弹层渲染=' + sheetShown + ' 识别设备=' + (doc.querySelector('.sheet__dev-name') ? doc.querySelector('.sheet__dev-name').textContent : '—'))
+    if (sheetShown) {
+      stats.push(report(doc, w, '⑫b 识别结果弹层',
+        ['sheet', 'sheet__card', 'sheet__dev', 'sheet__dev-icon', 'sheet__dev-name', 'sheet__btns', 'sheet__btn']))
+    }
+  } else {
+    console.log('  未找到 scan 页 vm，跳过弹层验证')
+  }
+
+  await nav(doc, w, '/pages/device/detail?id=' + dev.id)
+  stats.push(report(doc, w, '⑬ 设备详情 pages/device/detail',
+    ['hm-page', 'dev-head', 'dev-head__icon', 'dev-head__name', 'dev-head__model', 'dev-head__status', 'grid', 'cell', 'cell__icon', 'cell__num', 'cell__label', 'unbind', 'foot-tip']))
+
+  // 实时数据刷新验证：detail 页每 2s 轮询 updateDeviceData
+  const nums = () => [...doc.querySelectorAll('.cell__num')].map((e) => e.textContent).join('|')
+  const first = nums()
+  await sleep(2600)
+  const second = nums()
+  console.log('\n───── ⑬b 实时数据刷新 ─────')
+  console.log('  2.6s 后数值' + (first && second && first !== second ? '已更新 OK' : '未变化') + '  ' + first + ' → ' + second)
+  console.log('  最近同步: ' + (doc.querySelector('.dev-head__sync') ? doc.querySelector('.dev-head__sync').textContent : '—'))
+  // tabBar 第 4 个 tab 校验
+  const tabItems = doc.querySelectorAll('.uni-tabbar__item')
+  console.log('  tabBar 项数=' + tabItems.length + ' 标签=' + [...tabItems].map((i) => i.textContent.trim()).join('/'))
+
   const all = cssOf(doc)
   const decl = stripComments(all)
   const inline = inlineSeen.join('\n')

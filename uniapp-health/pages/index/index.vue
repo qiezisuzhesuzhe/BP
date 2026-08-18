@@ -103,9 +103,6 @@
               <text class="pkg__origin">¥{{ pkg.originPrice }}</text>
               <text class="pkg__dur">/ {{ pkg.duration }}</text>
             </view>
-            <view class="pkg__btn" :style="{ background: pkg.accent }">
-              <text class="pkg__btn-t">查看详情</text>
-            </view>
           </view>
 
           <view class="pkg__sold">
@@ -518,17 +515,6 @@ export default {
   font-size: $font-size-xs;
   color: $text-muted;
   margin-left: $space-1;
-}
-
-.pkg__btn {
-  padding: $space-2 $space-4;
-  border-radius: $radius-full;
-}
-
-.pkg__btn-t {
-  color: $text-inverse;
-  font-size: $font-size-sm;
-  font-weight: $font-weight-bold;
 }
 
 .pkg__sold {

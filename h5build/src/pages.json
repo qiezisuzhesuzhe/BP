@@ -83,6 +83,27 @@
         "navigationBarTitleText": "用户协议",
         "navigationStyle": "custom"
       }
+    },
+    {
+      "path": "pages/device/device",
+      "style": {
+        "navigationBarTitleText": "我的设备",
+        "navigationStyle": "custom"
+      }
+    },
+    {
+      "path": "pages/device/scan",
+      "style": {
+        "navigationBarTitleText": "扫描设备",
+        "navigationStyle": "custom"
+      }
+    },
+    {
+      "path": "pages/device/detail",
+      "style": {
+        "navigationBarTitleText": "设备详情",
+        "navigationStyle": "custom"
+      }
     }
   ],
   "globalStyle": {
@@ -118,6 +139,12 @@
         "text": "我的",
         "iconPath": "static/tab/mine.png",
         "selectedIconPath": "static/tab/mine-active.png"
+      },
+      {
+        "pagePath": "pages/device/device",
+        "text": "设备",
+        "iconPath": "static/tab/device.png",
+        "selectedIconPath": "static/tab/device-active.png"
       }
     ]
   }

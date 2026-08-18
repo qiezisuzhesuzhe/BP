@@ -10,8 +10,8 @@
     </view>
 
     <block v-else>
-      <view class="top" :style="{ background: 'linear-gradient(160deg,' + right.accent + ' 0%,' + shade(right.accent) + ' 100%)' }">
-        <hm-navbar title="权益详情" bg-color="transparent" text-color="#ffffff" />
+      <view class="top">
+        <hm-navbar title="权益详情" bg-color="transparent" />
         <view class="top__body">
           <view class="top__row">
             <text class="top__emoji">{{ right.icon }}</text>
@@ -187,13 +187,6 @@ export default {
     }
   },
   methods: {
-    shade(hex) {
-      const n = parseInt(hex.slice(1), 16)
-      const r = Math.max(0, ((n >> 16) & 255) - 40)
-      const g = Math.max(0, ((n >> 8) & 255) - 40)
-      const b = Math.max(0, (n & 255) - 30)
-      return 'rgb(' + r + ',' + g + ',' + b + ')'
-    },
     onUse() {
       const r = this.right
       if (!r) return
@@ -222,11 +215,12 @@ export default {
 
 <style lang="scss" scoped>
 .top {
-  padding-bottom: 88rpx;
+  background: transparent;
+  padding-bottom: $space-5;
 }
 
 .top__body {
-  padding: 20rpx 36rpx 0;
+  padding: $space-2 $space-4 0;
 }
 
 .top__row {
@@ -235,14 +229,15 @@ export default {
 }
 
 .top__emoji {
-  width: 104rpx;
-  height: 104rpx;
-  border-radius: 28rpx;
-  background: rgba(255, 255, 255, 0.2);
-  font-size: 48rpx;
+  width: $size-avatar-md;
+  height: $size-avatar-md;
+  border-radius: $radius-card-child;
+  background: $bg-surface;
+  box-shadow: $shadow-sm;
+  font-size: $size-icon-md;
   text-align: center;
-  line-height: 104rpx;
-  margin-right: 24rpx;
+  line-height: $size-avatar-md;
+  margin-right: $space-3;
 }
 
 .top__main {
@@ -251,41 +246,44 @@ export default {
 
 .top__name {
   display: block;
-  font-size: 40rpx;
-  font-weight: 700;
-  color: #fff;
+  font-size: $page-title-size;
+  font-weight: $page-title-weight;
+  line-height: $page-title-line-height;
+  color: $page-title-color;
   letter-spacing: 1rpx;
 }
 
 .top__sub {
   display: block;
-  margin-top: 8rpx;
-  font-size: 24rpx;
-  color: rgba(255, 255, 255, 0.82);
-  line-height: 1.5;
+  margin-top: $space-1;
+  font-size: $font-size-xs;
+  color: $text-muted;
+  line-height: $line-height-normal;
 }
 
 .top__chips {
   display: flex;
   flex-wrap: wrap;
-  margin-top: 28rpx;
+  margin-top: $space-3;
 }
 
 .chip {
-  padding: 8rpx 22rpx;
-  border-radius: 999rpx;
-  background: rgba(255, 255, 255, 0.18);
-  margin-right: 14rpx;
-  margin-bottom: 10rpx;
+  padding: $space-1 $space-3;
+  border-radius: $radius-full;
+  background: $label-soft-bg;
+  border: 1rpx solid $label-soft-border;
+  margin-right: $space-2;
+  margin-bottom: $space-1;
 }
 
 .chip__t {
-  font-size: 22rpx;
-  color: #fff;
+  font-size: $font-size-2xs;
+  color: $label-soft-text;
 }
 
-.panel {
-  margin-top: -64rpx;
+.hm-card {
+  margin: $space-data-list-gap $space-3 0;
+  padding: $space-3;
 }
 
 .prog__head {
@@ -295,38 +293,38 @@ export default {
 }
 
 .prog__t {
-  font-size: 28rpx;
-  font-weight: 600;
-  color: $ink-900;
+  font-size: $font-size-sm;
+  font-weight: $font-weight-semibold;
+  color: $text-primary;
 }
 
 .prog__n {
-  font-size: 24rpx;
-  color: $ink-500;
+  font-size: $font-size-xs;
+  color: $text-muted;
 }
 
 .prog__bar {
-  height: 14rpx;
-  border-radius: 999rpx;
-  background: $warm-200;
-  margin-top: 20rpx;
+  height: $space-2;
+  border-radius: $radius-full;
+  background: $bg-section;
+  margin-top: $space-2;
   overflow: hidden;
 }
 
 .prog__fill {
   height: 100%;
-  border-radius: 999rpx;
+  border-radius: $radius-full;
 }
 
 .prog__foot {
   display: flex;
   justify-content: space-between;
-  margin-top: 14rpx;
+  margin-top: $space-2;
 }
 
 .prog__d {
-  font-size: 22rpx;
-  color: $ink-400;
+  font-size: $font-size-2xs;
+  color: $text-disabled;
 }
 
 .stat {
@@ -341,33 +339,33 @@ export default {
 
 .stat__n {
   display: block;
-  font-size: 34rpx;
-  font-weight: 700;
+  font-size: $font-size-lg;
+  font-weight: $font-weight-bold;
 }
 
 .stat__l {
   display: block;
-  margin-top: 8rpx;
-  font-size: 22rpx;
-  color: $ink-500;
+  margin-top: $space-1;
+  font-size: $font-size-2xs;
+  color: $text-muted;
 }
 
 .stat__sep {
   width: 1rpx;
-  height: 56rpx;
-  background: $warm-200;
+  height: $space-8;
+  background: $bg-section;
 }
 
 .sec {
-  padding: 40rpx 36rpx 20rpx;
+  padding: $space-5 $space-4 $space-2;
 }
 
 .srv {
   display: flex;
   align-items: center;
-  padding-bottom: 26rpx;
-  margin-bottom: 26rpx;
-  border-bottom: 1rpx solid $warm-100;
+  padding-bottom: $space-3;
+  margin-bottom: $space-3;
+  border-bottom: 1rpx solid $border-subtle;
 }
 
 .srv--last {
@@ -377,17 +375,17 @@ export default {
 }
 
 .srv__dot {
-  width: 48rpx;
-  height: 48rpx;
-  border-radius: 16rpx;
+  width: $size-icon-md;
+  height: $size-icon-md;
+  border-radius: $radius-xs;
   text-align: center;
-  line-height: 48rpx;
-  margin-right: 22rpx;
+  line-height: $size-icon-md;
+  margin-right: $space-3;
 }
 
 .srv__dot-t {
-  font-size: 24rpx;
-  font-weight: 700;
+  font-size: $font-size-xs;
+  font-weight: $font-weight-bold;
 }
 
 .srv__main {
@@ -396,30 +394,30 @@ export default {
 
 .srv__name {
   display: block;
-  font-size: 28rpx;
-  font-weight: 600;
-  color: $ink-900;
+  font-size: $font-size-sm;
+  font-weight: $font-weight-semibold;
+  color: $text-primary;
 }
 
 .srv__spec {
   display: block;
-  margin-top: 6rpx;
-  font-size: 23rpx;
-  color: $ink-500;
+  margin-top: $space-1;
+  font-size: $font-size-xs;
+  color: $text-muted;
 }
 
 .srv__tag {
-  padding: 6rpx 18rpx;
-  border-radius: 999rpx;
-  font-size: 21rpx;
+  padding: $space-1 $space-2;
+  border-radius: $radius-full;
+  font-size: $font-size-2xs;
 }
 
 .row {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 22rpx 0;
-  border-bottom: 1rpx solid $warm-100;
+  padding: $space-3 0;
+  border-bottom: 1rpx solid $border-subtle;
 }
 
 .row:last-child {
@@ -427,36 +425,36 @@ export default {
 }
 
 .row__l {
-  font-size: 26rpx;
-  color: $ink-500;
+  font-size: $font-size-sm;
+  color: $text-muted;
 }
 
 .row__v {
-  font-size: 26rpx;
-  color: $ink-900;
-  font-weight: 500;
+  font-size: $font-size-sm;
+  color: $text-primary;
+  font-weight: $font-weight-medium;
 }
 
 .row__v--mono {
-  font-size: 24rpx;
+  font-size: $font-size-xs;
   letter-spacing: 1rpx;
 }
 
 .row__v--price {
-  color: $coral-500;
-  font-weight: 700;
+  color: $badge;
+  font-weight: $font-weight-bold;
 }
 
 .row__v--link {
-  color: $teal-700;
+  color: $brand-primary-active;
 }
 
 .note__p {
   display: block;
-  font-size: 24rpx;
-  color: $ink-500;
-  line-height: 1.85;
-  margin-bottom: 14rpx;
+  font-size: $font-size-xs;
+  color: $text-muted;
+  line-height: $line-height-relaxed;
+  margin-bottom: $space-2;
 }
 
 .note__p:last-child {
@@ -464,7 +462,7 @@ export default {
 }
 
 .bar-holder {
-  height: calc(160rpx + env(safe-area-inset-bottom));
+  height: calc(env(safe-area-inset-bottom) + #{$size-bottom-nav-height});
 }
 
 .buybar {
@@ -472,13 +470,14 @@ export default {
   left: 0;
   right: 0;
   bottom: 0;
-  z-index: 20;
+  z-index: $z-nav;
   display: flex;
   align-items: center;
-  padding: 18rpx 32rpx;
-  padding-bottom: calc(18rpx + env(safe-area-inset-bottom));
-  background: rgba(255, 255, 255, 0.97);
-  box-shadow: 0 -8rpx 40rpx rgba(20, 10, 10, 0.08);
+  padding: $space-2 $space-4;
+  padding-bottom: calc(env(safe-area-inset-bottom) + #{$space-2});
+  background: $bg-glass-nav;
+  backdrop-filter: $glass-nav-blur;
+  box-shadow: $shadow-lg;
 }
 
 .buybar__l {
@@ -487,59 +486,59 @@ export default {
 
 .buybar__t {
   display: block;
-  font-size: 27rpx;
-  font-weight: 600;
-  color: $ink-900;
+  font-size: $font-size-sm;
+  font-weight: $font-weight-semibold;
+  color: $text-primary;
 }
 
 .buybar__d {
   display: block;
-  margin-top: 6rpx;
-  font-size: 22rpx;
-  color: $ink-400;
+  margin-top: $space-1;
+  font-size: $font-size-2xs;
+  color: $text-disabled;
 }
 
 .buybar__btn {
-  padding: 24rpx 46rpx;
-  border-radius: 999rpx;
-  box-shadow: 0 10rpx 28rpx rgba(26, 125, 130, 0.28);
+  padding: $space-3 $space-5;
+  border-radius: $radius-full;
+  box-shadow: $shadow-md;
 }
 
 .buybar__btn-t {
-  font-size: 28rpx;
-  font-weight: 700;
-  color: #fff;
+  font-size: $font-size-sm;
+  font-weight: $font-weight-bold;
+  color: $text-inverse;
 }
 
 .miss {
-  padding-bottom: 120rpx;
+  padding-bottom: $space-12;
   text-align: center;
 }
 
 .miss__icon {
   display: block;
-  margin-top: 160rpx;
-  font-size: 90rpx;
+  margin-top: $space-12;
+  font-size: $size-icon-xl;
 }
 
 .miss__t {
   display: block;
-  margin-top: 28rpx;
-  font-size: 30rpx;
-  color: $ink-500;
+  margin-top: $space-3;
+  font-size: $font-size-md;
+  color: $text-muted;
 }
 
 .miss__btn {
   display: inline-block;
-  margin-top: 44rpx;
-  padding: 22rpx 56rpx;
-  border-radius: 999rpx;
-  background: $teal-700;
+  margin-top: $space-5;
+  padding: $space-3 $space-6;
+  border-radius: $radius-full;
+  background: $brand-primary;
 }
 
 .miss__btn-t {
-  font-size: 27rpx;
-  font-weight: 600;
-  color: #fff;
+  font-size: $font-size-sm;
+  font-weight: $font-weight-semibold;
+  color: $text-inverse;
 }
 </style>

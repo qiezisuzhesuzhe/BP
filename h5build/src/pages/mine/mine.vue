@@ -1,7 +1,7 @@
 <template>
   <view class="hm-page">
     <view class="top">
-      <hm-navbar title="我的" :show-back="false" bg-color="transparent" text-color="#ffffff" />
+      <hm-navbar title="我的" :show-back="false" bg-color="transparent" />
       <view class="top__body">
         <view class="who" @tap="goProfile">
           <view class="who__avatar">
@@ -95,9 +95,9 @@ export default {
   data() {
     return {
       about: [
-        { key: 'agreement', icon: '📄', bg: '#f5f3ee', label: '用户协议与隐私政策', desc: '服务条款、健康数据使用说明' },
-        { key: 'service', icon: '☎️', bg: '#e8f4ec', label: '联系客服', desc: '工作日 09:00 - 21:00' },
-        { key: 'reset', icon: '♻️', bg: '#fde8e3', label: '清空演示数据', desc: '恢复到初始状态，便于重新体验' }
+        { key: 'agreement', icon: '📄', bg: '#f2f7fa', label: '用户协议与隐私政策', desc: '服务条款、健康数据使用说明' },
+        { key: 'service', icon: '☎️', bg: '#ddf7ed', label: '联系客服', desc: '工作日 09:00 - 21:00' },
+        { key: 'reset', icon: '♻️', bg: '#fdf4ed', label: '清空演示数据', desc: '恢复到初始状态，便于重新体验' }
       ]
     }
   },
@@ -125,13 +125,13 @@ export default {
     },
     menu() {
       return [
-        { key: 'profile', icon: '👤', bg: '#e0f4f5', label: '个人资料', desc: '姓名、性别、身高体重等健康档案' },
-        { key: 'orders', icon: '🧾', bg: '#e3eef8', label: '我的订单', desc: '共 ' + this.orderCount + ' 笔订单记录' },
-        { key: 'rights', icon: '🎫', bg: '#e8f4ec', label: '我的权益', desc: '已开通 ' + this.rightsCount + ' 项健康管理服务' },
+        { key: 'profile', icon: '👤', bg: '#d4f5ee', label: '个人资料', desc: '姓名、性别、身高体重等健康档案' },
+        { key: 'orders', icon: '🧾', bg: '#d8f8fa', label: '我的订单', desc: '共 ' + this.orderCount + ' 笔订单记录' },
+        { key: 'rights', icon: '🎫', bg: '#ddf7ed', label: '我的权益', desc: '已开通 ' + this.rightsCount + ' 项健康管理服务' },
         {
           key: 'chat',
           icon: '💬',
-          bg: '#faf0e0',
+          bg: '#fdf4ed',
           label: '健康对话',
           desc: this.activeRight ? '继续与 AI 健康助手对话' : '开通服务后可使用',
           badge: this.activeRight && !this.activeRight.chatStarted ? '待问询' : ''
@@ -211,12 +211,12 @@ export default {
 
 <style lang="scss" scoped>
 .top {
-  background: linear-gradient(160deg, $teal-800 0%, $teal-700 55%, $teal-500 100%);
-  padding-bottom: 96rpx;
+  background: transparent;
+  padding-bottom: $space-5;
 }
 
 .top__body {
-  padding: 16rpx 36rpx 0;
+  padding: $space-2 $space-4 0;
 }
 
 .who {
@@ -225,20 +225,20 @@ export default {
 }
 
 .who__avatar {
-  width: 116rpx;
-  height: 116rpx;
+  width: $size-avatar-lg;
+  height: $size-avatar-lg;
   border-radius: 50%;
-  background: rgba(255, 255, 255, 0.22);
-  border: 3rpx solid rgba(255, 255, 255, 0.45);
+  background: linear-gradient(135deg, $avatar-default-bg-start 0%, $avatar-default-bg-end 100%);
+  box-shadow: $shadow-sm;
   text-align: center;
-  line-height: 112rpx;
-  margin-right: 24rpx;
+  line-height: $size-avatar-lg;
+  margin-right: $space-3;
 }
 
 .who__avatar-t {
-  font-size: 44rpx;
-  font-weight: 700;
-  color: #fff;
+  font-size: $font-size-xl;
+  font-weight: $font-weight-heavy;
+  color: $text-secondary;
 }
 
 .who__main {
@@ -247,47 +247,51 @@ export default {
 
 .who__name {
   display: block;
-  font-size: 38rpx;
-  font-weight: 700;
-  color: #fff;
+  font-size: $page-title-size;
+  font-weight: $page-title-weight;
+  line-height: $page-title-line-height;
+  color: $page-title-color;
   letter-spacing: 1rpx;
 }
 
 .who__meta {
   display: block;
-  margin-top: 8rpx;
-  font-size: 24rpx;
-  color: rgba(255, 255, 255, 0.8);
+  margin-top: $space-1;
+  font-size: $font-size-xs;
+  color: $text-muted;
 }
 
 .who__go {
-  font-size: 40rpx;
-  color: rgba(255, 255, 255, 0.7);
+  font-size: $font-size-xl;
+  color: $text-hint;
 }
 
 .tag-row {
   display: flex;
   flex-wrap: wrap;
-  margin-top: 26rpx;
+  margin-top: $space-3;
 }
 
 .tag {
-  padding: 8rpx 20rpx;
-  border-radius: 999rpx;
-  background: rgba(255, 255, 255, 0.16);
-  margin-right: 12rpx;
-  margin-bottom: 10rpx;
+  padding: $space-1 $space-3;
+  border-radius: $radius-full;
+  background: $label-soft-bg;
+  border: 1rpx solid $label-soft-border;
+  margin-right: $space-2;
+  margin-bottom: $space-1;
 }
 
 .tag__t {
-  font-size: 21rpx;
-  color: rgba(255, 255, 255, 0.95);
+  font-size: $font-size-2xs;
+  color: $label-soft-text;
+  font-weight: $font-weight-medium;
 }
 
 .stat {
-  margin-top: -72rpx;
+  margin: 0 $space-3;
   display: flex;
   align-items: center;
+  padding: $space-3 0;
 }
 
 .stat__i {
@@ -297,40 +301,43 @@ export default {
 
 .stat__n {
   display: block;
-  font-size: 40rpx;
-  font-weight: 700;
-  color: $teal-700;
+  font-size: $font-size-xl;
+  font-weight: $font-weight-heavy;
+  line-height: $line-height-tight;
+  color: $brand-primary-active;
 }
 
 .stat__l {
   display: block;
-  margin-top: 8rpx;
-  font-size: 23rpx;
-  color: $ink-500;
+  margin-top: $space-1;
+  font-size: $font-size-2xs;
+  color: $text-muted;
 }
 
 .stat__sep {
   width: 1rpx;
-  height: 60rpx;
-  background: $warm-200;
+  height: $space-6;
+  background: $border-subtle;
 }
 
 .cur {
+  margin: $space-data-list-gap $space-3 0;
+  padding: $space-3;
   display: flex;
   align-items: center;
 }
 
 .cur__icon {
-  width: 88rpx;
-  height: 88rpx;
-  border-radius: 26rpx;
+  width: $size-icon-xl;
+  height: $size-icon-xl;
+  border-radius: $radius-card-child;
   text-align: center;
-  line-height: 88rpx;
-  margin-right: 22rpx;
+  line-height: $size-icon-xl;
+  margin-right: $space-3;
 }
 
 .cur__icon-t {
-  font-size: 40rpx;
+  font-size: $font-size-xl;
 }
 
 .cur__main {
@@ -339,33 +346,38 @@ export default {
 
 .cur__name {
   display: block;
-  font-size: 29rpx;
-  font-weight: 600;
-  color: $ink-900;
+  font-size: $font-size-md;
+  font-weight: $font-weight-semibold;
+  color: $text-primary;
 }
 
 .cur__meta {
   display: block;
-  margin-top: 8rpx;
-  font-size: 23rpx;
-  color: $ink-500;
+  margin-top: $space-1;
+  font-size: $font-size-xs;
+  color: $text-muted;
 }
 
 .cur__go {
-  font-size: 24rpx;
-  font-weight: 600;
+  font-size: $font-size-xs;
+  font-weight: $font-weight-semibold;
 }
 
 .sec {
-  padding: 40rpx 36rpx 20rpx;
+  padding: $space-5 $space-4 $space-2;
+}
+
+.menu {
+  margin: 0 $space-3;
+  padding: $space-3;
 }
 
 .mi {
   display: flex;
   align-items: center;
-  padding-bottom: 26rpx;
-  margin-bottom: 26rpx;
-  border-bottom: 1rpx solid $warm-100;
+  padding-bottom: $space-3;
+  margin-bottom: $space-3;
+  border-bottom: 1rpx solid $border-subtle;
 }
 
 .mi--last {
@@ -375,16 +387,16 @@ export default {
 }
 
 .mi__icon {
-  width: 72rpx;
-  height: 72rpx;
-  border-radius: 22rpx;
+  width: $size-icon-lg;
+  height: $size-icon-lg;
+  border-radius: $radius-sm;
   text-align: center;
-  line-height: 72rpx;
-  margin-right: 22rpx;
+  line-height: $size-icon-lg;
+  margin-right: $space-3;
 }
 
 .mi__icon-t {
-  font-size: 32rpx;
+  font-size: $size-icon-xs;
 }
 
 .mi__main {
@@ -394,48 +406,48 @@ export default {
 
 .mi__t {
   display: block;
-  font-size: 28rpx;
-  font-weight: 600;
-  color: $ink-900;
+  font-size: $font-size-sm;
+  font-weight: $font-weight-semibold;
+  color: $text-primary;
 }
 
 .mi__d {
   display: block;
-  margin-top: 6rpx;
-  font-size: 23rpx;
-  color: $ink-400;
+  margin-top: $space-1;
+  font-size: $font-size-2xs;
+  color: $text-disabled;
 }
 
 .mi__badge {
-  padding: 5rpx 16rpx;
-  border-radius: 999rpx;
-  background: $coral-100;
-  color: $coral-500;
-  font-size: 20rpx;
-  margin-right: 12rpx;
+  padding: $space-1 $space-2;
+  border-radius: $radius-full;
+  background: $warm-soft;
+  color: $badge;
+  font-size: $font-size-2xs;
+  margin-right: $space-2;
 }
 
 .mi__go {
-  font-size: 34rpx;
-  color: $ink-300;
+  font-size: $font-size-lg;
+  color: $text-hint;
 }
 
 .foot {
-  padding: 50rpx 60rpx 20rpx;
+  padding: $space-6 $space-8 $space-2;
   text-align: center;
 }
 
 .foot__t {
   display: block;
-  font-size: 22rpx;
-  color: $ink-400;
+  font-size: $font-size-2xs;
+  color: $text-disabled;
 }
 
 .foot__d {
   display: block;
-  margin-top: 10rpx;
-  font-size: 21rpx;
-  color: $ink-300;
-  line-height: 1.7;
+  margin-top: $space-1;
+  font-size: $font-size-2xs;
+  color: $text-hint;
+  line-height: $line-height-relaxed;
 }
 </style>

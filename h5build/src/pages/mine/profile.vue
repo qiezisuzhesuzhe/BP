@@ -1,7 +1,7 @@
 <template>
   <view class="hm-page">
     <view class="top">
-      <hm-navbar title="个人资料" bg-color="transparent" text-color="#ffffff" />
+      <hm-navbar title="个人资料" bg-color="transparent" />
       <view class="top__body">
         <view class="ava">
           <text class="ava__t">{{ form.avatarText }}</text>
@@ -135,10 +135,10 @@ export default {
     },
     bmiColor() {
       const lv = this.bmiLevel
-      if (lv === '正常') return '#6ba584'
-      if (lv === '超重') return '#d9a05b'
-      if (lv === '肥胖') return '#e07a5f'
-      return '#6b8082'
+      if (lv === '正常') return '#27ae60'
+      if (lv === '超重') return '#f15533'
+      if (lv === '肥胖') return '#eb5757'
+      return '#64748b'
     },
     bmiHint() {
       const lv = this.bmiLevel
@@ -203,49 +203,51 @@ export default {
 
 <style lang="scss" scoped>
 .top {
-  background: linear-gradient(160deg, $teal-800 0%, $teal-700 55%, $teal-500 100%);
-  padding-bottom: 96rpx;
+  background: transparent;
+  padding-bottom: $space-5;
   text-align: center;
 }
 
 .top__body {
-  padding: 10rpx 36rpx 0;
+  padding: $space-1 $space-4 0;
 }
 
 .ava {
-  width: 132rpx;
-  height: 132rpx;
-  border-radius: 50%;
-  background: rgba(255, 255, 255, 0.22);
-  border: 3rpx solid rgba(255, 255, 255, 0.45);
+  width: $size-avatar-lg;
+  height: $size-avatar-lg;
+  border-radius: $radius-full;
+  background: linear-gradient(135deg, $avatar-default-bg-start 0%, $avatar-default-bg-end 100%);
+  box-shadow: $shadow-sm;
   margin: 0 auto;
-  line-height: 128rpx;
+  line-height: $size-avatar-lg;
 }
 
 .ava__t {
-  font-size: 52rpx;
-  font-weight: 700;
-  color: #fff;
+  font-size: $font-size-xl;
+  font-weight: $font-weight-bold;
+  color: $text-secondary;
 }
 
 .top__d {
   display: block;
-  margin-top: 22rpx;
-  font-size: 23rpx;
-  color: rgba(255, 255, 255, 0.8);
+  margin-top: $space-3;
+  font-size: $font-size-xs;
+  color: $text-muted;
+  line-height: $line-height-relaxed;
 }
 
-.hm-card:first-of-type {
-  margin-top: -72rpx;
+.hm-card {
+  margin: $space-data-list-gap $space-3 0;
+  padding: $space-3;
 }
 
 .fi {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding-bottom: 24rpx;
-  margin-bottom: 24rpx;
-  border-bottom: 1rpx solid $warm-100;
+  padding-bottom: $space-3;
+  margin-bottom: $space-3;
+  border-bottom: 1rpx solid $border-subtle;
 }
 
 .fi--last {
@@ -255,8 +257,8 @@ export default {
 }
 
 .fi__l {
-  font-size: 27rpx;
-  color: $ink-700;
+  font-size: $font-size-sm;
+  color: $text-secondary;
   width: 170rpx;
   flex-shrink: 0;
 }
@@ -264,8 +266,8 @@ export default {
 .fi__input {
   flex: 1;
   text-align: right;
-  font-size: 27rpx;
-  color: $ink-900;
+  font-size: $font-size-sm;
+  color: $text-primary;
 }
 
 .fi__input--num {
@@ -274,13 +276,13 @@ export default {
 }
 
 .fi__ph {
-  color: #c4d2d3;
-  font-size: 26rpx;
+  color: $text-hint;
+  font-size: $font-size-sm;
 }
 
 .fi__ro {
-  font-size: 27rpx;
-  color: $ink-400;
+  font-size: $font-size-sm;
+  color: $text-disabled;
 }
 
 .unit {
@@ -289,39 +291,39 @@ export default {
 }
 
 .unit__t {
-  margin-left: 10rpx;
-  font-size: 24rpx;
-  color: $ink-400;
+  margin-left: $space-1;
+  font-size: $font-size-xs;
+  color: $text-disabled;
 }
 
 .seg {
   display: flex;
-  border-radius: 999rpx;
-  background: $warm-100;
-  padding: 5rpx;
+  border-radius: $radius-full;
+  background: $bg-subtle;
+  padding: 4rpx;
 }
 
 .seg__i {
-  padding: 10rpx 34rpx;
-  border-radius: 999rpx;
+  padding: $space-1 $space-4;
+  border-radius: $radius-full;
 }
 
 .seg__i--on {
-  background: $teal-700;
+  background: $brand-primary;
 }
 
 .seg__t {
-  font-size: 25rpx;
-  color: $ink-500;
+  font-size: $font-size-xs;
+  color: $text-muted;
 }
 
 .seg__t--on {
-  color: #fff;
-  font-weight: 600;
+  color: $text-inverse;
+  font-weight: $font-weight-semibold;
 }
 
 .sec {
-  padding: 40rpx 36rpx 20rpx;
+  padding: $space-5 $space-4 $space-2;
 }
 
 .bmi {
@@ -332,22 +334,22 @@ export default {
 
 .bmi__l {
   flex: 1;
-  padding-right: 24rpx;
+  padding-right: $space-3;
 }
 
 .bmi__t {
   display: block;
-  font-size: 28rpx;
-  font-weight: 600;
-  color: $ink-900;
+  font-size: $font-size-sm;
+  font-weight: $font-weight-semibold;
+  color: $text-primary;
 }
 
 .bmi__d {
   display: block;
-  margin-top: 8rpx;
-  font-size: 22rpx;
-  color: $ink-400;
-  line-height: 1.6;
+  margin-top: $space-1;
+  font-size: $font-size-2xs;
+  color: $text-disabled;
+  line-height: $line-height-relaxed;
 }
 
 .bmi__r {
@@ -356,14 +358,15 @@ export default {
 
 .bmi__n {
   display: block;
-  font-size: 46rpx;
-  font-weight: 700;
+  font-size: $font-size-xl;
+  font-weight: $font-weight-bold;
+  line-height: $line-height-tight;
 }
 
 .bmi__lv {
   display: block;
-  margin-top: 4rpx;
-  font-size: 22rpx;
+  margin-top: $space-1;
+  font-size: $font-size-2xs;
 }
 
 .tags {
@@ -372,16 +375,18 @@ export default {
 }
 
 .tg {
-  padding: 10rpx 22rpx;
-  border-radius: 999rpx;
-  background: $teal-100;
-  margin-right: 12rpx;
-  margin-bottom: 12rpx;
+  padding: $space-1 $space-3;
+  border-radius: $radius-full;
+  background: $label-soft-bg;
+  border: 1rpx solid $label-soft-border;
+  margin-right: $space-1;
+  margin-bottom: $space-1;
 }
 
 .tg__t {
-  font-size: 22rpx;
-  color: $teal-800;
+  font-size: $font-size-2xs;
+  color: $label-soft-text;
+  font-weight: $font-weight-medium;
 }
 
 .row {
@@ -391,17 +396,17 @@ export default {
 }
 
 .row__l {
-  font-size: 26rpx;
-  color: $ink-500;
+  font-size: $font-size-xs;
+  color: $text-muted;
 }
 
 .row__v {
-  font-size: 26rpx;
-  color: $ink-900;
+  font-size: $font-size-xs;
+  color: $text-primary;
 }
 
 .bar-holder {
-  height: calc(160rpx + env(safe-area-inset-bottom));
+  height: calc(env(safe-area-inset-bottom) + #{$size-bottom-nav-height});
 }
 
 .savebar {
@@ -409,25 +414,26 @@ export default {
   left: 0;
   right: 0;
   bottom: 0;
-  z-index: 20;
-  padding: 18rpx 32rpx;
-  padding-bottom: calc(18rpx + env(safe-area-inset-bottom));
-  background: rgba(255, 255, 255, 0.97);
-  box-shadow: 0 -8rpx 40rpx rgba(20, 10, 10, 0.08);
+  z-index: $z-nav;
+  padding: $space-2 $space-4;
+  padding-bottom: calc(env(safe-area-inset-bottom) + #{$space-2});
+  background: $bg-glass-nav;
+  backdrop-filter: $glass-nav-blur;
+  box-shadow: $shadow-lg;
 }
 
 .savebar__btn {
-  padding: 28rpx 0;
-  border-radius: 999rpx;
-  background: linear-gradient(135deg, $teal-700 0%, $teal-800 100%);
+  padding: $space-3 0;
+  border-radius: $radius-full;
+  background: $brand-primary;
   text-align: center;
-  box-shadow: 0 10rpx 28rpx rgba(26, 125, 130, 0.28);
+  box-shadow: $shadow-md;
 }
 
 .savebar__btn-t {
-  font-size: 30rpx;
-  font-weight: 700;
-  color: #fff;
+  font-size: $font-size-md;
+  font-weight: $font-weight-bold;
+  color: $text-inverse;
   letter-spacing: 2rpx;
 }
 </style>

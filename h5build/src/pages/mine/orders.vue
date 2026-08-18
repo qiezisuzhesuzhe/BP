@@ -1,7 +1,7 @@
 <template>
   <view class="hm-page">
     <view class="top">
-      <hm-navbar title="我的订单" bg-color="transparent" text-color="#ffffff" />
+      <hm-navbar title="我的订单" bg-color="transparent" />
       <view class="top__body">
         <text class="top__t">订单记录</text>
         <text class="top__d">共 {{ orders.length }} 笔 · 已支付 {{ paidCount }} 笔</text>
@@ -118,7 +118,7 @@ export default {
     },
     softOf(pkgId) {
       const p = this.$store.getters.packages.find((x) => x.id === pkgId)
-      return p ? p.accentSoft : '#f5f3ee'
+      return p ? p.accentSoft : '#edf5f2'
     },
     goPay(o) {
       uni.navigateTo({ url: '/pages/pay/pay?orderNo=' + o.orderNo })
@@ -154,118 +154,119 @@ export default {
 
 <style lang="scss" scoped>
 .top {
-  background: linear-gradient(160deg, $teal-800 0%, $teal-700 55%, $teal-500 100%);
-  padding-bottom: 44rpx;
+  background: transparent;
+  padding-bottom: $space-5;
 }
 
 .top__body {
-  padding: 16rpx 36rpx 0;
+  padding: $space-2 $space-4 0;
 }
 
 .top__t {
   display: block;
-  font-size: 38rpx;
-  font-weight: 700;
-  color: #fff;
+  font-size: $page-title-size;
+  font-weight: $page-title-weight;
+  line-height: $page-title-line-height;
+  color: $page-title-color;
   letter-spacing: 1rpx;
 }
 
 .top__d {
   display: block;
-  margin-top: 8rpx;
-  font-size: 24rpx;
-  color: rgba(255, 255, 255, 0.8);
+  margin-top: $space-1;
+  font-size: $font-size-xs;
+  color: $text-muted;
 }
 
 .tabs {
   display: flex;
   align-items: center;
-  padding: 22rpx 30rpx;
-  background: #fff;
+  padding: $space-3 $space-4;
+  background: $bg-surface;
   box-shadow: $shadow-sm;
 }
 
 .tab {
-  padding: 12rpx 32rpx;
-  border-radius: 999rpx;
-  background: $warm-100;
-  margin-right: 16rpx;
+  padding: $space-2 $space-4;
+  border-radius: $radius-full;
+  background: $bg-subtle;
+  margin-right: $space-2;
 }
 
 .tab--on {
-  background: $teal-700;
+  background: $brand-primary;
 }
 
 .tab__t {
-  font-size: 25rpx;
-  color: $ink-500;
+  font-size: $font-size-xs;
+  color: $text-muted;
 }
 
 .tab__t--on {
-  color: #fff;
-  font-weight: 600;
+  color: $text-inverse;
+  font-weight: $font-weight-semibold;
 }
 
 .list {
-  padding: 26rpx 24rpx 0;
+  padding: $space-3 $space-3 0;
 }
 
 .ord {
-  border-radius: $radius-md;
-  background: #fff;
+  border-radius: $radius-card-child;
+  background: $bg-surface;
   box-shadow: $shadow-sm;
-  padding: 26rpx;
-  margin-bottom: 22rpx;
+  padding: $space-3;
+  margin-bottom: $space-data-list-gap;
 }
 
 .ord__head {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding-bottom: 20rpx;
-  border-bottom: 1rpx solid $warm-100;
+  padding-bottom: $space-2;
+  border-bottom: 1rpx solid $border-subtle;
 }
 
 .ord__no {
-  font-size: 22rpx;
-  color: $ink-400;
+  font-size: $font-size-2xs;
+  color: $text-disabled;
   letter-spacing: 1rpx;
 }
 
 .ord__st {
-  font-size: 23rpx;
-  font-weight: 600;
+  font-size: $font-size-2xs;
+  font-weight: $font-weight-semibold;
 }
 
 .ord__st--paid {
-  color: $sage-500;
+  color: $success;
 }
 
 .ord__st--pending {
-  color: $coral-500;
+  color: $badge;
 }
 
 .ord__st--canceled {
-  color: $ink-400;
+  color: $text-disabled;
 }
 
 .ord__body {
   display: flex;
   align-items: center;
-  padding: 24rpx 0;
+  padding: $space-3 0;
 }
 
 .ord__icon {
-  width: 92rpx;
-  height: 92rpx;
-  border-radius: 26rpx;
+  width: $size-avatar-md;
+  height: $size-avatar-md;
+  border-radius: $radius-sm;
   text-align: center;
-  line-height: 92rpx;
-  margin-right: 22rpx;
+  line-height: $size-avatar-md;
+  margin-right: $space-3;
 }
 
 .ord__icon-t {
-  font-size: 42rpx;
+  font-size: $font-size-xl;
 }
 
 .ord__main {
@@ -275,16 +276,16 @@ export default {
 
 .ord__name {
   display: block;
-  font-size: 29rpx;
-  font-weight: 600;
-  color: $ink-900;
+  font-size: $font-size-md;
+  font-weight: $font-weight-semibold;
+  color: $text-primary;
 }
 
 .ord__spec {
   display: block;
-  margin-top: 8rpx;
-  font-size: 23rpx;
-  color: $ink-500;
+  margin-top: $space-1;
+  font-size: $font-size-xs;
+  color: $text-muted;
 }
 
 .ord__price {
@@ -293,123 +294,124 @@ export default {
 
 .ord__now {
   display: block;
-  font-size: 32rpx;
-  font-weight: 700;
-  color: $coral-500;
+  font-size: $font-size-md;
+  font-weight: $font-weight-heavy;
+  color: $badge;
 }
 
 .ord__origin {
   display: block;
-  margin-top: 4rpx;
-  font-size: 21rpx;
-  color: $ink-300;
+  margin-top: $space-1;
+  font-size: $font-size-2xs;
+  color: $text-hint;
   text-decoration: line-through;
 }
 
 .ord__rows {
-  padding-top: 18rpx;
-  border-top: 1rpx solid $warm-100;
+  padding-top: $space-2;
+  border-top: 1rpx solid $border-subtle;
 }
 
 .ord__row {
   display: flex;
   justify-content: space-between;
-  padding: 7rpx 0;
+  padding: $space-1 0;
 }
 
 .ord__row-l {
-  font-size: 23rpx;
-  color: $ink-400;
+  font-size: $font-size-xs;
+  color: $text-disabled;
 }
 
 .ord__row-v {
-  font-size: 23rpx;
-  color: $ink-700;
+  font-size: $font-size-xs;
+  color: $text-secondary;
 }
 
 .ord__row-v--save {
-  color: $coral-500;
+  color: $badge;
 }
 
 .ord__acts {
   display: flex;
   justify-content: flex-end;
-  margin-top: 22rpx;
+  margin-top: $space-3;
 }
 
 .ord__ghost {
-  padding: 16rpx 34rpx;
-  border-radius: 999rpx;
-  border: 1rpx solid $warm-200;
-  margin-left: 16rpx;
+  padding: $space-2 $space-4;
+  border-radius: $radius-full;
+  border: 1rpx solid $border-subtle;
+  margin-left: $space-2;
 }
 
 .ord__ghost-t {
-  font-size: 25rpx;
-  color: $ink-500;
+  font-size: $font-size-xs;
+  color: $text-muted;
 }
 
 .ord__cta {
-  padding: 16rpx 38rpx;
-  border-radius: 999rpx;
-  background: $teal-700;
-  margin-left: 16rpx;
+  padding: $space-2 $space-4;
+  border-radius: $radius-full;
+  background: $brand-primary;
+  margin-left: $space-2;
 }
 
 .ord__cta-t {
-  font-size: 25rpx;
-  font-weight: 600;
-  color: #fff;
+  font-size: $font-size-xs;
+  font-weight: $font-weight-semibold;
+  color: $text-inverse;
 }
 
 .empty {
-  padding: 110rpx 80rpx;
+  padding: $space-12 $space-10;
   text-align: center;
 }
 
 .empty__icon {
   display: block;
-  font-size: 90rpx;
+  font-size: $size-icon-xl;
+  color: $text-disabled;
 }
 
 .empty__t {
   display: block;
-  margin-top: 28rpx;
-  font-size: 30rpx;
-  font-weight: 600;
-  color: $ink-700;
+  margin-top: $space-3;
+  font-size: $font-size-md;
+  font-weight: $font-weight-semibold;
+  color: $text-secondary;
 }
 
 .empty__d {
   display: block;
-  margin-top: 14rpx;
-  font-size: 24rpx;
-  color: $ink-400;
-  line-height: 1.7;
+  margin-top: $space-2;
+  font-size: $font-size-xs;
+  color: $text-muted;
+  line-height: $line-height-relaxed;
 }
 
 .empty__btn {
   display: inline-block;
-  margin-top: 40rpx;
-  padding: 22rpx 56rpx;
-  border-radius: 999rpx;
-  background: $teal-700;
+  margin-top: $space-5;
+  padding: $space-3 $space-8;
+  border-radius: $radius-full;
+  background: $brand-primary;
 }
 
 .empty__btn-t {
-  font-size: 27rpx;
-  font-weight: 600;
-  color: #fff;
+  font-size: $font-size-sm;
+  font-weight: $font-weight-semibold;
+  color: $text-inverse;
 }
 
 .tips {
-  padding: 30rpx 50rpx 10rpx;
+  padding: $space-4 $space-6 $space-1;
   text-align: center;
 }
 
 .tips__t {
-  font-size: 21rpx;
-  color: $ink-300;
-  line-height: 1.7;
+  font-size: $font-size-2xs;
+  color: $text-hint;
+  line-height: $line-height-relaxed;
 }
 </style>

@@ -18,7 +18,7 @@ export default {
     title: { type: String, default: '' },
     showBack: { type: Boolean, default: true },
     bgColor: { type: String, default: 'transparent' },
-    textColor: { type: String, default: '#1a2b2c' },
+    textColor: { type: String, default: '#1a2a3c' },
     backTo: { type: String, default: '' }
   },
   data() {
@@ -52,19 +52,19 @@ export default {
 .nav {
   position: sticky;
   top: 0;
-  z-index: 90;
+  z-index: $z-nav;
 }
 
 .nav__bar {
-  height: 88rpx;
+  min-height: $size-header-height;
   display: flex;
   align-items: center;
-  padding: 0 20rpx;
+  padding: 0 $space-3;
 }
 
 .nav__left,
 .nav__right {
-  width: 120rpx;
+  width: $size-avatar-lg;
   display: flex;
   align-items: center;
 }
@@ -74,18 +74,23 @@ export default {
 }
 
 .nav__back {
-  font-size: 60rpx;
-  line-height: 60rpx;
-  width: 60rpx;
+  width: $size-back-subpage-back;
+  height: $size-back-subpage-back;
+  line-height: $size-back-subpage-back;
+  border-radius: $radius-full;
+  background: $back-subpage-back-bg;
+  color: $back-subpage-back-text;
+  box-shadow: $shadow-sm;
+  font-size: $font-size-xl;
   text-align: center;
-  font-weight: 300;
+  font-weight: $font-weight-regular;
 }
 
 .nav__title {
   flex: 1;
   text-align: center;
-  font-size: 32rpx;
-  font-weight: 600;
+  font-size: $font-size-md;
+  font-weight: $font-weight-semibold;
   letter-spacing: 1rpx;
 }
 </style>

@@ -1,7 +1,7 @@
 <template>
   <view class="hm-page">
     <view class="top">
-      <hm-navbar title="用户协议" bg-color="transparent" text-color="#ffffff" />
+      <hm-navbar title="用户协议" bg-color="transparent" />
       <view class="top__body">
         <text class="top__t">用户协议与隐私政策</text>
         <text class="top__d">生效日期：2026-01-01 · 版本 v1.0</text>
@@ -162,66 +162,69 @@ export default {
 
 <style lang="scss" scoped>
 .top {
-  background: linear-gradient(160deg, $teal-800 0%, $teal-700 55%, $teal-500 100%);
-  padding-bottom: 44rpx;
+  background: transparent;
+  padding-bottom: $space-5;
 }
 
 .top__body {
-  padding: 16rpx 36rpx 0;
+  padding: $space-2 $space-4 0;
 }
 
 .top__t {
   display: block;
-  font-size: 36rpx;
-  font-weight: 700;
-  color: #fff;
+  font-size: $page-title-size;
+  font-weight: $page-title-weight;
+  line-height: $page-title-line-height;
+  color: $page-title-color;
   letter-spacing: 1rpx;
 }
 
 .top__d {
   display: block;
-  margin-top: 10rpx;
-  font-size: 23rpx;
-  color: rgba(255, 255, 255, 0.78);
+  margin-top: $space-1;
+  font-size: $font-size-xs;
+  color: $text-muted;
 }
 
 .tabs {
   display: flex;
   align-items: center;
-  padding: 22rpx 30rpx;
-  background: #fff;
+  padding: $space-3 $space-4;
+  background: $bg-surface;
   box-shadow: $shadow-sm;
 }
 
 .tab {
-  padding: 12rpx 34rpx;
-  border-radius: 999rpx;
-  background: $warm-100;
-  margin-right: 16rpx;
+  padding: $space-2 $space-4;
+  border-radius: $radius-full;
+  background: $bg-subtle;
+  margin-right: $space-2;
 }
 
 .tab--on {
-  background: $teal-700;
+  background: $brand-primary;
 }
 
 .tab__t {
-  font-size: 25rpx;
-  color: $ink-500;
+  font-size: $font-size-xs;
+  color: $text-muted;
 }
 
 .tab__t--on {
-  color: #fff;
-  font-weight: 600;
+  color: $text-inverse;
+  font-weight: $font-weight-semibold;
 }
 
 .warn {
   display: flex;
-  background: $coral-100;
+  padding: $space-3;
+  margin: $space-3 $space-3 0;
+  background: $warm-soft;
 }
 
 .warn__icon {
-  font-size: 34rpx;
-  margin-right: 18rpx;
+  font-size: $size-icon-xs;
+  margin-right: $space-2;
 }
 
 .warn__main {
@@ -230,25 +233,27 @@ export default {
 
 .warn__t {
   display: block;
-  font-size: 27rpx;
-  font-weight: 700;
-  color: #a34a32;
+  font-size: $font-size-sm;
+  font-weight: $font-weight-heavy;
+  line-height: $line-height-tight;
+  color: $text-primary;
 }
 
 .warn__d {
   display: block;
-  margin-top: 10rpx;
-  font-size: 24rpx;
-  color: #8a4f3c;
-  line-height: 1.8;
+  margin-top: $space-1;
+  font-size: $font-size-xs;
+  color: $text-muted;
+  line-height: $line-height-relaxed;
 }
 
 .doc {
-  padding: 32rpx 30rpx;
+  padding: $space-4;
+  margin: $space-data-list-gap $space-3 0;
 }
 
 .art {
-  margin-bottom: 34rpx;
+  margin-bottom: $space-4;
 }
 
 .art:last-child {
@@ -257,19 +262,20 @@ export default {
 
 .art__t {
   display: block;
-  font-size: 29rpx;
-  font-weight: 700;
-  color: $ink-900;
-  margin-bottom: 16rpx;
+  font-size: $font-size-lg;
+  font-weight: $font-weight-heavy;
+  line-height: $line-height-tight;
+  color: $text-primary;
+  margin-bottom: $space-2;
   letter-spacing: 1rpx;
 }
 
 .art__p {
   display: block;
-  font-size: 25rpx;
-  color: $ink-700;
-  line-height: 1.9;
-  margin-bottom: 14rpx;
+  font-size: $font-size-xs;
+  color: $text-secondary;
+  line-height: $line-height-relaxed;
+  margin-bottom: $space-2;
 }
 
 .art__p:last-child {
@@ -277,13 +283,13 @@ export default {
 }
 
 .foot {
-  padding: 40rpx 50rpx 10rpx;
+  padding: $space-5 $space-6 $space-1;
   text-align: center;
 }
 
 .foot__t {
-  font-size: 22rpx;
-  color: $ink-400;
-  line-height: 1.8;
+  font-size: $font-size-2xs;
+  color: $text-disabled;
+  line-height: $line-height-relaxed;
 }
 </style>

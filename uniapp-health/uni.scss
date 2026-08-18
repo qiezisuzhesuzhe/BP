@@ -1,39 +1,156 @@
-/* 安康健康管理 · 设计变量
-   与原型 index.html 保持一致的设计 token */
+/* 安康健康管理 · 设计令牌
+   来源：/workspace/DESIGN.md
+   方案：rpx + SCSS 变量（1px = 2rpx，基于 750rpx 设计基准） */
 
-$teal-900: #0d4f52;
-$teal-800: #14666a;
-$teal-700: #1a7d82;
-$teal-500: #2da5aa;
-$teal-300: #7dc8cc;
-$teal-100: #e0f4f5;
+/* ---------- 品牌色 ---------- */
+$brand-primary: #7dd4bc;
+$brand-primary-hover: #4ab89e;
+$brand-primary-active: #389a82;
+$brand-soft: #d4f5ee;
 
-$sage-500: #6ba584;
-$sage-300: #b5d8c3;
-$sage-100: #e8f4ec;
+$label-soft-bg: rgba(212, 245, 238, 0.72);
+$label-soft-border: rgba(56, 154, 130, 0.12);
+$label-soft-text: $brand-primary-active;
 
-$coral-500: #e07a5f;
-$coral-300: #f2a89a;
-$coral-100: #fde8e3;
+$brand-cyan: #61e0e5;
+$brand-cyan-soft: #d8f8fa;
+$brand-green: #84e8c2;
+$brand-green-soft: #ddf7ed;
 
-$gold-500: #d9a05b;
-$gold-100: #faf0e0;
+/* ---------- 头像 ---------- */
+$avatar-default-bg-start: #f2f4f7;
+$avatar-default-bg-end: #d9dee7;
+$avatar-default-shape: #aab2bf;
 
-$warm-50: #fbfaf7;
-$warm-100: #f5f3ee;
-$warm-200: #ebe7df;
+/* ---------- 语义状态色 ---------- */
+$info: #8dcdd8;
+$info-soft: #e2f2f6;
+$warm: #e8c4a4;
+$warm-soft: #fdf4ed;
+$success: #27ae60;
+$warning: #f2c94c;
+$danger: #eb5757;
+$badge: #f15533;
 
-$ink-900: #1a2b2c;
-$ink-700: #3d5456;
-$ink-500: #6b8082;
-$ink-400: #94a8aa;
-$ink-300: #c4d2d3;
+/* ---------- 背景 ---------- */
+$bg-page: linear-gradient(45deg, #ddf7ed 0%, #e9faf5 42%, #f5faff 76%, #f5faff 100%);
+$bg-page-fade: linear-gradient(180deg, rgba(245, 250, 255, 0) 0%, #f5faff 88%);
+$bg-page-height: 1600rpx;
+$bg-page-base: #f5faff;
+$bg-surface: #ffffff;
+$bg-glass-nav: rgba(255, 255, 255, 0.78);
+$bg-subtle: #edf5f2;
+$bg-section: #f2f7fa;
 
-$shadow-sm: 0 2rpx 16rpx rgba(20, 10, 10, 0.06);
-$shadow-md: 0 12rpx 48rpx rgba(20, 10, 10, 0.08);
-$shadow-lg: 0 24rpx 80rpx rgba(20, 10, 10, 0.12);
+$back-subpage-bg: $bg-page-base;
+$back-subpage-header-bg: $bg-surface;
+$back-subpage-back-bg: $bg-surface;
 
-$radius-sm: 20rpx;
-$radius-md: 28rpx;
-$radius-lg: 40rpx;
-$radius-xl: 56rpx;
+/* ---------- 文字 ---------- */
+$text-primary: #1a2a3c;
+$text-secondary: #334155;
+$text-muted: #64748b;
+$text-disabled: #94a3b8;
+$text-hint: #c6d2de;
+$text-inverse: #ffffff;
+$back-subpage-back-text: $text-primary;
+
+/* ---------- 描边 / 遮罩 ---------- */
+$border-subtle: rgba(15, 61, 53, 0.06);
+$overlay: rgba(15, 61, 53, 0.1);
+
+/* ---------- 字体 ---------- */
+$font-family-base: "PingFang SC", -apple-system, BlinkMacSystemFont, "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+
+$font-size-2xs: 20rpx;
+$font-size-xs: 24rpx;
+$font-size-sm: 28rpx;
+$font-size-md: 32rpx;
+$font-size-lg: 36rpx;
+$font-size-xl: 44rpx;
+$font-size-2xl: 56rpx;
+$font-size-3xl: 72rpx;
+$font-size-4xl: 120rpx;
+
+$line-height-tight: 1.1;
+$line-height-normal: 1.4;
+$line-height-relaxed: 1.6;
+
+$font-weight-regular: 400;
+$font-weight-medium: 500;
+$font-weight-semibold: 600;
+$font-weight-bold: 700;
+$font-weight-heavy: 800;
+
+/* ---------- 语义排版 ---------- */
+$page-title-size: $font-size-2xl;
+$page-title-line-height: $line-height-tight;
+$page-title-weight: $font-weight-heavy;
+$page-title-color: $text-primary;
+$page-title-inverse-color: $text-inverse;
+
+/* ---------- 间距 ---------- */
+$space-1: 8rpx;
+$space-2: 16rpx;
+$space-3: 24rpx;
+$space-4: 32rpx;
+$space-5: 40rpx;
+$space-6: 48rpx;
+$space-8: 64rpx;
+$space-10: 80rpx;
+$space-12: 96rpx;
+$space-data-list-gap: $space-2;
+
+/* ---------- 尺寸 ---------- */
+$size-page-max-width: 960rpx;
+$size-header-height: 128rpx;
+$size-tab-height: 96rpx;
+$size-bottom-nav-height: 144rpx;
+
+$size-icon-xs: 32rpx;
+$size-icon-sm: 36rpx;
+$size-icon-md: 48rpx;
+$size-icon-lg: 64rpx;
+$size-icon-xl: 88rpx;
+
+$size-back-subpage-back: 84rpx;
+$size-back-subpage-header-min-height: 84rpx;
+
+$size-avatar-sm: 64rpx;
+$size-product-user-avatar: 56rpx;
+$size-avatar-md: 96rpx;
+$size-avatar-lg: 128rpx;
+
+$size-badge-sm: 12rpx;
+$size-badge-md: 36rpx;
+$size-input-height: 88rpx;
+$size-stat-card-height: 180rpx;
+
+/* ---------- 圆角 ---------- */
+$radius-xs: 12rpx;
+$radius-sm: 24rpx;
+$radius-md: 40rpx;
+$radius-lg: 48rpx;
+$radius-xl: 48rpx;
+$radius-card: $radius-lg;
+$radius-card-child: $radius-md;
+$radius-control: $radius-sm;
+$radius-full: 999rpx;
+
+/* ---------- 阴影 ---------- */
+$shadow-sm: 0 4rpx 24rpx rgba(15, 61, 53, 0.06);
+$shadow-md: 0 12rpx 48rpx rgba(125, 212, 188, 0.18);
+$shadow-lg: 0 16rpx 96rpx rgba(15, 61, 53, 0.1);
+$glass-nav-blur: blur(18px) saturate(180%);
+
+/* ---------- 层级 ---------- */
+$z-base: 0;
+$z-nav: 3000;
+$z-modal: 4000;
+
+/* ---------- 动效 ---------- */
+$duration-fast: 120ms;
+$duration-normal: 200ms;
+$duration-slow: 320ms;
+$ease-standard: cubic-bezier(0.2, 0, 0, 1);
+$ease-emphasized: cubic-bezier(0.2, 0, 0, 1.2);

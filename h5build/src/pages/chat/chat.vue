@@ -1,6 +1,6 @@
 <template>
   <view class="chat">
-    <hm-navbar title="" bg-color="#ffffff">
+    <hm-navbar title="" bg-color="transparent">
       <template #right>
         <view class="chat__voice" @tap="toggleVoice">
           <text class="chat__voice-icon">{{ voiceOn ? '🔊' : '🔇' }}</text>
@@ -531,26 +531,26 @@ export default {
   height: 100vh;
   display: flex;
   flex-direction: column;
-  background: $warm-50;
+  background: $bg-page-base;
 }
 
 .chat__voice {
-  width: 64rpx;
-  height: 64rpx;
+  width: $size-avatar-sm;
+  height: $size-avatar-sm;
   border-radius: 50%;
-  background: $teal-100;
+  background: $brand-soft;
   display: flex;
   align-items: center;
   justify-content: center;
 }
 
 .chat__voice-icon {
-  font-size: 30rpx;
+  font-size: $font-size-md;
 }
 
 .chat__head {
-  background: #fff;
-  padding: 4rpx 28rpx 22rpx;
+  background: $bg-surface;
+  padding: $space-1 $space-3 $space-3;
   display: flex;
   align-items: center;
   box-shadow: $shadow-sm;
@@ -558,44 +558,44 @@ export default {
 }
 
 .chat__head-avatar {
-  width: 76rpx;
-  height: 76rpx;
+  width: $size-avatar-sm;
+  height: $size-avatar-sm;
   border-radius: 50%;
-  background: linear-gradient(140deg, $teal-500 0%, $teal-800 100%);
+  background: linear-gradient(140deg, $brand-primary 0%, $brand-primary-active 100%);
   display: flex;
   align-items: center;
   justify-content: center;
 }
 
 .chat__head-emoji {
-  font-size: 36rpx;
+  font-size: $size-icon-xs;
 }
 
 .chat__head-main {
   flex: 1;
-  padding-left: 18rpx;
+  padding-left: $space-2;
 }
 
 .chat__head-name {
   display: block;
-  font-size: 30rpx;
+  font-size: $font-size-md;
   font-weight: 700;
-  color: $ink-900;
+  color: $text-primary;
   letter-spacing: 1rpx;
 }
 
 .chat__head-state {
   display: flex;
   align-items: center;
-  margin-top: 8rpx;
+  margin-top: $space-1;
 }
 
 .chat__dot-live {
-  width: 12rpx;
-  height: 12rpx;
+  width: $size-badge-sm;
+  height: $size-badge-sm;
   border-radius: 50%;
-  background: $sage-500;
-  margin-right: 10rpx;
+  background: $success;
+  margin-right: $space-1;
   animation: live 1.6s ease-in-out infinite;
 }
 
@@ -612,8 +612,8 @@ export default {
 }
 
 .chat__head-status {
-  font-size: 22rpx;
-  color: $ink-500;
+  font-size: $font-size-2xs;
+  color: $text-muted;
 }
 
 .chat__scroll {
@@ -622,31 +622,31 @@ export default {
 }
 
 .chat__list {
-  padding: 28rpx 24rpx 20rpx;
+  padding: $space-3 $space-3 $space-2;
 }
 
 .chat__notice {
   text-align: center;
-  padding: 0 40rpx 26rpx;
+  padding: 0 $space-5 $space-3;
 }
 
 .chat__notice-t {
-  font-size: 20rpx;
-  color: $ink-400;
-  background: $warm-100;
-  padding: 8rpx 20rpx;
-  border-radius: 999rpx;
-  line-height: 1.6;
+  font-size: $font-size-2xs;
+  color: $text-disabled;
+  background: $bg-subtle;
+  padding: $space-1 $space-2;
+  border-radius: $radius-full;
+  line-height: $line-height-relaxed;
 }
 
 .chat__anchor {
-  height: 8rpx;
+  height: $space-1;
 }
 
 .msg {
   display: flex;
   align-items: flex-start;
-  margin-bottom: 26rpx;
+  margin-bottom: $space-3;
 }
 
 .msg--user {
@@ -654,10 +654,10 @@ export default {
 }
 
 .msg__avatar {
-  width: 66rpx;
-  height: 66rpx;
+  width: $size-avatar-sm;
+  height: $size-avatar-sm;
   border-radius: 50%;
-  background: linear-gradient(140deg, $teal-500 0%, $teal-800 100%);
+  background: linear-gradient(140deg, $brand-primary 0%, $brand-primary-active 100%);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -666,12 +666,12 @@ export default {
 }
 
 .msg__avatar-t {
-  font-size: 30rpx;
+  font-size: $font-size-md;
 }
 
 .msg__body {
   max-width: 78%;
-  padding-left: 16rpx;
+  padding-left: $space-2;
 }
 
 .msg--user .msg__body {
@@ -679,45 +679,45 @@ export default {
 }
 
 .bubble {
-  padding: 22rpx 26rpx;
-  border-radius: 8rpx $radius-md $radius-md $radius-md;
+  padding: $space-3;
+  border-radius: $radius-xs $radius-card-child $radius-card-child $radius-card-child;
 }
 
 .bubble--ai {
-  background: #fff;
+  background: $bg-surface;
   box-shadow: $shadow-sm;
 }
 
 .bubble--user {
-  background: $teal-700;
-  border-radius: $radius-md 8rpx $radius-md $radius-md;
+  background: $brand-primary;
+  border-radius: $radius-card-child $radius-xs $radius-card-child $radius-card-child;
 }
 
 .bubble__t {
-  font-size: 27rpx;
-  line-height: 1.7;
+  font-size: $font-size-sm;
+  line-height: $line-height-relaxed;
 }
 
 .bubble__t--ai {
-  color: $ink-900;
+  color: $text-primary;
 }
 
 .bubble__t--user {
-  color: #fff;
+  color: $text-inverse;
 }
 
 .typing {
   display: flex;
   align-items: center;
-  padding: 26rpx;
+  padding: $space-3;
 }
 
 .typing__dot {
-  width: 14rpx;
-  height: 14rpx;
+  width: $size-badge-sm;
+  height: $size-badge-sm;
   border-radius: 50%;
-  background: $ink-300;
-  margin-right: 10rpx;
+  background: $text-hint;
+  margin-right: $space-1;
   animation: bounce 1.2s ease-in-out infinite;
 }
 
@@ -747,26 +747,26 @@ export default {
 }
 
 .gen {
-  background: #fff;
-  border-radius: 8rpx $radius-md $radius-md $radius-md;
+  background: $bg-surface;
+  border-radius: $radius-xs $radius-card-child $radius-card-child $radius-card-child;
   box-shadow: $shadow-sm;
-  padding: 26rpx;
-  width: 460rpx;
+  padding: $space-3;
+  width: $size-page-max-width * 0.48;
 }
 
 .gen__head {
   display: flex;
   align-items: center;
-  margin-bottom: 18rpx;
+  margin-bottom: $space-2;
 }
 
 .gen__ring {
-  width: 30rpx;
-  height: 30rpx;
+  width: $size-icon-xs;
+  height: $size-icon-xs;
   border-radius: 50%;
-  border: 4rpx solid $teal-100;
-  border-top-color: $teal-700;
-  margin-right: 14rpx;
+  border: 2rpx solid $brand-soft;
+  border-top-color: $brand-primary-active;
+  margin-right: $space-2;
   animation: spin 0.9s linear infinite;
 }
 
@@ -780,70 +780,70 @@ export default {
 }
 
 .gen__title {
-  font-size: 26rpx;
+  font-size: $font-size-sm;
   font-weight: 700;
-  color: $ink-900;
+  color: $text-primary;
 }
 
 .gen__step {
   display: flex;
   align-items: center;
-  margin-bottom: 10rpx;
+  margin-bottom: $space-1;
 }
 
 .gen__step-mark {
-  width: 30rpx;
-  font-size: 22rpx;
-  color: $ink-300;
+  width: $size-icon-xs;
+  font-size: $font-size-2xs;
+  color: $text-hint;
   text-align: center;
 }
 
 .gen__step-mark--on {
-  color: $teal-700;
+  color: $brand-primary-active;
 }
 
 .gen__step-t {
-  font-size: 24rpx;
-  color: $ink-400;
+  font-size: $font-size-xs;
+  color: $text-disabled;
 }
 
 .gen__step-t--on {
-  color: $ink-700;
+  color: $text-secondary;
   font-weight: 600;
 }
 
 .gen__bar {
-  height: 8rpx;
-  border-radius: 999rpx;
-  background: $warm-100;
-  margin-top: 16rpx;
+  height: $space-1;
+  border-radius: $radius-full;
+  background: $bg-section;
+  margin-top: $space-2;
   overflow: hidden;
 }
 
 .gen__bar-in {
   height: 100%;
-  border-radius: 999rpx;
-  background: linear-gradient(90deg, $teal-500 0%, $teal-800 100%);
+  border-radius: $radius-full;
+  background: linear-gradient(90deg, $brand-primary 0%, $brand-primary-active 100%);
   transition: width 0.6s ease;
 }
 
 .report {
-  background: #fff;
-  border-radius: 8rpx $radius-md $radius-md $radius-md;
+  background: $bg-surface;
+  border-radius: $radius-xs $radius-card-child $radius-card-child $radius-card-child;
   box-shadow: $shadow-md;
-  padding: 26rpx;
-  width: 520rpx;
+  padding: $space-3;
+  width: $size-page-max-width * 0.54;
 }
 
 .report__head {
   display: flex;
   align-items: center;
-  padding-bottom: 20rpx;
+  padding-bottom: $space-2;
 }
 
 .report__icon {
-  font-size: 40rpx;
-  margin-right: 16rpx;
+  font-size: $size-icon-sm;
+  margin-right: $space-2;
 }
 
 .report__head-main {
@@ -852,79 +852,79 @@ export default {
 
 .report__title {
   display: block;
-  font-size: 30rpx;
+  font-size: $font-size-md;
   font-weight: 700;
-  color: $ink-900;
+  color: $text-primary;
 }
 
 .report__sub {
   display: block;
-  font-size: 21rpx;
-  color: $ink-500;
-  margin-top: 6rpx;
+  font-size: $font-size-2xs;
+  color: $text-muted;
+  margin-top: $space-1;
 }
 
 .report__row {
   display: flex;
   align-items: flex-start;
-  margin-bottom: 14rpx;
+  margin-bottom: $space-2;
 }
 
 .report__label {
-  width: 118rpx;
-  font-size: 23rpx;
-  color: $ink-400;
+  width: $size-avatar-lg;
+  font-size: $font-size-xs;
+  color: $text-disabled;
   flex-shrink: 0;
-  line-height: 1.6;
+  line-height: $line-height-relaxed;
 }
 
 .report__value {
   flex: 1;
-  font-size: 24rpx;
-  color: $ink-900;
+  font-size: $font-size-xs;
+  color: $text-primary;
   font-weight: 600;
-  line-height: 1.6;
+  line-height: $line-height-relaxed;
 }
 
 .report__risk {
-  font-size: 22rpx;
+  font-size: $font-size-2xs;
   font-weight: 700;
-  padding: 6rpx 18rpx;
-  border-radius: 999rpx;
+  padding: $space-1 $space-2;
+  border-radius: $radius-full;
 }
 
 .report__line {
   height: 1rpx;
-  background: $warm-200;
-  margin: 8rpx 0 20rpx;
+  background: $bg-section;
+  margin: $space-1 0 $space-2;
 }
 
 .report__focus-title {
   display: block;
-  font-size: 25rpx;
+  font-size: $font-size-xs;
   font-weight: 700;
-  color: $teal-800;
-  margin-bottom: 16rpx;
+  color: $brand-primary-active;
+  margin-bottom: $space-2;
 }
 
 .report__point {
   display: flex;
   align-items: flex-start;
-  margin-bottom: 16rpx;
+  margin-bottom: $space-2;
 }
 
 .report__point-idx {
-  width: 32rpx;
-  height: 32rpx;
+  width: $size-icon-xs;
+  height: $size-icon-xs;
   border-radius: 50%;
-  background: $teal-100;
-  color: $teal-800;
-  font-size: 20rpx;
+  background: $brand-soft;
+  color: $brand-primary-active;
+  font-size: $font-size-2xs;
   font-weight: 700;
   text-align: center;
-  line-height: 32rpx;
+  line-height: $size-icon-xs;
   flex-shrink: 0;
-  margin-right: 14rpx;
+  margin-right: $space-2;
 }
 
 .report__point-main {
@@ -933,164 +933,164 @@ export default {
 
 .report__point-t {
   display: block;
-  font-size: 25rpx;
+  font-size: $font-size-xs;
   font-weight: 600;
-  color: $ink-900;
+  color: $text-primary;
 }
 
 .report__point-d {
   display: block;
-  font-size: 22rpx;
-  color: $ink-500;
-  line-height: 1.65;
-  margin-top: 6rpx;
+  font-size: $font-size-2xs;
+  color: $text-muted;
+  line-height: $line-height-relaxed;
+  margin-top: $space-1;
 }
 
 .report__ref {
   display: block;
-  font-size: 20rpx;
-  color: $ink-400;
-  margin-top: 6rpx;
+  font-size: $font-size-2xs;
+  color: $text-disabled;
+  margin-top: $space-1;
 }
 
 .plan {
-  background: $warm-100;
-  border-radius: 8rpx $radius-md $radius-md $radius-md;
-  padding: 24rpx 20rpx 6rpx;
-  width: 560rpx;
+  background: $bg-subtle;
+  border-radius: $radius-xs $radius-card-child $radius-card-child $radius-card-child;
+  padding: $space-3 $space-2 $space-1;
+  width: $size-page-max-width * 0.58;
 }
 
 .plan__head {
   display: flex;
   align-items: baseline;
   justify-content: space-between;
-  padding: 0 6rpx 20rpx;
+  padding: 0 $space-1 $space-2;
 }
 
 .plan__title {
-  font-size: 27rpx;
+  font-size: $font-size-sm;
   font-weight: 700;
-  color: $ink-900;
+  color: $text-primary;
 }
 
 .plan__count {
-  font-size: 21rpx;
-  color: $ink-500;
+  font-size: $font-size-2xs;
+  color: $text-muted;
 }
 
 .opts {
-  padding: 4rpx 0 10rpx 82rpx;
+  padding: $space-1 0 $space-1 $space-10;
 }
 
 .opts__hint {
   display: block;
-  font-size: 21rpx;
-  color: $ink-400;
-  margin-bottom: 14rpx;
+  font-size: $font-size-2xs;
+  color: $text-disabled;
+  margin-bottom: $space-2;
 }
 
 .opts__item {
-  background: #fff;
-  border: 2rpx solid $teal-100;
-  border-radius: 999rpx;
-  padding: 20rpx 28rpx;
-  margin-bottom: 16rpx;
+  background: $bg-surface;
+  border: 1rpx solid $brand-soft;
+  border-radius: $radius-full;
+  padding: $space-2 $space-3;
+  margin-bottom: $space-2;
   box-shadow: $shadow-sm;
 }
 
 .opts__item--on {
-  background: $teal-700;
-  border-color: $teal-700;
+  background: $brand-primary;
+  border-color: $brand-primary-active;
 }
 
 .opts__t {
-  font-size: 26rpx;
-  color: $teal-800;
+  font-size: $font-size-sm;
+  color: $brand-primary-active;
   font-weight: 600;
 }
 
 .opts__t--on {
-  color: #fff;
+  color: $text-inverse;
 }
 
 .cta {
-  margin: 20rpx 0 10rpx 82rpx;
-  background: linear-gradient(135deg, $teal-700 0%, $teal-900 100%);
-  border-radius: 999rpx;
-  padding: 24rpx 0;
+  margin: $space-2 0 $space-1 $space-10;
+  background: $brand-primary;
+  border-radius: $radius-full;
+  padding: $space-3 0;
   text-align: center;
   box-shadow: $shadow-md;
 }
 
 .cta__t {
-  color: #fff;
-  font-size: 28rpx;
+  color: $text-inverse;
+  font-size: $font-size-sm;
   font-weight: 700;
   letter-spacing: 1rpx;
 }
 
 .bar {
-  background: #fff;
-  box-shadow: 0 -6rpx 30rpx rgba(20, 10, 10, 0.06);
+  background: $bg-surface;
+  box-shadow: $shadow-lg;
 }
 
 .bar__inner {
   display: flex;
   align-items: center;
-  padding: 18rpx 24rpx;
+  padding: $space-2 $space-3;
 }
 
 .bar__input {
   flex: 1;
-  height: 76rpx;
-  background: $warm-100;
-  border-radius: 999rpx;
-  padding: 0 28rpx;
-  font-size: 26rpx;
-  color: $ink-900;
+  height: $size-avatar-sm;
+  background: $bg-subtle;
+  border-radius: $radius-full;
+  padding: 0 $space-3;
+  font-size: $font-size-sm;
+  color: $text-primary;
 }
 
 .bar__input--off {
-  background: $warm-200;
-  color: $ink-400;
+  background: $bg-section;
+  color: $text-disabled;
 }
 
 .bar__ph {
-  color: $ink-400;
-  font-size: 25rpx;
+  color: $text-disabled;
+  font-size: $font-size-xs;
 }
 
 .bar__mic {
-  width: 72rpx;
-  height: 72rpx;
+  width: $size-avatar-sm;
+  height: $size-avatar-sm;
   border-radius: 50%;
-  background: $warm-100;
+  background: $bg-subtle;
   display: flex;
   align-items: center;
   justify-content: center;
-  margin-left: 14rpx;
+  margin-left: $space-2;
   flex-shrink: 0;
 }
 
 .bar__mic-t {
-  font-size: 30rpx;
+  font-size: $font-size-md;
 }
 
 .bar__send {
-  background: $teal-700;
-  border-radius: 999rpx;
-  padding: 18rpx 30rpx;
-  margin-left: 14rpx;
+  background: $brand-primary;
+  border-radius: $radius-full;
+  padding: $space-2 $space-4;
+  margin-left: $space-2;
   flex-shrink: 0;
 }
 
 .bar__send--off {
-  background: $ink-300;
+  background: $text-hint;
 }
 
 .bar__send-t {
-  color: #fff;
-  font-size: 25rpx;
+  color: $text-inverse;
+  font-size: $font-size-xs;
   font-weight: 700;
 }
 

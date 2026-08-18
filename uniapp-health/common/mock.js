@@ -14,8 +14,8 @@ export const PACKAGES = [
     price: 699,
     originPrice: 1299,
     tagline: '中国高血压防治指南 2024 标准',
-    accent: '#1a7d82',
-    accentSoft: '#e0f4f5',
+    accent: '#389a82',
+    accentSoft: '#d4f5ee',
     icon: '🩺',
     sold: 2847,
     rating: '4.9',
@@ -74,8 +74,8 @@ export const PACKAGES = [
     price: 899,
     originPrice: 1599,
     tagline: '中国2型糖尿病防治指南 2024 标准',
-    accent: '#2f6fa8',
-    accentSoft: '#e3eef8',
+    accent: '#4ab89e',
+    accentSoft: '#d8f8fa',
     icon: '🩸',
     sold: 1936,
     rating: '4.8',
@@ -209,13 +209,13 @@ export const TIMELINE = {
 }
 
 export const CAT_META = {
-  monitor: { label: '监测', color: '#1a7d82', bg: '#e0f4f5' },
-  medication: { label: '用药', color: '#e07a5f', bg: '#fde8e3' },
-  nutrition: { label: '营养', color: '#6ba584', bg: '#e8f4ec' },
-  exercise: { label: '运动', color: '#2f6fa8', bg: '#e3eef8' },
-  psychology: { label: '心理', color: '#8b6db3', bg: '#f0eaf8' },
-  sleep: { label: '睡眠', color: '#5a6b8c', bg: '#e9ecf5' },
-  assessment: { label: '评估', color: '#d9a05b', bg: '#faf0e0' }
+  monitor: { label: '监测', color: '#389a82', bg: '#d4f5ee' },
+  medication: { label: '用药', color: '#f15533', bg: '#fdf4ed' },
+  nutrition: { label: '营养', color: '#27ae60', bg: '#ddf7ed' },
+  exercise: { label: '运动', color: '#4ab89e', bg: '#d8f8fa' },
+  psychology: { label: '心理', color: '#8dcdd8', bg: '#e2f2f6' },
+  sleep: { label: '睡眠', color: '#64748b', bg: '#f2f7fa' },
+  assessment: { label: '评估', color: '#f2c94c', bg: '#fdf4ed' }
 }
 
 export const QUESTIONS = [

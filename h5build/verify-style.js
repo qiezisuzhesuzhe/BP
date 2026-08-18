@@ -51,14 +51,40 @@ function cssOf(doc) {
   return [...doc.querySelectorAll('style')].map((s) => s.textContent).join('\n')
 }
 
-const TOKENS = ['0d4f52', '14666a', '1a7d82', '2da5aa', '7dc8cc', 'e0f4f5', '6ba584',
-  'e8f4ec', 'e07a5f', 'fde8e3', 'd9a05b', 'faf0e0', 'fbfaf7', 'f5f3ee',
-  '1a2b2c', '3d5456', '6b8082', 'c4d2d3']
+function inlineOf(doc) {
+  return [...doc.querySelectorAll('[style]')].map((e) => e.getAttribute('style')).join('\n')
+}
+
+function hexToRgb(h) {
+  const n = parseInt(h, 16)
+  return 'rgb(' + ((n >> 16) & 255) + ', ' + ((n >> 8) & 255) + ', ' + (n & 255) + ')'
+}
+
+function computedOf(doc, w) {
+  const out = []
+  for (const el of doc.querySelectorAll('[style]')) {
+    const s = w.getComputedStyle(el)
+    out.push(s.backgroundColor, s.color, s.backgroundImage, s.borderColor)
+  }
+  return out.join('\n')
+}
+
+function stripComments(css) {
+  return css.replace(/\/\*[\s\S]*?\*\//g, '')
+}
+
+const TOKENS = ['7dd4bc', '4ab89e', '389a82', 'd4f5ee', '61e0e5', 'd8f8fa', '84e8c2',
+  'ddf7ed', '8dcdd8', 'e2f2f6', 'e8c4a4', 'fdf4ed', '27ae60', 'f2c94c',
+  'eb5757', 'f15533', 'f5faff', 'edf5f2', 'f2f7fa', '1a2a3c', '334155',
+  '64748b', '94a3b8', 'c6d2de']
+
+const inlineSeen = []
 
 function report(doc, w, label, keys) {
   const all = cssOf(doc)
+  inlineSeen.push(inlineOf(doc), computedOf(doc, w))
   const ph = (all.match(/%\?[0-9.]+\?%/g) || []).length
-  const rpx = (all.match(/[0-9]rpx/g) || []).length
+  const rpx = (stripComments(all).match(/[0-9]rpx/g) || []).length
   const px = (all.match(/:\s*[0-9.]+px/g) || []).length
   console.log(`\n───── ${label} ─────`)
   console.log(`  <style>=${doc.querySelectorAll('style').length}  CSS=${all.length}B  残留占位符=${ph}  残留rpx=${rpx}  已换算px声明=${px}`)
@@ -164,7 +190,7 @@ async function tab(doc, w, url) {
 
   const rightId = store.getters.activeRight ? store.getters.activeRight.id : ''
   await nav(doc, w, '/pages/rights/detail?id=' + rightId)
-  stats.push(report(doc, w, '⑤ 权益详情 pages/rights/detail', ['hm-page', 'top', 'top__t']))
+  stats.push(report(doc, w, '⑤ 权益详情 pages/rights/detail', ['hm-page', 'top', 'top__name']))
 
   await tab(doc, w, '/pages/message/message')
   stats.push(report(doc, w, '⑥ 消息 pages/message/message',
@@ -182,14 +208,20 @@ async function tab(doc, w, url) {
   stats.push(report(doc, w, '⑨ 用户协议 pages/mine/agreement', ['hm-page']))
 
   const all = cssOf(doc)
-  const hitTokens = TOKENS.filter((t) => all.toLowerCase().includes(t))
+  const decl = stripComments(all)
+  const inline = inlineSeen.join('\n')
+  const surface = (all + '\n' + inline).toLowerCase()
+  const hitTokens = TOKENS.filter((t) => surface.includes(t) || surface.includes(hexToRgb(t)))
+  const missTokens = TOKENS.filter((t) => !(surface.includes(t) || surface.includes(hexToRgb(t))))
   console.log('\n══════ 汇总 ══════')
   console.log('累计注入 <style>      : ' + doc.querySelectorAll('style').length)
   console.log('累计运行时 CSS 体积   : ' + all.length + ' B')
   console.log('残留占位符 %?n?%      : ' + (all.match(/%\?[0-9.]+\?%/g) || []).length)
-  console.log('残留字面量 rpx        : ' + (all.match(/[0-9]rpx/g) || []).length)
+  console.log('残留字面量 rpx(声明)  : ' + (decl.match(/[0-9]rpx/g) || []).length)
+  console.log('残留字面量 rpx(含注释): ' + (all.match(/[0-9]rpx/g) || []).length)
   console.log('已换算 px 声明        : ' + (all.match(/:\s*[0-9.]+px/g) || []).length)
-  console.log('设计令牌命中          : ' + hitTokens.length + '/' + TOKENS.length + '  ' + hitTokens.map((t) => '#' + t).join(' '))
+  console.log('设计令牌命中(CSS+内联): ' + hitTokens.length + '/' + TOKENS.length)
+  if (missTokens.length) console.log('  未出现令牌          : ' + missTokens.map((t) => '#' + t).join(' '))
   const okSum = stats.reduce((a, s) => a + s.ok, 0)
   const totSum = stats.reduce((a, s) => a + s.total, 0)
   console.log('各页类名样式命中合计  : ' + okSum + '/' + totSum)

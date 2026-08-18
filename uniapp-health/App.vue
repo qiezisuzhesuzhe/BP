@@ -22,10 +22,11 @@ export default {
 
 <style lang="scss">
 page {
-  background: $warm-50;
-  color: $ink-900;
-  font-size: 28rpx;
-  line-height: 1.6;
+  background: $bg-page-base;
+  color: $text-primary;
+  font-family: $font-family-base;
+  font-size: $font-size-sm;
+  line-height: $line-height-relaxed;
 }
 
 view,
@@ -40,35 +41,39 @@ image {
 
 .hm-page {
   min-height: 100vh;
-  background: $warm-50;
+  background: $bg-page-base;
+  background-image: $bg-page;
+  background-repeat: no-repeat;
+  background-size: 100% $bg-page-height;
 }
 
 .hm-card {
-  background: #fff;
-  border-radius: $radius-md;
+  background: $bg-surface;
+  border-radius: $radius-card;
   box-shadow: $shadow-sm;
 }
 
 .hm-sec-title {
-  font-size: 34rpx;
-  font-weight: 700;
-  color: $ink-900;
+  font-size: $font-size-lg;
+  font-weight: $font-weight-heavy;
+  line-height: $line-height-tight;
+  color: $text-primary;
   letter-spacing: 1rpx;
 }
 
 .hm-sec-sub {
-  font-size: 24rpx;
-  color: $ink-500;
-  margin-top: 6rpx;
+  font-size: $font-size-xs;
+  color: $text-muted;
+  margin-top: $space-1;
 }
 
 .hm-divider {
   height: 1rpx;
-  background: $warm-200;
+  background: $border-subtle;
 }
 
 .hm-safe-bottom {
-  height: calc(env(safe-area-inset-bottom) + 24rpx);
+  height: calc(env(safe-area-inset-bottom) + #{$space-3});
 }
 
 .ellipsis {

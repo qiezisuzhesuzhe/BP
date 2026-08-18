@@ -34,7 +34,7 @@ export default {
   },
   methods: {
     meta(cat) {
-      return CAT_META[cat] || { label: '指导', color: '#1a7d82', bg: '#e0f4f5' }
+      return CAT_META[cat] || { label: '指导', color: '#389a82', bg: '#d4f5ee' }
     }
   }
 }
@@ -47,7 +47,7 @@ export default {
 }
 
 .tl__rail {
-  width: 76rpx;
+  width: $size-avatar-sm;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -55,73 +55,73 @@ export default {
 }
 
 .tl__dot {
-  width: 56rpx;
-  height: 56rpx;
+  width: $size-product-user-avatar;
+  height: $size-product-user-avatar;
   border-radius: 50%;
   display: flex;
   align-items: center;
   justify-content: center;
-  margin-top: 8rpx;
-  box-shadow: 0 4rpx 14rpx rgba(20, 10, 10, 0.14);
+  margin-top: $space-1;
+  box-shadow: $shadow-sm;
 }
 
 .tl__dot-icon {
-  font-size: 26rpx;
-  line-height: 26rpx;
+  font-size: $font-size-sm;
+  line-height: $font-size-sm;
 }
 
 .tl__line {
   flex: 1;
-  width: 2rpx;
-  background: $warm-200;
-  margin: 8rpx 0;
+  width: 1rpx;
+  background: $bg-section;
+  margin: $space-1 0;
 }
 
 .tl__card {
   flex: 1;
-  background: #fff;
-  border-radius: $radius-sm;
-  padding: 22rpx 24rpx;
-  margin: 0 0 20rpx 8rpx;
+  background: $bg-surface;
+  border-radius: $radius-card-child;
+  padding: $space-3;
+  margin: 0 0 $space-data-list-gap $space-1;
   box-shadow: $shadow-sm;
 }
 
 .tl__card--locked {
-  background: $warm-100;
+  background: $bg-subtle;
 }
 
 .tl__head {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  margin-bottom: 8rpx;
+  margin-bottom: $space-1;
 }
 
 .tl__time {
-  font-size: 26rpx;
-  font-weight: 700;
-  color: $ink-700;
+  font-size: $font-size-sm;
+  font-weight: $font-weight-bold;
+  color: $text-secondary;
   letter-spacing: 1rpx;
 }
 
 .tl__tag {
-  font-size: 20rpx;
-  padding: 4rpx 14rpx;
-  border-radius: 999rpx;
+  font-size: $font-size-2xs;
+  padding: $space-1 $space-2;
+  border-radius: $radius-full;
 }
 
 .tl__title {
   display: block;
-  font-size: 29rpx;
-  font-weight: 600;
-  color: $ink-900;
-  margin-bottom: 6rpx;
+  font-size: $font-size-sm;
+  font-weight: $font-weight-semibold;
+  color: $text-primary;
+  margin-bottom: $space-1;
 }
 
 .tl__desc {
   display: block;
-  font-size: 24rpx;
-  color: $ink-500;
-  line-height: 1.6;
+  font-size: $font-size-xs;
+  color: $text-muted;
+  line-height: $line-height-relaxed;
 }
 </style>

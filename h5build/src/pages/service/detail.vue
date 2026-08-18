@@ -4,7 +4,7 @@
       <hm-navbar
         :title="navSolid ? pkg.name : ''"
         :bg-color="navSolid ? '#ffffff' : 'transparent'"
-        :text-color="navSolid ? '#1a2b2c' : '#ffffff'"
+        :text-color="navSolid ? '#1a2a3c' : '#ffffff'"
       />
     </view>
 
@@ -191,12 +191,12 @@ export default {
   top: 0;
   left: 0;
   right: 0;
-  z-index: 95;
+  z-index: $z-nav;
 }
 
 .hero {
   position: relative;
-  background: $warm-100;
+  background: $bg-subtle;
 }
 
 .hero__img {
@@ -209,155 +209,155 @@ export default {
   top: 0;
   left: 0;
   right: 0;
-  height: 220rpx;
+  height: $size-stat-card-height;
   background: linear-gradient(180deg, rgba(0, 0, 0, 0.38) 0%, rgba(0, 0, 0, 0) 100%);
 }
 
 .wrap {
-  padding: 32rpx 28rpx 0;
+  padding: $space-4 $space-3 0;
 }
 
 .card {
-  background: #fff;
-  border-radius: $radius-md;
+  background: $bg-surface;
+  border-radius: $radius-card-child;
   box-shadow: $shadow-md;
 }
 
 .intro {
-  padding: 28rpx;
-  margin-top: -60rpx;
+  padding: $space-3;
+  margin-top: $space-data-list-gap;
 }
 
 .intro__tagline {
   display: inline-block;
-  border-radius: 999rpx;
-  padding: 6rpx 16rpx;
+  border-radius: $radius-full;
+  padding: $space-1 $space-2;
 }
 
 .intro__tagline-t {
-  font-size: 20rpx;
-  font-weight: 600;
+  font-size: $font-size-2xs;
+  font-weight: $font-weight-semibold;
 }
 
 .intro__head {
   display: flex;
   align-items: center;
-  margin-top: 16rpx;
+  margin-top: $space-2;
 }
 
 .intro__name {
   flex: 1;
-  font-size: 42rpx;
-  font-weight: 700;
-  color: $ink-900;
+  font-size: $font-size-xl;
+  font-weight: $font-weight-bold;
+  color: $text-primary;
   letter-spacing: 1rpx;
 }
 
 .intro__dur {
-  font-size: 22rpx;
-  font-weight: 600;
-  padding: 6rpx 16rpx;
-  border-radius: 999rpx;
-  margin-left: 16rpx;
+  font-size: $font-size-2xs;
+  font-weight: $font-weight-semibold;
+  padding: $space-1 $space-2;
+  border-radius: $radius-full;
+  margin-left: $space-2;
 }
 
 .intro__sub {
   display: block;
-  font-size: 25rpx;
-  color: $ink-500;
-  margin-top: 12rpx;
-  line-height: 1.7;
+  font-size: $font-size-xs;
+  color: $text-muted;
+  margin-top: $space-2;
+  line-height: $line-height-relaxed;
 }
 
 .intro__meta {
   display: flex;
   align-items: center;
   flex-wrap: wrap;
-  margin-top: 18rpx;
+  margin-top: $space-2;
 }
 
 .intro__meta-t {
-  font-size: 21rpx;
-  color: $ink-400;
+  font-size: $font-size-2xs;
+  color: $text-disabled;
 }
 
 .intro__meta-dot {
-  font-size: 21rpx;
-  color: $ink-300;
-  margin: 0 10rpx;
+  font-size: $font-size-2xs;
+  color: $text-hint;
+  margin: 0 $space-1;
 }
 
 .intro__price {
   display: flex;
   align-items: baseline;
-  margin-top: 22rpx;
-  padding-top: 22rpx;
-  border-top: 1rpx solid $warm-100;
+  margin-top: $space-3;
+  padding-top: $space-3;
+  border-top: 1rpx solid $border-subtle;
 }
 
 .intro__cur {
-  font-size: 26rpx;
-  color: $coral-500;
-  font-weight: 700;
+  font-size: $font-size-sm;
+  color: $badge;
+  font-weight: $font-weight-bold;
 }
 
 .intro__now {
-  font-size: 60rpx;
-  line-height: 60rpx;
-  color: $coral-500;
-  font-weight: 700;
-  margin-left: 2rpx;
+  font-size: $font-size-2xl;
+  line-height: $font-size-2xl;
+  color: $badge;
+  font-weight: $font-weight-bold;
+  margin-left: 0;
 }
 
 .intro__origin {
-  font-size: 24rpx;
-  color: $ink-400;
+  font-size: $font-size-xs;
+  color: $text-disabled;
   text-decoration: line-through;
-  margin-left: 14rpx;
+  margin-left: $space-2;
 }
 
 .intro__save {
-  font-size: 20rpx;
-  color: $coral-500;
-  background: $coral-100;
-  padding: 5rpx 14rpx;
-  border-radius: 999rpx;
-  margin-left: 14rpx;
+  font-size: $font-size-2xs;
+  color: $badge;
+  background: $warm-soft;
+  padding: $space-1 $space-2;
+  border-radius: $radius-full;
+  margin-left: $space-2;
 }
 
 .intro__tags {
   display: flex;
   flex-wrap: wrap;
-  margin-top: 22rpx;
+  margin-top: $space-3;
 }
 
 .intro__tag {
-  font-size: 21rpx;
-  color: $ink-700;
-  background: $warm-100;
-  padding: 8rpx 18rpx;
-  border-radius: 999rpx;
-  margin: 0 12rpx 12rpx 0;
+  font-size: $font-size-2xs;
+  color: $text-secondary;
+  background: $bg-subtle;
+  padding: $space-1 $space-2;
+  border-radius: $radius-full;
+  margin: 0 $space-2 $space-2 0;
 }
 
 .sec-head {
   display: flex;
   align-items: baseline;
   justify-content: space-between;
-  margin-bottom: 22rpx;
+  margin-bottom: $space-3;
 }
 
 .hl {
   display: flex;
   align-items: flex-start;
-  padding: 26rpx 24rpx;
-  margin-bottom: 20rpx;
+  padding: $space-3;
+  margin-bottom: $space-2;
 }
 
 .hl__icon {
-  width: 76rpx;
-  height: 76rpx;
-  border-radius: $radius-sm;
+  width: $size-avatar-sm;
+  height: $size-avatar-sm;
+  border-radius: $radius-card-child;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -365,38 +365,38 @@ export default {
 }
 
 .hl__icon-t {
-  font-size: 38rpx;
+  font-size: $size-icon-sm;
 }
 
 .hl__main {
   flex: 1;
-  padding-left: 20rpx;
+  padding-left: $space-2;
 }
 
 .hl__t {
   display: block;
-  font-size: 28rpx;
-  font-weight: 700;
-  color: $ink-900;
+  font-size: $font-size-sm;
+  font-weight: $font-weight-bold;
+  color: $text-primary;
 }
 
 .hl__d {
   display: block;
-  font-size: 22rpx;
-  color: $ink-500;
-  margin-top: 8rpx;
-  line-height: 1.7;
+  font-size: $font-size-2xs;
+  color: $text-muted;
+  margin-top: $space-1;
+  line-height: $line-height-relaxed;
 }
 
 .srv {
-  padding: 4rpx 24rpx;
+  padding: $space-1 $space-3;
 }
 
 .srv__row {
   display: flex;
   align-items: center;
-  padding: 22rpx 0;
-  border-bottom: 1rpx solid $warm-100;
+  padding: $space-3 0;
+  border-bottom: 1rpx solid $border-subtle;
 }
 
 .srv__row:last-child {
@@ -404,7 +404,7 @@ export default {
 }
 
 .srv__row--head {
-  border-bottom: 1rpx solid $warm-200;
+  border-bottom: 1rpx solid $border-subtle;
 }
 
 .srv__c1 {
@@ -415,34 +415,34 @@ export default {
 }
 
 .srv__c2 {
-  width: 200rpx;
+  width: $size-stat-card-height;
   text-align: right;
 }
 
 .srv__th {
-  font-size: 22rpx;
-  color: $ink-400;
-  font-weight: 600;
+  font-size: $font-size-2xs;
+  color: $text-disabled;
+  font-weight: $font-weight-semibold;
 }
 
 .srv__dot {
-  width: 10rpx;
-  height: 10rpx;
-  border-radius: 999rpx;
-  margin-right: 14rpx;
+  width: $size-badge-sm;
+  height: $size-badge-sm;
+  border-radius: $radius-full;
+  margin-right: $space-2;
   flex-shrink: 0;
 }
 
 .srv__name {
-  font-size: 26rpx;
-  color: $ink-900;
+  font-size: $font-size-sm;
+  color: $text-primary;
 }
 
 .srv__spec {
-  width: 200rpx;
+  width: $size-stat-card-height;
   text-align: right;
-  font-size: 23rpx;
-  color: $ink-500;
+  font-size: $font-size-xs;
+  color: $text-muted;
 }
 
 .ds {
@@ -455,40 +455,40 @@ export default {
 }
 
 .ds__body {
-  padding: 24rpx 26rpx 8rpx;
+  padding: $space-3 $space-3 $space-1;
 }
 
 .ds__point {
   display: flex;
   align-items: flex-start;
-  padding-bottom: 20rpx;
+  padding-bottom: $space-2;
 }
 
 .ds__idx {
-  width: 34rpx;
-  height: 34rpx;
-  border-radius: 999rpx;
-  font-size: 20rpx;
-  font-weight: 700;
+  width: $size-badge-md;
+  height: $size-badge-md;
+  border-radius: $radius-full;
+  font-size: $font-size-2xs;
+  font-weight: $font-weight-bold;
   text-align: center;
-  line-height: 34rpx;
-  margin-right: 16rpx;
+  line-height: $size-badge-md;
+  margin-right: $space-2;
   flex-shrink: 0;
 }
 
 .ds__p {
   flex: 1;
-  font-size: 24rpx;
-  color: $ink-700;
-  line-height: 1.7;
+  font-size: $font-size-xs;
+  color: $text-secondary;
+  line-height: $line-height-relaxed;
 }
 
 .faq {
-  padding: 4rpx 24rpx;
+  padding: $space-1 $space-3;
 }
 
 .faq__item {
-  border-bottom: 1rpx solid $warm-100;
+  border-bottom: 1rpx solid $border-subtle;
 }
 
 .faq__item:last-child {
@@ -498,53 +498,53 @@ export default {
 .faq__q {
   display: flex;
   align-items: center;
-  padding: 26rpx 0;
+  padding: $space-3 0;
 }
 
 .faq__q-t {
   flex: 1;
-  font-size: 26rpx;
-  font-weight: 600;
-  color: $ink-900;
+  font-size: $font-size-sm;
+  font-weight: $font-weight-semibold;
+  color: $text-primary;
 }
 
 .faq__arrow {
-  font-size: 30rpx;
-  color: $ink-400;
-  margin-left: 16rpx;
+  font-size: $font-size-md;
+  color: $text-disabled;
+  margin-left: $space-2;
   transition: transform 0.2s;
 }
 
 .faq__arrow--on {
   transform: rotate(180deg);
-  color: $teal-700;
+  color: $brand-primary-active;
 }
 
 .faq__a {
-  padding: 0 0 26rpx;
+  padding: 0 0 $space-3;
 }
 
 .faq__a-t {
-  font-size: 23rpx;
-  color: $ink-500;
-  line-height: 1.8;
+  font-size: $font-size-xs;
+  color: $text-muted;
+  line-height: $line-height-relaxed;
 }
 
 .foot-tip {
-  padding: 40rpx 44rpx 20rpx;
+  padding: $space-5 $space-5 $space-2;
   text-align: center;
 }
 
 .foot-tip__t {
   display: block;
-  font-size: 20rpx;
-  color: $ink-400;
-  line-height: 1.7;
-  margin-bottom: 8rpx;
+  font-size: $font-size-2xs;
+  color: $text-disabled;
+  line-height: $line-height-relaxed;
+  margin-bottom: $space-1;
 }
 
 .bar-holder {
-  height: calc(150rpx + env(safe-area-inset-bottom));
+  height: calc(env(safe-area-inset-bottom) + #{$size-bottom-nav-height});
 }
 
 .buybar {
@@ -552,11 +552,11 @@ export default {
   left: 0;
   right: 0;
   bottom: 0;
-  z-index: 96;
-  background: #fff;
-  box-shadow: 0 -8rpx 32rpx rgba(20, 10, 10, 0.08);
-  padding: 18rpx 28rpx;
-  padding-bottom: calc(18rpx + env(safe-area-inset-bottom));
+  z-index: $z-nav;
+  background: $bg-surface;
+  box-shadow: $shadow-lg;
+  padding: $space-2 $space-3;
+  padding-bottom: calc(env(safe-area-inset-bottom) + #{$space-2});
   display: flex;
   align-items: center;
 }
@@ -572,40 +572,40 @@ export default {
 }
 
 .buybar__cur {
-  font-size: 24rpx;
-  color: $coral-500;
-  font-weight: 700;
+  font-size: $font-size-xs;
+  color: $badge;
+  font-weight: $font-weight-bold;
 }
 
 .buybar__now {
-  font-size: 54rpx;
-  line-height: 54rpx;
-  color: $coral-500;
-  font-weight: 700;
-  margin-left: 2rpx;
+  font-size: $font-size-2xl;
+  line-height: $font-size-2xl;
+  color: $badge;
+  font-weight: $font-weight-bold;
+  margin-left: 0;
 }
 
 .buybar__origin {
-  font-size: 22rpx;
-  color: $ink-400;
+  font-size: $font-size-2xs;
+  color: $text-disabled;
   text-decoration: line-through;
-  margin-left: 12rpx;
+  margin-left: $space-2;
 }
 
 .buybar__save {
   display: inline-block;
-  font-size: 19rpx;
-  color: $coral-500;
-  background: $coral-100;
-  padding: 4rpx 12rpx;
-  border-radius: 999rpx;
-  margin-top: 6rpx;
+  font-size: $font-size-2xs;
+  color: $badge;
+  background: $warm-soft;
+  padding: $space-1 $space-2;
+  border-radius: $radius-full;
+  margin-top: $space-1;
 }
 
 .buybar__btn {
-  min-width: 300rpx;
-  height: 92rpx;
-  border-radius: 999rpx;
+  min-width: $size-page-max-width * 0.32;
+  height: $size-input-height;
+  border-radius: $radius-full;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -613,9 +613,9 @@ export default {
 }
 
 .buybar__btn-t {
-  color: #fff;
-  font-size: 32rpx;
-  font-weight: 700;
+  color: $text-inverse;
+  font-size: $font-size-md;
+  font-weight: $font-weight-bold;
   letter-spacing: 2rpx;
 }
 </style>

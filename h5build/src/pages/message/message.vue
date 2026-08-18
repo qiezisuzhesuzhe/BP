@@ -1,7 +1,7 @@
 <template>
   <view class="hm-page">
     <view class="top">
-      <hm-navbar title="消息" :show-back="false" bg-color="transparent" text-color="#ffffff" />
+      <hm-navbar title="消息" :show-back="false" bg-color="transparent" />
       <view class="top__body">
         <view class="top__row">
           <view class="top__l">
@@ -141,7 +141,7 @@ export default {
       return CAT[t] || '通知'
     },
     soft(hex) {
-      if (!hex || hex.charAt(0) !== '#') return '#f5f3ee'
+      if (!hex || hex.charAt(0) !== '#') return '#edf5f2'
       const n = parseInt(hex.slice(1), 16)
       const r = (n >> 16) & 255
       const g = (n >> 8) & 255
@@ -180,12 +180,12 @@ export default {
 
 <style lang="scss" scoped>
 .top {
-  background: linear-gradient(160deg, $teal-800 0%, $teal-700 55%, $teal-500 100%);
-  padding-bottom: 40rpx;
+  background: transparent;
+  padding-bottom: $space-5;
 }
 
 .top__body {
-  padding: 16rpx 36rpx 0;
+  padding: $space-2 $space-4 0;
 }
 
 .top__row {
@@ -196,108 +196,111 @@ export default {
 
 .top__t {
   display: block;
-  font-size: 38rpx;
-  font-weight: 700;
-  color: #fff;
+  font-size: $page-title-size;
+  font-weight: $page-title-weight;
+  line-height: $page-title-line-height;
+  color: $page-title-color;
   letter-spacing: 1rpx;
 }
 
 .top__d {
   display: block;
-  margin-top: 8rpx;
-  font-size: 24rpx;
-  color: rgba(255, 255, 255, 0.8);
+  margin-top: $space-1;
+  font-size: $font-size-xs;
+  color: $text-muted;
 }
 
 .top__act {
-  padding: 12rpx 26rpx;
-  border-radius: 999rpx;
-  background: rgba(255, 255, 255, 0.18);
+  padding: $space-2 $space-3;
+  border-radius: $radius-full;
+  background: $bg-surface;
+  box-shadow: $shadow-sm;
 }
 
 .top__act-t {
-  font-size: 23rpx;
-  color: #fff;
+  font-size: $font-size-2xs;
+  color: $brand-primary-active;
+  font-weight: $font-weight-semibold;
 }
 
 .tabs {
   width: 100%;
-  background: #fff;
+  background: $bg-surface;
   box-shadow: $shadow-sm;
 }
 
 .tabs__inner {
   display: flex;
   align-items: center;
-  padding: 20rpx 24rpx;
+  padding: $space-2 $space-3;
   white-space: nowrap;
 }
 
 .tab {
   display: inline-flex;
   align-items: center;
-  padding: 12rpx 28rpx;
-  border-radius: 999rpx;
-  background: $warm-100;
-  margin-right: 14rpx;
+  padding: $space-2 $space-3;
+  border-radius: $radius-full;
+  background: $bg-subtle;
+  margin-right: $space-2;
 }
 
 .tab--on {
-  background: $teal-700;
+  background: $brand-primary;
 }
 
 .tab__t {
-  font-size: 25rpx;
-  color: $ink-500;
+  font-size: $font-size-xs;
+  color: $text-muted;
 }
 
 .tab__t--on {
-  color: #fff;
-  font-weight: 600;
+  color: $text-inverse;
+  font-weight: $font-weight-semibold;
 }
 
 .tab__n {
-  margin-left: 8rpx;
-  min-width: 30rpx;
-  padding: 0 8rpx;
-  border-radius: 999rpx;
-  background: $coral-500;
-  font-size: 19rpx;
-  color: #fff;
+  margin-left: $space-1;
+  min-width: $size-badge-md;
+  padding: 0 $space-1;
+  border-radius: $radius-full;
+  background: $badge;
+  font-size: $font-size-2xs;
+  color: $text-inverse;
   text-align: center;
-  line-height: 30rpx;
+  line-height: $size-badge-md;
 }
 
 .tab__n--on {
-  background: rgba(255, 255, 255, 0.28);
+  background: $brand-primary-active;
 }
 
 .list {
-  padding: 24rpx 24rpx 0;
+  padding: $space-3 $space-3 0;
 }
 
 .group {
-  margin-bottom: 10rpx;
+  margin-bottom: $space-1;
 }
 
 .group__head {
-  padding: 14rpx 12rpx 16rpx;
+  padding: $space-2 $space-2 $space-2;
 }
 
 .group__t {
-  font-size: 23rpx;
-  color: $ink-400;
+  font-size: $font-size-2xs;
+  color: $text-disabled;
   letter-spacing: 1rpx;
 }
 
 .msg {
   position: relative;
   display: flex;
-  padding: 28rpx 26rpx;
-  border-radius: $radius-md;
-  background: #fff;
+  padding: $space-3;
+  border-radius: $radius-card-child;
+  background: $bg-surface;
   box-shadow: $shadow-sm;
-  margin-bottom: 18rpx;
+  margin-bottom: $space-data-list-gap;
 }
 
 .msg--unread {
@@ -305,17 +308,17 @@ export default {
 }
 
 .msg__icon {
-  width: 76rpx;
-  height: 76rpx;
-  border-radius: 24rpx;
+  width: $size-icon-lg;
+  height: $size-icon-lg;
+  border-radius: $radius-sm;
   text-align: center;
-  line-height: 76rpx;
-  margin-right: 22rpx;
+  line-height: $size-icon-lg;
+  margin-right: $space-3;
   flex-shrink: 0;
 }
 
 .msg__icon-t {
-  font-size: 34rpx;
+  font-size: $font-size-lg;
 }
 
 .msg__main {
@@ -331,90 +334,91 @@ export default {
 
 .msg__title {
   flex: 1;
-  font-size: 28rpx;
-  font-weight: 600;
-  color: $ink-900;
+  font-size: $font-size-sm;
+  font-weight: $font-weight-semibold;
+  color: $text-primary;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
 }
 
 .msg__time {
-  margin-left: 16rpx;
-  font-size: 21rpx;
-  color: $ink-400;
+  margin-left: $space-2;
+  font-size: $font-size-2xs;
+  color: $text-disabled;
   flex-shrink: 0;
 }
 
 .msg__content {
   display: block;
-  margin-top: 10rpx;
-  font-size: 25rpx;
-  color: $ink-500;
-  line-height: 1.66;
+  margin-top: $space-1;
+  font-size: $font-size-xs;
+  color: $text-muted;
+  line-height: $line-height-relaxed;
 }
 
 .msg__foot {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  margin-top: 16rpx;
+  margin-top: $space-2;
 }
 
 .msg__cat {
-  padding: 5rpx 16rpx;
-  border-radius: 999rpx;
-  font-size: 20rpx;
+  padding: $space-1 $space-2;
+  border-radius: $radius-full;
+  font-size: $font-size-2xs;
 }
 
 .msg__go {
-  font-size: 22rpx;
-  color: $teal-700;
+  font-size: $font-size-2xs;
+  color: $brand-primary-active;
 }
 
 .msg__dot {
   position: absolute;
-  top: 26rpx;
-  right: 20rpx;
-  width: 14rpx;
-  height: 14rpx;
+  top: $space-3;
+  right: $space-2;
+  width: $size-badge-sm;
+  height: $size-badge-sm;
   border-radius: 50%;
-  background: $coral-500;
+  background: $badge;
 }
 
 .empty {
-  padding: 120rpx 80rpx;
+  padding: $space-12 $space-10;
   text-align: center;
 }
 
 .empty__icon {
   display: block;
-  font-size: 90rpx;
+  font-size: $size-icon-xl;
+  color: $text-disabled;
 }
 
 .empty__t {
   display: block;
-  margin-top: 28rpx;
-  font-size: 30rpx;
-  font-weight: 600;
-  color: $ink-700;
+  margin-top: $space-3;
+  font-size: $font-size-md;
+  font-weight: $font-weight-semibold;
+  color: $text-secondary;
 }
 
 .empty__d {
   display: block;
-  margin-top: 14rpx;
-  font-size: 24rpx;
-  color: $ink-400;
-  line-height: 1.7;
+  margin-top: $space-2;
+  font-size: $font-size-xs;
+  color: $text-muted;
+  line-height: $line-height-relaxed;
 }
 
 .tips {
-  padding: 30rpx 36rpx 10rpx;
+  padding: $space-4 $space-4 $space-1;
   text-align: center;
 }
 
 .tips__t {
-  font-size: 21rpx;
-  color: $ink-300;
+  font-size: $font-size-2xs;
+  color: $text-hint;
 }
 </style>

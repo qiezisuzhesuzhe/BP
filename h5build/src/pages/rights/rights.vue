@@ -1,7 +1,7 @@
 <template>
   <view class="hm-page">
     <view class="top">
-      <hm-navbar title="我的权益" back-to="/pages/index/index" bg-color="transparent" text-color="#ffffff" />
+      <hm-navbar title="我的权益" back-to="/pages/index/index" bg-color="transparent" />
       <view class="top__body">
         <text class="top__t">我的健康管理权益</text>
         <text class="top__d">共 {{ rights.length }} 项服务 · {{ activeCount }} 项使用中</text>
@@ -19,7 +19,7 @@
 
     <view v-else class="list">
       <view v-for="r in rights" :key="r.id" class="card">
-        <view class="card__head" :style="{ background: 'linear-gradient(135deg,' + r.accent + ' 0%,' + shade(r.accent) + ' 100%)' }">
+        <view class="card__head" :style="{ background: r.accentSoft }">
           <view class="card__head-l">
             <text class="card__status">{{ statusText(r) }}</text>
             <text class="card__name">{{ r.name }}</text>
@@ -166,13 +166,6 @@ export default {
       const p = Math.round((r.usedDays / r.totalDays) * 100)
       return Math.min(100, Math.max(2, p))
     },
-    shade(hex) {
-      const n = parseInt(hex.slice(1), 16)
-      const r = Math.max(0, ((n >> 16) & 255) - 40)
-      const g = Math.max(0, ((n >> 8) & 255) - 40)
-      const b = Math.max(0, (n & 255) - 30)
-      return 'rgb(' + r + ',' + g + ',' + b + ')'
-    },
     qrOn(n) {
       return [1, 2, 3, 4, 6, 7, 9].indexOf(n) > -1
     },
@@ -210,89 +203,89 @@ export default {
 
 <style lang="scss" scoped>
 .top {
-  background: linear-gradient(160deg, $teal-800 0%, $teal-700 55%, $teal-500 100%);
-  padding-bottom: 90rpx;
-  border-bottom-left-radius: $radius-lg;
-  border-bottom-right-radius: $radius-lg;
+  background: transparent;
+  padding-bottom: $space-5;
 }
 
 .top__body {
-  padding: 10rpx 36rpx 0;
+  padding: $space-1 $space-4 0;
 }
 
 .top__t {
   display: block;
-  color: #fff;
-  font-size: 42rpx;
-  font-weight: 700;
+  color: $page-title-color;
+  font-size: $page-title-size;
+  font-weight: $page-title-weight;
+  line-height: $page-title-line-height;
   letter-spacing: 2rpx;
 }
 
 .top__d {
   display: block;
-  color: rgba(255, 255, 255, 0.76);
-  font-size: 24rpx;
-  margin-top: 10rpx;
+  color: $text-muted;
+  font-size: $font-size-xs;
+  margin-top: $space-1;
 }
 
 .empty {
-  margin: -60rpx 28rpx 0;
-  background: #fff;
-  border-radius: $radius-md;
-  box-shadow: $shadow-md;
-  padding: 70rpx 40rpx;
+  margin: 0 $space-3;
+  background: $bg-surface;
+  border-radius: $radius-card;
+  box-shadow: $shadow-sm;
+  padding: $space-8 $space-5;
   display: flex;
   flex-direction: column;
   align-items: center;
 }
 
 .empty__icon {
-  font-size: 84rpx;
+  font-size: $size-icon-xl;
+  color: $text-disabled;
 }
 
 .empty__t {
-  font-size: 32rpx;
-  font-weight: 700;
-  color: $ink-900;
-  margin-top: 24rpx;
+  font-size: $font-size-md;
+  font-weight: $font-weight-bold;
+  color: $text-primary;
+  margin-top: $space-3;
 }
 
 .empty__d {
-  font-size: 24rpx;
-  color: $ink-500;
+  font-size: $font-size-xs;
+  color: $text-muted;
   text-align: center;
-  margin-top: 12rpx;
-  line-height: 1.7;
+  margin-top: $space-2;
+  line-height: $line-height-relaxed;
 }
 
 .empty__btn {
-  margin-top: 36rpx;
-  background: $teal-700;
-  border-radius: 999rpx;
-  padding: 20rpx 56rpx;
+  margin-top: $space-5;
+  background: $brand-primary;
+  border-radius: $radius-full;
+  padding: $space-2 $space-6;
 }
 
 .empty__btn-t {
-  color: #fff;
-  font-size: 27rpx;
-  font-weight: 700;
+  color: $text-inverse;
+  font-size: $font-size-sm;
+  font-weight: $font-weight-bold;
 }
 
 .list {
-  padding: 0 28rpx;
-  margin-top: -60rpx;
+  padding: 0 $space-3;
+  margin-top: 0;
 }
 
 .card {
-  background: #fff;
-  border-radius: $radius-md;
+  background: $bg-surface;
+  border-radius: $radius-card;
   overflow: hidden;
-  box-shadow: $shadow-md;
-  margin-bottom: 28rpx;
+  box-shadow: $shadow-sm;
+  margin-bottom: $space-data-list-gap;
 }
 
 .card__head {
-  padding: 28rpx;
+  padding: $space-3;
   display: flex;
   align-items: center;
 }
@@ -304,49 +297,49 @@ export default {
 
 .card__status {
   display: inline-block;
-  font-size: 19rpx;
-  color: #fff;
-  background: rgba(255, 255, 255, 0.24);
-  padding: 5rpx 14rpx;
-  border-radius: 999rpx;
+  font-size: $font-size-2xs;
+  color: $label-soft-text;
+  background: $bg-surface;
+  padding: $space-1 $space-2;
+  border-radius: $radius-full;
 }
 
 .card__name {
   display: block;
-  color: #fff;
-  font-size: 36rpx;
-  font-weight: 700;
-  margin-top: 14rpx;
+  color: $text-primary;
+  font-size: $font-size-lg;
+  font-weight: $font-weight-bold;
+  margin-top: $space-2;
 }
 
 .card__sub {
   display: block;
-  color: rgba(255, 255, 255, 0.8);
-  font-size: 21rpx;
-  margin-top: 8rpx;
+  color: $text-muted;
+  font-size: $font-size-2xs;
+  margin-top: $space-1;
 }
 
 .card__emoji {
-  font-size: 68rpx;
-  margin-left: 16rpx;
+  font-size: $size-icon-lg;
+  margin-left: $space-2;
 }
 
 .card__body {
-  padding: 24rpx 28rpx 28rpx;
+  padding: $space-3;
 }
 
 .card__rows {
-  background: $warm-50;
-  border-radius: $radius-sm;
-  padding: 8rpx 20rpx;
+  background: $bg-section;
+  border-radius: $radius-card-child;
+  padding: $space-1 $space-3;
 }
 
 .card__row {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 16rpx 0;
-  border-bottom: 1rpx solid $warm-200;
+  padding: $space-2 0;
+  border-bottom: 1rpx solid $border-subtle;
 }
 
 .card__row:last-child {
@@ -354,80 +347,80 @@ export default {
 }
 
 .card__row-l {
-  font-size: 24rpx;
-  color: $ink-500;
+  font-size: $font-size-xs;
+  color: $text-muted;
 }
 
 .card__row-v {
-  font-size: 25rpx;
-  color: $ink-900;
-  font-weight: 600;
+  font-size: $font-size-xs;
+  color: $text-primary;
+  font-weight: $font-weight-semibold;
 }
 
 .prog {
-  margin-top: 22rpx;
+  margin-top: $space-3;
 }
 
 .prog__bar {
-  height: 12rpx;
-  border-radius: 999rpx;
-  background: $warm-200;
+  height: $space-2;
+  border-radius: $radius-full;
+  background: $bg-section;
   overflow: hidden;
 }
 
 .prog__fill {
   height: 100%;
-  border-radius: 999rpx;
+  border-radius: $radius-full;
 }
 
 .prog__t {
   display: block;
-  font-size: 21rpx;
-  color: $ink-400;
-  margin-top: 10rpx;
+  font-size: $font-size-2xs;
+  color: $text-disabled;
+  margin-top: $space-1;
 }
 
 .card__acts {
   display: flex;
   align-items: center;
-  margin-top: 28rpx;
+  margin-top: $space-3;
 }
 
 .card__ghost {
-  padding: 20rpx 34rpx;
-  border-radius: 999rpx;
-  border: 1rpx solid $ink-300;
-  margin-right: 18rpx;
+  padding: $space-2 $space-4;
+  border-radius: $radius-full;
+  border: 1rpx solid $text-hint;
+  margin-right: $space-2;
 }
 
 .card__ghost-t {
-  font-size: 26rpx;
-  color: $ink-700;
+  font-size: $font-size-xs;
+  color: $text-secondary;
 }
 
 .card__cta {
   flex: 1;
-  padding: 22rpx 0;
-  border-radius: 999rpx;
+  padding: $space-3 0;
+  border-radius: $radius-full;
   text-align: center;
   box-shadow: $shadow-sm;
 }
 
 .card__cta-t {
-  color: #fff;
-  font-size: 29rpx;
+  color: $text-inverse;
+  font-size: $font-size-sm;
   font-weight: 700;
   letter-spacing: 1rpx;
 }
 
 .tips {
-  padding: 12rpx 40rpx 20rpx;
+  padding: $space-2 $space-5;
   text-align: center;
 }
 
 .tips__t {
-  font-size: 21rpx;
-  color: $ink-400;
+  font-size: $font-size-2xs;
+  color: $text-disabled;
 }
 
 .mask {
@@ -436,18 +429,18 @@ export default {
   right: 0;
   top: 0;
   bottom: 0;
-  background: rgba(13, 40, 42, 0.55);
-  z-index: 200;
+  background: $overlay;
+  z-index: $z-modal;
   display: flex;
   align-items: flex-end;
 }
 
 .sheet {
   width: 100%;
-  background: #fff;
-  border-top-left-radius: $radius-lg;
-  border-top-right-radius: $radius-lg;
-  padding: 44rpx 40rpx calc(48rpx + env(safe-area-inset-bottom));
+  background: $bg-surface;
+  border-top-left-radius: $radius-card;
+  border-top-right-radius: $radius-card;
+  padding: $space-5 $space-5 calc(env(safe-area-inset-bottom) + #{$space-6});
   animation: rise 0.28s ease-out;
 }
 
@@ -469,32 +462,32 @@ export default {
 
 .sheet__pane--center {
   align-items: center;
-  padding: 30rpx 0 20rpx;
+  padding: $space-4 0 $space-2;
 }
 
 .sheet__icon {
-  font-size: 64rpx;
+  font-size: $size-icon-lg;
   text-align: center;
 }
 
 .sheet__t {
-  font-size: 34rpx;
+  font-size: $font-size-lg;
   font-weight: 700;
-  color: $ink-900;
+  color: $text-primary;
   text-align: center;
-  margin-top: 20rpx;
+  margin-top: $space-2;
 }
 
 .sheet__d {
-  font-size: 24rpx;
-  color: $ink-500;
+  font-size: $font-size-xs;
+  color: $text-muted;
   text-align: center;
-  margin-top: 12rpx;
-  line-height: 1.7;
+  margin-top: $space-2;
+  line-height: $line-height-relaxed;
 }
 
 .qr {
-  margin-top: 32rpx;
+  margin-top: $space-4;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -503,10 +496,10 @@ export default {
 .qr__box {
   width: 300rpx;
   height: 300rpx;
-  background: $warm-50;
-  border: 2rpx solid $warm-200;
-  border-radius: $radius-sm;
-  padding: 20rpx;
+  background: $bg-page-base;
+  border: 1rpx solid $border-subtle;
+  border-radius: $radius-card-child;
+  padding: $space-2;
   display: flex;
   flex-wrap: wrap;
   justify-content: space-between;
@@ -518,11 +511,11 @@ export default {
   width: 78rpx;
   height: 78rpx;
   border-radius: 10rpx;
-  background: $warm-100;
+  background: $bg-subtle;
 }
 
 .qr__cell--on {
-  background: $teal-800;
+  background: $brand-primary;
 }
 
 .qr__logo {
@@ -533,110 +526,110 @@ export default {
   height: 78rpx;
   margin: -39rpx 0 0 -39rpx;
   border-radius: 14rpx;
-  background: #fff;
-  border: 4rpx solid $teal-700;
+  background: $bg-surface;
+  border: 4rpx solid $brand-primary;
   display: flex;
   align-items: center;
   justify-content: center;
 }
 
 .qr__logo-t {
-  font-size: 34rpx;
+  font-size: $font-size-lg;
   font-weight: 700;
-  color: $teal-700;
+  color: $brand-primary-active;
 }
 
 .qr__hint {
-  font-size: 21rpx;
-  color: $ink-400;
-  margin-top: 16rpx;
+  font-size: $font-size-2xs;
+  color: $text-disabled;
+  margin-top: $space-2;
 }
 
 .who {
-  margin-top: 30rpx;
-  background: $teal-100;
-  border-radius: $radius-sm;
-  padding: 22rpx;
+  margin-top: $space-4;
+  background: $brand-soft;
+  border-radius: $radius-card-child;
+  padding: $space-3;
   display: flex;
   align-items: center;
 }
 
 .who__avatar {
-  width: 72rpx;
-  height: 72rpx;
+  width: $size-avatar-sm;
+  height: $size-avatar-sm;
   border-radius: 50%;
-  background: $teal-700;
+  background: $brand-primary;
   display: flex;
   align-items: center;
   justify-content: center;
 }
 
 .who__avatar-t {
-  color: #fff;
-  font-size: 30rpx;
+  color: $text-inverse;
+  font-size: $font-size-md;
   font-weight: 700;
 }
 
 .who__main {
   flex: 1;
-  padding: 0 18rpx;
+  padding: 0 $space-2;
 }
 
 .who__name {
   display: block;
-  font-size: 27rpx;
+  font-size: $font-size-sm;
   font-weight: 700;
-  color: $teal-900;
+  color: $brand-primary-active;
 }
 
 .who__meta {
   display: block;
-  font-size: 21rpx;
-  color: $teal-800;
+  font-size: $font-size-2xs;
+  color: $brand-primary-active;
   opacity: 0.8;
-  margin-top: 6rpx;
+  margin-top: $space-1;
 }
 
 .who__badge {
-  background: $teal-700;
-  border-radius: 999rpx;
-  padding: 6rpx 16rpx;
+  background: $brand-primary;
+  border-radius: $radius-full;
+  padding: $space-1 $space-2;
 }
 
 .who__badge-t {
-  color: #fff;
-  font-size: 19rpx;
+  color: $text-inverse;
+  font-size: $font-size-2xs;
 }
 
 .sheet__btn {
-  margin-top: 34rpx;
-  background: $teal-700;
-  border-radius: 999rpx;
-  padding: 26rpx 0;
+  margin-top: $space-4;
+  background: $brand-primary;
+  border-radius: $radius-full;
+  padding: $space-3 0;
   text-align: center;
   box-shadow: $shadow-sm;
   width: 100%;
 }
 
 .sheet__btn-t {
-  color: #fff;
-  font-size: 30rpx;
+  color: $text-inverse;
+  font-size: $font-size-md;
   font-weight: 700;
   letter-spacing: 1rpx;
 }
 
 .sheet__cancel {
   text-align: center;
-  font-size: 25rpx;
-  color: $ink-400;
-  margin-top: 26rpx;
+  font-size: $font-size-xs;
+  color: $text-disabled;
+  margin-top: $space-3;
 }
 
 .spin {
-  width: 76rpx;
-  height: 76rpx;
-  border: 6rpx solid $warm-200;
-  border-top-color: $teal-700;
+  width: $size-avatar-sm;
+  height: $size-avatar-sm;
+  border: 4rpx solid $border-subtle;
+  border-top-color: $brand-primary-active;
   border-radius: 50%;
   animation: spin 0.8s linear infinite;
 }
@@ -648,10 +641,10 @@ export default {
 }
 
 .ok {
-  width: 100rpx;
-  height: 100rpx;
+  width: $size-avatar-md;
+  height: $size-avatar-md;
   border-radius: 50%;
-  background: $sage-500;
+  background: $success;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -659,8 +652,8 @@ export default {
 }
 
 .ok__t {
-  color: #fff;
-  font-size: 52rpx;
+  color: $text-inverse;
+  font-size: $font-size-2xl;
   font-weight: 700;
 }
 

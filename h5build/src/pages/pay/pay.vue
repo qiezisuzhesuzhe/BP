@@ -1,6 +1,6 @@
 <template>
   <view class="hm-page">
-    <hm-navbar title="订单支付" bg-color="#ffffff" text-color="#1a2b2c" :show-back="!paying" />
+    <hm-navbar title="订单支付" bg-color="transparent" :show-back="!paying" />
 
     <block v-if="order">
       <view class="wrap">
@@ -151,9 +151,9 @@ export default {
     },
     iconBg() {
       const o = this.order
-      if (!o) return '#f5f3ee'
+      if (!o) return '#edf5f2'
       const pkg = this.$store.getters.packages.find((p) => p.id === o.pkgId)
-      return pkg ? pkg.accentSoft : '#f5f3ee'
+      return pkg ? pkg.accentSoft : '#edf5f2'
     },
     statusText() {
       const o = this.order
@@ -222,28 +222,28 @@ export default {
 
 <style lang="scss" scoped>
 .wrap {
-  padding: 28rpx 28rpx 0;
+  padding: $space-3 $space-3 0;
 }
 
 .card {
-  background: #fff;
-  border-radius: $radius-md;
+  background: $bg-surface;
+  border-radius: $radius-card-child;
   box-shadow: $shadow-md;
 }
 
 .ord {
-  padding: 26rpx 28rpx;
+  padding: $space-3;
 }
 
 .ord__head {
   display: flex;
   align-items: center;
-  padding-bottom: 24rpx;
+  padding-bottom: $space-3;
 }
 
 .ord__icon {
-  width: 88rpx;
-  height: 88rpx;
+  width: $size-avatar-md;
+  height: $size-avatar-md;
   border-radius: $radius-sm;
   display: flex;
   align-items: center;
@@ -252,68 +252,68 @@ export default {
 }
 
 .ord__icon-t {
-  font-size: 42rpx;
+  font-size: $size-icon-sm;
 }
 
 .ord__main {
   flex: 1;
-  padding: 0 20rpx;
+  padding: 0 $space-2;
   overflow: hidden;
 }
 
 .ord__name {
   display: block;
-  font-size: 30rpx;
+  font-size: $font-size-md;
   font-weight: 700;
-  color: $ink-900;
+  color: $text-primary;
 }
 
 .ord__dur {
   display: block;
-  font-size: 22rpx;
-  color: $ink-500;
-  margin-top: 8rpx;
+  font-size: $font-size-2xs;
+  color: $text-muted;
+  margin-top: $space-1;
 }
 
 .ord__status {
-  font-size: 23rpx;
+  font-size: $font-size-xs;
   font-weight: 600;
 }
 
 .ord__rows {
-  padding: 22rpx 0 4rpx;
+  padding: $space-3 0 $space-1;
 }
 
 .ord__row {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding-bottom: 18rpx;
+  padding-bottom: $space-2;
 }
 
 .ord__k {
-  font-size: 24rpx;
-  color: $ink-500;
+  font-size: $font-size-xs;
+  color: $text-muted;
 }
 
 .ord__v {
-  font-size: 24rpx;
-  color: $ink-900;
+  font-size: $font-size-xs;
+  color: $text-primary;
 }
 
 .ord__v--cut {
-  color: $coral-500;
+  color: $badge;
 }
 
 .ord__row--pay {
   align-items: baseline;
-  padding-top: 4rpx;
+  padding-top: $space-1;
 }
 
 .ord__k--pay {
-  font-size: 26rpx;
+  font-size: $font-size-sm;
   font-weight: 600;
-  color: $ink-900;
+  color: $text-primary;
 }
 
 .ord__pay {
@@ -322,50 +322,50 @@ export default {
 }
 
 .ord__pay-cur {
-  font-size: 24rpx;
-  color: $coral-500;
+  font-size: $font-size-xs;
+  color: $badge;
   font-weight: 700;
 }
 
 .ord__pay-v {
-  font-size: 50rpx;
-  line-height: 50rpx;
-  color: $coral-500;
+  font-size: $font-size-2xl;
+  line-height: $font-size-2xl;
+  color: $badge;
   font-weight: 700;
-  margin-left: 2rpx;
+  margin-left: 0;
 }
 
 .sec-head {
   display: flex;
   align-items: baseline;
   justify-content: space-between;
-  margin-bottom: 20rpx;
+  margin-bottom: $space-2;
 }
 
 .pay {
-  background: #fff;
-  border-radius: $radius-md;
+  background: $bg-surface;
+  border-radius: $radius-card-child;
   box-shadow: $shadow-md;
-  padding: 10rpx 20rpx;
+  padding: $space-1 $space-2;
 }
 
 .pay__item {
   display: flex;
   align-items: center;
-  padding: 24rpx 20rpx;
+  padding: $space-3 $space-2;
   border-radius: $radius-sm;
-  border: 2rpx solid transparent;
-  margin: 10rpx 0;
+  border: 1rpx solid transparent;
+  margin: $space-data-list-gap 0;
 }
 
 .pay__item--on {
-  border-color: $teal-500;
-  background: $teal-100;
+  border-color: $brand-primary;
+  background: $brand-soft;
 }
 
 .pay__icon {
-  font-size: 40rpx;
-  margin-right: 20rpx;
+  font-size: $size-icon-sm;
+  margin-right: $space-2;
 }
 
 .pay__main {
@@ -375,23 +375,23 @@ export default {
 
 .pay__name {
   display: block;
-  font-size: 28rpx;
+  font-size: $font-size-sm;
   font-weight: 600;
-  color: $ink-900;
+  color: $text-primary;
 }
 
 .pay__desc {
   display: block;
-  font-size: 21rpx;
-  color: $ink-400;
-  margin-top: 6rpx;
+  font-size: $font-size-2xs;
+  color: $text-disabled;
+  margin-top: $space-1;
 }
 
 .pay__radio {
-  width: 40rpx;
-  height: 40rpx;
-  border-radius: 999rpx;
-  border: 2rpx solid $ink-300;
+  width: $size-badge-md;
+  height: $size-badge-md;
+  border-radius: $radius-full;
+  border: 1rpx solid $text-hint;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -399,32 +399,32 @@ export default {
 }
 
 .pay__radio--on {
-  background: $teal-700;
-  border-color: $teal-700;
+  background: $brand-primary;
+  border-color: $brand-primary-active;
 }
 
 .pay__check {
-  color: #fff;
-  font-size: 24rpx;
+  color: $text-inverse;
+  font-size: $font-size-xs;
   font-weight: 700;
-  line-height: 24rpx;
+  line-height: $font-size-xs;
 }
 
 .foot-tip {
-  padding: 36rpx 44rpx 20rpx;
+  padding: $space-4 $space-5 $space-2;
   text-align: center;
 }
 
 .foot-tip__t {
   display: block;
-  font-size: 20rpx;
-  color: $ink-400;
-  line-height: 1.7;
-  margin-bottom: 6rpx;
+  font-size: $font-size-2xs;
+  color: $text-disabled;
+  line-height: $line-height-relaxed;
+  margin-bottom: $space-1;
 }
 
 .bar-holder {
-  height: calc(160rpx + env(safe-area-inset-bottom));
+  height: calc(env(safe-area-inset-bottom) + #{$size-bottom-nav-height});
 }
 
 .paybar {
@@ -433,16 +433,16 @@ export default {
   right: 0;
   bottom: 0;
   z-index: 96;
-  background: #fff;
-  box-shadow: 0 -8rpx 32rpx rgba(20, 10, 10, 0.08);
-  padding: 20rpx 28rpx;
-  padding-bottom: calc(20rpx + env(safe-area-inset-bottom));
+  background: $bg-surface;
+  box-shadow: $shadow-lg;
+  padding: $space-2 $space-3;
+  padding-bottom: calc(env(safe-area-inset-bottom) + #{$space-2});
 }
 
 .paybar__btn {
-  height: 96rpx;
-  border-radius: 999rpx;
-  background: linear-gradient(135deg, $teal-700 0%, $teal-500 100%);
+  height: $size-input-height;
+  border-radius: $radius-full;
+  background: $brand-primary;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -454,39 +454,39 @@ export default {
 }
 
 .paybar__btn-t {
-  color: #fff;
-  font-size: 32rpx;
+  color: $text-inverse;
+  font-size: $font-size-md;
   font-weight: 700;
   letter-spacing: 2rpx;
 }
 
 .empty {
-  padding: 180rpx 60rpx 0;
+  padding: $space-12 $space-6 0;
   display: flex;
   flex-direction: column;
   align-items: center;
 }
 
 .empty__icon {
-  font-size: 90rpx;
+  font-size: $size-icon-xl;
 }
 
 .empty__t {
-  font-size: 26rpx;
-  color: $ink-500;
-  margin-top: 24rpx;
+  font-size: $font-size-sm;
+  color: $text-muted;
+  margin-top: $space-3;
 }
 
 .empty__btn {
-  margin-top: 40rpx;
-  padding: 20rpx 56rpx;
-  border-radius: 999rpx;
-  background: $teal-700;
+  margin-top: $space-5;
+  padding: $space-2 $space-6;
+  border-radius: $radius-full;
+  background: $brand-primary;
 }
 
 .empty__btn-t {
-  color: #fff;
-  font-size: 26rpx;
+  color: $text-inverse;
+  font-size: $font-size-sm;
   font-weight: 600;
 }
 
@@ -497,36 +497,36 @@ export default {
   right: 0;
   bottom: 0;
   z-index: 200;
-  background: rgba(15, 25, 26, 0.62);
+  background: $overlay;
   display: flex;
   align-items: center;
   justify-content: center;
 }
 
 .modal {
-  width: 540rpx;
-  background: #fff;
-  border-radius: $radius-lg;
+  width: $size-page-max-width * 0.6;
+  background: $bg-surface;
+  border-radius: $radius-card;
   box-shadow: $shadow-lg;
-  padding: 56rpx 40rpx 48rpx;
+  padding: $space-6 $space-5;
   display: flex;
   flex-direction: column;
   align-items: center;
 }
 
 .modal__loading {
-  height: 120rpx;
+  height: $size-avatar-lg;
   display: flex;
   align-items: center;
   justify-content: center;
 }
 
 .modal__spin {
-  width: 84rpx;
-  height: 84rpx;
-  border-radius: 999rpx;
-  border: 8rpx solid $warm-200;
-  border-top-color: $teal-700;
+  width: $size-avatar-sm;
+  height: $size-avatar-sm;
+  border-radius: $radius-full;
+  border: 4rpx solid $border-subtle;
+  border-top-color: $brand-primary-active;
   animation: spin 0.8s linear infinite;
 }
 
@@ -540,17 +540,17 @@ export default {
 }
 
 .modal__done {
-  height: 120rpx;
+  height: $size-avatar-lg;
   display: flex;
   align-items: center;
   justify-content: center;
 }
 
 .modal__circle {
-  width: 112rpx;
-  height: 112rpx;
-  border-radius: 999rpx;
-  background: $sage-500;
+  width: $size-avatar-md;
+  height: $size-avatar-md;
+  border-radius: $radius-full;
+  background: $success;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -573,50 +573,50 @@ export default {
 }
 
 .modal__tick {
-  color: #fff;
-  font-size: 62rpx;
+  color: $text-inverse;
+  font-size: $font-size-3xl;
   font-weight: 700;
-  line-height: 62rpx;
+  line-height: $font-size-3xl;
 }
 
 .modal__stage {
-  font-size: 30rpx;
+  font-size: $font-size-md;
   font-weight: 700;
-  color: $ink-900;
-  margin-top: 28rpx;
+  color: $text-primary;
+  margin-top: $space-3;
   text-align: center;
 }
 
 .modal__amount {
   display: flex;
   align-items: baseline;
-  margin-top: 20rpx;
+  margin-top: $space-2;
 }
 
 .modal__amount-cur {
-  font-size: 26rpx;
-  color: $ink-900;
+  font-size: $font-size-sm;
+  color: $text-primary;
   font-weight: 700;
 }
 
 .modal__amount-v {
-  font-size: 64rpx;
-  line-height: 64rpx;
-  color: $ink-900;
+  font-size: $font-size-3xl;
+  line-height: $font-size-3xl;
+  color: $text-primary;
   font-weight: 700;
-  margin-left: 4rpx;
+  margin-left: 0;
 }
 
 .modal__note {
-  font-size: 24rpx;
-  color: $sage-500;
+  font-size: $font-size-xs;
+  color: $success;
   font-weight: 600;
-  margin-top: 16rpx;
+  margin-top: $space-2;
 }
 
 .modal__tip {
-  font-size: 21rpx;
-  color: $ink-400;
-  margin-top: 20rpx;
+  font-size: $font-size-2xs;
+  color: $text-disabled;
+  margin-top: $space-2;
 }
 </style>

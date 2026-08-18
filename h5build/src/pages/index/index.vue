@@ -2,7 +2,7 @@
   <view class="hm-page">
     <!-- 顶部渐变头 -->
     <view class="hero">
-      <hm-navbar title="" :show-back="false" bg-color="transparent" text-color="#ffffff">
+      <hm-navbar title="" :show-back="false" bg-color="transparent">
         <template #right>
           <view class="hero__bell" @tap="goMsg">
             <text class="hero__bell-icon">🔔</text>
@@ -97,7 +97,7 @@
       </view>
 
       <view v-for="pkg in packages" :key="pkg.id" class="pkg" @tap="goDetail(pkg.id)">
-        <view class="pkg__banner" :style="{ background: 'linear-gradient(135deg,' + pkg.accent + ' 0%, ' + shade(pkg.accent) + ' 100%)' }">
+        <view class="pkg__banner" :style="{ background: pkg.accentSoft }">
           <view class="pkg__banner-l">
             <text class="pkg__badge">{{ pkg.tagline }}</text>
             <text class="pkg__name">{{ pkg.name }}</text>
@@ -246,69 +246,69 @@ export default {
 
 <style lang="scss" scoped>
 .hero {
-  background: linear-gradient(160deg, $teal-800 0%, $teal-700 45%, $teal-500 100%);
-  padding-bottom: 44rpx;
-  border-bottom-left-radius: $radius-lg;
-  border-bottom-right-radius: $radius-lg;
+  background: transparent;
+  padding-bottom: $space-5;
 }
 
 .hero__bell {
   position: relative;
-  width: 64rpx;
-  height: 64rpx;
+  width: $size-icon-lg;
+  height: $size-icon-lg;
   display: flex;
   align-items: center;
   justify-content: center;
 }
 
 .hero__bell-icon {
-  font-size: 34rpx;
+  font-size: $font-size-lg;
 }
 
 .hero__badge {
   position: absolute;
   top: 2rpx;
   right: 0;
-  min-width: 30rpx;
-  height: 30rpx;
-  border-radius: 999rpx;
-  background: $coral-500;
+  min-width: $size-badge-md;
+  height: $size-badge-md;
+  border-radius: $radius-full;
+  background: $badge;
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 0 6rpx;
+  padding: 0 $space-1;
 }
 
 .hero__badge-t {
-  color: #fff;
-  font-size: 18rpx;
-  line-height: 18rpx;
+  color: $text-inverse;
+  font-size: $font-size-2xs;
+  line-height: $line-height-tight;
 }
 
 .hero__body {
-  padding: 8rpx 36rpx 0;
+  padding: $space-1 $space-4 0;
 }
 
 .hero__hello {
   display: block;
-  color: #fff;
-  font-size: 46rpx;
-  font-weight: 700;
+  color: $page-title-color;
+  font-size: $page-title-size;
+  font-weight: $page-title-weight;
+  line-height: $page-title-line-height;
   letter-spacing: 2rpx;
 }
 
 .hero__slogan {
   display: block;
-  color: rgba(255, 255, 255, 0.78);
-  font-size: 25rpx;
-  margin-top: 10rpx;
+  color: $text-muted;
+  font-size: $font-size-xs;
+  margin-top: $space-2;
 }
 
 .hero__stats {
-  margin-top: 36rpx;
-  background: rgba(255, 255, 255, 0.16);
-  border-radius: $radius-sm;
-  padding: 26rpx 0;
+  margin-top: $space-4;
+  background: $bg-surface;
+  border-radius: $radius-card;
+  box-shadow: $shadow-sm;
+  padding: $space-3 0;
   display: flex;
   align-items: center;
 }
@@ -321,95 +321,94 @@ export default {
 }
 
 .hero__stat-v {
-  color: #fff;
-  font-size: 40rpx;
-  font-weight: 700;
-  line-height: 44rpx;
+  color: $brand-primary-active;
+  font-size: $font-size-xl;
+  font-weight: $font-weight-heavy;
+  line-height: $line-height-tight;
 }
 
 .hero__stat-l {
-  color: rgba(255, 255, 255, 0.75);
-  font-size: 21rpx;
-  margin-top: 8rpx;
+  color: $text-muted;
+  font-size: $font-size-2xs;
+  margin-top: $space-1;
 }
 
 .hero__stat-line {
   width: 1rpx;
-  height: 48rpx;
-  background: rgba(255, 255, 255, 0.28);
+  height: $space-6;
+  background: $border-subtle;
 }
 
 .wrap {
-  padding: 32rpx 28rpx 0;
+  padding: $space-4 $space-3 0;
 }
 
 .ongoing {
-  background: #fff;
-  border-radius: $radius-md;
+  background: $bg-surface;
+  border-radius: $radius-card;
   box-shadow: $shadow-md;
-  padding: 24rpx;
+  padding: $space-3;
   display: flex;
   align-items: center;
-  margin-top: -68rpx;
 }
 
 .ongoing__icon {
-  width: 84rpx;
-  height: 84rpx;
-  border-radius: $radius-sm;
+  width: $size-icon-xl;
+  height: $size-icon-xl;
+  border-radius: $radius-card-child;
   display: flex;
   align-items: center;
   justify-content: center;
 }
 
 .ongoing__icon-t {
-  font-size: 40rpx;
+  font-size: $font-size-xl;
 }
 
 .ongoing__main {
   flex: 1;
-  padding: 0 20rpx;
+  padding: 0 $space-3;
   overflow: hidden;
 }
 
 .ongoing__name {
   display: block;
-  font-size: 30rpx;
-  font-weight: 700;
-  color: $ink-900;
+  font-size: $font-size-md;
+  font-weight: $font-weight-heavy;
+  line-height: $line-height-tight;
+  color: $text-primary;
 }
 
 .ongoing__meta {
   display: block;
-  font-size: 22rpx;
-  color: $ink-500;
-  margin-top: 6rpx;
+  font-size: $font-size-xs;
+  color: $text-muted;
+  margin-top: $space-1;
 }
 
 .ongoing__act {
-  padding: 14rpx 26rpx;
-  border-radius: 999rpx;
+  padding: $space-2 $space-3;
+  border-radius: $radius-full;
 }
 
 .ongoing__act-t {
-  color: #fff;
-  font-size: 24rpx;
-  font-weight: 600;
+  color: $text-inverse;
+  font-size: $font-size-xs;
+  font-weight: $font-weight-semibold;
 }
 
 .notice {
-  background: $gold-100;
-  border-radius: $radius-md;
-  padding: 24rpx;
+  background: $warm-soft;
+  border-radius: $radius-card;
+  padding: $space-3;
   display: flex;
   align-items: center;
-  margin-top: -68rpx;
-  box-shadow: $shadow-md;
+  box-shadow: $shadow-sm;
 }
 
 .notice__icon {
-  font-size: 38rpx;
-  margin-right: 18rpx;
+  font-size: $font-size-lg;
+  margin-right: $space-2;
 }
 
 .notice__main {
@@ -418,75 +417,77 @@ export default {
 
 .notice__t {
   display: block;
-  font-size: 27rpx;
-  font-weight: 700;
-  color: #8a6a2f;
+  font-size: $font-size-sm;
+  font-weight: $font-weight-heavy;
+  line-height: $line-height-tight;
+  color: $text-primary;
 }
 
 .notice__d {
   display: block;
-  font-size: 22rpx;
-  color: #a3803f;
-  margin-top: 6rpx;
+  font-size: $font-size-xs;
+  color: $text-muted;
+  margin-top: $space-1;
 }
 
 .sec-head {
   display: flex;
   align-items: flex-end;
   justify-content: space-between;
-  margin-bottom: 24rpx;
+  margin-bottom: $space-3;
 }
 
 .day-switch {
   display: flex;
-  background: $warm-100;
-  border-radius: 999rpx;
+  background: $bg-subtle;
+  border-radius: $radius-full;
   padding: 4rpx;
 }
 
 .day-switch__item {
-  padding: 8rpx 18rpx;
-  border-radius: 999rpx;
+  padding: $space-1 $space-2;
+  border-radius: $radius-full;
 }
 
 .day-switch__item--on {
-  background: #fff;
+  background: $bg-surface;
   box-shadow: $shadow-sm;
 }
 
 .day-switch__t {
-  font-size: 21rpx;
-  color: $ink-500;
+  font-size: $font-size-2xs;
+  color: $text-muted;
 }
 
 .day-switch__item--on .day-switch__t {
-  color: $teal-700;
-  font-weight: 700;
+  color: $brand-primary-active;
+  font-weight: $font-weight-bold;
 }
 
 .unlock {
-  background: $teal-100;
-  border-radius: $radius-sm;
-  padding: 24rpx;
+  background: $label-soft-bg;
+  border: 1rpx solid $label-soft-border;
+  border-radius: $radius-card-child;
+  padding: $space-3;
   text-align: center;
 }
 
 .unlock__t {
-  color: $teal-800;
-  font-size: 25rpx;
-  font-weight: 600;
+  color: $label-soft-text;
+  font-size: $font-size-xs;
+  font-weight: $font-weight-semibold;
 }
 
 .pkg {
-  background: #fff;
-  border-radius: $radius-md;
+  background: $bg-surface;
+  border-radius: $radius-card;
   overflow: hidden;
-  box-shadow: $shadow-md;
-  margin-bottom: 28rpx;
+  box-shadow: $shadow-sm;
+  margin-bottom: $space-3;
 }
 
 .pkg__banner {
-  padding: 30rpx 28rpx;
+  padding: $space-4 $space-3;
   display: flex;
   align-items: center;
 }
@@ -498,37 +499,37 @@ export default {
 
 .pkg__badge {
   display: inline-block;
-  font-size: 19rpx;
-  color: #fff;
-  background: rgba(255, 255, 255, 0.22);
-  padding: 5rpx 14rpx;
-  border-radius: 999rpx;
+  font-size: $font-size-2xs;
+  color: $label-soft-text;
+  background: $bg-surface;
+  padding: 4rpx $space-2;
+  border-radius: $radius-full;
 }
 
 .pkg__name {
   display: block;
-  color: #fff;
-  font-size: 38rpx;
-  font-weight: 700;
-  margin-top: 14rpx;
+  color: $text-primary;
+  font-size: $font-size-lg;
+  font-weight: $font-weight-heavy;
+  line-height: $line-height-tight;
+  margin-top: $space-2;
   letter-spacing: 1rpx;
 }
 
 .pkg__sub {
   display: block;
-  color: rgba(255, 255, 255, 0.82);
-  font-size: 22rpx;
-  margin-top: 8rpx;
+  color: $text-secondary;
+  font-size: $font-size-xs;
+  margin-top: $space-1;
 }
 
 .pkg__emoji {
-  font-size: 76rpx;
-  opacity: 0.9;
-  margin-left: 16rpx;
+  font-size: $size-icon-xl;
+  margin-left: $space-2;
 }
 
 .pkg__body {
-  padding: 24rpx 28rpx 26rpx;
+  padding: $space-3;
 }
 
 .pkg__tags {
@@ -537,17 +538,17 @@ export default {
 }
 
 .pkg__tag {
-  font-size: 21rpx;
-  padding: 6rpx 16rpx;
-  border-radius: 999rpx;
-  margin: 0 12rpx 12rpx 0;
+  font-size: $font-size-2xs;
+  padding: $space-1 $space-2;
+  border-radius: $radius-full;
+  margin: 0 $space-1 $space-1 0;
 }
 
 .pkg__foot {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  margin-top: 12rpx;
+  margin-top: $space-2;
 }
 
 .pkg__price {
@@ -556,64 +557,64 @@ export default {
 }
 
 .pkg__cur {
-  font-size: 24rpx;
-  color: $coral-500;
-  font-weight: 700;
+  font-size: $font-size-xs;
+  color: $badge;
+  font-weight: $font-weight-bold;
 }
 
 .pkg__now {
-  font-size: 52rpx;
-  color: $coral-500;
-  font-weight: 700;
-  line-height: 52rpx;
+  font-size: $font-size-2xl;
+  color: $badge;
+  font-weight: $font-weight-heavy;
+  line-height: $line-height-tight;
   margin-left: 2rpx;
 }
 
 .pkg__origin {
-  font-size: 23rpx;
-  color: $ink-400;
+  font-size: $font-size-xs;
+  color: $text-disabled;
   text-decoration: line-through;
-  margin-left: 12rpx;
+  margin-left: $space-1;
 }
 
 .pkg__dur {
-  font-size: 22rpx;
-  color: $ink-500;
-  margin-left: 8rpx;
+  font-size: $font-size-xs;
+  color: $text-muted;
+  margin-left: $space-1;
 }
 
 .pkg__btn {
-  padding: 16rpx 34rpx;
-  border-radius: 999rpx;
+  padding: $space-2 $space-4;
+  border-radius: $radius-full;
 }
 
 .pkg__btn-t {
-  color: #fff;
-  font-size: 26rpx;
-  font-weight: 700;
+  color: $text-inverse;
+  font-size: $font-size-sm;
+  font-weight: $font-weight-bold;
 }
 
 .pkg__sold {
-  margin-top: 16rpx;
+  margin-top: $space-2;
 }
 
 .pkg__sold-t {
-  font-size: 21rpx;
-  color: $ink-400;
+  font-size: $font-size-2xs;
+  color: $text-disabled;
 }
 
 .kn {
-  background: #fff;
-  border-radius: $radius-md;
+  background: $bg-surface;
+  border-radius: $radius-card;
   box-shadow: $shadow-sm;
-  padding: 8rpx 24rpx;
+  padding: $space-1 $space-3;
 }
 
 .kn__item {
   display: flex;
   align-items: flex-start;
-  padding: 22rpx 0;
-  border-bottom: 1rpx solid $warm-100;
+  padding: $space-3 0;
+  border-bottom: 1rpx solid $border-subtle;
 }
 
 .kn__item:last-child {
@@ -621,8 +622,8 @@ export default {
 }
 
 .kn__icon {
-  font-size: 32rpx;
-  margin-right: 18rpx;
+  font-size: $size-icon-xs;
+  margin-right: $space-2;
 }
 
 .kn__main {
@@ -631,26 +632,26 @@ export default {
 
 .kn__t {
   display: block;
-  font-size: 26rpx;
-  font-weight: 600;
-  color: $ink-900;
+  font-size: $font-size-sm;
+  font-weight: $font-weight-semibold;
+  color: $text-primary;
 }
 
 .kn__d {
   display: block;
-  font-size: 22rpx;
-  color: $ink-500;
-  margin-top: 6rpx;
+  font-size: $font-size-xs;
+  color: $text-muted;
+  margin-top: $space-1;
 }
 
 .foot-tip {
-  padding: 40rpx 48rpx 20rpx;
+  padding: $space-5 $space-6 $space-3;
   text-align: center;
 }
 
 .foot-tip__t {
-  font-size: 20rpx;
-  color: $ink-400;
-  line-height: 1.7;
+  font-size: $font-size-2xs;
+  color: $text-disabled;
+  line-height: $line-height-relaxed;
 }
 </style>

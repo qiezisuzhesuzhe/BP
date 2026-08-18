@@ -2,7 +2,7 @@
   <view class="hm-page">
     <!-- 顶部渐变头 -->
     <view class="hero">
-      <hm-navbar title="" :show-back="false" bg-color="transparent">
+      <hm-navbar title="" :show-back="false" bg-color="transparent" :sticky="false">
         <template #right>
           <view class="hero__bell" @tap="goMsg">
             <text class="hero__bell-icon fa-solid fa-bell"></text>
@@ -14,10 +14,11 @@
       </hm-navbar>
 
       <view class="hero__body">
+        <text class="hero__org">新华保险北京分公司</text>
         <text class="hero__hello">{{ greeting }}，{{ profile.name }}</text>
         <text class="hero__slogan">今天也要好好照顾自己</text>
 
-        <view class="hero__stats">
+        <view v-if="activeRight" class="hero__stats">
           <view class="hero__stat">
             <text class="hero__stat-v">{{ activeRight ? activeRight.usedDays : 0 }}</text>
             <text class="hero__stat-l">已管理天数</text>
@@ -36,7 +37,7 @@
       </view>
     </view>
 
-    <!-- 进行中的服务 / 未购买引导 -->
+    <!-- 进行中的服务 -->
     <view class="wrap">
       <view v-if="activeRight" class="ongoing" @tap="goRightDetail(activeRight.id)">
         <view class="ongoing__icon" :style="{ background: activeRight.accentSoft }">
@@ -48,14 +49,6 @@
         </view>
         <view class="ongoing__act" :style="{ background: activeRight.accent }">
           <text class="ongoing__act-t">{{ activeRight.chatStarted ? '继续对话' : '立即使用' }}</text>
-        </view>
-      </view>
-
-      <view v-else class="notice">
-        <text class="notice__icon fa-solid fa-lightbulb"></text>
-        <view class="notice__main">
-          <text class="notice__t">您还没有开通健康管理服务</text>
-          <text class="notice__d">开通服务包后，获得专属每日健康指导</text>
         </view>
       </view>
     </view>
@@ -261,6 +254,14 @@ export default {
   padding: $space-1 $space-4 0;
 }
 
+.hero__org {
+  display: block;
+  font-size: $font-size-xs;
+  color: $text-muted;
+  letter-spacing: 2rpx;
+  margin-bottom: $space-1;
+}
+
 .hero__hello {
   display: block;
   color: $page-title-color;
@@ -371,40 +372,6 @@ export default {
   color: $text-inverse;
   font-size: $font-size-xs;
   font-weight: $font-weight-semibold;
-}
-
-.notice {
-  background: $warm-soft;
-  border-radius: $radius-card;
-  padding: $space-3;
-  display: flex;
-  align-items: center;
-  box-shadow: $shadow-sm;
-}
-
-.notice__icon {
-  font-size: $font-size-lg;
-  margin-right: $space-2;
-  color: $icon-ink;
-}
-
-.notice__main {
-  flex: 1;
-}
-
-.notice__t {
-  display: block;
-  font-size: $font-size-sm;
-  font-weight: $font-weight-heavy;
-  line-height: $line-height-tight;
-  color: $text-primary;
-}
-
-.notice__d {
-  display: block;
-  font-size: $font-size-xs;
-  color: $text-muted;
-  margin-top: $space-1;
 }
 
 .sec-head {

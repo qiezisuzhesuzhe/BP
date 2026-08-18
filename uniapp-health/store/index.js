@@ -35,7 +35,7 @@ function uid(prefix) {
 }
 
 const defaultProfile = {
-  name: '张明远',
+  name: '张丽丽',
   avatarText: '张',
   phone: '138****6820',
   gender: '男',

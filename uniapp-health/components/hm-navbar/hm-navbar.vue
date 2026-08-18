@@ -1,5 +1,5 @@
 <template>
-  <view class="nav" :style="{ background: bgColor, color: textColor }">
+  <view class="nav" :class="{ 'nav--static': !sticky }" :style="{ background: bgColor, color: textColor }">
     <view class="nav__status" :style="{ height: statusBarHeight + 'px' }"></view>
     <view class="nav__bar">
       <view class="nav__left" @tap="onBack">
@@ -19,7 +19,8 @@ export default {
     showBack: { type: Boolean, default: true },
     bgColor: { type: String, default: 'transparent' },
     textColor: { type: String, default: '#1a2a3c' },
-    backTo: { type: String, default: '' }
+    backTo: { type: String, default: '' },
+    sticky: { type: Boolean, default: true }
   },
   data() {
     return { statusBarHeight: 20 }
@@ -53,6 +54,10 @@ export default {
   position: sticky;
   top: 0;
   z-index: $z-nav;
+}
+
+.nav--static {
+  position: static;
 }
 
 .nav__bar {

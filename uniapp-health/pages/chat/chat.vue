@@ -75,7 +75,7 @@
 
             <view v-else-if="m.kind === 'timeline'" class="plan">
               <view class="plan__head">
-                <text class="plan__title">第 1 天 · 健康日程</text>
+                <text class="plan__title">今日健康日程</text>
                 <text class="plan__count">共 {{ m.items.length }} 项</text>
               </view>
               <hm-timeline :items="m.items" />

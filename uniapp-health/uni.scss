@@ -53,7 +53,7 @@ $text-muted: #64748b;
 $text-disabled: #94a3b8;
 $text-hint: #c6d2de;
 $text-inverse: #ffffff;
-$icon-ink: rgba(0, 0, 0, 0.5);
+$icon-ink: rgba(0, 0, 0, 0.1);
 $back-subpage-back-text: $text-primary;
 
 /* ---------- 描边 / 遮罩 ---------- */
@@ -61,7 +61,9 @@ $border-subtle: rgba(15, 61, 53, 0.06);
 $overlay: rgba(15, 61, 53, 0.1);
 
 /* ---------- 字体 ---------- */
-$font-family-base: "PingFang SC", -apple-system, BlinkMacSystemFont, "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+/* 英文/数字优先匹配 DIN Pro（Mac 自带 DIN Alternate 作为备选），中文回退苹方/雅黑 */
+$font-family-en: "DIN Pro", "DIN Alternate", "Helvetica Neue", Arial, sans-serif;
+$font-family-base: "DIN Pro", "DIN Alternate", "PingFang SC", -apple-system, BlinkMacSystemFont, "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
 
 $font-size-2xs: 20rpx;
 $font-size-xs: 24rpx;

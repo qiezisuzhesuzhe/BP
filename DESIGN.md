@@ -51,7 +51,7 @@
 | `--color-text-secondary` | `#334155` | 正文、重要说明 |
 | `--color-text-muted` | `#64748B` | 次级文字、说明、灰色模块标题 |
 | `--color-text-disabled` | `#94A3B8` | 禁用文字、弱提示、空状态图标 |
-| `--color-icon-ink` | `rgba(0, 0, 0, 0.50)` | 浅色底上的深色图标色（半透明墨色，不使用纯黑） |
+| `--color-icon-ink` | `rgba(0, 0, 0, 0.10)` | 浅色底上的深色图标色（仅 alpha=0.10 的透明黑，不使用纯黑/更高透明度） |
 | `--color-text-hint` | `#C6D2DE` | 占位提示、搜索框 placeholder |
 | `--color-text-inverse` | `#FFFFFF` | 深色背景、品牌渐变背景上的标题和重要文字 |
 | `--color-border-subtle` | `rgba(15, 61, 53, 0.06)` | 弱边框、分割线 |
@@ -61,7 +61,8 @@
 
 | 令牌 | 值 | 用途 |
 | --- | --- | --- |
-| `--font-family-base` | `"PingFang SC", -apple-system, BlinkMacSystemFont, "Hiragino Sans GB", "Microsoft YaHei", sans-serif` | 默认字体 |
+| `--font-family-base` | `"DIN Pro", "DIN Alternate", "PingFang SC", -apple-system, BlinkMacSystemFont, "Hiragino Sans GB", "Microsoft YaHei", sans-serif` | 默认字体；英文/数字优先渲染 DIN Pro（Mac 备选 DIN Alternate），中文回退苹方/雅黑 |
+| `--font-family-en` | `"DIN Pro", "DIN Alternate", "Helvetica Neue", Arial, sans-serif` | 纯英文/数字场景字体 |
 | `--icon-font-family` | `"Font Awesome 6 Free"` | 图标字体族，通过 BootCDN 国内 CDN 加载（font-awesome 6.4.2） |
 | `--icon-font-family-brands` | `"Font Awesome 6 Brands"` | 品牌图标字体族（微信/支付宝等） |
 | `--font-size-2xs` | `10px` | 微型说明、底部导航文字 |
@@ -227,7 +228,7 @@
 - 禁止使用 emoji 作为 UI 图标（Windows 等系统会渲染为方框）。
 - 统一使用 Font Awesome 6（`--icon-font-family`）图标字体：Solid 图标用 `fa-solid fa-xxx`，品牌图标用 `fa-brands fa-xxx`。
 - 图标继承所在元素 `font-size` 与 `color`，通过设计令牌控制尺寸与颜色。
-- 深色底（品牌渐变、深色圆点等）图标使用 `--color-text-inverse`；浅色底图标使用 `--color-icon-ink`（半透明墨色），禁止纯黑。
+- 深色底（品牌渐变、深色圆点等）图标使用 `--color-text-inverse`；浅色底图标使用 `--color-icon-ink`（透明黑 alpha=0.10），禁止纯黑及其他透明度。
 - 数据驱动的图标（列表项、菜单、消息）以 class 字符串形式存于数据层，模板用 `:class` 绑定。
 
 ### 空状态

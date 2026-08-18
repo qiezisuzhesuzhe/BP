@@ -158,10 +158,7 @@ async function tab(doc, w, url) {
 
   const stats = []
 
-  stats.push(report(doc, w, '① 首页 pages/index/index',
-    ['hm-page', 'hero', 'hero__hello', 'hero__stat-v', 'hero__bell', 'day-switch', 'hm-sec-title', 'wrap']))
-
-  // 播种订单 + 权益，保证后续页面有数据可渲染
+  // 先播种订单 + 权益，保证首页时间轴（仅购买后显示）与后续页面可渲染
   let store = null
   for (const sel of ['uni-app', 'uni-page', 'body > *']) {
     for (const el of doc.querySelectorAll(sel)) {
@@ -175,6 +172,9 @@ async function tab(doc, w, url) {
   const order = await store.dispatch('createOrder', 'hbp3m')
   await store.dispatch('payOrder', order.orderNo)
   await sleep(1500)
+
+  stats.push(report(doc, w, '① 首页 pages/index/index',
+    ['hm-page', 'hero', 'hero__hello', 'hero__stat-v', 'hero__bell', 'day-switch', 'hm-sec-title', 'wrap', 'tl__action', 'tl__cover']))
 
   await nav(doc, w, '/pages/service/detail?id=hbp3m')
   stats.push(report(doc, w, '② 服务详情 pages/service/detail',

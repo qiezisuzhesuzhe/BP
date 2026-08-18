@@ -24,7 +24,7 @@
           </view>
           <view class="hero__stat-line"></view>
           <view class="hero__stat">
-            <text class="hero__stat-v">{{ todayTimeline.items.length }}</text>
+            <text class="hero__stat-v">{{ activeRight ? todayTimeline.items.length : '—' }}</text>
             <text class="hero__stat-l">今日待办</text>
           </view>
           <view class="hero__stat-line"></view>
@@ -55,13 +55,13 @@
         <text class="notice__icon fa-solid fa-lightbulb"></text>
         <view class="notice__main">
           <text class="notice__t">您还没有开通健康管理服务</text>
-          <text class="notice__d">下方为体验版今日指导，开通后获得专属方案</text>
+          <text class="notice__d">开通服务包后，获得专属每日健康指导</text>
         </view>
       </view>
     </view>
 
-    <!-- 今日健康指导 -->
-    <view class="wrap">
+    <!-- 今日健康指导（仅成功购买服务包后显示） -->
+    <view v-if="activeRight" class="wrap">
       <view class="sec-head">
         <view>
           <text class="hm-sec-title">今日健康指导</text>
@@ -80,11 +80,7 @@
         </view>
       </view>
 
-      <hm-timeline :items="todayTimeline.items" :locked="todayTimeline.preview" :free-count="3" />
-
-      <view v-if="todayTimeline.preview" class="unlock" @tap="scrollToShop">
-        <text class="unlock__t">开通服务包，解锁完整每日方案 →</text>
-      </view>
+      <hm-timeline :items="todayTimeline.items" />
     </view>
 
     <!-- 健康管理服务包 -->
@@ -163,7 +159,7 @@ export default {
   data() {
     return {
       knowledge: KNOWLEDGE,
-      dayTabs: ['第1天', '第2天', '第3天']
+      dayTabs: ['今天', '明天', '后天']
     }
   },
   computed: {
@@ -236,9 +232,6 @@ export default {
     },
     goMsg() {
       uni.switchTab({ url: '/pages/message/message' })
-    },
-    scrollToShop() {
-      uni.pageScrollTo({ selector: '#shop', duration: 300, fail() {} })
     }
   }
 }
@@ -466,20 +459,6 @@ export default {
 .day-switch__item--on .day-switch__t {
   color: $brand-primary-active;
   font-weight: $font-weight-bold;
-}
-
-.unlock {
-  background: $label-soft-bg;
-  border: 1rpx solid $label-soft-border;
-  border-radius: $radius-card-child;
-  padding: $space-3;
-  text-align: center;
-}
-
-.unlock__t {
-  color: $label-soft-text;
-  font-size: $font-size-xs;
-  font-weight: $font-weight-semibold;
 }
 
 .pkg {

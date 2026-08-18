@@ -514,7 +514,7 @@ export default {
 }
 
 .rights__item-t {
-  font-size: $font-size-min;
+  font-size: $font-size-sm;
   color: $text-secondary;
   margin-top: $space-1;
 }

@@ -211,7 +211,7 @@ async function tab(doc, w, url) {
   // 健康商城栏目页（tabBar 第 2 项）
   await tab(doc, w, '/pages/mall/mall')
   stats.push(report(doc, w, '⑨b 健康商城 pages/mall/mall',
-    ['hm-page', 'banner', 'banner__t', 'banner__d', 'banner__pts', 'banner__pts-v', 'good', 'good__icon', 'good__name', 'good__desc', 'good__price', 'good__pts', 'good__act']))
+    ['hm-page', 'search', 'search__icon', 'search__ph', 'banner', 'banner__tag', 'banner__t', 'banner__d', 'banner__pts', 'banner__pts-v', 'quicks', 'quick', 'quick__icon', 'quick__t', 'goods', 'good', 'good__pic', 'good__pic-tag', 'good__name', 'good__desc', 'good__price', 'good__pts']))
   const mallGoods = doc.querySelectorAll('.good').length
   console.log('  商城商品卡数量: ' + mallGoods)
 

@@ -305,7 +305,7 @@ export default {
 
 .hero__stats {
   margin-top: $space-4;
-  background: $bg-surface;
+  background: $bg-section;
   border-radius: $radius-card;
   box-shadow: $shadow-sm;
   padding: $space-3 0;
@@ -340,7 +340,7 @@ export default {
 }
 
 .wrap {
-  padding: $space-4 $space-3 0;
+  padding: $space-4 $space-4 0;
 }
 
 .ongoing {
@@ -359,6 +359,7 @@ export default {
   display: flex;
   align-items: center;
   justify-content: center;
+  box-shadow: $shadow-md;
 }
 
 .ongoing__icon-t {

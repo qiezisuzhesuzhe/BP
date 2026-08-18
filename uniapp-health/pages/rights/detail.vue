@@ -282,7 +282,7 @@ export default {
 }
 
 .hm-card {
-  margin: $space-data-list-gap $space-3 0;
+  margin: $space-data-list-gap $space-4 0;
   padding: $space-3;
 }
 

@@ -222,7 +222,7 @@ export default {
 
 <style lang="scss" scoped>
 .wrap {
-  padding: $space-3 $space-3 0;
+  padding: $space-4 $space-4 0;
 }
 
 .card {

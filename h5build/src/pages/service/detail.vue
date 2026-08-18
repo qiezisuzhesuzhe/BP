@@ -214,7 +214,7 @@ export default {
 }
 
 .wrap {
-  padding: $space-4 $space-3 0;
+  padding: $space-4 $space-4 0;
 }
 
 .card {

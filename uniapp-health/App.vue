@@ -39,6 +39,13 @@ image {
   box-sizing: border-box;
 }
 
+/* uni-app H5 中 <view> 编译为自定义元素 <uni-view>，
+   浏览器默认 display: inline 会导致容器 padding/margin 失效，
+   这里统一恢复为块级，避免页面区块错位、卡片贴边 */
+view {
+  display: block;
+}
+
 .hm-page {
   min-height: 100vh;
   background: $bg-page-base;

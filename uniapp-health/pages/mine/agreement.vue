@@ -218,7 +218,7 @@ export default {
 .warn {
   display: flex;
   padding: $space-3;
-  margin: $space-3 $space-3 0;
+  margin: $space-3 $space-4 0;
   background: $warm-soft;
 }
 
@@ -249,7 +249,7 @@ export default {
 
 .doc {
   padding: $space-4;
-  margin: $space-data-list-gap $space-3 0;
+  margin: $space-data-list-gap $space-4 0;
 }
 
 .art {

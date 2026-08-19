@@ -3226,7 +3226,7 @@
       "name": "智能手环",
       "model": "BP100CE",
       "firstSeen": 1787136812838,
-      "lastSeen": 1787144548843,
+      "lastSeen": 1787144563730,
       "version": "91.0.0.59",
       "netType": "LTE",
       "wearing": "1",
@@ -3237,11 +3237,11 @@
         "calorie": 80,
         "battery": 93,
         "charging": false,
-        "ts": 1787173345,
-        "updatedAt": 1787144548844,
+        "ts": 1787173320,
+        "updatedAt": 1787144563730,
         "sbp": 135,
         "dbp": 89,
-        "hr": 94,
+        "hr": 101,
         "sleep": {
           "deep": 0,
           "light": 0,
@@ -3727,6 +3727,17 @@
           "battery": 93,
           "charging": false,
           "ts": 1787173345
+        },
+        {
+          "at": 1787144563730,
+          "hr": 101,
+          "sleep": {
+            "deep": 0,
+            "light": 0,
+            "wake": 5,
+            "total": 5
+          },
+          "ts": 1787173320
         }
       ]
     }

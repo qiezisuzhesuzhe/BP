@@ -1,7 +1,11 @@
 <template>
   <view class="hm-page">
     <hm-navbar title="手环状态" bg-color="transparent">
-      <view slot="right">
+      <view slot="right" class="nav-actions">
+        <view class="nav-sub-btn" @tap="onUnbind">
+          <text class="fa-solid fa-link-slash nav-sub-btn__icon"></text>
+          <text class="nav-sub-btn__t">解绑</text>
+        </view>
         <view class="nav-refresh" :class="{ 'nav-refresh--busy': refreshing }" @tap="doRefresh">
           <text class="fa-solid fa-rotate nav-refresh__icon" :class="{ 'nav-refresh__icon--spin': refreshing }"></text>
         </view>
@@ -264,7 +268,7 @@
 </template>
 
 <script>
-import { fetchBandLatest, fetchBandAddress, sendBandMessage, bpLevel } from '@/common/band.js'
+import { fetchBandLatest, fetchBandAddress, sendBandMessage, bpLevel, unbindBandDevice } from '@/common/band.js'
 
 const POLL_MS = 60 * 1000 // 每 1 分钟刷新
 
@@ -496,6 +500,33 @@ export default {
         this.msgTitle = ''
         this.msgText = ''
       }
+    },
+    // 解绑设备：二次确认 → 删后端记录 + 删本地 store → 回设备列表 Tab
+    onUnbind() {
+      if (!this.id || !this.device) return
+      const name = this.device.name || '手环'
+      uni.showModal({
+        title: '解绑设备',
+        content: '解绑后「' + name + '」将停止向本账号同步健康数据，确定继续吗？',
+        confirmText: '确定解绑',
+        confirmColor: '#f15533',
+        cancelText: '取消',
+        success: async (res) => {
+          if (!res.confirm) return
+          // 后端解绑（忽略失败，本地一定删除，避免用户被"脏设备"卡住）
+          await unbindBandDevice(this.deviceid)
+          this.$store.dispatch('removeDevice', this.id)
+          uni.showToast({ title: '已解绑', icon: 'success' })
+          this.clearTimer()
+          setTimeout(() => {
+            // 设备列表是 tabBar 页：switchTab 跳回
+            uni.switchTab({
+              url: '/pages/device/device',
+              fail: () => uni.navigateBack()
+            })
+          }, 500)
+        }
+      })
     },
     // 手动刷新：loading 反馈 + 结果提示
     async doRefresh() {
@@ -1222,6 +1253,42 @@ export default {
 .foot__right {
   display: flex;
   align-items: center;
+}
+
+/* 顶部右上角功能区：解绑按钮 + 刷新 */
+.nav-actions {
+  display: flex;
+  align-items: center;
+  gap: $space-2;
+}
+
+.nav-sub-btn {
+  height: 60rpx;
+  padding: 0 $space-3;
+  border-radius: $radius-full;
+  background: rgba(255, 255, 255, 0.7);
+  border: 1rpx solid rgba(148, 163, 184, 0.35);
+  display: inline-flex;
+  align-items: center;
+  gap: $space-1;
+  backdrop-filter: blur(6px);
+  transition: opacity 0.15s ease, transform 0.1s ease;
+}
+
+.nav-sub-btn:active {
+  transform: scale(0.97);
+  opacity: 0.8;
+}
+
+.nav-sub-btn__icon {
+  font-size: $font-size-xs;
+  color: #64748b;
+}
+
+.nav-sub-btn__t {
+  font-size: $font-size-xs;
+  font-weight: $font-weight-semibold;
+  color: #475569;
 }
 
 /* 顶部右上角刷新按钮 */

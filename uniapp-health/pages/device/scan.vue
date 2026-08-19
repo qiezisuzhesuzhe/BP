@@ -293,11 +293,10 @@ export default {
       }
       uni.showToast({ title: '设备添加成功', icon: 'success' })
       setTimeout(() => {
-        if (type.key === 'band-bp') {
-          uni.redirectTo({ url: '/pages/band/status?id=' + dev.id })
-        } else {
-          uni.redirectTo({ url: '/pages/device/detail?id=' + dev.id })
-        }
+        // 添加完成后回到设备列表 tab（多设备都在同一个入口），不再直接跳详情
+        uni.switchTab({
+          url: '/pages/device/device'
+        })
       }, 600)
     }
   }

@@ -417,6 +417,19 @@ app.post('/api/devices', (req, res) => {
   res.json({ code: 0, data: dev })
 })
 
+// 解绑设备：从数据库中移除（保留后端设备记录以免影响手环上报解析，但前端不再展示）
+// 实际上由于 /pb/upload 仍会写入 touch(deviceid)，手环继续上报仍可见；
+// 解绑语义：前端 owner 层面的删除，不影响手环与平台的链路。
+app.delete('/api/devices/:deviceid', (req, res) => {
+  const id = req.params.deviceid
+  if (!id) return res.status(400).json({ code: 400, message: 'deviceid required' })
+  if (!db.devices[id]) return res.status(404).json({ code: 404, message: 'device not found' })
+  delete db.devices[id]
+  saveDB(db)
+  console.log('[api/devices] 解绑', id)
+  res.json({ code: 0, data: { deviceid: id } })
+})
+
 // 当前公网上报地址（供 H5 显示；隧道重启导致地址变化时自动取最新一条）
 app.get('/api/address', (req, res) => {
   const url = currentTunnelUrl()

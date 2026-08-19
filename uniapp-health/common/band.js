@@ -121,6 +121,76 @@ export function bindBandDevice(deviceid, name) {
   })
 }
 
+// 解绑手环设备（从后端设备库移除）
+export function unbindBandDevice(deviceid) {
+  return new Promise((resolve) => {
+    if (!deviceid) {
+      resolve(null)
+      return
+    }
+    uni.request({
+      url: bandApi('/api/devices/' + encodeURIComponent(deviceid)),
+      method: 'DELETE',
+      timeout: 5000,
+      success(res) {
+        if (res.statusCode === 200 && res.data && res.data.code === 0) {
+          resolve(true)
+        } else {
+          resolve(false)
+        }
+      },
+      fail() {
+        resolve(false)
+      }
+    })
+  })
+}
+
+// 批量拉取多个 deviceid 的最新状态（给设备列表页用）
+// 返回 { [deviceid]: latestSnapshot | null }
+export function fetchBandLatestBatch(deviceids) {
+  return new Promise((resolve) => {
+    const ids = Array.isArray(deviceids) ? deviceids.filter(Boolean) : []
+    if (ids.length === 0) {
+      resolve({})
+      return
+    }
+    const out = {}
+    let remain = ids.length
+    ids.forEach((id) => {
+      uni.request({
+        url: bandApi('/api/devices/' + id) + '?_t=' + Date.now(),
+        method: 'GET',
+        timeout: 5000,
+        success(res) {
+          if (res.statusCode === 200 && res.data && res.data.code === 0 && res.data.data && res.data.data.latest) {
+            out[id] = res.data.data.latest
+          } else {
+            out[id] = null
+          }
+        },
+        fail() {
+          out[id] = null
+        },
+        complete() {
+          remain--
+          if (remain <= 0) resolve(out)
+        }
+      })
+    })
+    // 兜底超时 8s
+    setTimeout(() => {
+      ids.forEach((id) => {
+        if (!(id in out)) out[id] = null
+      })
+      if (remain > 0) {
+        remain = 0
+        resolve(out)
+      }
+    }, 8000)
+  })
+}
+
 // 从二维码文本中宽容提取设备号（IMEI/deviceid），兼容多种厂商二维码格式
 export function extractDeviceId(text) {
   const raw = String(text || '').trim()

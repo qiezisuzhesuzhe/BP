@@ -23,30 +23,60 @@
         </view>
         <view class="dev__main">
           <text class="dev__name">{{ dev.name }}</text>
-          <text class="dev__sn">{{ dev.model }} · {{ dev.sn }}</text>
-          <text class="dev__sync">最近同步 {{ dev.lastSync }}</text>
+          <text class="dev__sn">{{ dev.model }} · {{ dev.sn || dev.deviceid }}</text>
+          <!-- 血压款手环：展示实时血压 + 心率 + 电量 -->
+          <view v-if="dev.typeKey === 'band-bp' && bandLive[dev.deviceid]" class="dev__live">
+            <view class="dev__chip">
+              <text class="dev__chip-icon fa-solid fa-heart-pulse" style="color:#f15533"></text>
+              <text class="dev__chip-n">{{ bandLive[dev.deviceid].sbp != null ? bandLive[dev.deviceid].sbp : '--' }}</text>
+              <text class="dev__chip-sep">/</text>
+              <text class="dev__chip-n dev__chip-n--sub">{{ bandLive[dev.deviceid].dbp != null ? bandLive[dev.deviceid].dbp : '--' }}</text>
+              <text class="dev__chip-u">mmHg</text>
+            </view>
+            <view class="dev__chip">
+              <text class="dev__chip-icon fa-solid fa-heart" style="color:#389a82"></text>
+              <text class="dev__chip-n">{{ bandLive[dev.deviceid].hr != null ? bandLive[dev.deviceid].hr : '--' }}</text>
+              <text class="dev__chip-u">bpm</text>
+            </view>
+            <view class="dev__chip" v-if="bandLive[dev.deviceid].battery != null">
+              <text class="dev__chip-icon" :class="batteryIcon(bandLive[dev.deviceid].battery)" :style="{ color: batteryColor(bandLive[dev.deviceid].battery) }"></text>
+              <text class="dev__chip-n">{{ bandLive[dev.deviceid].battery }}</text>
+              <text class="dev__chip-u">%</text>
+            </view>
+          </view>
+          <!-- 非血压款：展示最近同步 -->
+          <text v-else class="dev__sync">最近同步 {{ dev.lastSync }}</text>
         </view>
-        <view class="dev__status" :class="{ 'dev__status--off': !dev.online }">
-          <text class="dev__status-dot"></text>
-          <text class="dev__status-t">{{ dev.online ? '在线' : '离线' }}</text>
+        <view class="dev__right">
+          <view class="dev__status" :class="{ 'dev__status--off': !isOnline(dev) }">
+            <text class="dev__status-dot"></text>
+            <text class="dev__status-t">{{ isOnline(dev) ? '在线' : '离线' }}</text>
+          </view>
+          <text class="fa-solid fa-angle-right dev__arrow"></text>
         </view>
       </view>
     </view>
 
     <view v-if="devices.length > 0" class="hm-safe-bottom"></view>
     <view v-if="devices.length > 0" class="add-bar" @tap="goScan">
-      <text class="fa-solid fa-qrcode add-bar__icon"></text>
-      <text class="add-bar__t">扫描添加设备</text>
+      <text class="fa-solid fa-plus add-bar__icon"></text>
+      <text class="add-bar__t">添加其他设备</text>
     </view>
   </view>
 </template>
 
 <script>
 import { DEVICE_TYPES } from '@/common/mock.js'
+import { fetchBandLatestBatch } from '@/common/band.js'
+
+const LIVE_POLL_MS = 60 * 1000 // 列表页每 1 分钟拉一次手环实时数据（与详情页一致）
 
 export default {
   data() {
-    return { timer: null }
+    return {
+      bandLive: {}, // { [deviceid]: latestSnapshot }
+      timer: null
+    }
   },
   computed: {
     devices() {
@@ -54,9 +84,9 @@ export default {
     }
   },
   onShow() {
-    this.syncAll()
-    // 原型模拟：每 5 秒拉取一次设备最新数据
-    this.timer = setInterval(() => this.syncAll(), 5000)
+    this.pullBandLive()
+    this.clearTimer()
+    this.timer = setInterval(() => this.pullBandLive(), LIVE_POLL_MS)
   },
   onHide() {
     this.clearTimer()
@@ -71,18 +101,51 @@ export default {
         this.timer = null
       }
     },
-    syncAll() {
-      this.devices.forEach((d) => {
-        this.$store.dispatch('updateDeviceData', d.id)
-      })
+    // 拉取所有血压款手环的后端实时数据
+    async pullBandLive() {
+      const bandIds = this.devices
+        .filter((d) => d.typeKey === 'band-bp' && d.deviceid)
+        .map((d) => d.deviceid)
+      if (bandIds.length === 0) {
+        this.bandLive = {}
+        return
+      }
+      const data = await fetchBandLatestBatch(bandIds)
+      if (data) this.bandLive = data
     },
     meta(dev) {
       return DEVICE_TYPES.find((t) => t.key === dev.typeKey) || DEVICE_TYPES[0]
     },
+    // 在线判断：血压款以后端 latest 更新时间 + 电量为准，其他设备走 store
+    isOnline(dev) {
+      if (dev.typeKey === 'band-bp' && dev.deviceid) {
+        const l = this.bandLive[dev.deviceid]
+        if (!l) return dev.online === true
+        // updatedAt 20 分钟内视为在线
+        if (l.updatedAt) return Date.now() - l.updatedAt < 20 * 60 * 1000
+        return (l.hr != null) || (l.sbp != null) || (l.battery != null)
+      }
+      return dev.online === true
+    },
+    batteryIcon(b) {
+      const v = Number(b)
+      if (isNaN(v)) return 'fa-solid fa-battery-three-quarters'
+      if (v >= 80) return 'fa-solid fa-battery-full'
+      if (v >= 50) return 'fa-solid fa-battery-three-quarters'
+      if (v >= 20) return 'fa-solid fa-battery-half'
+      if (v >= 10) return 'fa-solid fa-battery-quarter'
+      return 'fa-solid fa-battery-empty'
+    },
+    batteryColor(b) {
+      const v = Number(b)
+      if (isNaN(v)) return '#94a3b8'
+      if (v >= 50) return '#27ae60'
+      if (v >= 20) return '#f2994a'
+      return '#f15533'
+    },
     goDetail(id) {
       const dev = this.$store.getters.deviceById(id)
       if (dev && dev.typeKey === 'band-bp') {
-        // 血压款手环：进入实时状态页（对接后端数据，每 1 分钟刷新）
         uni.navigateTo({ url: '/pages/band/status?id=' + id })
         return
       }
@@ -167,6 +230,12 @@ export default {
   box-shadow: $shadow-sm;
   padding: $space-3;
   margin-bottom: $space-data-list-gap;
+  transition: transform 0.1s ease, box-shadow 0.2s ease;
+}
+
+.dev:active {
+  transform: scale(0.99);
+  box-shadow: $shadow-sm;
 }
 
 .dev__icon {
@@ -187,6 +256,7 @@ export default {
   flex: 1;
   padding: 0 $space-3;
   overflow: hidden;
+  min-width: 0;
 }
 
 .dev__name {
@@ -195,6 +265,9 @@ export default {
   font-weight: $font-weight-heavy;
   color: $text-primary;
   line-height: $line-height-tight;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .dev__sn {
@@ -202,6 +275,9 @@ export default {
   font-size: $font-size-xs;
   color: $text-secondary;
   margin-top: $space-1;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .dev__sync {
@@ -209,6 +285,60 @@ export default {
   font-size: $font-size-2xs;
   color: $text-disabled;
   margin-top: $space-1;
+}
+
+/* 手环实时数据：指标 chip 行 */
+.dev__live {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: $space-2;
+  margin-top: $space-2;
+}
+
+.dev__chip {
+  display: inline-flex;
+  align-items: baseline;
+  padding: $space-1 $space-2;
+  border-radius: $radius-sm;
+  background: $bg-section;
+}
+
+.dev__chip-icon {
+  font-size: $font-size-xs;
+  margin-right: $space-1;
+  opacity: 0.9;
+}
+
+.dev__chip-n {
+  font-family: $font-family-en;
+  font-weight: $font-weight-heavy;
+  color: $text-primary;
+  font-size: $font-size-sm;
+  line-height: 1;
+}
+
+.dev__chip-n--sub {
+  color: $text-secondary;
+}
+
+.dev__chip-sep {
+  margin: 0 4rpx;
+  color: $text-muted;
+  font-size: $font-size-xs;
+}
+
+.dev__chip-u {
+  margin-left: $space-1;
+  font-size: $font-size-2xs;
+  color: $text-muted;
+}
+
+.dev__right {
+  display: flex;
+  align-items: center;
+  gap: $space-2;
+  flex-shrink: 0;
 }
 
 .dev__status {
@@ -246,6 +376,11 @@ export default {
   color: $text-muted;
 }
 
+.dev__arrow {
+  font-size: $font-size-xs;
+  color: $text-disabled;
+}
+
 .add-bar {
   position: fixed;
   left: $space-4;
@@ -259,6 +394,12 @@ export default {
   display: flex;
   align-items: center;
   justify-content: center;
+  transition: opacity 0.2s ease, transform 0.1s ease;
+}
+
+.add-bar:active {
+  transform: scale(0.99);
+  opacity: 0.9;
 }
 
 .add-bar__icon {

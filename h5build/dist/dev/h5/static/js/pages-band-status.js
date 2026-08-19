@@ -113,8 +113,33 @@ var render = function () {
         [
           _c(
             "v-uni-view",
-            { attrs: { slot: "right" }, slot: "right" },
+            {
+              staticClass: "nav-actions",
+              attrs: { slot: "right" },
+              slot: "right",
+            },
             [
+              _c(
+                "v-uni-view",
+                {
+                  staticClass: "nav-sub-btn",
+                  on: {
+                    click: function ($event) {
+                      arguments[0] = $event = _vm.$handleEvent($event)
+                      _vm.onUnbind.apply(void 0, arguments)
+                    },
+                  },
+                },
+                [
+                  _c("v-uni-text", {
+                    staticClass: "fa-solid fa-link-slash nav-sub-btn__icon",
+                  }),
+                  _c("v-uni-text", { staticClass: "nav-sub-btn__t" }, [
+                    _vm._v("解绑"),
+                  ]),
+                ],
+                1
+              ),
               _c(
                 "v-uni-view",
                 {
@@ -1125,7 +1150,7 @@ __webpack_require__.r(__webpack_exports__);
 /*!****************************!*\
   !*** ./src/common/band.js ***!
   \****************************/
-/*! exports provided: BAND_SERVER, bandApi, fetchBandLatest, fetchBandAddress, sendBandMessage, bindBandDevice, extractDeviceId, bpLevel */
+/*! exports provided: BAND_SERVER, bandApi, fetchBandLatest, fetchBandAddress, sendBandMessage, bindBandDevice, unbindBandDevice, fetchBandLatestBatch, extractDeviceId, bpLevel */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -1136,18 +1161,35 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "fetchBandAddress", function() { return fetchBandAddress; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "sendBandMessage", function() { return sendBandMessage; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "bindBandDevice", function() { return bindBandDevice; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "unbindBandDevice", function() { return unbindBandDevice; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "fetchBandLatestBatch", function() { return fetchBandLatestBatch; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "extractDeviceId", function() { return extractDeviceId; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "bpLevel", function() { return bpLevel; });
-/* harmony import */ var core_js_modules_es_object_to_string_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! core-js/modules/es.object.to-string.js */ "07d7");
-/* harmony import */ var core_js_modules_es_object_to_string_js__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_object_to_string_js__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var core_js_modules_es_regexp_exec_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! core-js/modules/es.regexp.exec.js */ "rB9j");
-/* harmony import */ var core_js_modules_es_regexp_exec_js__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_regexp_exec_js__WEBPACK_IMPORTED_MODULE_1__);
-/* harmony import */ var core_js_modules_es_string_match_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! core-js/modules/es.string.match.js */ "Rm1S");
-/* harmony import */ var core_js_modules_es_string_match_js__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_string_match_js__WEBPACK_IMPORTED_MODULE_2__);
-/* harmony import */ var core_js_modules_es_string_replace_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! core-js/modules/es.string.replace.js */ "UxlC");
-/* harmony import */ var core_js_modules_es_string_replace_js__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_string_replace_js__WEBPACK_IMPORTED_MODULE_3__);
-/* harmony import */ var core_js_modules_es_string_trim_js__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! core-js/modules/es.string.trim.js */ "SYor");
-/* harmony import */ var core_js_modules_es_string_trim_js__WEBPACK_IMPORTED_MODULE_4___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_string_trim_js__WEBPACK_IMPORTED_MODULE_4__);
+/* harmony import */ var core_js_modules_es_array_filter_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! core-js/modules/es.array.filter.js */ "TeQF");
+/* harmony import */ var core_js_modules_es_array_filter_js__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_array_filter_js__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var core_js_modules_es_iterator_constructor_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! core-js/modules/es.iterator.constructor.js */ "6fVz");
+/* harmony import */ var core_js_modules_es_iterator_constructor_js__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_iterator_constructor_js__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var core_js_modules_es_iterator_filter_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! core-js/modules/es.iterator.filter.js */ "kQ2C");
+/* harmony import */ var core_js_modules_es_iterator_filter_js__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_iterator_filter_js__WEBPACK_IMPORTED_MODULE_2__);
+/* harmony import */ var core_js_modules_es_iterator_for_each_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! core-js/modules/es.iterator.for-each.js */ "fVRX");
+/* harmony import */ var core_js_modules_es_iterator_for_each_js__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_iterator_for_each_js__WEBPACK_IMPORTED_MODULE_3__);
+/* harmony import */ var core_js_modules_es_object_to_string_js__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! core-js/modules/es.object.to-string.js */ "07d7");
+/* harmony import */ var core_js_modules_es_object_to_string_js__WEBPACK_IMPORTED_MODULE_4___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_object_to_string_js__WEBPACK_IMPORTED_MODULE_4__);
+/* harmony import */ var core_js_modules_es_regexp_exec_js__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! core-js/modules/es.regexp.exec.js */ "rB9j");
+/* harmony import */ var core_js_modules_es_regexp_exec_js__WEBPACK_IMPORTED_MODULE_5___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_regexp_exec_js__WEBPACK_IMPORTED_MODULE_5__);
+/* harmony import */ var core_js_modules_es_string_match_js__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! core-js/modules/es.string.match.js */ "Rm1S");
+/* harmony import */ var core_js_modules_es_string_match_js__WEBPACK_IMPORTED_MODULE_6___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_string_match_js__WEBPACK_IMPORTED_MODULE_6__);
+/* harmony import */ var core_js_modules_es_string_replace_js__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! core-js/modules/es.string.replace.js */ "UxlC");
+/* harmony import */ var core_js_modules_es_string_replace_js__WEBPACK_IMPORTED_MODULE_7___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_string_replace_js__WEBPACK_IMPORTED_MODULE_7__);
+/* harmony import */ var core_js_modules_es_string_trim_js__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! core-js/modules/es.string.trim.js */ "SYor");
+/* harmony import */ var core_js_modules_es_string_trim_js__WEBPACK_IMPORTED_MODULE_8___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_string_trim_js__WEBPACK_IMPORTED_MODULE_8__);
+/* harmony import */ var core_js_modules_web_dom_collections_for_each_js__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! core-js/modules/web.dom-collections.for-each.js */ "FZtP");
+/* harmony import */ var core_js_modules_web_dom_collections_for_each_js__WEBPACK_IMPORTED_MODULE_9___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_web_dom_collections_for_each_js__WEBPACK_IMPORTED_MODULE_9__);
+
+
+
+
+
 
 
 
@@ -1271,6 +1313,76 @@ function bindBandDevice(deviceid, name) {
   });
 }
 
+// 解绑手环设备（从后端设备库移除）
+function unbindBandDevice(deviceid) {
+  return new Promise(function (resolve) {
+    if (!deviceid) {
+      resolve(null);
+      return;
+    }
+    uni.request({
+      url: bandApi('/api/devices/' + encodeURIComponent(deviceid)),
+      method: 'DELETE',
+      timeout: 5000,
+      success: function success(res) {
+        if (res.statusCode === 200 && res.data && res.data.code === 0) {
+          resolve(true);
+        } else {
+          resolve(false);
+        }
+      },
+      fail: function fail() {
+        resolve(false);
+      }
+    });
+  });
+}
+
+// 批量拉取多个 deviceid 的最新状态（给设备列表页用）
+// 返回 { [deviceid]: latestSnapshot | null }
+function fetchBandLatestBatch(deviceids) {
+  return new Promise(function (resolve) {
+    var ids = Array.isArray(deviceids) ? deviceids.filter(Boolean) : [];
+    if (ids.length === 0) {
+      resolve({});
+      return;
+    }
+    var out = {};
+    var remain = ids.length;
+    ids.forEach(function (id) {
+      uni.request({
+        url: bandApi('/api/devices/' + id) + '?_t=' + Date.now(),
+        method: 'GET',
+        timeout: 5000,
+        success: function success(res) {
+          if (res.statusCode === 200 && res.data && res.data.code === 0 && res.data.data && res.data.data.latest) {
+            out[id] = res.data.data.latest;
+          } else {
+            out[id] = null;
+          }
+        },
+        fail: function fail() {
+          out[id] = null;
+        },
+        complete: function complete() {
+          remain--;
+          if (remain <= 0) resolve(out);
+        }
+      });
+    });
+    // 兜底超时 8s
+    setTimeout(function () {
+      ids.forEach(function (id) {
+        if (!(id in out)) out[id] = null;
+      });
+      if (remain > 0) {
+        remain = 0;
+        resolve(out);
+      }
+    }, 8000);
+  });
+}
+
 // 从二维码文本中宽容提取设备号（IMEI/deviceid），兼容多种厂商二维码格式
 function extractDeviceId(text) {
   var raw = String(text || '').trim();
@@ -1331,7 +1443,7 @@ function bpLevel(sbp, dbp) {
 var ___CSS_LOADER_API_IMPORT___ = __webpack_require__(/*! ../../../node_modules/css-loader/dist/runtime/api.js */ "JPst");
 exports = ___CSS_LOADER_API_IMPORT___(false);
 // Module
-exports.push([module.i, "@charset \"UTF-8\";\n/* 安康健康管理 · 设计令牌\n   来源：/workspace/DESIGN.md\n   方案：rpx + SCSS 变量（1px = 2rpx，基于 750rpx 设计基准） */\n/* ---------- 品牌色 ---------- */\n/* ---------- 头像 ---------- */\n/* ---------- 语义状态色 ---------- */\n/* ---------- 金色（尊享装饰） ---------- */\n/* ---------- 背景 ---------- */\n/* 斜向两色渐变：左上(#ddf7ed) → 右下(#f3f3f3)，末端即底色；\n   配合 App.vue 中 background-attachment: fixed 铺满视口固定，不随页面滚动/变长 */\n/* ---------- 文字 ---------- */\n/* ---------- 描边 / 遮罩 ---------- */\n/* ---------- 字体 ---------- */\n/* 英文/数字优先匹配 DIN Pro（Mac 自带 DIN Alternate 作为备选），中文回退苹方/雅黑 */\n/* 移动端最小舒适字号（可读正文下限）：\n   说明/入口/数据标签等可读文字不得小于 12px(24rpx)；\n   $font-size-2xs(10px) 仅限角标、徽标、装饰性元素 */\n/* ---------- 语义排版 ---------- */\n/* ---------- 间距 ---------- */\n/* ---------- 区块标题 ---------- */\n/* 标题下间距 = 列表间距；上间距 = 下间距 × 2 */\n/* ---------- 尺寸 ---------- */\n/* ---------- 圆角（已减半，更克制干净） ---------- */\n/* ---------- 阴影 ---------- */\n/* ---------- 层级 ---------- */\n/* ---------- 动效 ---------- */\n/* ---------- 页面容器 ---------- */\n.wrap[data-v-20cccf23] {\n  height: auto;\n  padding: %?32?% %?32?% 0;\n}\n/* 非首个容器顶部贴齐：卡片间距由自身撑开，区块标题由 sec-head 撑开 */\n.wrap[data-v-20cccf23]:not(.wrap--first) {\n  padding-top: 0;\n}\n/* ---------- 区块标题 ---------- */\n.sec-head[data-v-20cccf23] {\n  display: flex;\n  align-items: flex-end;\n  justify-content: space-between;\n  margin-top: %?64?%;\n  margin-bottom: %?32?%;\n}\n.sec-title[data-v-20cccf23] {\n  font-size: %?36?%;\n  font-weight: 800;\n  line-height: 1.1;\n  color: #1a2a3c;\n  letter-spacing: %?1?%;\n}\n.sec-sub[data-v-20cccf23] {\n  font-size: %?24?%;\n  color: #64748b;\n  margin-top: %?16?%;\n}\n.head[data-v-20cccf23] {\n  display: flex;\n  align-items: center;\n  background: #ffffff;\n  border-radius: %?20?%;\n  box-shadow: 0 %?4?% %?24?% rgba(15, 61, 53, 0.06);\n  padding: %?32?%;\n}\n.head__icon[data-v-20cccf23] {\n  position: relative;\n  width: %?88?%;\n  height: %?88?%;\n  border-radius: %?20?%;\n  background: rgba(212, 245, 238, 0.72);\n  display: flex;\n  align-items: center;\n  justify-content: center;\n  flex-shrink: 0;\n}\n/* 图标右下角小徽标：眼睛=地址区块可见，闭眼=隐藏 */\n.head__icon-eye[data-v-20cccf23] {\n  position: absolute;\n  right: %?-6?%;\n  bottom: %?-6?%;\n  width: %?34?%;\n  height: %?34?%;\n  border-radius: %?999?%;\n  background: #389a82;\n  color: #ffffff;\n  font-size: %?16?%;\n  display: flex;\n  align-items: center;\n  justify-content: center;\n  border: %?4?% solid #ffffff;\n  box-sizing: border-box;\n}\n.head__icon-t[data-v-20cccf23] {\n  font-size: %?44?%;\n  color: #389a82;\n}\n.head__main[data-v-20cccf23] {\n  flex: 1;\n  padding: 0 %?24?%;\n  overflow: hidden;\n}\n.head__name[data-v-20cccf23] {\n  display: block;\n  font-size: %?32?%;\n  font-weight: 800;\n  color: #1a2a3c;\n  line-height: 1.1;\n}\n.head__sn[data-v-20cccf23] {\n  display: block;\n  font-size: %?20?%;\n  color: #64748b;\n  margin-top: %?8?%;\n  white-space: nowrap;\n  overflow: hidden;\n  text-overflow: ellipsis;\n}\n.head__status[data-v-20cccf23] {\n  display: flex;\n  align-items: center;\n  flex-shrink: 0;\n  padding: %?8?% %?16?%;\n  border-radius: %?999?%;\n  background: #27ae60;\n}\n.head__status--off[data-v-20cccf23] {\n  background: #f2f7fa;\n}\n.head__dot[data-v-20cccf23] {\n  width: %?12?%;\n  height: %?12?%;\n  border-radius: 50%;\n  background: #ffffff;\n  margin-right: %?8?%;\n}\n.head__status--off .head__dot[data-v-20cccf23] {\n  background: #94a3b8;\n}\n.head__status-t[data-v-20cccf23] {\n  font-size: %?20?%;\n  color: #ffffff;\n  font-weight: 600;\n}\n.head__status--off .head__status-t[data-v-20cccf23] {\n  color: #64748b;\n}\n/* 实时指标 2×2 并排卡（心率/血氧/体温/皮肤温度） */\n/* 首行与设备头卡拉开距离，与下方区块标题间距($space-8)呼应 */\n.vital[data-v-20cccf23] {\n  display: flex;\n  margin-top: %?64?%;\n}\n.vital__card[data-v-20cccf23] {\n  flex: 1;\n  min-width: 0;\n  background: #ffffff;\n  border-radius: %?20?%;\n  box-shadow: 0 %?4?% %?24?% rgba(15, 61, 53, 0.06);\n  padding: %?32?%;\n}\n.vital__card + .vital__card[data-v-20cccf23] {\n  margin-left: %?24?%;\n}\n.vital[data-v-20cccf23]:not(:first-child) {\n  margin-top: %?24?%;\n}\n/* 心率卡：浅绿渐变弱强调，其余指标白卡 */\n.vital__card--hr[data-v-20cccf23] {\n  background: linear-gradient(145deg, #e8f8f0 0%, #ffffff 75%);\n}\n.vital__head[data-v-20cccf23] {\n  display: flex;\n  align-items: center;\n}\n.vital__icon[data-v-20cccf23] {\n  font-size: %?32?%;\n  margin-right: %?16?%;\n}\n.vital__icon--hr[data-v-20cccf23] {\n  color: #84e8c2;\n}\n.vital__icon--spo2[data-v-20cccf23] {\n  color: #0ba5c3;\n}\n.vital__icon--temp[data-v-20cccf23] {\n  color: #f2994a;\n}\n.vital__icon--skin[data-v-20cccf23] {\n  color: #4a90d9;\n}\n.vital__name[data-v-20cccf23] {\n  font-size: %?28?%;\n  font-weight: 600;\n  color: #334155;\n  white-space: nowrap;\n  overflow: hidden;\n  text-overflow: ellipsis;\n}\n.vital__value[data-v-20cccf23] {\n  display: flex;\n  align-items: baseline;\n  margin-top: %?24?%;\n}\n.vital__num[data-v-20cccf23] {\n  font-size: %?56?%;\n  font-weight: 800;\n  font-family: \"DIN Pro\", \"DIN Alternate\", \"Helvetica Neue\", Arial, sans-serif;\n  line-height: 1;\n}\n.vital__card--hr .vital__num[data-v-20cccf23] {\n  color: #84e8c2;\n}\n.vital__card--spo2 .vital__num[data-v-20cccf23] {\n  color: #0ba5c3;\n}\n.vital__card--temp .vital__num[data-v-20cccf23] {\n  color: #f2994a;\n}\n.vital__card--skin .vital__num[data-v-20cccf23] {\n  color: #4a90d9;\n}\n.vital__unit[data-v-20cccf23] {\n  margin-left: %?8?%;\n  font-size: %?20?%;\n  color: #64748b;\n}\n.vital__sub[data-v-20cccf23] {\n  display: block;\n  margin-top: %?16?%;\n  font-size: %?20?%;\n  color: #c6d2de;\n  white-space: nowrap;\n  overflow: hidden;\n  text-overflow: ellipsis;\n}\n/* 压力卡（全宽，带等级标签与进度条） */\n.stress[data-v-20cccf23] {\n  margin-top: %?64?%;\n  background: #ffffff;\n  border-radius: %?20?%;\n  box-shadow: 0 %?4?% %?24?% rgba(15, 61, 53, 0.06);\n  padding: %?32?%;\n}\n.stress__head[data-v-20cccf23] {\n  display: flex;\n  align-items: center;\n  justify-content: space-between;\n}\n.stress__title[data-v-20cccf23] {\n  display: flex;\n  align-items: center;\n}\n.stress__icon[data-v-20cccf23] {\n  font-size: %?32?%;\n  color: #8b5cf6;\n  margin-right: %?16?%;\n}\n.stress__name[data-v-20cccf23] {\n  font-size: %?28?%;\n  font-weight: 600;\n  color: #334155;\n}\n.stress__tag[data-v-20cccf23] {\n  display: flex;\n  align-items: center;\n  padding: %?8?% %?24?%;\n  border-radius: %?999?%;\n  font-size: %?20?%;\n  font-weight: 600;\n}\n.stress__tag-dot[data-v-20cccf23] {\n  width: %?12?%;\n  height: %?12?%;\n  border-radius: 50%;\n  margin-right: %?8?%;\n}\n.stress__value[data-v-20cccf23] {\n  display: flex;\n  align-items: baseline;\n  margin-top: %?24?%;\n}\n.stress__num[data-v-20cccf23] {\n  font-size: %?56?%;\n  font-weight: 800;\n  font-family: \"DIN Pro\", \"DIN Alternate\", \"Helvetica Neue\", Arial, sans-serif;\n  line-height: 1;\n  color: #1a2a3c;\n}\n.stress__unit[data-v-20cccf23] {\n  margin-left: %?16?%;\n  font-size: %?20?%;\n  color: #64748b;\n}\n.stress__bar[data-v-20cccf23] {\n  margin-top: %?24?%;\n  height: %?16?%;\n  border-radius: %?999?%;\n  background: #f2f7fa;\n  overflow: hidden;\n}\n.stress__bar-in[data-v-20cccf23] {\n  height: 100%;\n  border-radius: %?999?%;\n  transition: width 0.6s ease;\n}\n.stress__scale[data-v-20cccf23] {\n  margin-top: %?8?%;\n  display: flex;\n  justify-content: space-between;\n}\n.stress__scale-t[data-v-20cccf23] {\n  font-size: %?20?%;\n  color: #c6d2de;\n}\n/* 血压卡 */\n.bp[data-v-20cccf23] {\n  display: flex;\n  align-items: center;\n  background: #ffffff;\n  border-radius: %?20?%;\n  box-shadow: 0 %?4?% %?24?% rgba(15, 61, 53, 0.06);\n  padding: %?32?% 0;\n}\n.bp__col[data-v-20cccf23] {\n  flex: 1;\n  display: flex;\n  flex-direction: column;\n  align-items: center;\n}\n.bp__num[data-v-20cccf23] {\n  font-size: %?56?%;\n  font-weight: 800;\n  color: #1a2a3c;\n  font-family: \"DIN Pro\", \"DIN Alternate\", \"Helvetica Neue\", Arial, sans-serif;\n  line-height: 1;\n}\n.bp__t[data-v-20cccf23] {\n  margin-top: %?16?%;\n  font-size: %?20?%;\n  color: #64748b;\n}\n.bp__divider[data-v-20cccf23] {\n  width: %?1?%;\n  height: %?48?%;\n  background: #f2f7fa;\n}\n.bp-tag[data-v-20cccf23] {\n  display: flex;\n  align-items: center;\n  padding: %?8?% %?24?%;\n  border-radius: %?999?%;\n  font-size: %?20?%;\n  font-weight: 600;\n}\n.bp-tag__dot[data-v-20cccf23] {\n  width: %?12?%;\n  height: %?12?%;\n  border-radius: 50%;\n  margin-right: %?8?%;\n}\n/* 步数卡 */\n.steps[data-v-20cccf23] {\n  background: #ffffff;\n  border-radius: %?20?%;\n  box-shadow: 0 %?4?% %?24?% rgba(15, 61, 53, 0.06);\n  padding: %?32?%;\n}\n.steps__main[data-v-20cccf23] {\n  display: flex;\n  align-items: baseline;\n}\n.steps__num[data-v-20cccf23] {\n  font-size: %?56?%;\n  font-weight: 800;\n  color: #1a2a3c;\n  font-family: \"DIN Pro\", \"DIN Alternate\", \"Helvetica Neue\", Arial, sans-serif;\n  line-height: 1;\n}\n.steps__unit[data-v-20cccf23] {\n  margin-left: %?16?%;\n  font-size: %?24?%;\n  color: #64748b;\n}\n.steps__bar[data-v-20cccf23] {\n  margin-top: %?24?%;\n  height: %?16?%;\n  border-radius: %?999?%;\n  background: #f2f7fa;\n  overflow: hidden;\n}\n.steps__bar-in[data-v-20cccf23] {\n  height: 100%;\n  border-radius: %?999?%;\n  background: linear-gradient(90deg, #7dd4bc, #4ab89e);\n  transition: width 0.6s ease;\n}\n.steps__meta[data-v-20cccf23] {\n  margin-top: %?16?%;\n  display: flex;\n  justify-content: space-between;\n}\n.steps__meta-item[data-v-20cccf23] {\n  font-size: %?20?%;\n  color: #64748b;\n}\n/* 心电图卡（深色底，波形为唯一视觉重心） */\n.ecg[data-v-20cccf23] {\n  position: relative;\n  background: linear-gradient(155deg, #0c2b2e 0%, #113f40 100%);\n  border-radius: %?20?%;\n  padding: %?32?%;\n  box-shadow: 0 %?12?% %?48?% rgba(125, 212, 188, 0.18);\n  overflow: hidden;\n}\n.ecg[data-v-20cccf23]::before {\n  content: \"\";\n  position: absolute;\n  inset: 0;\n  background-image: linear-gradient(rgba(255, 255, 255, 0.045) %?1?%, transparent %?1?%), linear-gradient(90deg, rgba(255, 255, 255, 0.045) %?1?%, transparent %?1?%);\n  background-size: %?48?% %?48?%;\n  pointer-events: none;\n}\n.ecg__svg[data-v-20cccf23] {\n  position: relative;\n  display: block;\n  width: 100%;\n  height: %?220?%;\n}\n.ecg__line[data-v-20cccf23] {\n  stroke: #6ff0c3;\n  stroke-width: 2;\n  stroke-linejoin: round;\n  stroke-linecap: round;\n  -webkit-filter: drop-shadow(0 0 %?6?% rgba(111, 240, 195, 0.65));\n          filter: drop-shadow(0 0 %?6?% rgba(111, 240, 195, 0.65));\n}\n.ecg__empty[data-v-20cccf23] {\n  position: relative;\n  height: %?220?%;\n  display: flex;\n  align-items: center;\n  justify-content: center;\n}\n.ecg__empty-t[data-v-20cccf23] {\n  color: rgba(255, 255, 255, 0.45);\n  font-size: %?24?%;\n  letter-spacing: %?2?%;\n}\n.ecg__meta[data-v-20cccf23] {\n  position: relative;\n  display: block;\n  margin-top: %?16?%;\n  font-size: %?20?%;\n  color: rgba(255, 255, 255, 0.6);\n}\n/* 睡眠卡 */\n.sleep[data-v-20cccf23] {\n  background: #ffffff;\n  border-radius: %?20?%;\n  box-shadow: 0 %?4?% %?24?% rgba(15, 61, 53, 0.06);\n  padding: %?32?%;\n}\n.sleep__stats[data-v-20cccf23] {\n  display: flex;\n}\n.sleep__stat[data-v-20cccf23] {\n  flex: 1;\n  display: flex;\n  flex-direction: column;\n  align-items: center;\n}\n.sleep__stat-num[data-v-20cccf23] {\n  font-size: %?36?%;\n  font-weight: 800;\n  font-family: \"DIN Pro\", \"DIN Alternate\", \"Helvetica Neue\", Arial, sans-serif;\n  line-height: 1.1;\n}\n.sleep__stat-num--deep[data-v-20cccf23] {\n  color: #1e6f5c;\n}\n.sleep__stat-num--light[data-v-20cccf23] {\n  color: #3eb98f;\n}\n.sleep__stat-num--wake[data-v-20cccf23] {\n  color: #94a3b8;\n}\n.sleep__stat-t[data-v-20cccf23] {\n  margin-top: %?8?%;\n  font-size: %?20?%;\n  color: #64748b;\n}\n.sleep__strip[data-v-20cccf23] {\n  margin-top: %?24?%;\n  height: %?24?%;\n  border-radius: %?999?%;\n  overflow: hidden;\n  display: flex;\n}\n.sleep__strip-seg[data-v-20cccf23] {\n  height: 100%;\n  transition: width 0.6s ease;\n}\n.sleep__strip-seg--deep[data-v-20cccf23] {\n  background: #1e6f5c;\n}\n.sleep__strip-seg--light[data-v-20cccf23] {\n  background: #7dd4bc;\n}\n.sleep__strip-seg--wake[data-v-20cccf23] {\n  background: #c8d5df;\n}\n.sleep__strip--empty[data-v-20cccf23] {\n  background: #f2f7fa;\n}\n/* 上报地址卡 */\n.addr[data-v-20cccf23] {\n  background: #ffffff;\n  border-radius: %?20?%;\n  box-shadow: 0 %?4?% %?24?% rgba(15, 61, 53, 0.06);\n  padding: %?32?%;\n}\n.addr__row[data-v-20cccf23] {\n  display: flex;\n  align-items: center;\n}\n.addr__icon[data-v-20cccf23] {\n  font-size: %?28?%;\n  color: #389a82;\n  margin-right: %?16?%;\n  flex-shrink: 0;\n}\n.addr__url[data-v-20cccf23] {\n  flex: 1;\n  font-size: %?28?%;\n  font-family: \"DIN Pro\", \"DIN Alternate\", \"Helvetica Neue\", Arial, sans-serif;\n  font-weight: 600;\n  color: #1a2a3c;\n  overflow: hidden;\n  white-space: nowrap;\n  text-overflow: ellipsis;\n}\n.addr__url--off[data-v-20cccf23] {\n  color: #64748b;\n}\n.addr__tag[data-v-20cccf23] {\n  flex-shrink: 0;\n  margin-left: %?16?%;\n  padding: %?8?% %?16?%;\n  border-radius: %?999?%;\n  font-size: %?20?%;\n  font-weight: 600;\n  color: #f2994a;\n  background: #fdf4ed;\n}\n.addr__tip[data-v-20cccf23] {\n  display: block;\n  margin-top: %?16?%;\n  font-size: %?20?%;\n  color: #64748b;\n}\n/* 底部状态 */\n.foot[data-v-20cccf23] {\n  display: flex;\n  align-items: center;\n  justify-content: space-between;\n  padding: %?32?% %?32?% 0;\n}\n.foot__left[data-v-20cccf23] {\n  display: flex;\n  align-items: center;\n}\n.foot__dot[data-v-20cccf23] {\n  width: %?12?%;\n  height: %?12?%;\n  border-radius: 50%;\n  background: #c6d2de;\n  margin-right: %?16?%;\n}\n.foot__dot--ok[data-v-20cccf23] {\n  background: #27ae60;\n}\n.foot__t[data-v-20cccf23] {\n  font-size: %?20?%;\n  color: #64748b;\n}\n.foot__sync[data-v-20cccf23] {\n  font-size: %?20?%;\n  color: #94a3b8;\n}\n.foot__right[data-v-20cccf23] {\n  display: flex;\n  align-items: center;\n}\n/* 顶部右上角刷新按钮 */\n.nav-refresh[data-v-20cccf23] {\n  width: %?60?%;\n  height: %?60?%;\n  border-radius: %?999?%;\n  background: #389a82;\n  box-shadow: 0 %?4?% %?24?% rgba(15, 61, 53, 0.06);\n  display: flex;\n  align-items: center;\n  justify-content: center;\n}\n.nav-refresh--busy[data-v-20cccf23] {\n  opacity: 0.7;\n}\n.nav-refresh__icon[data-v-20cccf23] {\n  color: #ffffff;\n  font-size: %?24?%;\n}\n.nav-refresh__icon--spin[data-v-20cccf23] {\n  -webkit-animation: spin-data-v-20cccf23 0.8s linear infinite;\n          animation: spin-data-v-20cccf23 0.8s linear infinite;\n}\n@-webkit-keyframes spin-data-v-20cccf23 {\nfrom {\n    -webkit-transform: rotate(0deg);\n            transform: rotate(0deg);\n}\nto {\n    -webkit-transform: rotate(360deg);\n            transform: rotate(360deg);\n}\n}\n@keyframes spin-data-v-20cccf23 {\nfrom {\n    -webkit-transform: rotate(0deg);\n            transform: rotate(0deg);\n}\nto {\n    -webkit-transform: rotate(360deg);\n            transform: rotate(360deg);\n}\n}\n/* 发送消息卡 */\n.msg[data-v-20cccf23] {\n  background: #ffffff;\n  border-radius: %?20?%;\n  box-shadow: 0 %?4?% %?24?% rgba(15, 61, 53, 0.06);\n  padding: %?32?%;\n}\n.msg__input[data-v-20cccf23] {\n  height: %?88?%;\n  background: #f2f7fa;\n  border-radius: %?20?%;\n  padding: 0 %?24?%;\n  font-size: %?28?%;\n  color: #1a2a3c;\n}\n.msg__area[data-v-20cccf23] {\n  margin-top: %?24?%;\n  width: 100%;\n  height: %?180?%;\n  background: #f2f7fa;\n  border-radius: %?20?%;\n  padding: %?24?%;\n  font-size: %?28?%;\n  color: #1a2a3c;\n  box-sizing: border-box;\n  line-height: 1.6;\n}\n.msg__ph[data-v-20cccf23] {\n  color: #c6d2de;\n  font-size: %?24?%;\n}\n/* 快捷提醒语 */\n.msg__presets[data-v-20cccf23] {\n  margin-top: %?24?%;\n  display: flex;\n  flex-wrap: wrap;\n}\n.msg__chip[data-v-20cccf23] {\n  margin: 0 %?16?% %?16?% 0;\n  padding: %?8?% %?24?%;\n  border-radius: %?999?%;\n  background: #f2f7fa;\n  border: %?1?% solid rgba(15, 61, 53, 0.06);\n}\n.msg__chip-t[data-v-20cccf23] {\n  font-size: %?20?%;\n  color: #334155;\n}\n.msg__bar[data-v-20cccf23] {\n  margin-top: %?24?%;\n  display: flex;\n  align-items: center;\n  justify-content: space-between;\n}\n.msg__len[data-v-20cccf23] {\n  font-size: %?20?%;\n  color: #64748b;\n}\n.msg__btn[data-v-20cccf23] {\n  display: flex;\n  align-items: center;\n  background: #389a82;\n  border-radius: %?999?%;\n  padding: %?16?% %?40?%;\n}\n.msg__btn--busy[data-v-20cccf23] {\n  opacity: 0.7;\n}\n.msg__btn-icon[data-v-20cccf23] {\n  color: #ffffff;\n  font-size: %?20?%;\n  margin-right: %?8?%;\n}\n.msg__btn-t[data-v-20cccf23] {\n  color: #ffffff;\n  font-size: %?24?%;\n  font-weight: 600;\n}", ""]);
+exports.push([module.i, "@charset \"UTF-8\";\n/* 安康健康管理 · 设计令牌\n   来源：/workspace/DESIGN.md\n   方案：rpx + SCSS 变量（1px = 2rpx，基于 750rpx 设计基准） */\n/* ---------- 品牌色 ---------- */\n/* ---------- 头像 ---------- */\n/* ---------- 语义状态色 ---------- */\n/* ---------- 金色（尊享装饰） ---------- */\n/* ---------- 背景 ---------- */\n/* 斜向两色渐变：左上(#ddf7ed) → 右下(#f3f3f3)，末端即底色；\n   配合 App.vue 中 background-attachment: fixed 铺满视口固定，不随页面滚动/变长 */\n/* ---------- 文字 ---------- */\n/* ---------- 描边 / 遮罩 ---------- */\n/* ---------- 字体 ---------- */\n/* 英文/数字优先匹配 DIN Pro（Mac 自带 DIN Alternate 作为备选），中文回退苹方/雅黑 */\n/* 移动端最小舒适字号（可读正文下限）：\n   说明/入口/数据标签等可读文字不得小于 12px(24rpx)；\n   $font-size-2xs(10px) 仅限角标、徽标、装饰性元素 */\n/* ---------- 语义排版 ---------- */\n/* ---------- 间距 ---------- */\n/* ---------- 区块标题 ---------- */\n/* 标题下间距 = 列表间距；上间距 = 下间距 × 2 */\n/* ---------- 尺寸 ---------- */\n/* ---------- 圆角（已减半，更克制干净） ---------- */\n/* ---------- 阴影 ---------- */\n/* ---------- 层级 ---------- */\n/* ---------- 动效 ---------- */\n/* ---------- 页面容器 ---------- */\n.wrap[data-v-20cccf23] {\n  height: auto;\n  padding: %?32?% %?32?% 0;\n}\n/* 非首个容器顶部贴齐：卡片间距由自身撑开，区块标题由 sec-head 撑开 */\n.wrap[data-v-20cccf23]:not(.wrap--first) {\n  padding-top: 0;\n}\n/* ---------- 区块标题 ---------- */\n.sec-head[data-v-20cccf23] {\n  display: flex;\n  align-items: flex-end;\n  justify-content: space-between;\n  margin-top: %?64?%;\n  margin-bottom: %?32?%;\n}\n.sec-title[data-v-20cccf23] {\n  font-size: %?36?%;\n  font-weight: 800;\n  line-height: 1.1;\n  color: #1a2a3c;\n  letter-spacing: %?1?%;\n}\n.sec-sub[data-v-20cccf23] {\n  font-size: %?24?%;\n  color: #64748b;\n  margin-top: %?16?%;\n}\n.head[data-v-20cccf23] {\n  display: flex;\n  align-items: center;\n  background: #ffffff;\n  border-radius: %?20?%;\n  box-shadow: 0 %?4?% %?24?% rgba(15, 61, 53, 0.06);\n  padding: %?32?%;\n}\n.head__icon[data-v-20cccf23] {\n  position: relative;\n  width: %?88?%;\n  height: %?88?%;\n  border-radius: %?20?%;\n  background: rgba(212, 245, 238, 0.72);\n  display: flex;\n  align-items: center;\n  justify-content: center;\n  flex-shrink: 0;\n}\n/* 图标右下角小徽标：眼睛=地址区块可见，闭眼=隐藏 */\n.head__icon-eye[data-v-20cccf23] {\n  position: absolute;\n  right: %?-6?%;\n  bottom: %?-6?%;\n  width: %?34?%;\n  height: %?34?%;\n  border-radius: %?999?%;\n  background: #389a82;\n  color: #ffffff;\n  font-size: %?16?%;\n  display: flex;\n  align-items: center;\n  justify-content: center;\n  border: %?4?% solid #ffffff;\n  box-sizing: border-box;\n}\n.head__icon-t[data-v-20cccf23] {\n  font-size: %?44?%;\n  color: #389a82;\n}\n.head__main[data-v-20cccf23] {\n  flex: 1;\n  padding: 0 %?24?%;\n  overflow: hidden;\n}\n.head__name[data-v-20cccf23] {\n  display: block;\n  font-size: %?32?%;\n  font-weight: 800;\n  color: #1a2a3c;\n  line-height: 1.1;\n}\n.head__sn[data-v-20cccf23] {\n  display: block;\n  font-size: %?20?%;\n  color: #64748b;\n  margin-top: %?8?%;\n  white-space: nowrap;\n  overflow: hidden;\n  text-overflow: ellipsis;\n}\n.head__status[data-v-20cccf23] {\n  display: flex;\n  align-items: center;\n  flex-shrink: 0;\n  padding: %?8?% %?16?%;\n  border-radius: %?999?%;\n  background: #27ae60;\n}\n.head__status--off[data-v-20cccf23] {\n  background: #f2f7fa;\n}\n.head__dot[data-v-20cccf23] {\n  width: %?12?%;\n  height: %?12?%;\n  border-radius: 50%;\n  background: #ffffff;\n  margin-right: %?8?%;\n}\n.head__status--off .head__dot[data-v-20cccf23] {\n  background: #94a3b8;\n}\n.head__status-t[data-v-20cccf23] {\n  font-size: %?20?%;\n  color: #ffffff;\n  font-weight: 600;\n}\n.head__status--off .head__status-t[data-v-20cccf23] {\n  color: #64748b;\n}\n/* 实时指标 2×2 并排卡（心率/血氧/体温/皮肤温度） */\n/* 首行与设备头卡拉开距离，与下方区块标题间距($space-8)呼应 */\n.vital[data-v-20cccf23] {\n  display: flex;\n  margin-top: %?64?%;\n}\n.vital__card[data-v-20cccf23] {\n  flex: 1;\n  min-width: 0;\n  background: #ffffff;\n  border-radius: %?20?%;\n  box-shadow: 0 %?4?% %?24?% rgba(15, 61, 53, 0.06);\n  padding: %?32?%;\n}\n.vital__card + .vital__card[data-v-20cccf23] {\n  margin-left: %?24?%;\n}\n.vital[data-v-20cccf23]:not(:first-child) {\n  margin-top: %?24?%;\n}\n/* 心率卡：浅绿渐变弱强调，其余指标白卡 */\n.vital__card--hr[data-v-20cccf23] {\n  background: linear-gradient(145deg, #e8f8f0 0%, #ffffff 75%);\n}\n.vital__head[data-v-20cccf23] {\n  display: flex;\n  align-items: center;\n}\n.vital__icon[data-v-20cccf23] {\n  font-size: %?32?%;\n  margin-right: %?16?%;\n}\n.vital__icon--hr[data-v-20cccf23] {\n  color: #84e8c2;\n}\n.vital__icon--spo2[data-v-20cccf23] {\n  color: #0ba5c3;\n}\n.vital__icon--temp[data-v-20cccf23] {\n  color: #f2994a;\n}\n.vital__icon--skin[data-v-20cccf23] {\n  color: #4a90d9;\n}\n.vital__name[data-v-20cccf23] {\n  font-size: %?28?%;\n  font-weight: 600;\n  color: #334155;\n  white-space: nowrap;\n  overflow: hidden;\n  text-overflow: ellipsis;\n}\n.vital__value[data-v-20cccf23] {\n  display: flex;\n  align-items: baseline;\n  margin-top: %?24?%;\n}\n.vital__num[data-v-20cccf23] {\n  font-size: %?56?%;\n  font-weight: 800;\n  font-family: \"DIN Pro\", \"DIN Alternate\", \"Helvetica Neue\", Arial, sans-serif;\n  line-height: 1;\n}\n.vital__card--hr .vital__num[data-v-20cccf23] {\n  color: #84e8c2;\n}\n.vital__card--spo2 .vital__num[data-v-20cccf23] {\n  color: #0ba5c3;\n}\n.vital__card--temp .vital__num[data-v-20cccf23] {\n  color: #f2994a;\n}\n.vital__card--skin .vital__num[data-v-20cccf23] {\n  color: #4a90d9;\n}\n.vital__unit[data-v-20cccf23] {\n  margin-left: %?8?%;\n  font-size: %?20?%;\n  color: #64748b;\n}\n.vital__sub[data-v-20cccf23] {\n  display: block;\n  margin-top: %?16?%;\n  font-size: %?20?%;\n  color: #c6d2de;\n  white-space: nowrap;\n  overflow: hidden;\n  text-overflow: ellipsis;\n}\n/* 压力卡（全宽，带等级标签与进度条） */\n.stress[data-v-20cccf23] {\n  margin-top: %?64?%;\n  background: #ffffff;\n  border-radius: %?20?%;\n  box-shadow: 0 %?4?% %?24?% rgba(15, 61, 53, 0.06);\n  padding: %?32?%;\n}\n.stress__head[data-v-20cccf23] {\n  display: flex;\n  align-items: center;\n  justify-content: space-between;\n}\n.stress__title[data-v-20cccf23] {\n  display: flex;\n  align-items: center;\n}\n.stress__icon[data-v-20cccf23] {\n  font-size: %?32?%;\n  color: #8b5cf6;\n  margin-right: %?16?%;\n}\n.stress__name[data-v-20cccf23] {\n  font-size: %?28?%;\n  font-weight: 600;\n  color: #334155;\n}\n.stress__tag[data-v-20cccf23] {\n  display: flex;\n  align-items: center;\n  padding: %?8?% %?24?%;\n  border-radius: %?999?%;\n  font-size: %?20?%;\n  font-weight: 600;\n}\n.stress__tag-dot[data-v-20cccf23] {\n  width: %?12?%;\n  height: %?12?%;\n  border-radius: 50%;\n  margin-right: %?8?%;\n}\n.stress__value[data-v-20cccf23] {\n  display: flex;\n  align-items: baseline;\n  margin-top: %?24?%;\n}\n.stress__num[data-v-20cccf23] {\n  font-size: %?56?%;\n  font-weight: 800;\n  font-family: \"DIN Pro\", \"DIN Alternate\", \"Helvetica Neue\", Arial, sans-serif;\n  line-height: 1;\n  color: #1a2a3c;\n}\n.stress__unit[data-v-20cccf23] {\n  margin-left: %?16?%;\n  font-size: %?20?%;\n  color: #64748b;\n}\n.stress__bar[data-v-20cccf23] {\n  margin-top: %?24?%;\n  height: %?16?%;\n  border-radius: %?999?%;\n  background: #f2f7fa;\n  overflow: hidden;\n}\n.stress__bar-in[data-v-20cccf23] {\n  height: 100%;\n  border-radius: %?999?%;\n  transition: width 0.6s ease;\n}\n.stress__scale[data-v-20cccf23] {\n  margin-top: %?8?%;\n  display: flex;\n  justify-content: space-between;\n}\n.stress__scale-t[data-v-20cccf23] {\n  font-size: %?20?%;\n  color: #c6d2de;\n}\n/* 血压卡 */\n.bp[data-v-20cccf23] {\n  display: flex;\n  align-items: center;\n  background: #ffffff;\n  border-radius: %?20?%;\n  box-shadow: 0 %?4?% %?24?% rgba(15, 61, 53, 0.06);\n  padding: %?32?% 0;\n}\n.bp__col[data-v-20cccf23] {\n  flex: 1;\n  display: flex;\n  flex-direction: column;\n  align-items: center;\n}\n.bp__num[data-v-20cccf23] {\n  font-size: %?56?%;\n  font-weight: 800;\n  color: #1a2a3c;\n  font-family: \"DIN Pro\", \"DIN Alternate\", \"Helvetica Neue\", Arial, sans-serif;\n  line-height: 1;\n}\n.bp__t[data-v-20cccf23] {\n  margin-top: %?16?%;\n  font-size: %?20?%;\n  color: #64748b;\n}\n.bp__divider[data-v-20cccf23] {\n  width: %?1?%;\n  height: %?48?%;\n  background: #f2f7fa;\n}\n.bp-tag[data-v-20cccf23] {\n  display: flex;\n  align-items: center;\n  padding: %?8?% %?24?%;\n  border-radius: %?999?%;\n  font-size: %?20?%;\n  font-weight: 600;\n}\n.bp-tag__dot[data-v-20cccf23] {\n  width: %?12?%;\n  height: %?12?%;\n  border-radius: 50%;\n  margin-right: %?8?%;\n}\n/* 步数卡 */\n.steps[data-v-20cccf23] {\n  background: #ffffff;\n  border-radius: %?20?%;\n  box-shadow: 0 %?4?% %?24?% rgba(15, 61, 53, 0.06);\n  padding: %?32?%;\n}\n.steps__main[data-v-20cccf23] {\n  display: flex;\n  align-items: baseline;\n}\n.steps__num[data-v-20cccf23] {\n  font-size: %?56?%;\n  font-weight: 800;\n  color: #1a2a3c;\n  font-family: \"DIN Pro\", \"DIN Alternate\", \"Helvetica Neue\", Arial, sans-serif;\n  line-height: 1;\n}\n.steps__unit[data-v-20cccf23] {\n  margin-left: %?16?%;\n  font-size: %?24?%;\n  color: #64748b;\n}\n.steps__bar[data-v-20cccf23] {\n  margin-top: %?24?%;\n  height: %?16?%;\n  border-radius: %?999?%;\n  background: #f2f7fa;\n  overflow: hidden;\n}\n.steps__bar-in[data-v-20cccf23] {\n  height: 100%;\n  border-radius: %?999?%;\n  background: linear-gradient(90deg, #7dd4bc, #4ab89e);\n  transition: width 0.6s ease;\n}\n.steps__meta[data-v-20cccf23] {\n  margin-top: %?16?%;\n  display: flex;\n  justify-content: space-between;\n}\n.steps__meta-item[data-v-20cccf23] {\n  font-size: %?20?%;\n  color: #64748b;\n}\n/* 心电图卡（深色底，波形为唯一视觉重心） */\n.ecg[data-v-20cccf23] {\n  position: relative;\n  background: linear-gradient(155deg, #0c2b2e 0%, #113f40 100%);\n  border-radius: %?20?%;\n  padding: %?32?%;\n  box-shadow: 0 %?12?% %?48?% rgba(125, 212, 188, 0.18);\n  overflow: hidden;\n}\n.ecg[data-v-20cccf23]::before {\n  content: \"\";\n  position: absolute;\n  inset: 0;\n  background-image: linear-gradient(rgba(255, 255, 255, 0.045) %?1?%, transparent %?1?%), linear-gradient(90deg, rgba(255, 255, 255, 0.045) %?1?%, transparent %?1?%);\n  background-size: %?48?% %?48?%;\n  pointer-events: none;\n}\n.ecg__svg[data-v-20cccf23] {\n  position: relative;\n  display: block;\n  width: 100%;\n  height: %?220?%;\n}\n.ecg__line[data-v-20cccf23] {\n  stroke: #6ff0c3;\n  stroke-width: 2;\n  stroke-linejoin: round;\n  stroke-linecap: round;\n  -webkit-filter: drop-shadow(0 0 %?6?% rgba(111, 240, 195, 0.65));\n          filter: drop-shadow(0 0 %?6?% rgba(111, 240, 195, 0.65));\n}\n.ecg__empty[data-v-20cccf23] {\n  position: relative;\n  height: %?220?%;\n  display: flex;\n  align-items: center;\n  justify-content: center;\n}\n.ecg__empty-t[data-v-20cccf23] {\n  color: rgba(255, 255, 255, 0.45);\n  font-size: %?24?%;\n  letter-spacing: %?2?%;\n}\n.ecg__meta[data-v-20cccf23] {\n  position: relative;\n  display: block;\n  margin-top: %?16?%;\n  font-size: %?20?%;\n  color: rgba(255, 255, 255, 0.6);\n}\n/* 睡眠卡 */\n.sleep[data-v-20cccf23] {\n  background: #ffffff;\n  border-radius: %?20?%;\n  box-shadow: 0 %?4?% %?24?% rgba(15, 61, 53, 0.06);\n  padding: %?32?%;\n}\n.sleep__stats[data-v-20cccf23] {\n  display: flex;\n}\n.sleep__stat[data-v-20cccf23] {\n  flex: 1;\n  display: flex;\n  flex-direction: column;\n  align-items: center;\n}\n.sleep__stat-num[data-v-20cccf23] {\n  font-size: %?36?%;\n  font-weight: 800;\n  font-family: \"DIN Pro\", \"DIN Alternate\", \"Helvetica Neue\", Arial, sans-serif;\n  line-height: 1.1;\n}\n.sleep__stat-num--deep[data-v-20cccf23] {\n  color: #1e6f5c;\n}\n.sleep__stat-num--light[data-v-20cccf23] {\n  color: #3eb98f;\n}\n.sleep__stat-num--wake[data-v-20cccf23] {\n  color: #94a3b8;\n}\n.sleep__stat-t[data-v-20cccf23] {\n  margin-top: %?8?%;\n  font-size: %?20?%;\n  color: #64748b;\n}\n.sleep__strip[data-v-20cccf23] {\n  margin-top: %?24?%;\n  height: %?24?%;\n  border-radius: %?999?%;\n  overflow: hidden;\n  display: flex;\n}\n.sleep__strip-seg[data-v-20cccf23] {\n  height: 100%;\n  transition: width 0.6s ease;\n}\n.sleep__strip-seg--deep[data-v-20cccf23] {\n  background: #1e6f5c;\n}\n.sleep__strip-seg--light[data-v-20cccf23] {\n  background: #7dd4bc;\n}\n.sleep__strip-seg--wake[data-v-20cccf23] {\n  background: #c8d5df;\n}\n.sleep__strip--empty[data-v-20cccf23] {\n  background: #f2f7fa;\n}\n/* 上报地址卡 */\n.addr[data-v-20cccf23] {\n  background: #ffffff;\n  border-radius: %?20?%;\n  box-shadow: 0 %?4?% %?24?% rgba(15, 61, 53, 0.06);\n  padding: %?32?%;\n}\n.addr__row[data-v-20cccf23] {\n  display: flex;\n  align-items: center;\n}\n.addr__icon[data-v-20cccf23] {\n  font-size: %?28?%;\n  color: #389a82;\n  margin-right: %?16?%;\n  flex-shrink: 0;\n}\n.addr__url[data-v-20cccf23] {\n  flex: 1;\n  font-size: %?28?%;\n  font-family: \"DIN Pro\", \"DIN Alternate\", \"Helvetica Neue\", Arial, sans-serif;\n  font-weight: 600;\n  color: #1a2a3c;\n  overflow: hidden;\n  white-space: nowrap;\n  text-overflow: ellipsis;\n}\n.addr__url--off[data-v-20cccf23] {\n  color: #64748b;\n}\n.addr__tag[data-v-20cccf23] {\n  flex-shrink: 0;\n  margin-left: %?16?%;\n  padding: %?8?% %?16?%;\n  border-radius: %?999?%;\n  font-size: %?20?%;\n  font-weight: 600;\n  color: #f2994a;\n  background: #fdf4ed;\n}\n.addr__tip[data-v-20cccf23] {\n  display: block;\n  margin-top: %?16?%;\n  font-size: %?20?%;\n  color: #64748b;\n}\n/* 底部状态 */\n.foot[data-v-20cccf23] {\n  display: flex;\n  align-items: center;\n  justify-content: space-between;\n  padding: %?32?% %?32?% 0;\n}\n.foot__left[data-v-20cccf23] {\n  display: flex;\n  align-items: center;\n}\n.foot__dot[data-v-20cccf23] {\n  width: %?12?%;\n  height: %?12?%;\n  border-radius: 50%;\n  background: #c6d2de;\n  margin-right: %?16?%;\n}\n.foot__dot--ok[data-v-20cccf23] {\n  background: #27ae60;\n}\n.foot__t[data-v-20cccf23] {\n  font-size: %?20?%;\n  color: #64748b;\n}\n.foot__sync[data-v-20cccf23] {\n  font-size: %?20?%;\n  color: #94a3b8;\n}\n.foot__right[data-v-20cccf23] {\n  display: flex;\n  align-items: center;\n}\n/* 顶部右上角功能区：解绑按钮 + 刷新 */\n.nav-actions[data-v-20cccf23] {\n  display: flex;\n  align-items: center;\n  gap: %?16?%;\n}\n.nav-sub-btn[data-v-20cccf23] {\n  height: %?60?%;\n  padding: 0 %?24?%;\n  border-radius: %?999?%;\n  background: rgba(255, 255, 255, 0.7);\n  border: %?1?% solid rgba(148, 163, 184, 0.35);\n  display: inline-flex;\n  align-items: center;\n  gap: %?8?%;\n  -webkit-backdrop-filter: blur(6px);\n          backdrop-filter: blur(6px);\n  transition: opacity 0.15s ease, -webkit-transform 0.1s ease;\n  transition: opacity 0.15s ease, transform 0.1s ease;\n  transition: opacity 0.15s ease, transform 0.1s ease, -webkit-transform 0.1s ease;\n}\n.nav-sub-btn[data-v-20cccf23]:active {\n  -webkit-transform: scale(0.97);\n          transform: scale(0.97);\n  opacity: 0.8;\n}\n.nav-sub-btn__icon[data-v-20cccf23] {\n  font-size: %?24?%;\n  color: #64748b;\n}\n.nav-sub-btn__t[data-v-20cccf23] {\n  font-size: %?24?%;\n  font-weight: 600;\n  color: #475569;\n}\n/* 顶部右上角刷新按钮 */\n.nav-refresh[data-v-20cccf23] {\n  width: %?60?%;\n  height: %?60?%;\n  border-radius: %?999?%;\n  background: #389a82;\n  box-shadow: 0 %?4?% %?24?% rgba(15, 61, 53, 0.06);\n  display: flex;\n  align-items: center;\n  justify-content: center;\n}\n.nav-refresh--busy[data-v-20cccf23] {\n  opacity: 0.7;\n}\n.nav-refresh__icon[data-v-20cccf23] {\n  color: #ffffff;\n  font-size: %?24?%;\n}\n.nav-refresh__icon--spin[data-v-20cccf23] {\n  -webkit-animation: spin-data-v-20cccf23 0.8s linear infinite;\n          animation: spin-data-v-20cccf23 0.8s linear infinite;\n}\n@-webkit-keyframes spin-data-v-20cccf23 {\nfrom {\n    -webkit-transform: rotate(0deg);\n            transform: rotate(0deg);\n}\nto {\n    -webkit-transform: rotate(360deg);\n            transform: rotate(360deg);\n}\n}\n@keyframes spin-data-v-20cccf23 {\nfrom {\n    -webkit-transform: rotate(0deg);\n            transform: rotate(0deg);\n}\nto {\n    -webkit-transform: rotate(360deg);\n            transform: rotate(360deg);\n}\n}\n/* 发送消息卡 */\n.msg[data-v-20cccf23] {\n  background: #ffffff;\n  border-radius: %?20?%;\n  box-shadow: 0 %?4?% %?24?% rgba(15, 61, 53, 0.06);\n  padding: %?32?%;\n}\n.msg__input[data-v-20cccf23] {\n  height: %?88?%;\n  background: #f2f7fa;\n  border-radius: %?20?%;\n  padding: 0 %?24?%;\n  font-size: %?28?%;\n  color: #1a2a3c;\n}\n.msg__area[data-v-20cccf23] {\n  margin-top: %?24?%;\n  width: 100%;\n  height: %?180?%;\n  background: #f2f7fa;\n  border-radius: %?20?%;\n  padding: %?24?%;\n  font-size: %?28?%;\n  color: #1a2a3c;\n  box-sizing: border-box;\n  line-height: 1.6;\n}\n.msg__ph[data-v-20cccf23] {\n  color: #c6d2de;\n  font-size: %?24?%;\n}\n/* 快捷提醒语 */\n.msg__presets[data-v-20cccf23] {\n  margin-top: %?24?%;\n  display: flex;\n  flex-wrap: wrap;\n}\n.msg__chip[data-v-20cccf23] {\n  margin: 0 %?16?% %?16?% 0;\n  padding: %?8?% %?24?%;\n  border-radius: %?999?%;\n  background: #f2f7fa;\n  border: %?1?% solid rgba(15, 61, 53, 0.06);\n}\n.msg__chip-t[data-v-20cccf23] {\n  font-size: %?20?%;\n  color: #334155;\n}\n.msg__bar[data-v-20cccf23] {\n  margin-top: %?24?%;\n  display: flex;\n  align-items: center;\n  justify-content: space-between;\n}\n.msg__len[data-v-20cccf23] {\n  font-size: %?20?%;\n  color: #64748b;\n}\n.msg__btn[data-v-20cccf23] {\n  display: flex;\n  align-items: center;\n  background: #389a82;\n  border-radius: %?999?%;\n  padding: %?16?% %?40?%;\n}\n.msg__btn--busy[data-v-20cccf23] {\n  opacity: 0.7;\n}\n.msg__btn-icon[data-v-20cccf23] {\n  color: #ffffff;\n  font-size: %?20?%;\n  margin-right: %?8?%;\n}\n.msg__btn-t[data-v-20cccf23] {\n  color: #ffffff;\n  font-size: %?24?%;\n  font-weight: 600;\n}", ""]);
 // Exports
 module.exports = exports;
 
@@ -1380,6 +1492,10 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
+//
+//
+//
+//
 //
 //
 //
@@ -1964,88 +2080,140 @@ var POLL_MS = 60 * 1000; // 每 1 分钟刷新
         }, _callee);
       }))();
     },
+    // 解绑设备：二次确认 → 删后端记录 + 删本地 store → 回设备列表 Tab
+    onUnbind: function onUnbind() {
+      var _this3 = this;
+      if (!this.id || !this.device) return;
+      var name = this.device.name || '手环';
+      uni.showModal({
+        title: '解绑设备',
+        content: '解绑后「' + name + '」将停止向本账号同步健康数据，确定继续吗？',
+        confirmText: '确定解绑',
+        confirmColor: '#f15533',
+        cancelText: '取消',
+        success: function () {
+          var _success = Object(_workspace_h5build_node_modules_babel_runtime_helpers_esm_asyncToGenerator_js__WEBPACK_IMPORTED_MODULE_1__["default"])(/*#__PURE__*/Object(_workspace_h5build_node_modules_babel_runtime_helpers_esm_regenerator_js__WEBPACK_IMPORTED_MODULE_0__["default"])().m(function _callee2(res) {
+            return Object(_workspace_h5build_node_modules_babel_runtime_helpers_esm_regenerator_js__WEBPACK_IMPORTED_MODULE_0__["default"])().w(function (_context2) {
+              while (1) switch (_context2.n) {
+                case 0:
+                  if (res.confirm) {
+                    _context2.n = 1;
+                    break;
+                  }
+                  return _context2.a(2);
+                case 1:
+                  _context2.n = 2;
+                  return Object(_common_band_js__WEBPACK_IMPORTED_MODULE_7__["unbindBandDevice"])(_this3.deviceid);
+                case 2:
+                  _this3.$store.dispatch('removeDevice', _this3.id);
+                  uni.showToast({
+                    title: '已解绑',
+                    icon: 'success'
+                  });
+                  _this3.clearTimer();
+                  setTimeout(function () {
+                    // 设备列表是 tabBar 页：switchTab 跳回
+                    uni.switchTab({
+                      url: '/pages/device/device',
+                      fail: function fail() {
+                        return uni.navigateBack();
+                      }
+                    });
+                  }, 500);
+                case 3:
+                  return _context2.a(2);
+              }
+            }, _callee2);
+          }));
+          function success(_x) {
+            return _success.apply(this, arguments);
+          }
+          return success;
+        }()
+      });
+    },
     // 手动刷新：loading 反馈 + 结果提示
     doRefresh: function doRefresh() {
-      var _this3 = this;
-      return Object(_workspace_h5build_node_modules_babel_runtime_helpers_esm_asyncToGenerator_js__WEBPACK_IMPORTED_MODULE_1__["default"])(/*#__PURE__*/Object(_workspace_h5build_node_modules_babel_runtime_helpers_esm_regenerator_js__WEBPACK_IMPORTED_MODULE_0__["default"])().m(function _callee2() {
+      var _this4 = this;
+      return Object(_workspace_h5build_node_modules_babel_runtime_helpers_esm_asyncToGenerator_js__WEBPACK_IMPORTED_MODULE_1__["default"])(/*#__PURE__*/Object(_workspace_h5build_node_modules_babel_runtime_helpers_esm_regenerator_js__WEBPACK_IMPORTED_MODULE_0__["default"])().m(function _callee3() {
         var l, hasData;
-        return Object(_workspace_h5build_node_modules_babel_runtime_helpers_esm_regenerator_js__WEBPACK_IMPORTED_MODULE_0__["default"])().w(function (_context2) {
-          while (1) switch (_context2.n) {
+        return Object(_workspace_h5build_node_modules_babel_runtime_helpers_esm_regenerator_js__WEBPACK_IMPORTED_MODULE_0__["default"])().w(function (_context3) {
+          while (1) switch (_context3.n) {
             case 0:
-              if (!_this3.refreshing) {
-                _context2.n = 1;
+              if (!_this4.refreshing) {
+                _context3.n = 1;
                 break;
               }
-              return _context2.a(2);
+              return _context3.a(2);
             case 1:
-              _this3.refreshing = true;
-              _context2.n = 2;
-              return _this3.load();
+              _this4.refreshing = true;
+              _context3.n = 2;
+              return _this4.load();
             case 2:
-              _this3.refreshing = false;
-              if (_this3.deviceid) {
-                _context2.n = 3;
+              _this4.refreshing = false;
+              if (_this4.deviceid) {
+                _context3.n = 3;
                 break;
               }
               uni.showToast({
                 title: '未绑定设备号',
                 icon: 'none'
               });
-              return _context2.a(2);
+              return _context3.a(2);
             case 3:
-              l = _this3.latest;
+              l = _this4.latest;
               hasData = !!(l && (l.hr != null || l.sbp != null || l.dbp != null || l.steps != null));
               uni.showToast({
                 title: hasData ? '已刷新，数据已更新' : '暂无新数据，等待手环上报',
                 icon: 'none'
               });
             case 4:
-              return _context2.a(2);
+              return _context3.a(2);
           }
-        }, _callee2);
+        }, _callee3);
       }))();
     },
     // 每次刷新都核对当前上报地址；与上次不同则标记"已变化"
     refreshAddress: function refreshAddress() {
-      var _this4 = this;
+      var _this5 = this;
       Object(_common_band_js__WEBPACK_IMPORTED_MODULE_7__["fetchBandAddress"])().then(function (info) {
         if (!info || !info.public) {
-          _this4.address = '';
+          _this5.address = '';
           return;
         }
         var prev = uni.getStorageSync('ankang_band_address');
-        _this4.address = info.public;
-        _this4.addressChanged = !!(prev && prev !== info.public);
+        _this5.address = info.public;
+        _this5.addressChanged = !!(prev && prev !== info.public);
         uni.setStorageSync('ankang_band_address', info.public);
       });
     },
     load: function load() {
-      var _this5 = this;
-      return Object(_workspace_h5build_node_modules_babel_runtime_helpers_esm_asyncToGenerator_js__WEBPACK_IMPORTED_MODULE_1__["default"])(/*#__PURE__*/Object(_workspace_h5build_node_modules_babel_runtime_helpers_esm_regenerator_js__WEBPACK_IMPORTED_MODULE_0__["default"])().m(function _callee3() {
+      var _this6 = this;
+      return Object(_workspace_h5build_node_modules_babel_runtime_helpers_esm_asyncToGenerator_js__WEBPACK_IMPORTED_MODULE_1__["default"])(/*#__PURE__*/Object(_workspace_h5build_node_modules_babel_runtime_helpers_esm_regenerator_js__WEBPACK_IMPORTED_MODULE_0__["default"])().m(function _callee4() {
         var latest, l;
-        return Object(_workspace_h5build_node_modules_babel_runtime_helpers_esm_regenerator_js__WEBPACK_IMPORTED_MODULE_0__["default"])().w(function (_context3) {
-          while (1) switch (_context3.n) {
+        return Object(_workspace_h5build_node_modules_babel_runtime_helpers_esm_regenerator_js__WEBPACK_IMPORTED_MODULE_0__["default"])().w(function (_context4) {
+          while (1) switch (_context4.n) {
             case 0:
-              _this5.refreshAddress();
-              if (_this5.deviceid) {
-                _context3.n = 1;
+              _this6.refreshAddress();
+              if (_this6.deviceid) {
+                _context4.n = 1;
                 break;
               }
-              return _context3.a(2);
+              return _context4.a(2);
             case 1:
-              _context3.n = 2;
-              return Object(_common_band_js__WEBPACK_IMPORTED_MODULE_7__["fetchBandLatest"])(_this5.deviceid);
+              _context4.n = 2;
+              return Object(_common_band_js__WEBPACK_IMPORTED_MODULE_7__["fetchBandLatest"])(_this6.deviceid);
             case 2:
-              latest = _context3.v;
-              _this5.latest = latest || {};
-              _this5.lastSyncAt = Date.now();
+              latest = _context4.v;
+              _this6.latest = latest || {};
+              _this6.lastSyncAt = Date.now();
               // 只有后端真实上报过数据才视为在线
-              l = _this5.latest;
-              _this5.online = !!(l && (l.hr != null || l.sbp != null || l.dbp != null || l.steps != null));
+              l = _this6.latest;
+              _this6.online = !!(l && (l.hr != null || l.sbp != null || l.dbp != null || l.steps != null));
               // 回写本地 store，保持设备列表一致
-              if (_this5.id) {
-                _this5.$store.commit('UPDATE_DEVICE_DATA', {
-                  id: _this5.id,
+              if (_this6.id) {
+                _this6.$store.commit('UPDATE_DEVICE_DATA', {
+                  id: _this6.id,
                   data: {
                     sys: l.sbp,
                     dia: l.dbp,
@@ -2053,13 +2221,13 @@ var POLL_MS = 60 * 1000; // 每 1 分钟刷新
                     steps: l.steps,
                     battery: l.battery
                   },
-                  lastSync: _this5.syncText
+                  lastSync: _this6.syncText
                 });
               }
             case 3:
-              return _context3.a(2);
+              return _context4.a(2);
           }
-        }, _callee3);
+        }, _callee4);
       }))();
     }
   }

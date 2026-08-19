@@ -621,6 +621,11 @@ export default {
   margin-bottom: $space-sec-head-bottom;
 }
 
+/* 第一个卡片标题无需上间距 */
+.wrap:first-of-type .sec-head {
+  margin-top: 0;
+}
+
 .sec-head__side {
   display: flex;
   align-items: center;

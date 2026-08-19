@@ -110,9 +110,15 @@
     <view class="wrap">
       <view class="sec-head">
         <text class="sec-title">血压</text>
-        <view class="bp-tag" :style="{ background: bp.bg, color: bp.color }">
-          <text class="bp-tag__dot" :style="{ background: bp.color }"></text>
-          <text class="bp-tag__t">{{ bp.label }}</text>
+        <view class="sec-head__right">
+          <view class="bp-tag" :style="{ background: bp.bg, color: bp.color }">
+            <text class="bp-tag__dot" :style="{ background: bp.color }"></text>
+            <text class="bp-tag__t">{{ bp.label }}</text>
+          </view>
+          <view class="measure-bp-btn" :class="{ 'measure-bp-btn--busy': measuringBp }" @tap="onClickMeasureBP">
+            <text class="fa-solid fa-stethoscope measure-bp-btn__icon"></text>
+            <text class="measure-bp-btn__t">{{ measuringBp ? '下发中…' : '测血压' }}</text>
+          </view>
         </view>
       </view>
       <view class="bp">
@@ -264,7 +270,7 @@
 </template>
 
 <script>
-import { fetchBandLatest, fetchBandAddress, sendBandMessage, bpLevel } from '@/common/band.js'
+import { fetchBandLatest, fetchBandAddress, sendBandMessage, bpLevel, triggerMeasureBP } from '@/common/band.js'
 
 const POLL_MS = 60 * 1000 // 每 1 分钟刷新
 
@@ -284,7 +290,8 @@ export default {
       msgTitle: '',
       msgText: '',
       msgSending: false,
-      presets: ['记得测量血压', '记得按时吃药', '该起身活动了', '注意安全早点回家', '记得喝水', '不舒服请按 SOS']
+      presets: ['记得测量血压', '记得按时吃药', '该起身活动了', '注意安全早点回家', '记得喝水', '不舒服请按 SOS'],
+      measuringBp: false
     }
   },
   computed: {
@@ -497,6 +504,29 @@ export default {
         this.msgText = ''
       }
     },
+    // 触发测血压：下发"请测血压"消息提醒 + 一键同步
+    async onClickMeasureBP() {
+      if (this.measuringBp) return
+      if (!this.deviceid) {
+        uni.showToast({ title: '未绑定设备号', icon: 'none' })
+        return
+      }
+      this.measuringBp = true
+      const r = await triggerMeasureBP(this.deviceid)
+      this.measuringBp = false
+      if (r.err) {
+        uni.showToast({ title: r.err, icon: 'none' })
+        return
+      }
+      uni.showModal({
+        title: '已下发指令',
+        content: '手环已收到提醒，同时已同步历史数据。\n请在手环上点击开始测量血压，测量完成后1–2分钟，新数据会自动显示在页面上。',
+        showCancel: false,
+        confirmText: '我知道了'
+      })
+      // 提示下发后，再额外刷新一次拉数据
+      setTimeout(() => this.load(), 1500)
+    },
     // 手动刷新：loading 反馈 + 结果提示
     async doRefresh() {
       if (this.refreshing) return
@@ -574,6 +604,12 @@ export default {
   justify-content: space-between;
   margin-top: $space-sec-head-top;
   margin-bottom: $space-sec-head-bottom;
+}
+
+.sec-head__right {
+  display: flex;
+  align-items: center;
+  gap: $space-3;
 }
 
 .sec-title {
@@ -946,6 +982,36 @@ export default {
   height: $size-badge-sm;
   border-radius: 50%;
   margin-right: $space-1;
+}
+
+/* 测血压按钮（血压标题右侧） */
+.measure-bp-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: $space-2;
+  height: 60rpx;
+  padding: 0 $space-4;
+  border-radius: $radius-full;
+  background: linear-gradient(135deg, #f15533 0%, #f2994a 100%);
+  color: #fff;
+  font-size: $font-size-sm;
+  font-weight: $font-weight-semibold;
+  box-shadow: 0 4rpx 14rpx rgba(241, 85, 51, 0.28);
+  transition: opacity 0.2s ease, transform 0.1s ease;
+}
+
+.measure-bp-btn:active {
+  transform: scale(0.97);
+  opacity: 0.85;
+}
+
+.measure-bp-btn--busy {
+  opacity: 0.7;
+  pointer-events: none;
+}
+
+.measure-bp-btn__icon {
+  font-size: $font-size-md;
 }
 
 /* 步数卡 */

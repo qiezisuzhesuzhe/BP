@@ -3226,22 +3226,22 @@
       "name": "智能手环",
       "model": "BP100CE",
       "firstSeen": 1787136812838,
-      "lastSeen": 1787142772942,
+      "lastSeen": 1787144098687,
       "version": "91.0.0.59",
       "netType": "LTE",
       "wearing": "1",
       "lastDeviceInfo": 1787140482904,
       "latest": {
-        "steps": 546,
-        "distance": 392,
-        "calorie": 30,
+        "steps": 1220,
+        "distance": 870,
+        "calorie": 80,
         "battery": 94,
         "charging": false,
-        "ts": 1787171571,
-        "updatedAt": 1787142772942,
+        "ts": 1787172840,
+        "updatedAt": 1787144098687,
         "sbp": 135,
         "dbp": 89,
-        "hr": 95,
+        "hr": 94,
         "sleep": {
           "deep": 0,
           "light": 0,
@@ -3314,7 +3314,10 @@
           14760,
           15026
         ],
-        "ecgTs": 1787167501
+        "ecgTs": 1787167501,
+        "bodyTemp": 32.68,
+        "tempOk": true,
+        "stress": 62
       },
       "history": [
         {
@@ -3671,6 +3674,50 @@
           "battery": 94,
           "charging": false,
           "ts": 1787171571
+        },
+        {
+          "at": 1787143450173,
+          "steps": 1220,
+          "distance": 870,
+          "calorie": 80,
+          "battery": 94,
+          "charging": false,
+          "ts": 1787172247
+        },
+        {
+          "at": 1787143465094,
+          "steps": 63,
+          "sleep": {
+            "deep": 1,
+            "light": 2,
+            "wake": 2,
+            "total": 5
+          },
+          "ts": 1787172240,
+          "hr": 88,
+          "bodyTemp": 32.68,
+          "tempOk": true,
+          "stress": 62
+        },
+        {
+          "at": 1787144085059,
+          "steps": 1220,
+          "distance": 870,
+          "calorie": 80,
+          "battery": 94,
+          "charging": false,
+          "ts": 1787172882
+        },
+        {
+          "at": 1787144098687,
+          "hr": 94,
+          "ts": 1787172840,
+          "sleep": {
+            "deep": 0,
+            "light": 0,
+            "wake": 5,
+            "total": 5
+          }
         }
       ]
     }

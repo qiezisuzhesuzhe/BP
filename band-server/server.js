@@ -465,7 +465,10 @@ app.post('/api/band/message', async (req, res) => {
   if (Buffer.byteLength(String(description), 'utf8') > 240) {
     return res.status(400).json({ code: 400, message: '内容不能超过 240 字节' })
   }
-  const url = buildEntUrl('/entservice/cmd/message', device_id)
+  // 设备未激活时需附带 device_model 参数（取本服务已收到的设备型号）
+  let url = ENTSERVICE_BASE + '/entservice/cmd/message'
+  const dev = db.devices[device_id]
+  if (dev && dev.model) url += '?device_model=' + encodeURIComponent(dev.model)
   try {
     const r = await curlPostJson(url, {
       device_id,
@@ -481,47 +484,6 @@ app.post('/api/band/message', async (req, res) => {
         message: '下发失败，平台返回 ' + (r.ReturnCode || '') + (r.msg ? '：' + r.msg : '')
       })
     }
-  } catch (e) {
-    res.status(502).json({ code: 502, message: '指令服务不可达: ' + e.message })
-  }
-})
-
-// 构建 entservice 指令 URL（如果已知设备型号则自动附加 device_model）
-function buildEntUrl(path, device_id) {
-  let url = ENTSERVICE_BASE + path
-  const dev = device_id ? db.devices[device_id] : null
-  if (dev && dev.model) url += (path.includes('?') ? '&' : '?') + 'device_model=' + encodeURIComponent(dev.model)
-  return url
-}
-
-/* ---------------- 触发手环测血压（消息提醒 + 一键同步） ---------------- */
-// 说明：iwown 官方 entservice 没有「立即测量血压」指令。
-// 此接口的策略：
-//   1) 下发消息到手环屏幕（弹窗提醒用户"请测量血压"）
-//   2) 同时发 datasync 触发手环同步历史数据，让之前测量但未上传的数据尽快回传
-//   3) 前端在按钮点击后展示"请在手环上开始测量，测量结束后1-2分钟自动显示新数据"
-app.post('/api/band/measure-bp', async (req, res) => {
-  const { device_id } = req.body || {}
-  if (!device_id) return res.status(400).json({ code: 400, message: 'device_id 不能为空' })
-  const msgUrl = buildEntUrl('/entservice/cmd/message', device_id)
-  const syncUrl = buildEntUrl('/entservice/cmd/datasync', device_id)
-  try {
-    const [msgR, syncR] = await Promise.all([
-      curlPostJson(msgUrl, { device_id, title: '提醒', description: '请立即测量血压，并在测量结束后同步数据' }),
-      curlPostJson(syncUrl, { device_id })
-    ])
-    const msgOk = msgR && msgR.ReturnCode === 0
-    const syncOk = syncR && syncR.ReturnCode === 0
-    console.log('[band/measure-bp]', device_id, 'msgOk=', msgOk, 'syncOk=', syncOk)
-    res.json({
-      code: 0,
-      data: {
-        msgOk,
-        syncOk,
-        msgCode: msgR && msgR.ReturnCode,
-        syncCode: syncR && syncR.ReturnCode
-      }
-    })
   } catch (e) {
     res.status(502).json({ code: 502, message: '指令服务不可达: ' + e.message })
   }

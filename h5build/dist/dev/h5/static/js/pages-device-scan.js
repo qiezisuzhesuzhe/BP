@@ -864,7 +864,7 @@ render._withStripped = true
 /*!****************************!*\
   !*** ./src/common/band.js ***!
   \****************************/
-/*! exports provided: BAND_SERVER, bandApi, fetchBandLatest, fetchBandAddress, sendBandMessage, bindBandDevice, extractDeviceId, bpLevel, triggerMeasureBP */
+/*! exports provided: BAND_SERVER, bandApi, fetchBandLatest, fetchBandAddress, sendBandMessage, bindBandDevice, extractDeviceId, bpLevel */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -877,7 +877,6 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "bindBandDevice", function() { return bindBandDevice; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "extractDeviceId", function() { return extractDeviceId; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "bpLevel", function() { return bpLevel; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "triggerMeasureBP", function() { return triggerMeasureBP; });
 /* harmony import */ var core_js_modules_es_object_to_string_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! core-js/modules/es.object.to-string.js */ "07d7");
 /* harmony import */ var core_js_modules_es_object_to_string_js__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_object_to_string_js__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var core_js_modules_es_regexp_exec_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! core-js/modules/es.regexp.exec.js */ "rB9j");
@@ -1056,38 +1055,6 @@ function bpLevel(sbp, dbp) {
     label: '正常',
     color: '#27ae60'
   };
-}
-
-// 触发测血压：下发消息提醒 + 一键同步历史数据（见 server.js /api/band/measure-bp）
-// 返回 { err?: string } —— err 为空即下发成功，由前端弹窗提示用户"请在手环上操作测量"
-function triggerMeasureBP(deviceid) {
-  return new Promise(function (resolve) {
-    uni.request({
-      url: bandApi('/api/band/measure-bp'),
-      method: 'POST',
-      data: {
-        device_id: deviceid
-      },
-      timeout: 20000,
-      success: function success(res) {
-        if (res.statusCode === 200 && res.data && res.data.code === 0) {
-          resolve({
-            err: null,
-            data: res.data.data || null
-          });
-        } else {
-          resolve({
-            err: res.data && res.data.message || '下发失败(' + (res.statusCode || '') + ')'
-          });
-        }
-      },
-      fail: function fail() {
-        resolve({
-          err: '无法连接指令服务'
-        });
-      }
-    });
-  });
 }
 
 /***/ }),

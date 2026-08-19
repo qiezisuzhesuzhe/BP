@@ -151,26 +151,3 @@ export function bpLevel(sbp, dbp) {
   if (sbp >= 120 || dbp >= 80) return { key: 'normal-h', label: '正常偏高', color: '#f2994a' }
   return { key: 'normal', label: '正常', color: '#27ae60' }
 }
-
-// 触发测血压：下发消息提醒 + 一键同步历史数据（见 server.js /api/band/measure-bp）
-// 返回 { err?: string } —— err 为空即下发成功，由前端弹窗提示用户"请在手环上操作测量"
-export function triggerMeasureBP(deviceid) {
-  return new Promise((resolve) => {
-    uni.request({
-      url: bandApi('/api/band/measure-bp'),
-      method: 'POST',
-      data: { device_id: deviceid },
-      timeout: 20000,
-      success(res) {
-        if (res.statusCode === 200 && res.data && res.data.code === 0) {
-          resolve({ err: null, data: res.data.data || null })
-        } else {
-          resolve({ err: (res.data && res.data.message) || '下发失败(' + (res.statusCode || '') + ')' })
-        }
-      },
-      fail() {
-        resolve({ err: '无法连接指令服务' })
-      }
-    })
-  })
-}

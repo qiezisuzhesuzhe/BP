@@ -124,6 +124,11 @@
           placeholder="消息内容（≤240字节），发送后在手环上显示"
           placeholder-class="msg__ph"
         />
+        <view class="msg__presets">
+          <view v-for="p in presets" :key="p" class="msg__chip" @tap="sendPreset(p)">
+            <text class="msg__chip-t">{{ p }}</text>
+          </view>
+        </view>
         <view class="msg__bar">
           <text class="msg__len">{{ msgBytes }}/240 字节</text>
           <view class="msg__btn" :class="{ 'msg__btn--busy': msgSending }" @tap="sendMsg">
@@ -168,7 +173,8 @@ export default {
       addrVisible: true,
       msgTitle: '',
       msgText: '',
-      msgSending: false
+      msgSending: false,
+      presets: ['记得测量血压', '记得按时吃药', '该起身活动了', '注意安全早点回家', '记得喝水', '不舒服请按 SOS']
     }
   },
   computed: {
@@ -253,9 +259,14 @@ export default {
       this.addrVisible = !this.addrVisible
     },
     // 发送消息到手环（entservice 指令下发）
-    async sendMsg() {
-      const title = (this.msgTitle || '').trim()
-      const text = (this.msgText || '').trim()
+    sendMsg() {
+      this.doSend((this.msgTitle || '').trim(), (this.msgText || '').trim())
+    },
+    // 快捷提醒语：一键填充并发送
+    sendPreset(p) {
+      this.doSend('安康提醒', p)
+    },
+    async doSend(title, text) {
       if (!text) {
         uni.showToast({ title: '请输入消息内容', icon: 'none' })
         return
@@ -276,7 +287,10 @@ export default {
       const err = await sendBandMessage(this.deviceid, title, text)
       this.msgSending = false
       uni.showToast({ title: err ? err : '消息已发送到手环', icon: 'none' })
-      if (!err) this.msgText = ''
+      if (!err) {
+        this.msgTitle = ''
+        this.msgText = ''
+      }
     },
     // 手动刷新：loading 反馈 + 结果提示
     async doRefresh() {
@@ -799,6 +813,26 @@ export default {
 .msg__ph {
   color: $text-hint;
   font-size: $font-size-xs;
+}
+
+/* 快捷提醒语 */
+.msg__presets {
+  margin-top: $space-3;
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.msg__chip {
+  margin: 0 $space-2 $space-2 0;
+  padding: $space-1 $space-3;
+  border-radius: $radius-full;
+  background: $bg-section;
+  border: 1rpx solid $border-subtle;
+}
+
+.msg__chip-t {
+  font-size: $font-size-2xs;
+  color: $text-secondary;
 }
 
 .msg__bar {

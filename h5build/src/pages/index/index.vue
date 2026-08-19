@@ -397,6 +397,7 @@ export default {
 .rights {
   position: relative;
   overflow: hidden;
+  height: auto;
   background: linear-gradient(160deg, $bg-surface 0%, $gold-soft 100%);
   border: 1rpx solid $gold-line;
   border-radius: $radius-card;
@@ -509,6 +510,7 @@ export default {
 .rights__grid {
   position: relative;
   z-index: 1;
+  height: auto;
   margin-top: $space-4;
   display: flex;
   flex-wrap: wrap;
@@ -545,7 +547,7 @@ export default {
 
 /* 入口下方剩余次数文字：无限制用淡色，剩余有限次数用金色突出 */
 .rights__item-q {
-  font-size: $font-size-2xs;
+  font-size: $font-size-sm;
   color: $text-disabled;
   margin-top: 2rpx;
   font-family: $font-family-en;
@@ -765,7 +767,7 @@ export default {
 }
 
 .foot-tip {
-  padding: $space-5 $space-6 $space-3;
+  padding: 0 $space-6;
   text-align: center;
 }
 
@@ -827,7 +829,7 @@ export default {
 
 .consult__cert-t {
   margin-left: $space-1;
-  font-size: $font-size-2xs;
+  font-size: $font-size-sm;
   color: $text-muted;
 }
 
@@ -876,7 +878,7 @@ export default {
 }
 
 .consult__doctor-name {
-  font-size: $font-size-sm;
+  font-size: $font-size-lg;
   font-weight: $font-weight-semibold;
   color: $text-primary;
 }

@@ -858,7 +858,7 @@ export default {
 }
 
 .consult__guide-t {
-  font-size: $font-size-2xs;
+  font-size: $font-size-xs;
   color: $text-muted;
 }
 

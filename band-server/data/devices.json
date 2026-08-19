@@ -3226,22 +3226,22 @@
       "name": "智能手环",
       "model": "BP100CE",
       "firstSeen": 1787136812838,
-      "lastSeen": 1787144563730,
+      "lastSeen": 1787149466192,
       "version": "91.0.0.59",
       "netType": "LTE",
       "wearing": "1",
       "lastDeviceInfo": 1787140482904,
       "latest": {
-        "steps": 1220,
-        "distance": 870,
-        "calorie": 80,
+        "steps": 3099,
+        "distance": 2168,
+        "calorie": 202,
         "battery": 93,
         "charging": false,
-        "ts": 1787173320,
-        "updatedAt": 1787144563730,
+        "ts": 1787178240,
+        "updatedAt": 1787149466192,
         "sbp": 135,
         "dbp": 89,
-        "hr": 101,
+        "hr": 109,
         "sleep": {
           "deep": 0,
           "light": 0,
@@ -3738,6 +3738,41 @@
             "total": 5
           },
           "ts": 1787173320
+        },
+        {
+          "at": 1787147889479,
+          "steps": 3099,
+          "distance": 2168,
+          "calorie": 202,
+          "battery": 93,
+          "charging": false,
+          "ts": 1787176687
+        },
+        {
+          "at": 1787147905379,
+          "hr": 109,
+          "steps": 24,
+          "sleep": {
+            "deep": 0,
+            "light": 0,
+            "wake": 5,
+            "total": 5
+          },
+          "ts": 1787176680
+        },
+        {
+          "at": 1787149450654,
+          "steps": 3099,
+          "distance": 2168,
+          "calorie": 202,
+          "battery": 93,
+          "charging": false,
+          "ts": 1787178248
+        },
+        {
+          "at": 1787149466192,
+          "hr": 109,
+          "ts": 1787178240
         }
       ]
     }

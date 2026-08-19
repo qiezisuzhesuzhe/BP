@@ -36,8 +36,8 @@
     </view>
 
     <!-- 我的权益（始终展示，购买后解锁完整权益） -->
-    <view class="wrap">
-      <view class="sec-head">
+    <view class="wrap wrap--first">
+      <view class="sec-head sec-head--first">
         <text class="hm-sec-title">我的权益</text>
         <text v-if="activeRight" class="hm-sec-sub">{{ activeRight.name }}</text>
       </view>
@@ -622,7 +622,7 @@ export default {
 }
 
 /* 第一个卡片标题无需上间距 */
-.wrap:first-of-type .sec-head {
+.sec-head--first {
   margin-top: 0;
 }
 

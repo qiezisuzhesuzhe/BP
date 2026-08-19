@@ -8,12 +8,24 @@
         <view v-if="idx < items.length - 1" class="tl__line"></view>
       </view>
 
-      <view class="tl__card">
+      <view class="tl__card" :class="{ 'tl__card--sent': sent(idx) }" @tap="cardTap(item, idx)">
         <view class="tl__head">
-          <text class="tl__time">{{ item.time }}</text>
-          <text class="tl__tag" :style="{ color: meta(item.cat).color, background: meta(item.cat).bg }">
-            {{ meta(item.cat).label }}
-          </text>
+          <view class="tl__head-l">
+            <text class="tl__time">{{ item.time }}</text>
+            <text class="tl__tag" :style="{ color: meta(item.cat).color, background: meta(item.cat).bg }">
+              {{ meta(item.cat).label }}
+            </text>
+          </view>
+          <view class="tl__head-r">
+            <view v-if="sent(idx)" class="tl__sent">
+              <text class="tl__sent-icon fa-solid fa-bell-ring-check"></text>
+              <text class="tl__sent-t">已发手环</text>
+            </view>
+            <view v-else class="tl__send-hint">
+              <text class="tl__send-hint-icon fa-regular fa-bell"></text>
+              <text class="tl__send-hint-t">点击发送提醒</text>
+            </view>
+          </view>
         </view>
         <text class="tl__title">{{ item.title }}</text>
         <text class="tl__desc">{{ item.desc }}</text>
@@ -67,7 +79,11 @@ const FALLBACK_IMG = '/static/img/placeholder.png'
 export default {
   name: 'hm-timeline',
   props: {
-    items: { type: Array, default: () => [] }
+    items: { type: Array, default: () => [] },
+    // 已发送记录：{ [itemKey]: { ts, deviceid, name } }；itemKey 建议为 `${dayIdx}:${idx}:${item.title}`
+    sentRecords: { type: Object, default: () => ({}) },
+    // 当前 dayKey（用于组合 itemKey），传空则只用 idx
+    dayKey: { type: [String, Number], default: '' }
   },
   data() {
     return {
@@ -75,6 +91,16 @@ export default {
     }
   },
   methods: {
+    keyOf(idx) {
+      return (this.dayKey !== '' ? this.dayKey + ':' : '') + idx
+    },
+    sent(idx) {
+      return this.sentRecords && this.sentRecords[this.keyOf(idx)]
+    },
+    cardTap(item, idx) {
+      // 若已发送，仍然允许重发，交给父组件决定
+      this.$emit('card-tap', { item, idx, key: this.keyOf(idx), alreadySent: !!this.sent(idx) })
+    },
     meta(cat) {
       return CAT_META[cat] || { label: '指导', color: '#389a82', bg: '#d4f5ee' }
     },
@@ -169,6 +195,18 @@ export default {
   margin-bottom: $space-1;
 }
 
+.tl__head-l {
+  display: flex;
+  align-items: center;
+  gap: $space-2;
+}
+
+.tl__head-r {
+  display: flex;
+  align-items: center;
+  flex-shrink: 0;
+}
+
 .tl__time {
   font-size: $font-size-sm;
   font-weight: $font-weight-bold;
@@ -180,6 +218,49 @@ export default {
   font-size: $font-size-2xs;
   padding: $space-1 $space-2;
   border-radius: $radius-full;
+}
+
+/* 已发送状态 */
+.tl__sent {
+  display: inline-flex;
+  align-items: center;
+  padding: $space-1 $space-2;
+  border-radius: $radius-full;
+  background: rgba(56, 154, 130, 0.1);
+  color: #2b7e6a;
+}
+.tl__sent-icon {
+  font-size: $font-size-xs;
+  margin-right: $space-1;
+}
+.tl__sent-t {
+  font-size: $font-size-2xs;
+  font-weight: $font-weight-semibold;
+  line-height: 1;
+}
+
+/* 提示点击发送 */
+.tl__send-hint {
+  display: inline-flex;
+  align-items: center;
+  padding: $space-1 $space-2;
+  border-radius: $radius-full;
+  background: $bg-section;
+  color: $text-muted;
+}
+.tl__send-hint-icon {
+  font-size: $font-size-2xs;
+  margin-right: $space-1;
+  opacity: 0.8;
+}
+.tl__send-hint-t {
+  font-size: $font-size-2xs;
+  line-height: 1;
+}
+
+.tl__card--sent {
+  border: 1rpx solid rgba(56, 154, 130, 0.35);
+  box-shadow: 0 8rpx 24rpx rgba(56, 154, 130, 0.08);
 }
 
 .tl__title {

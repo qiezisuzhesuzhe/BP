@@ -51,19 +51,34 @@ component.options.__file = "components/hm-timeline/hm-timeline.vue"
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var core_js_modules_es_parse_int_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! core-js/modules/es.parse-int.js */ "4l63");
-/* harmony import */ var core_js_modules_es_parse_int_js__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_parse_int_js__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var core_js_modules_es_regexp_exec_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! core-js/modules/es.regexp.exec.js */ "rB9j");
-/* harmony import */ var core_js_modules_es_regexp_exec_js__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_regexp_exec_js__WEBPACK_IMPORTED_MODULE_1__);
-/* harmony import */ var core_js_modules_es_regexp_test_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! core-js/modules/es.regexp.test.js */ "ALS0");
-/* harmony import */ var core_js_modules_es_regexp_test_js__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_regexp_test_js__WEBPACK_IMPORTED_MODULE_2__);
-/* harmony import */ var core_js_modules_es_string_replace_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! core-js/modules/es.string.replace.js */ "UxlC");
-/* harmony import */ var core_js_modules_es_string_replace_js__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_string_replace_js__WEBPACK_IMPORTED_MODULE_3__);
-/* harmony import */ var _common_mock_js__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! @/common/mock.js */ "rfkh");
+/* harmony import */ var core_js_modules_es_number_constructor_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! core-js/modules/es.number.constructor.js */ "qePV");
+/* harmony import */ var core_js_modules_es_number_constructor_js__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_number_constructor_js__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var core_js_modules_es_parse_int_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! core-js/modules/es.parse-int.js */ "4l63");
+/* harmony import */ var core_js_modules_es_parse_int_js__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_parse_int_js__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var core_js_modules_es_regexp_exec_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! core-js/modules/es.regexp.exec.js */ "rB9j");
+/* harmony import */ var core_js_modules_es_regexp_exec_js__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_regexp_exec_js__WEBPACK_IMPORTED_MODULE_2__);
+/* harmony import */ var core_js_modules_es_regexp_test_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! core-js/modules/es.regexp.test.js */ "ALS0");
+/* harmony import */ var core_js_modules_es_regexp_test_js__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_regexp_test_js__WEBPACK_IMPORTED_MODULE_3__);
+/* harmony import */ var core_js_modules_es_string_replace_js__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! core-js/modules/es.string.replace.js */ "UxlC");
+/* harmony import */ var core_js_modules_es_string_replace_js__WEBPACK_IMPORTED_MODULE_4___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_string_replace_js__WEBPACK_IMPORTED_MODULE_4__);
+/* harmony import */ var _common_mock_js__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! @/common/mock.js */ "rfkh");
 
 
 
 
+
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 //
 //
 //
@@ -129,6 +144,18 @@ var FALLBACK_IMG = '/static/img/placeholder.png';
       default: function _default() {
         return [];
       }
+    },
+    // 已发送记录：{ [itemKey]: { ts, deviceid, name } }；itemKey 建议为 `${dayIdx}:${idx}:${item.title}`
+    sentRecords: {
+      type: Object,
+      default: function _default() {
+        return {};
+      }
+    },
+    // 当前 dayKey（用于组合 itemKey），传空则只用 idx
+    dayKey: {
+      type: [String, Number],
+      default: ''
     }
   },
   data: function data() {
@@ -137,8 +164,23 @@ var FALLBACK_IMG = '/static/img/placeholder.png';
     };
   },
   methods: {
+    keyOf: function keyOf(idx) {
+      return (this.dayKey !== '' ? this.dayKey + ':' : '') + idx;
+    },
+    sent: function sent(idx) {
+      return this.sentRecords && this.sentRecords[this.keyOf(idx)];
+    },
+    cardTap: function cardTap(item, idx) {
+      // 若已发送，仍然允许重发，交给父组件决定
+      this.$emit('card-tap', {
+        item: item,
+        idx: idx,
+        key: this.keyOf(idx),
+        alreadySent: !!this.sent(idx)
+      });
+    },
     meta: function meta(cat) {
-      return _common_mock_js__WEBPACK_IMPORTED_MODULE_4__["CAT_META"][cat] || {
+      return _common_mock_js__WEBPACK_IMPORTED_MODULE_5__["CAT_META"][cat] || {
         label: '指导',
         color: '#389a82',
         bg: '#d4f5ee'
@@ -270,7 +312,7 @@ __webpack_require__.r(__webpack_exports__);
 var ___CSS_LOADER_API_IMPORT___ = __webpack_require__(/*! ../../../node_modules/css-loader/dist/runtime/api.js */ "JPst");
 exports = ___CSS_LOADER_API_IMPORT___(false);
 // Module
-exports.push([module.i, "@charset \"UTF-8\";\n/* 安康健康管理 · 设计令牌\n   来源：/workspace/DESIGN.md\n   方案：rpx + SCSS 变量（1px = 2rpx，基于 750rpx 设计基准） */\n/* ---------- 品牌色 ---------- */\n/* ---------- 头像 ---------- */\n/* ---------- 语义状态色 ---------- */\n/* ---------- 金色（尊享装饰） ---------- */\n/* ---------- 背景 ---------- */\n/* 斜向两色渐变：左上(#ddf7ed) → 右下(#f3f3f3)，末端即底色；\n   配合 App.vue 中 background-attachment: fixed 铺满视口固定，不随页面滚动/变长 */\n/* ---------- 文字 ---------- */\n/* ---------- 描边 / 遮罩 ---------- */\n/* ---------- 字体 ---------- */\n/* 英文/数字优先匹配 DIN Pro（Mac 自带 DIN Alternate 作为备选），中文回退苹方/雅黑 */\n/* 移动端最小舒适字号（可读正文下限）：\n   说明/入口/数据标签等可读文字不得小于 12px(24rpx)；\n   $font-size-2xs(10px) 仅限角标、徽标、装饰性元素 */\n/* ---------- 语义排版 ---------- */\n/* ---------- 间距 ---------- */\n/* ---------- 区块标题 ---------- */\n/* 标题下间距 = 列表间距；上间距 = 下间距 × 2 */\n/* ---------- 尺寸 ---------- */\n/* ---------- 圆角（已减半，更克制干净） ---------- */\n/* ---------- 阴影 ---------- */\n/* ---------- 层级 ---------- */\n/* ---------- 动效 ---------- */\n.tl__row[data-v-65b63418] {\n  display: flex;\n  align-items: stretch;\n}\n.tl__rail[data-v-65b63418] {\n  width: %?64?%;\n  display: flex;\n  flex-direction: column;\n  align-items: center;\n  flex-shrink: 0;\n}\n.tl__dot[data-v-65b63418] {\n  width: %?56?%;\n  height: %?56?%;\n  border-radius: 50%;\n  display: flex;\n  align-items: center;\n  justify-content: center;\n  margin-top: %?8?%;\n  box-shadow: 0 %?4?% %?24?% rgba(15, 61, 53, 0.06);\n}\n.tl__dot-icon[data-v-65b63418] {\n  font-size: %?28?%;\n  line-height: %?28?%;\n}\n.tl__line[data-v-65b63418] {\n  flex: 1;\n  width: %?1?%;\n  background: #f2f7fa;\n  margin: %?8?% 0;\n}\n.tl__card[data-v-65b63418] {\n  flex: 1;\n  background: #ffffff;\n  border-radius: %?20?%;\n  padding: %?24?%;\n  margin: 0 0 %?32?% %?8?%;\n  box-shadow: 0 %?4?% %?24?% rgba(15, 61, 53, 0.06);\n}\n.tl__head[data-v-65b63418] {\n  display: flex;\n  align-items: center;\n  justify-content: space-between;\n  margin-bottom: %?8?%;\n}\n.tl__time[data-v-65b63418] {\n  font-size: %?28?%;\n  font-weight: 700;\n  color: #334155;\n  letter-spacing: %?1?%;\n}\n.tl__tag[data-v-65b63418] {\n  font-size: %?20?%;\n  padding: %?8?% %?16?%;\n  border-radius: %?999?%;\n}\n.tl__title[data-v-65b63418] {\n  display: block;\n  font-size: %?28?%;\n  font-weight: 600;\n  color: #1a2a3c;\n  margin-bottom: %?8?%;\n}\n.tl__desc[data-v-65b63418] {\n  display: block;\n  font-size: %?24?%;\n  color: #64748b;\n  line-height: 1.6;\n}\n/* ---------- 运动：视频封面 ---------- */\n.tl__cover[data-v-65b63418] {\n  position: relative;\n  margin-top: %?16?%;\n  border-radius: %?12?%;\n  overflow: hidden;\n}\n.tl__cover-img[data-v-65b63418] {\n  width: 100%;\n  height: %?320?%;\n  display: block;\n}\n.tl__cover-mask[data-v-65b63418] {\n  position: absolute;\n  top: 0;\n  left: 0;\n  right: 0;\n  bottom: 0;\n  background: linear-gradient(180deg, rgba(15, 61, 53, 0.05) 55%, rgba(15, 61, 53, 0.42));\n}\n.tl__cover-play[data-v-65b63418] {\n  position: absolute;\n  top: 50%;\n  left: 50%;\n  width: %?64?%;\n  height: %?64?%;\n  margin-left: %?-32?%;\n  margin-top: %?-32?%;\n  border-radius: 50%;\n  background: rgba(255, 255, 255, 0.92);\n  display: flex;\n  align-items: center;\n  justify-content: center;\n  box-shadow: 0 %?12?% %?48?% rgba(125, 212, 188, 0.18);\n}\n.tl__cover-play-icon[data-v-65b63418] {\n  color: #389a82;\n  font-size: %?28?%;\n  margin-left: %?4?%;\n}\n.tl__cover-dur[data-v-65b63418] {\n  position: absolute;\n  right: %?16?%;\n  bottom: %?16?%;\n  color: #ffffff;\n  font-size: %?20?%;\n  background: rgba(0, 0, 0, 0.35);\n  padding: %?2?% %?8?%;\n  border-radius: %?6?%;\n  letter-spacing: %?1?%;\n}\n.tl__cover-label[data-v-65b63418] {\n  position: absolute;\n  left: %?16?%;\n  bottom: %?16?%;\n  color: #ffffff;\n  font-size: %?20?%;\n  background: rgba(0, 0, 0, 0.35);\n  padding: %?2?% %?8?%;\n  border-radius: %?6?%;\n}\n/* ---------- 操作按钮（餐/评估） ---------- */\n.tl__action[data-v-65b63418] {\n  margin-top: %?16?%;\n  display: inline-flex;\n  align-items: center;\n  padding: %?8?% %?24?%;\n  border-radius: %?999?%;\n  background: #d4f5ee;\n  border: %?1?% solid rgba(56, 154, 130, 0.12);\n}\n.tl__action--primary[data-v-65b63418] {\n  background: rgba(212, 245, 238, 0.72);\n}\n.tl__action--done[data-v-65b63418] {\n  background: #f2f7fa;\n}\n.tl__action-icon[data-v-65b63418] {\n  font-size: %?24?%;\n  margin-right: %?8?%;\n  color: rgba(0, 0, 0, 0.1);\n}\n.tl__action--done .tl__action-icon[data-v-65b63418] {\n  color: #27ae60;\n}\n.tl__action-t[data-v-65b63418] {\n  font-size: %?24?%;\n  font-weight: 600;\n  color: #389a82;\n}\n.tl__action--done .tl__action-t[data-v-65b63418] {\n  color: #64748b;\n}", ""]);
+exports.push([module.i, "@charset \"UTF-8\";\n/* 安康健康管理 · 设计令牌\n   来源：/workspace/DESIGN.md\n   方案：rpx + SCSS 变量（1px = 2rpx，基于 750rpx 设计基准） */\n/* ---------- 品牌色 ---------- */\n/* ---------- 头像 ---------- */\n/* ---------- 语义状态色 ---------- */\n/* ---------- 金色（尊享装饰） ---------- */\n/* ---------- 背景 ---------- */\n/* 斜向两色渐变：左上(#ddf7ed) → 右下(#f3f3f3)，末端即底色；\n   配合 App.vue 中 background-attachment: fixed 铺满视口固定，不随页面滚动/变长 */\n/* ---------- 文字 ---------- */\n/* ---------- 描边 / 遮罩 ---------- */\n/* ---------- 字体 ---------- */\n/* 英文/数字优先匹配 DIN Pro（Mac 自带 DIN Alternate 作为备选），中文回退苹方/雅黑 */\n/* 移动端最小舒适字号（可读正文下限）：\n   说明/入口/数据标签等可读文字不得小于 12px(24rpx)；\n   $font-size-2xs(10px) 仅限角标、徽标、装饰性元素 */\n/* ---------- 语义排版 ---------- */\n/* ---------- 间距 ---------- */\n/* ---------- 区块标题 ---------- */\n/* 标题下间距 = 列表间距；上间距 = 下间距 × 2 */\n/* ---------- 尺寸 ---------- */\n/* ---------- 圆角（已减半，更克制干净） ---------- */\n/* ---------- 阴影 ---------- */\n/* ---------- 层级 ---------- */\n/* ---------- 动效 ---------- */\n.tl__row[data-v-65b63418] {\n  display: flex;\n  align-items: stretch;\n}\n.tl__rail[data-v-65b63418] {\n  width: %?64?%;\n  display: flex;\n  flex-direction: column;\n  align-items: center;\n  flex-shrink: 0;\n}\n.tl__dot[data-v-65b63418] {\n  width: %?56?%;\n  height: %?56?%;\n  border-radius: 50%;\n  display: flex;\n  align-items: center;\n  justify-content: center;\n  margin-top: %?8?%;\n  box-shadow: 0 %?4?% %?24?% rgba(15, 61, 53, 0.06);\n}\n.tl__dot-icon[data-v-65b63418] {\n  font-size: %?28?%;\n  line-height: %?28?%;\n}\n.tl__line[data-v-65b63418] {\n  flex: 1;\n  width: %?1?%;\n  background: #f2f7fa;\n  margin: %?8?% 0;\n}\n.tl__card[data-v-65b63418] {\n  flex: 1;\n  background: #ffffff;\n  border-radius: %?20?%;\n  padding: %?24?%;\n  margin: 0 0 %?32?% %?8?%;\n  box-shadow: 0 %?4?% %?24?% rgba(15, 61, 53, 0.06);\n}\n.tl__head[data-v-65b63418] {\n  display: flex;\n  align-items: center;\n  justify-content: space-between;\n  margin-bottom: %?8?%;\n}\n.tl__head-l[data-v-65b63418] {\n  display: flex;\n  align-items: center;\n  gap: %?16?%;\n}\n.tl__head-r[data-v-65b63418] {\n  display: flex;\n  align-items: center;\n  flex-shrink: 0;\n}\n.tl__time[data-v-65b63418] {\n  font-size: %?28?%;\n  font-weight: 700;\n  color: #334155;\n  letter-spacing: %?1?%;\n}\n.tl__tag[data-v-65b63418] {\n  font-size: %?20?%;\n  padding: %?8?% %?16?%;\n  border-radius: %?999?%;\n}\n/* 已发送状态 */\n.tl__sent[data-v-65b63418] {\n  display: inline-flex;\n  align-items: center;\n  padding: %?8?% %?16?%;\n  border-radius: %?999?%;\n  background: rgba(56, 154, 130, 0.1);\n  color: #2b7e6a;\n}\n.tl__sent-icon[data-v-65b63418] {\n  font-size: %?24?%;\n  margin-right: %?8?%;\n}\n.tl__sent-t[data-v-65b63418] {\n  font-size: %?20?%;\n  font-weight: 600;\n  line-height: 1;\n}\n/* 提示点击发送 */\n.tl__send-hint[data-v-65b63418] {\n  display: inline-flex;\n  align-items: center;\n  padding: %?8?% %?16?%;\n  border-radius: %?999?%;\n  background: #f2f7fa;\n  color: #64748b;\n}\n.tl__send-hint-icon[data-v-65b63418] {\n  font-size: %?20?%;\n  margin-right: %?8?%;\n  opacity: 0.8;\n}\n.tl__send-hint-t[data-v-65b63418] {\n  font-size: %?20?%;\n  line-height: 1;\n}\n.tl__card--sent[data-v-65b63418] {\n  border: %?1?% solid rgba(56, 154, 130, 0.35);\n  box-shadow: 0 %?8?% %?24?% rgba(56, 154, 130, 0.08);\n}\n.tl__title[data-v-65b63418] {\n  display: block;\n  font-size: %?28?%;\n  font-weight: 600;\n  color: #1a2a3c;\n  margin-bottom: %?8?%;\n}\n.tl__desc[data-v-65b63418] {\n  display: block;\n  font-size: %?24?%;\n  color: #64748b;\n  line-height: 1.6;\n}\n/* ---------- 运动：视频封面 ---------- */\n.tl__cover[data-v-65b63418] {\n  position: relative;\n  margin-top: %?16?%;\n  border-radius: %?12?%;\n  overflow: hidden;\n}\n.tl__cover-img[data-v-65b63418] {\n  width: 100%;\n  height: %?320?%;\n  display: block;\n}\n.tl__cover-mask[data-v-65b63418] {\n  position: absolute;\n  top: 0;\n  left: 0;\n  right: 0;\n  bottom: 0;\n  background: linear-gradient(180deg, rgba(15, 61, 53, 0.05) 55%, rgba(15, 61, 53, 0.42));\n}\n.tl__cover-play[data-v-65b63418] {\n  position: absolute;\n  top: 50%;\n  left: 50%;\n  width: %?64?%;\n  height: %?64?%;\n  margin-left: %?-32?%;\n  margin-top: %?-32?%;\n  border-radius: 50%;\n  background: rgba(255, 255, 255, 0.92);\n  display: flex;\n  align-items: center;\n  justify-content: center;\n  box-shadow: 0 %?12?% %?48?% rgba(125, 212, 188, 0.18);\n}\n.tl__cover-play-icon[data-v-65b63418] {\n  color: #389a82;\n  font-size: %?28?%;\n  margin-left: %?4?%;\n}\n.tl__cover-dur[data-v-65b63418] {\n  position: absolute;\n  right: %?16?%;\n  bottom: %?16?%;\n  color: #ffffff;\n  font-size: %?20?%;\n  background: rgba(0, 0, 0, 0.35);\n  padding: %?2?% %?8?%;\n  border-radius: %?6?%;\n  letter-spacing: %?1?%;\n}\n.tl__cover-label[data-v-65b63418] {\n  position: absolute;\n  left: %?16?%;\n  bottom: %?16?%;\n  color: #ffffff;\n  font-size: %?20?%;\n  background: rgba(0, 0, 0, 0.35);\n  padding: %?2?% %?8?%;\n  border-radius: %?6?%;\n}\n/* ---------- 操作按钮（餐/评估） ---------- */\n.tl__action[data-v-65b63418] {\n  margin-top: %?16?%;\n  display: inline-flex;\n  align-items: center;\n  padding: %?8?% %?24?%;\n  border-radius: %?999?%;\n  background: #d4f5ee;\n  border: %?1?% solid rgba(56, 154, 130, 0.12);\n}\n.tl__action--primary[data-v-65b63418] {\n  background: rgba(212, 245, 238, 0.72);\n}\n.tl__action--done[data-v-65b63418] {\n  background: #f2f7fa;\n}\n.tl__action-icon[data-v-65b63418] {\n  font-size: %?24?%;\n  margin-right: %?8?%;\n  color: rgba(0, 0, 0, 0.1);\n}\n.tl__action--done .tl__action-icon[data-v-65b63418] {\n  color: #27ae60;\n}\n.tl__action-t[data-v-65b63418] {\n  font-size: %?24?%;\n  font-weight: 600;\n  color: #389a82;\n}\n.tl__action--done .tl__action-t[data-v-65b63418] {\n  color: #64748b;\n}", ""]);
 // Exports
 module.exports = exports;
 
@@ -330,25 +372,79 @@ var render = function () {
           ),
           _c(
             "v-uni-view",
-            { staticClass: "tl__card" },
+            {
+              staticClass: "tl__card",
+              class: { "tl__card--sent": _vm.sent(idx) },
+              on: {
+                click: function ($event) {
+                  arguments[0] = $event = _vm.$handleEvent($event)
+                  _vm.cardTap(item, idx)
+                },
+              },
+            },
             [
               _c(
                 "v-uni-view",
                 { staticClass: "tl__head" },
                 [
-                  _c("v-uni-text", { staticClass: "tl__time" }, [
-                    _vm._v(_vm._s(item.time)),
-                  ]),
                   _c(
-                    "v-uni-text",
-                    {
-                      staticClass: "tl__tag",
-                      style: {
-                        color: _vm.meta(item.cat).color,
-                        background: _vm.meta(item.cat).bg,
-                      },
-                    },
-                    [_vm._v(" " + _vm._s(_vm.meta(item.cat).label) + " ")]
+                    "v-uni-view",
+                    { staticClass: "tl__head-l" },
+                    [
+                      _c("v-uni-text", { staticClass: "tl__time" }, [
+                        _vm._v(_vm._s(item.time)),
+                      ]),
+                      _c(
+                        "v-uni-text",
+                        {
+                          staticClass: "tl__tag",
+                          style: {
+                            color: _vm.meta(item.cat).color,
+                            background: _vm.meta(item.cat).bg,
+                          },
+                        },
+                        [_vm._v(" " + _vm._s(_vm.meta(item.cat).label) + " ")]
+                      ),
+                    ],
+                    1
+                  ),
+                  _c(
+                    "v-uni-view",
+                    { staticClass: "tl__head-r" },
+                    [
+                      _vm.sent(idx)
+                        ? _c(
+                            "v-uni-view",
+                            { staticClass: "tl__sent" },
+                            [
+                              _c("v-uni-text", {
+                                staticClass:
+                                  "tl__sent-icon fa-solid fa-bell-ring-check",
+                              }),
+                              _c("v-uni-text", { staticClass: "tl__sent-t" }, [
+                                _vm._v("已发手环"),
+                              ]),
+                            ],
+                            1
+                          )
+                        : _c(
+                            "v-uni-view",
+                            { staticClass: "tl__send-hint" },
+                            [
+                              _c("v-uni-text", {
+                                staticClass:
+                                  "tl__send-hint-icon fa-regular fa-bell",
+                              }),
+                              _c(
+                                "v-uni-text",
+                                { staticClass: "tl__send-hint-t" },
+                                [_vm._v("点击发送提醒")]
+                              ),
+                            ],
+                            1
+                          ),
+                    ],
+                    1
                   ),
                 ],
                 1

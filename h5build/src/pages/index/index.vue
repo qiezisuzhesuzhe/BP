@@ -141,7 +141,7 @@
         </view>
       </view>
 
-      <hm-timeline :items="todayTimeline.items" />
+      <hm-timeline :items="todayTimeline.items" :day-key="currentDayIndex" :sent-records="sentMap[currentDayIndex] || {}" @card-tap="onCardTap" />
     </view>
 
     <!-- 健康管理服务包 -->
@@ -185,6 +185,9 @@
 </template>
 
 <script>
+import { sendBandMessage } from '@/common/band.js'
+import { deviceType } from '@/common/mock.js'
+
 export default {
   data() {
     return {
@@ -193,7 +196,10 @@ export default {
         { name: '王伟教授', title: '中西医重点学科带头人' },
         { name: '张学智教授', title: '中医老年病学学术带头人' },
         { name: '冯利教授', title: '中西医肿瘤学科带头人' }
-      ]
+      ],
+      // 已发送记录：{ [dayIndex]: { [key]: { ts, deviceid, name } } }
+      sentMap: {},
+      _sending: false
     }
   },
   computed: {
@@ -272,6 +278,160 @@ export default {
     },
     goConsult() {
       uni.showToast({ title: '正在为您匹配在线医生（演示）', icon: 'none' })
+    },
+    // 字节长度（按 UTF-8），兼容 H5/Web：优先用 TextEncoder；兜底 Blob
+    byteLen(str) {
+      const s = String(str || '')
+      if (typeof TextEncoder === 'function') return new TextEncoder().encode(s).byteLength
+      try {
+        if (typeof Blob !== 'undefined') return new Blob([s]).size || 0
+      } catch (e) {}
+      return s.length
+    },
+    // 时间线某卡片：可发送的目标设备（仅过滤手环类设备，能接收消息的）
+    getBandDevices() {
+      const all = (this.$store.getters.devices || []).slice()
+      return all.filter((d) => /^band/.test(d.typeKey || ''))
+    },
+    // 点击时间线卡片 → 选择设备 → 确认发送 → 调接口
+    async onCardTap({ item, key, alreadySent }) {
+      if (this._sending) return
+      const devices = this.getBandDevices()
+      if (!devices.length) {
+        uni.showModal({
+          title: '未找到可发送的手环',
+          content: '请先在"设备"页面绑定一款智能手环，才能下发健康提醒。',
+          confirmText: '去绑定',
+          cancelText: '知道了',
+          confirmColor: '#389a82',
+          success: (r) => {
+            if (r.confirm) uni.switchTab({ url: '/pages/device/device' })
+          }
+        })
+        return
+      }
+      // 构造消息：标题(≤15 字节) 取分类 + 时间；内容(≤240) 取 title+desc
+      const label = (item.time || '') + ' ' + (item.title || '')
+      let title = this.labelToTitle(item.cat || '', item.time || '', item.title || '')
+      let desc = String(item.desc || item.title || '')
+      // 后端限制：标题 ≤15 字节，内容 ≤240 字节（utf8）
+      title = this.truncBytes(title, 15)
+      desc = this.truncBytes(desc, 240)
+      if (!desc) desc = this.truncBytes(String(item.title || '健康提醒'), 240)
+
+      const pickDeviceAndSend = (dev) => {
+        if (!dev) return
+        const type = deviceType(dev.typeKey)
+        const modelName = (type && type.model) || dev.name || '智能手环'
+        const targetText =
+          (dev.name || modelName) + '（' + (dev.sn ? 'SN:' + dev.sn : dev.deviceid || dev.id) + '）'
+        const existingHint = alreadySent
+          ? '\n（该提醒此前已发送，再次发送将在手环上生成新的提醒。）'
+          : ''
+        uni.showModal({
+          title: '发送提醒到 ' + modelName,
+          content:
+            '目标：' +
+            targetText +
+            '\n\n标题：' +
+            title +
+            '\n内容：' +
+            desc +
+            existingHint,
+          confirmText: '确认发送',
+          cancelText: '取消',
+          confirmColor: '#389a82',
+          success: async (r) => {
+            if (!r.confirm) return
+            await this.doSend(dev, title, desc, key, label)
+          }
+        })
+      }
+
+      if (devices.length === 1) {
+        pickDeviceAndSend(devices[0])
+        return
+      }
+      // 多设备：弹选择框（底部 actionsheet）
+      const actions = devices.map((d) => {
+        const type = deviceType(d.typeKey)
+        const typeName = (type && type.name) || '智能手环'
+        return (
+          (d.name || typeName) +
+          ' · ' +
+          (d.sn || d.deviceid || d.id || '').slice(-6)
+        )
+      })
+      actions.push('取消')
+      uni.showActionSheet({
+        itemList: actions,
+        success: (res) => {
+          if (res.tapIndex >= 0 && res.tapIndex < devices.length) {
+            pickDeviceAndSend(devices[res.tapIndex])
+          }
+        }
+      })
+    },
+    labelToTitle(cat, time, ttl) {
+      // 手环消息标题 ≤15 字节，中文每个汉字 3 字节，英文 1 字节
+      // 采用方案：`HH:MM ` (5+1=6 字节) + 2~3 字中文分类（≤9 字节），总 ≤15 字节
+      const C2 = {
+        vitals: '监测',
+        medication: '用药',
+        nutrition: '饮食',
+        exercise: '运动',
+        assessment: '评估',
+        visit: '复诊',
+        mood: '情绪',
+        sleep: '睡眠'
+      }
+      const base = C2[cat] || '提醒'
+      const t = (time || '').trim()
+      // 只要 HH:MM 部分（去掉 " 早餐"等）
+      const m = t.match(/\d{1,2}:\d{2}/)
+      const hhmm = m ? m[0] : ''
+      if (!hhmm) return base
+      return hhmm + ' ' + base
+    },
+    truncBytes(str, n) {
+      let s = String(str || '')
+      if (this.byteLen(s) <= n) return s
+      // 先粗暴砍到 n 字符（每个 UTF-8 字符最多 4 字节，n 足够小）
+      let cut = s.slice(0, Math.max(1, Math.min(n, s.length)))
+      // 不断删除最后一个字符直到 ≤n
+      while (this.byteLen(cut) > n && cut.length > 1) {
+        cut = cut.slice(0, cut.length - 1)
+      }
+      // 如果末尾留空间（至少 3 字节给 "…"）则追加，否则原样返回
+      const tail = '…'
+      if (this.byteLen(cut) + this.byteLen(tail) <= n) {
+        cut = cut + tail
+        // 兜底安全：补完再判一次
+        while (this.byteLen(cut) > n && cut.length > 1) {
+          cut = cut.slice(0, cut.length - 2) + tail
+        }
+      }
+      return cut
+    },
+    async doSend(dev, title, desc, key, label) {
+      if (!dev || !dev.deviceid) {
+        uni.showToast({ title: '该设备尚未生成设备号', icon: 'none' })
+        return
+      }
+      this._sending = true
+      uni.showLoading({ title: '下发中…', mask: true })
+      const err = await sendBandMessage(dev.deviceid, title, desc)
+      this._sending = false
+      uni.hideLoading()
+      if (err) {
+        uni.showToast({ title: err, icon: 'none' })
+        return
+      }
+      // 成功：记录 sentMap 触发卡片「已发手环」徽章
+      this.$set(this.sentMap, this.currentDayIndex, Object.assign({}, this.sentMap[this.currentDayIndex] || {}, {
+        [key]: { ts: Date.now(), deviceid: dev.deviceid, name: dev.name || deviceType(dev.typeKey).name, label }
+      }))
+      uni.showToast({ title: '已发送到手环', icon: 'success' })
     }
   }
 }

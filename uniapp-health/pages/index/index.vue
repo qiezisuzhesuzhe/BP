@@ -124,10 +124,6 @@
         </view>
 
         <view class="pkg__body">
-          <view class="pkg__tags">
-            <text v-for="(t, i) in pkg.tags" :key="i" class="pkg__tag" :style="{ color: pkg.accent, background: pkg.accentSoft }">{{ t }}</text>
-          </view>
-
           <view class="pkg__foot">
             <view class="pkg__price">
               <text class="pkg__cur">¥</text>
@@ -658,25 +654,13 @@ export default {
 }
 
 .pkg__emoji {
-  font-size: $size-icon-xl;
+  font-size: $size-icon-md;
   margin-left: $space-2;
   color: $icon-ink;
 }
 
 .pkg__body {
   padding: $space-3;
-}
-
-.pkg__tags {
-  display: flex;
-  flex-wrap: wrap;
-}
-
-.pkg__tag {
-  font-size: $font-size-2xs;
-  padding: $space-1 $space-2;
-  border-radius: $radius-full;
-  margin: 0 $space-1 $space-1 0;
 }
 
 .pkg__foot {

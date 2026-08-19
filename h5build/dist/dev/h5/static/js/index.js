@@ -2834,7 +2834,7 @@ var KNOWLEDGE = [{
   desc: '每次 30 分钟，快走、慢跑、太极拳、八段锦均可'
 }];
 
-// 首页"我的权益"入口（quota 表示剩余次数，无则不限）
+// 首页"我的权益"入口（图标统一品牌主色，视觉更清爽；quota 表示剩余次数，无则不限）
 var RIGHT_ENTRIES = [{
   key: 'ai',
   label: 'AI自测',
@@ -2845,41 +2845,41 @@ var RIGHT_ENTRIES = [{
   key: 'consult',
   label: '免费问诊',
   icon: 'fa-solid fa-comments',
-  color: '#4ab89e',
-  bg: '#d8f8fa'
+  color: '#389a82',
+  bg: '#d4f5ee'
 }, {
   key: 'expert',
   label: '专家预约',
   icon: 'fa-solid fa-user-doctor',
-  color: '#f15533',
-  bg: '#fdf4ed',
+  color: '#389a82',
+  bg: '#d4f5ee',
   quota: 3
 }, {
   key: 'video',
   label: '视频问诊',
   icon: 'fa-solid fa-video',
-  color: '#8dcdd8',
-  bg: '#e2f2f6',
+  color: '#389a82',
+  bg: '#d4f5ee',
   quota: 6
 }, {
   key: 'accompany',
   label: '陪诊',
   icon: 'fa-solid fa-hand-holding-heart',
-  color: '#f2c94c',
-  bg: '#fdf4ed',
+  color: '#389a82',
+  bg: '#d4f5ee',
   quota: 12
 }, {
   key: 'psycho',
   label: '心理评估',
   icon: 'fa-solid fa-heart-pulse',
-  color: '#27ae60',
-  bg: '#ddf7ed'
+  color: '#389a82',
+  bg: '#d4f5ee'
 }, {
   key: 'nurse',
   label: '上门换药',
   icon: 'fa-solid fa-house-medical',
-  color: '#64748b',
-  bg: '#f2f7fa'
+  color: '#389a82',
+  bg: '#d4f5ee'
 }];
 
 // 健康商城商品（积分换购：price 现金价 / points 所需积分 / img 商品图）
@@ -3154,7 +3154,7 @@ function makeDeviceSnapshot(type, prev) {
 var ___CSS_LOADER_API_IMPORT___ = __webpack_require__(/*! ../node_modules/css-loader/dist/runtime/api.js */ "JPst");
 exports = ___CSS_LOADER_API_IMPORT___(false);
 // Module
-exports.push([module.i, "@charset \"UTF-8\";\n/* 安康健康管理 · 设计令牌\n   来源：/workspace/DESIGN.md\n   方案：rpx + SCSS 变量（1px = 2rpx，基于 750rpx 设计基准） */\n/* ---------- 品牌色 ---------- */\n/* ---------- 头像 ---------- */\n/* ---------- 语义状态色 ---------- */\n/* ---------- 金色（尊享装饰） ---------- */\n/* ---------- 背景 ---------- */\n/* 斜向两色渐变：左上(#ddf7ed) → 右下(#f3f3f3)，末端即底色；\n   配合 App.vue 中 background-attachment: fixed 铺满视口固定，不随页面滚动/变长 */\n/* ---------- 文字 ---------- */\n/* ---------- 描边 / 遮罩 ---------- */\n/* ---------- 字体 ---------- */\n/* 英文/数字优先匹配 DIN Pro（Mac 自带 DIN Alternate 作为备选），中文回退苹方/雅黑 */\n/* 移动端最小舒适字号（可读正文下限）：\n   说明/入口/数据标签等可读文字不得小于 12px(24rpx)；\n   $font-size-2xs(10px) 仅限角标、徽标、装饰性元素 */\n/* ---------- 语义排版 ---------- */\n/* ---------- 间距 ---------- */\n/* ---------- 区块标题 ---------- */\n/* 标题上间距（叠加容器顶部 $space-4 后共 40rpx）、下间距 16rpx：上远下近 */\n/* ---------- 尺寸 ---------- */\n/* ---------- 圆角 ---------- */\n/* ---------- 阴影 ---------- */\n/* ---------- 层级 ---------- */\n/* ---------- 动效 ---------- */\nuni-page-body {\n  background: #f3f3f3;\n  color: #1a2a3c;\n  font-family: \"DIN Pro\", \"DIN Alternate\", \"PingFang SC\", -apple-system, BlinkMacSystemFont, \"Hiragino Sans GB\", \"Microsoft YaHei\", sans-serif;\n  font-size: %?28?%;\n  line-height: 1.6;\n}\nbody.?%PAGE?%{\n  background: #f3f3f3;\n}\nuni-view,\nuni-text,\nuni-scroll-view,\nuni-button,\nuni-input,\nuni-textarea,\nuni-image {\n  box-sizing: border-box;\n}\n/* uni-app H5 中 <view> 编译为自定义元素 <uni-view>，\n   浏览器默认 display: inline 会导致容器 padding/margin 失效，\n   这里统一恢复为块级，避免页面区块错位、卡片贴边 */\nuni-view {\n  display: block;\n}\n.hm-page {\n  min-height: 100vh;\n  background: #f3f3f3;\n  background-image: linear-gradient(135deg, #ddf7ed, #f3f3f3);\n  background-repeat: no-repeat;\n  /* 背景固定于视口：渐变铺满视口，页面滚动/变长时背景不随之移动 */\n  background-size: 100% 100%;\n  background-attachment: fixed;\n}\n.hm-card {\n  background: #ffffff;\n  border-radius: %?48?%;\n  box-shadow: 0 %?4?% %?24?% rgba(15, 61, 53, 0.06);\n}\n.hm-sec-title {\n  font-size: %?36?%;\n  font-weight: 800;\n  line-height: 1.1;\n  color: #1a2a3c;\n  letter-spacing: %?1?%;\n}\n.hm-sec-sub {\n  font-size: %?24?%;\n  color: #64748b;\n  margin-top: %?16?%;\n}\n.hm-divider {\n  height: %?1?%;\n  background: rgba(15, 61, 53, 0.06);\n}\n.hm-safe-bottom {\n  height: calc(env(safe-area-inset-bottom) + %?24?%);\n}\n.ellipsis {\n  overflow: hidden;\n  white-space: nowrap;\n  text-overflow: ellipsis;\n}\n.ellipsis-2 {\n  overflow: hidden;\n  text-overflow: ellipsis;\n  display: -webkit-box;\n  -webkit-line-clamp: 2;\n  -webkit-box-orient: vertical;\n}", ""]);
+exports.push([module.i, "@charset \"UTF-8\";\n/* 安康健康管理 · 设计令牌\n   来源：/workspace/DESIGN.md\n   方案：rpx + SCSS 变量（1px = 2rpx，基于 750rpx 设计基准） */\n/* ---------- 品牌色 ---------- */\n/* ---------- 头像 ---------- */\n/* ---------- 语义状态色 ---------- */\n/* ---------- 金色（尊享装饰） ---------- */\n/* ---------- 背景 ---------- */\n/* 斜向两色渐变：左上(#ddf7ed) → 右下(#f3f3f3)，末端即底色；\n   配合 App.vue 中 background-attachment: fixed 铺满视口固定，不随页面滚动/变长 */\n/* ---------- 文字 ---------- */\n/* ---------- 描边 / 遮罩 ---------- */\n/* ---------- 字体 ---------- */\n/* 英文/数字优先匹配 DIN Pro（Mac 自带 DIN Alternate 作为备选），中文回退苹方/雅黑 */\n/* 移动端最小舒适字号（可读正文下限）：\n   说明/入口/数据标签等可读文字不得小于 12px(24rpx)；\n   $font-size-2xs(10px) 仅限角标、徽标、装饰性元素 */\n/* ---------- 语义排版 ---------- */\n/* ---------- 间距 ---------- */\n/* ---------- 区块标题 ---------- */\n/* 标题上间距（叠加容器顶部 $space-4 后共 40rpx）、下间距 16rpx：上远下近 */\n/* ---------- 尺寸 ---------- */\n/* ---------- 圆角（已减半，更克制干净） ---------- */\n/* ---------- 阴影 ---------- */\n/* ---------- 层级 ---------- */\n/* ---------- 动效 ---------- */\nuni-page-body {\n  background: #f3f3f3;\n  color: #1a2a3c;\n  font-family: \"DIN Pro\", \"DIN Alternate\", \"PingFang SC\", -apple-system, BlinkMacSystemFont, \"Hiragino Sans GB\", \"Microsoft YaHei\", sans-serif;\n  font-size: %?28?%;\n  line-height: 1.6;\n}\nbody.?%PAGE?%{\n  background: #f3f3f3;\n}\nuni-view,\nuni-text,\nuni-scroll-view,\nuni-button,\nuni-input,\nuni-textarea,\nuni-image {\n  box-sizing: border-box;\n}\n/* uni-app H5 中 <view> 编译为自定义元素 <uni-view>，\n   浏览器默认 display: inline 会导致容器 padding/margin 失效，\n   这里统一恢复为块级，避免页面区块错位、卡片贴边 */\nuni-view {\n  display: block;\n}\n.hm-page {\n  min-height: 100vh;\n  background: #f3f3f3;\n  background-image: linear-gradient(135deg, #ddf7ed, #f3f3f3);\n  background-repeat: no-repeat;\n  /* 背景固定于视口：渐变铺满视口，页面滚动/变长时背景不随之移动 */\n  background-size: 100% 100%;\n  background-attachment: fixed;\n}\n.hm-card {\n  background: #ffffff;\n  border-radius: %?24?%;\n  box-shadow: 0 %?4?% %?24?% rgba(15, 61, 53, 0.06);\n}\n.hm-sec-title {\n  font-size: %?36?%;\n  font-weight: 800;\n  line-height: 1.1;\n  color: #1a2a3c;\n  letter-spacing: %?1?%;\n}\n.hm-sec-sub {\n  font-size: %?24?%;\n  color: #64748b;\n  margin-top: %?16?%;\n}\n.hm-divider {\n  height: %?1?%;\n  background: rgba(15, 61, 53, 0.06);\n}\n.hm-safe-bottom {\n  height: calc(env(safe-area-inset-bottom) + %?24?%);\n}\n.ellipsis {\n  overflow: hidden;\n  white-space: nowrap;\n  text-overflow: ellipsis;\n}\n.ellipsis-2 {\n  overflow: hidden;\n  text-overflow: ellipsis;\n  display: -webkit-box;\n  -webkit-line-clamp: 2;\n  -webkit-box-orient: vertical;\n}", ""]);
 // Exports
 module.exports = exports;
 

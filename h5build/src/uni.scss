@@ -150,12 +150,12 @@ $size-stat-card-height: 180rpx;
 $size-hero-image-height: 420rpx;
 $size-detail-image-height: 320rpx;
 
-/* ---------- 圆角 ---------- */
-$radius-xs: 12rpx;
-$radius-sm: 24rpx;
-$radius-md: 40rpx;
-$radius-lg: 48rpx;
-$radius-xl: 48rpx;
+/* ---------- 圆角（已减半，更克制干净） ---------- */
+$radius-xs: 6rpx;
+$radius-sm: 12rpx;
+$radius-md: 20rpx;
+$radius-lg: 24rpx;
+$radius-xl: 24rpx;
 $radius-card: $radius-lg;
 $radius-card-child: $radius-md;
 $radius-control: $radius-sm;

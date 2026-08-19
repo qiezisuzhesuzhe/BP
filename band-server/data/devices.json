@@ -2816,6 +2816,47 @@
           "dbp": 80
         }
       ]
+    },
+    "862071070111701": {
+      "deviceid": "862071070111701",
+      "name": "智能手环",
+      "model": "BP100CE",
+      "firstSeen": 1787136812838,
+      "lastSeen": 1787136837639,
+      "version": "91.0.0.59",
+      "netType": "LTE",
+      "wearing": "1",
+      "lastDeviceInfo": 1787136812838,
+      "latest": {
+        "steps": 0,
+        "distance": 0,
+        "calorie": 0,
+        "battery": 99,
+        "charging": false,
+        "ts": 1787165580,
+        "updatedAt": 1787136837639,
+        "sbp": 139,
+        "dbp": 75,
+        "hr": 72
+      },
+      "history": [
+        {
+          "at": 1787136819895,
+          "steps": 0,
+          "distance": 0,
+          "calorie": 0,
+          "battery": 99,
+          "charging": false,
+          "ts": 1787165617
+        },
+        {
+          "at": 1787136837639,
+          "ts": 1787165580,
+          "sbp": 139,
+          "dbp": 75,
+          "hr": 72
+        }
+      ]
     }
   }
 }

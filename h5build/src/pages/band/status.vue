@@ -644,8 +644,10 @@ export default {
 }
 
 /* 实时指标 2×2 并排卡（心率/血氧/体温/皮肤温度） */
+/* 首行与设备头卡拉开距离，与下方区块标题间距($space-8)呼应 */
 .vital {
   display: flex;
+  margin-top: $space-8;
 }
 
 .vital__card {

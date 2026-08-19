@@ -36,12 +36,12 @@ const TUNNEL_LOG = process.env.TUNNEL_LOG || '/tmp/band-tunnel.log'
 const TUNNEL_URL_FILE = path.join(__dirname, 'tunnel-url.txt')
 
 // 当前公网上报地址：优先取环境变量，其次解析隧道日志中最后一次分配的地址
-//（隧道重启后 lhr.life 域名会变化，取最新一条即当前可用地址）
+//（隧道重启后公网域名会变化，取最新一条即当前可用地址；支持 localhost.run / serveo）
 function currentTunnelUrl() {
   if (process.env.TUNNEL_URL) return process.env.TUNNEL_URL
   try {
     const log = fs.readFileSync(TUNNEL_LOG, 'utf8')
-    const urls = log.match(/https:\/\/[\w.-]+\.lhr\.life/g)
+    const urls = log.match(/https:\/\/[\w.-]+\.(?:lhr\.life|serveousercontent\.com)/g)
     if (urls && urls.length) return urls[urls.length - 1]
   } catch (e) {}
   try {

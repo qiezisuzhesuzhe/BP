@@ -388,14 +388,21 @@ app.post('/api/simulate', (req, res) => {
 
 app.get('/api/health', (req, res) => res.json({ code: 0, msg: 'band-server running', devices: Object.keys(db.devices).length }))
 
+/* ---------------- 托管 H5（与 API 同源） ---------------- */
+// H5 构建产物与后端接口同端口托管：前端用相对路径即可请求到本服务，
+// 无论是本地预览、内网穿透公网地址还是手机访问都能正常工作
+const H5_DIR = process.env.H5_DIR || '/workspace/h5build/dist/dev/h5'
+app.use(express.static(H5_DIR))
+
 /* ---------------- 启动 ---------------- */
 async function main() {
   await loadProtos()
   app.listen(PORT, '0.0.0.0', () => {
     console.log('band-server listening on http://0.0.0.0:' + PORT)
+    console.log('  H5 页面:  http://localhost:' + PORT + '/  （同源托管）')
     console.log('  设备上报路径(必选): /pb/upload  /alarm/upload  /call_log/upload')
     console.log('  可选路径: /deviceinfo/upload /status/notify /health/sleep')
-    console.log('  H5 查询: /api/devices  /api/devices/:deviceid  /api/simulate')
+    console.log('  H5 查询: /api/devices  /api/devices/:deviceid  /api/address  /api/simulate')
   })
 }
 

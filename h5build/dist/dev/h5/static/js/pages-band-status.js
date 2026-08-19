@@ -613,7 +613,9 @@ __webpack_require__.r(__webpack_exports__);
  * 未收到数据时返回 null，由页面显示占位符（--）。
  */
 
-var BAND_SERVER = 'http://localhost:8091';
+// 后端接收服务：H5 页面由 band-server(8091) 同源托管，API 使用相对路径，
+// 这样无论从本地预览、内网穿透公网地址还是手机访问，都能正确请求到本服务
+var BAND_SERVER = '';
 function bandApi(path) {
   return BAND_SERVER + path;
 }

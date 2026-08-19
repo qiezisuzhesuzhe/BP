@@ -262,14 +262,24 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
       dayTabs: ['今天', '明天', '后天'],
-      onlineDoctors: 2386,
-      todayConsulted: 14287,
-      avgSeconds: 28
+      doctors: [{
+        name: '王伟教授',
+        title: '中西医重点学科带头人'
+      }, {
+        name: '张学智教授',
+        title: '中医老年病学学术带头人'
+      }, {
+        name: '冯利教授',
+        title: '中西医肿瘤学科带头人'
+      }]
     };
   },
   computed: {
@@ -815,81 +825,36 @@ var render = function () {
         [
           _c(
             "v-uni-view",
-            {
-              staticClass: "consult",
-              on: {
-                click: function ($event) {
-                  arguments[0] = $event = _vm.$handleEvent($event)
-                  _vm.goConsult.apply(void 0, arguments)
-                },
-              },
-            },
+            { staticClass: "consult" },
             [
               _c(
                 "v-uni-view",
-                { staticClass: "consult__main" },
+                { staticClass: "consult__top" },
                 [
                   _c(
                     "v-uni-view",
-                    { staticClass: "consult__head" },
+                    { staticClass: "consult__top-l" },
                     [
-                      _c("v-uni-text", { staticClass: "consult__title" }, [
-                        _vm._v("免费在线问诊"),
-                      ]),
-                      _c("v-uni-text", { staticClass: "consult__tag" }, [
+                      _c("v-uni-text", { staticClass: "consult__free-tag" }, [
                         _vm._v("免费"),
+                      ]),
+                      _c("v-uni-text", { staticClass: "consult__title" }, [
+                        _vm._v("在线问诊"),
                       ]),
                     ],
                     1
                   ),
-                  _c("v-uni-text", { staticClass: "consult__desc" }, [
-                    _vm._v("三甲医生 24h 在线 · 平均 30 秒接诊"),
-                  ]),
                   _c(
                     "v-uni-view",
-                    { staticClass: "consult__stats" },
+                    { staticClass: "consult__cert" },
                     [
-                      _c(
-                        "v-uni-view",
-                        { staticClass: "consult__stat" },
-                        [
-                          _c("v-uni-text", { staticClass: "consult__stat-v" }, [
-                            _vm._v(_vm._s(_vm.onlineDoctors)),
-                          ]),
-                          _c("v-uni-text", { staticClass: "consult__stat-l" }, [
-                            _vm._v("在线医生"),
-                          ]),
-                        ],
-                        1
-                      ),
-                      _c("v-uni-view", { staticClass: "consult__stat-line" }),
-                      _c(
-                        "v-uni-view",
-                        { staticClass: "consult__stat" },
-                        [
-                          _c("v-uni-text", { staticClass: "consult__stat-v" }, [
-                            _vm._v(_vm._s(_vm.todayConsulted)),
-                          ]),
-                          _c("v-uni-text", { staticClass: "consult__stat-l" }, [
-                            _vm._v("今日接诊"),
-                          ]),
-                        ],
-                        1
-                      ),
-                      _c("v-uni-view", { staticClass: "consult__stat-line" }),
-                      _c(
-                        "v-uni-view",
-                        { staticClass: "consult__stat" },
-                        [
-                          _c("v-uni-text", { staticClass: "consult__stat-v" }, [
-                            _vm._v(_vm._s(_vm.avgSeconds) + "s"),
-                          ]),
-                          _c("v-uni-text", { staticClass: "consult__stat-l" }, [
-                            _vm._v("平均响应"),
-                          ]),
-                        ],
-                        1
-                      ),
+                      _c("v-uni-text", {
+                        staticClass:
+                          "fa-solid fa-circle-check consult__cert-ic",
+                      }),
+                      _c("v-uni-text", { staticClass: "consult__cert-t" }, [
+                        _vm._v("国家认证医疗机构"),
+                      ]),
                     ],
                     1
                   ),
@@ -898,15 +863,57 @@ var render = function () {
               ),
               _c(
                 "v-uni-view",
-                { staticClass: "consult__cta" },
+                {
+                  staticClass: "consult__input",
+                  on: {
+                    click: function ($event) {
+                      arguments[0] = $event = _vm.$handleEvent($event)
+                      _vm.goConsult.apply(void 0, arguments)
+                    },
+                  },
+                },
                 [
-                  _c("v-uni-text", { staticClass: "consult__cta-t" }, [
-                    _vm._v("立即问诊"),
+                  _c("v-uni-text", { staticClass: "consult__input-ph" }, [
+                    _vm._v("输入问题或长按说话..."),
                   ]),
                   _c("v-uni-text", {
-                    staticClass: "fa-solid fa-angle-right consult__cta-arrow",
+                    staticClass: "fa-solid fa-camera consult__input-cam",
                   }),
                 ],
+                1
+              ),
+              _c(
+                "v-uni-view",
+                { staticClass: "consult__guide" },
+                [
+                  _c("v-uni-text", { staticClass: "consult__guide-t" }, [
+                    _vm._v("医学指导：岐黄学者专家委员会"),
+                  ]),
+                ],
+                1
+              ),
+              _c(
+                "v-uni-view",
+                { staticClass: "consult__doctors" },
+                _vm._l(_vm.doctors, function (d) {
+                  return _c(
+                    "v-uni-view",
+                    { key: d.name, staticClass: "consult__doctor" },
+                    [
+                      _c(
+                        "v-uni-text",
+                        { staticClass: "consult__doctor-name" },
+                        [_vm._v(_vm._s(d.name))]
+                      ),
+                      _c(
+                        "v-uni-text",
+                        { staticClass: "consult__doctor-title" },
+                        [_vm._v(_vm._s(d.title))]
+                      ),
+                    ],
+                    1
+                  )
+                }),
                 1
               ),
             ],
@@ -1166,7 +1173,7 @@ __webpack_require__.r(__webpack_exports__);
 var ___CSS_LOADER_API_IMPORT___ = __webpack_require__(/*! ../../../node_modules/css-loader/dist/runtime/api.js */ "JPst");
 exports = ___CSS_LOADER_API_IMPORT___(false);
 // Module
-exports.push([module.i, "@charset \"UTF-8\";\n/* 安康健康管理 · 设计令牌\n   来源：/workspace/DESIGN.md\n   方案：rpx + SCSS 变量（1px = 2rpx，基于 750rpx 设计基准） */\n/* ---------- 品牌色 ---------- */\n/* ---------- 头像 ---------- */\n/* ---------- 语义状态色 ---------- */\n/* ---------- 金色（尊享装饰） ---------- */\n/* ---------- 背景 ---------- */\n/* 斜向两色渐变：左上(#ddf7ed) → 右下(#f3f3f3)，末端即底色；\n   配合 App.vue 中 background-attachment: fixed 铺满视口固定，不随页面滚动/变长 */\n/* ---------- 文字 ---------- */\n/* ---------- 描边 / 遮罩 ---------- */\n/* ---------- 字体 ---------- */\n/* 英文/数字优先匹配 DIN Pro（Mac 自带 DIN Alternate 作为备选），中文回退苹方/雅黑 */\n/* 移动端最小舒适字号（可读正文下限）：\n   说明/入口/数据标签等可读文字不得小于 12px(24rpx)；\n   $font-size-2xs(10px) 仅限角标、徽标、装饰性元素 */\n/* ---------- 语义排版 ---------- */\n/* ---------- 间距 ---------- */\n/* ---------- 区块标题 ---------- */\n/* 标题上间距三倍于下间距：上远下近，强化层级 */\n/* ---------- 尺寸 ---------- */\n/* ---------- 圆角（已减半，更克制干净） ---------- */\n/* ---------- 阴影 ---------- */\n/* ---------- 层级 ---------- */\n/* ---------- 动效 ---------- */\n.hero[data-v-57280228] {\n  background: transparent;\n  padding-bottom: %?40?%;\n}\n.hero__bell[data-v-57280228] {\n  position: relative;\n  width: %?64?%;\n  height: %?64?%;\n  display: flex;\n  align-items: center;\n  justify-content: center;\n}\n.hero__bell-icon[data-v-57280228] {\n  font-size: %?36?%;\n  color: rgba(0, 0, 0, 0.1);\n}\n.hero__badge[data-v-57280228] {\n  position: absolute;\n  top: %?2?%;\n  right: 0;\n  min-width: %?36?%;\n  height: %?36?%;\n  border-radius: %?999?%;\n  background: #f15533;\n  display: flex;\n  align-items: center;\n  justify-content: center;\n  padding: 0 %?8?%;\n}\n.hero__badge-t[data-v-57280228] {\n  color: #ffffff;\n  font-size: %?20?%;\n  line-height: 1.1;\n}\n.hero__body[data-v-57280228] {\n  padding: %?8?% %?32?% 0;\n}\n.hero__org[data-v-57280228] {\n  display: block;\n  font-size: %?24?%;\n  color: #64748b;\n  letter-spacing: %?2?%;\n  margin-bottom: %?8?%;\n}\n.hero__title[data-v-57280228] {\n  display: flex;\n  align-items: center;\n  justify-content: space-between;\n}\n.hero__hello[data-v-57280228] {\n  color: #1a2a3c;\n  font-size: %?56?%;\n  font-weight: 800;\n  line-height: 1.1;\n  letter-spacing: %?2?%;\n}\n.hero__stats[data-v-57280228] {\n  margin-top: %?32?%;\n  background: #f2f7fa;\n  border-radius: %?24?%;\n  box-shadow: 0 %?4?% %?24?% rgba(15, 61, 53, 0.06);\n  padding: %?24?% 0;\n  display: flex;\n  align-items: center;\n}\n.hero__stat[data-v-57280228] {\n  flex: 1;\n  display: flex;\n  flex-direction: column;\n  align-items: center;\n}\n.hero__stat-v[data-v-57280228] {\n  color: #389a82;\n  font-size: %?44?%;\n  font-weight: 800;\n  line-height: 1.1;\n}\n.hero__stat-l[data-v-57280228] {\n  color: #64748b;\n  font-size: %?20?%;\n  margin-top: %?8?%;\n}\n.hero__stat-line[data-v-57280228] {\n  width: %?1?%;\n  height: %?48?%;\n  background: rgba(15, 61, 53, 0.06);\n}\n.wrap[data-v-57280228] {\n  padding: %?32?% %?32?% 0;\n}\n.rights[data-v-57280228] {\n  position: relative;\n  overflow: hidden;\n  background: linear-gradient(160deg, #ffffff 0%, #faf3e0 100%);\n  border: %?1?% solid rgba(184, 147, 46, 0.35);\n  border-radius: %?24?%;\n  box-shadow: 0 %?12?% %?48?% rgba(125, 212, 188, 0.18), inset 0 %?2?% 0 rgba(255, 255, 255, 0.9);\n  padding: %?32?% %?24?% %?32?%;\n}\n/* 顶部金色高光线：尊享感 */\n.rights[data-v-57280228]::before {\n  content: \"\";\n  position: absolute;\n  top: 0;\n  left: %?32?%;\n  right: %?32?%;\n  height: %?3?%;\n  border-radius: %?999?%;\n  background: linear-gradient(90deg, transparent, #b8932e 35%, #9a7420 50%, #b8932e 65%, transparent);\n  opacity: 0.9;\n}\n/* 右上角金色柔光 */\n.rights[data-v-57280228]::after {\n  content: \"\";\n  position: absolute;\n  top: %?-140?%;\n  right: %?-100?%;\n  width: %?360?%;\n  height: %?360?%;\n  border-radius: 50%;\n  background: radial-gradient(circle, rgba(184, 147, 46, 0.14) 0%, rgba(184, 147, 46, 0) 70%);\n}\n.rights__head[data-v-57280228] {\n  position: relative;\n  z-index: 1;\n  display: flex;\n  align-items: center;\n  justify-content: space-between;\n  padding: 0 %?8?%;\n}\n.rights__head-l[data-v-57280228] {\n  flex: 1;\n  overflow: hidden;\n}\n.rights__level[data-v-57280228] {\n  display: inline-flex;\n  align-items: center;\n  padding: %?8?% %?24?%;\n  border-radius: %?999?%;\n  background: linear-gradient(135deg, #faf3e0 0%, #ffffff 100%);\n  border: %?1?% solid rgba(184, 147, 46, 0.35);\n  box-shadow: 0 %?4?% %?24?% rgba(15, 61, 53, 0.06);\n}\n.rights__level-icon[data-v-57280228] {\n  font-size: %?24?%;\n  color: #b8932e;\n  margin-right: %?8?%;\n}\n.rights__level-t[data-v-57280228] {\n  font-size: %?28?%;\n  font-weight: 800;\n  color: #1a2a3c;\n  letter-spacing: %?2?%;\n}\n.rights__date[data-v-57280228] {\n  display: block;\n  font-size: %?24?%;\n  color: #64748b;\n  margin-top: %?16?%;\n  font-family: \"DIN Pro\", \"DIN Alternate\", \"Helvetica Neue\", Arial, sans-serif;\n}\n.rights__pts[data-v-57280228] {\n  position: relative;\n  z-index: 1;\n  display: flex;\n  align-items: baseline;\n  flex-shrink: 0;\n  margin-left: %?24?%;\n}\n.rights__pts-l[data-v-57280228] {\n  font-size: %?24?%;\n  color: #64748b;\n  margin-right: %?8?%;\n}\n.rights__pts-v[data-v-57280228] {\n  font-size: %?56?%;\n  font-weight: 800;\n  line-height: 1.1;\n  font-family: \"DIN Pro\", \"DIN Alternate\", \"Helvetica Neue\", Arial, sans-serif;\n  background: linear-gradient(135deg, #b8932e 0%, #9a7420 100%);\n  -webkit-background-clip: text;\n  background-clip: text;\n  color: transparent;\n}\n.rights__pts-arrow[data-v-57280228] {\n  font-size: %?28?%;\n  color: #b8932e;\n  margin-left: %?8?%;\n}\n.rights__grid[data-v-57280228] {\n  position: relative;\n  z-index: 1;\n  margin-top: %?32?%;\n  display: flex;\n  flex-wrap: wrap;\n}\n.rights__item[data-v-57280228] {\n  width: 25%;\n  display: flex;\n  flex-direction: column;\n  align-items: center;\n  margin-bottom: %?24?%;\n}\n.rights__item-icon[data-v-57280228] {\n  position: relative;\n  width: %?64?%;\n  height: %?64?%;\n  border-radius: %?20?%;\n  display: flex;\n  align-items: center;\n  justify-content: center;\n  box-shadow: 0 %?4?% %?24?% rgba(15, 61, 53, 0.06);\n}\n.rights__item-icon-t[data-v-57280228] {\n  font-size: %?32?%;\n}\n.rights__item-t[data-v-57280228] {\n  font-size: %?28?%;\n  color: #334155;\n  margin-top: %?8?%;\n}\n/* 入口下方剩余次数文字：无限制用淡色，剩余有限次数用金色突出 */\n.rights__item-q[data-v-57280228] {\n  font-size: %?20?%;\n  color: #94a3b8;\n  margin-top: %?2?%;\n  font-family: \"DIN Pro\", \"DIN Alternate\", \"Helvetica Neue\", Arial, sans-serif;\n  letter-spacing: %?0.5?%;\n}\n.rights__item-q--limited[data-v-57280228] {\n  color: #9a7420;\n  font-weight: 600;\n}\n.ongoing[data-v-57280228] {\n  background: #ffffff;\n  border-radius: %?24?%;\n  box-shadow: 0 %?12?% %?48?% rgba(125, 212, 188, 0.18);\n  padding: %?24?%;\n  display: flex;\n  align-items: center;\n}\n.ongoing__icon[data-v-57280228] {\n  width: %?88?%;\n  height: %?88?%;\n  border-radius: %?20?%;\n  display: flex;\n  align-items: center;\n  justify-content: center;\n  box-shadow: 0 %?12?% %?48?% rgba(125, 212, 188, 0.18);\n}\n.ongoing__icon-t[data-v-57280228] {\n  font-size: %?44?%;\n  color: rgba(0, 0, 0, 0.1);\n}\n.ongoing__main[data-v-57280228] {\n  flex: 1;\n  padding: 0 %?24?%;\n  overflow: hidden;\n}\n.ongoing__name[data-v-57280228] {\n  display: block;\n  font-size: %?32?%;\n  font-weight: 800;\n  line-height: 1.1;\n  color: #1a2a3c;\n}\n.ongoing__meta[data-v-57280228] {\n  display: block;\n  font-size: %?24?%;\n  color: #64748b;\n  margin-top: %?8?%;\n}\n.ongoing__act[data-v-57280228] {\n  padding: %?16?% %?24?%;\n  border-radius: %?999?%;\n}\n.ongoing__act-t[data-v-57280228] {\n  color: #ffffff;\n  font-size: %?24?%;\n  font-weight: 600;\n}\n.sec-head[data-v-57280228] {\n  display: flex;\n  align-items: flex-end;\n  justify-content: space-between;\n  margin-top: %?48?%;\n  margin-bottom: %?16?%;\n}\n.sec-head__side[data-v-57280228] {\n  display: flex;\n  align-items: center;\n  flex-shrink: 0;\n}\n.sec-head__side .hm-sec-sub[data-v-57280228] {\n  margin-right: %?16?%;\n  margin-bottom: 0;\n}\n.day-switch[data-v-57280228] {\n  display: flex;\n  background: #edf5f2;\n  border-radius: %?999?%;\n  padding: %?4?%;\n}\n.day-switch__item[data-v-57280228] {\n  padding: %?8?% %?16?%;\n  border-radius: %?999?%;\n}\n.day-switch__item--on[data-v-57280228] {\n  background: #ffffff;\n  box-shadow: 0 %?4?% %?24?% rgba(15, 61, 53, 0.06);\n}\n.day-switch__t[data-v-57280228] {\n  font-size: %?20?%;\n  color: #64748b;\n}\n.day-switch__item--on .day-switch__t[data-v-57280228] {\n  color: #389a82;\n  font-weight: 700;\n}\n.pkg[data-v-57280228] {\n  background: #ffffff;\n  border-radius: %?24?%;\n  overflow: hidden;\n  box-shadow: 0 %?4?% %?24?% rgba(15, 61, 53, 0.06);\n  margin-bottom: %?32?%;\n}\n.pkg__banner[data-v-57280228] {\n  padding: %?32?% %?24?%;\n  display: flex;\n  align-items: center;\n}\n.pkg__banner-l[data-v-57280228] {\n  flex: 1;\n  overflow: hidden;\n}\n.pkg__name[data-v-57280228] {\n  display: block;\n  color: #1a2a3c;\n  font-size: %?36?%;\n  font-weight: 800;\n  line-height: 1.1;\n  margin-top: 0;\n  letter-spacing: %?1?%;\n}\n.pkg__sub[data-v-57280228] {\n  display: block;\n  color: #334155;\n  font-size: %?24?%;\n  margin-top: %?8?%;\n}\n.pkg__emoji[data-v-57280228] {\n  font-size: %?48?%;\n  margin-left: %?16?%;\n  color: rgba(0, 0, 0, 0.1);\n}\n.pkg__body[data-v-57280228] {\n  padding: %?24?%;\n}\n.pkg__foot[data-v-57280228] {\n  display: flex;\n  align-items: flex-end;\n  justify-content: space-between;\n  margin-top: %?16?%;\n}\n.pkg__price[data-v-57280228] {\n  display: flex;\n  align-items: baseline;\n}\n.pkg__cur[data-v-57280228] {\n  font-size: %?24?%;\n  color: #f15533;\n  font-weight: 700;\n}\n.pkg__now[data-v-57280228] {\n  font-size: %?56?%;\n  color: #f15533;\n  font-weight: 800;\n  line-height: 1.1;\n  margin-left: %?2?%;\n}\n.pkg__origin[data-v-57280228] {\n  font-size: %?24?%;\n  color: #94a3b8;\n  text-decoration: line-through;\n  margin-left: %?8?%;\n}\n.pkg__dur[data-v-57280228] {\n  font-size: %?24?%;\n  color: #64748b;\n  margin-left: %?8?%;\n}\n.pkg__sold[data-v-57280228] {\n  flex-shrink: 0;\n  padding-bottom: %?8?%;\n}\n.pkg__sold-t[data-v-57280228] {\n  font-size: %?24?%;\n  color: #94a3b8;\n}\n.pkg__sold-star[data-v-57280228] {\n  color: #f2c94c;\n  margin-right: %?8?%;\n}\n.foot-tip[data-v-57280228] {\n  padding: %?40?% %?48?% %?24?%;\n  text-align: center;\n}\n.foot-tip__t[data-v-57280228] {\n  font-size: %?20?%;\n  color: #94a3b8;\n  line-height: 1.6;\n}\n/* 免费在线问诊入口卡片：参考平安好医生 */\n.consult[data-v-57280228] {\n  display: flex;\n  align-items: center;\n  background: linear-gradient(135deg, #d4f5ee 0%, #ffffff 100%);\n  border: %?1?% solid rgba(56, 154, 130, 0.12);\n  border-radius: %?24?%;\n  box-shadow: 0 %?4?% %?24?% rgba(15, 61, 53, 0.06);\n  padding: %?32?% %?32?% %?32?% %?32?%;\n  position: relative;\n  overflow: hidden;\n}\n/* 右上角浅色装饰光斑 */\n.consult[data-v-57280228]::after {\n  content: \"\";\n  position: absolute;\n  top: %?-120?%;\n  right: %?-80?%;\n  width: %?280?%;\n  height: %?280?%;\n  border-radius: 50%;\n  background: radial-gradient(circle, rgba(125, 212, 188, 0.22) 0%, rgba(125, 212, 188, 0) 70%);\n  pointer-events: none;\n}\n.consult__main[data-v-57280228] {\n  flex: 1;\n  position: relative;\n  z-index: 1;\n  overflow: hidden;\n}\n.consult__head[data-v-57280228] {\n  display: flex;\n  align-items: center;\n}\n.consult__title[data-v-57280228] {\n  font-size: %?36?%;\n  font-weight: 800;\n  color: #1a2a3c;\n  letter-spacing: %?1?%;\n}\n.consult__tag[data-v-57280228] {\n  margin-left: %?16?%;\n  padding: %?8?% %?16?%;\n  border-radius: %?999?%;\n  background: #7dd4bc;\n  color: #ffffff;\n  font-size: %?20?%;\n  font-weight: 600;\n  letter-spacing: %?1?%;\n}\n.consult__desc[data-v-57280228] {\n  display: block;\n  margin-top: %?8?%;\n  font-size: %?24?%;\n  color: #64748b;\n}\n.consult__stats[data-v-57280228] {\n  margin-top: %?24?%;\n  display: flex;\n  align-items: center;\n  background: #ffffff;\n  border-radius: %?20?%;\n  padding: %?24?% %?16?%;\n  box-shadow: 0 %?4?% %?24?% rgba(15, 61, 53, 0.06);\n}\n.consult__stat[data-v-57280228] {\n  flex: 1;\n  display: flex;\n  flex-direction: column;\n  align-items: center;\n}\n.consult__stat-v[data-v-57280228] {\n  font-size: %?32?%;\n  font-weight: 800;\n  color: #389a82;\n  line-height: 1.1;\n  font-family: \"DIN Pro\", \"DIN Alternate\", \"Helvetica Neue\", Arial, sans-serif;\n}\n.consult__stat-l[data-v-57280228] {\n  font-size: %?20?%;\n  color: #64748b;\n  margin-top: %?8?%;\n}\n.consult__stat-line[data-v-57280228] {\n  width: %?1?%;\n  height: %?40?%;\n  background: rgba(15, 61, 53, 0.06);\n}\n.consult__cta[data-v-57280228] {\n  position: relative;\n  z-index: 1;\n  display: flex;\n  align-items: center;\n  margin-left: %?24?%;\n  padding: %?16?% %?24?%;\n  border-radius: %?999?%;\n  background: #389a82;\n  box-shadow: 0 %?12?% %?48?% rgba(125, 212, 188, 0.18);\n  flex-shrink: 0;\n}\n.consult__cta-t[data-v-57280228] {\n  font-size: %?24?%;\n  color: #ffffff;\n  font-weight: 600;\n}\n.consult__cta-arrow[data-v-57280228] {\n  font-size: %?28?%;\n  color: #ffffff;\n  margin-left: %?8?%;\n}", ""]);
+exports.push([module.i, "@charset \"UTF-8\";\n/* 安康健康管理 · 设计令牌\n   来源：/workspace/DESIGN.md\n   方案：rpx + SCSS 变量（1px = 2rpx，基于 750rpx 设计基准） */\n/* ---------- 品牌色 ---------- */\n/* ---------- 头像 ---------- */\n/* ---------- 语义状态色 ---------- */\n/* ---------- 金色（尊享装饰） ---------- */\n/* ---------- 背景 ---------- */\n/* 斜向两色渐变：左上(#ddf7ed) → 右下(#f3f3f3)，末端即底色；\n   配合 App.vue 中 background-attachment: fixed 铺满视口固定，不随页面滚动/变长 */\n/* ---------- 文字 ---------- */\n/* ---------- 描边 / 遮罩 ---------- */\n/* ---------- 字体 ---------- */\n/* 英文/数字优先匹配 DIN Pro（Mac 自带 DIN Alternate 作为备选），中文回退苹方/雅黑 */\n/* 移动端最小舒适字号（可读正文下限）：\n   说明/入口/数据标签等可读文字不得小于 12px(24rpx)；\n   $font-size-2xs(10px) 仅限角标、徽标、装饰性元素 */\n/* ---------- 语义排版 ---------- */\n/* ---------- 间距 ---------- */\n/* ---------- 区块标题 ---------- */\n/* 标题上间距三倍于下间距：上远下近，强化层级 */\n/* ---------- 尺寸 ---------- */\n/* ---------- 圆角（已减半，更克制干净） ---------- */\n/* ---------- 阴影 ---------- */\n/* ---------- 层级 ---------- */\n/* ---------- 动效 ---------- */\n.hero[data-v-57280228] {\n  background: transparent;\n  padding-bottom: %?40?%;\n}\n.hero__bell[data-v-57280228] {\n  position: relative;\n  width: %?64?%;\n  height: %?64?%;\n  display: flex;\n  align-items: center;\n  justify-content: center;\n}\n.hero__bell-icon[data-v-57280228] {\n  font-size: %?36?%;\n  color: rgba(0, 0, 0, 0.1);\n}\n.hero__badge[data-v-57280228] {\n  position: absolute;\n  top: %?2?%;\n  right: 0;\n  min-width: %?36?%;\n  height: %?36?%;\n  border-radius: %?999?%;\n  background: #f15533;\n  display: flex;\n  align-items: center;\n  justify-content: center;\n  padding: 0 %?8?%;\n}\n.hero__badge-t[data-v-57280228] {\n  color: #ffffff;\n  font-size: %?20?%;\n  line-height: 1.1;\n}\n.hero__body[data-v-57280228] {\n  padding: %?8?% %?32?% 0;\n}\n.hero__org[data-v-57280228] {\n  display: block;\n  font-size: %?24?%;\n  color: #64748b;\n  letter-spacing: %?2?%;\n  margin-bottom: %?8?%;\n}\n.hero__title[data-v-57280228] {\n  display: flex;\n  align-items: center;\n  justify-content: space-between;\n}\n.hero__hello[data-v-57280228] {\n  color: #1a2a3c;\n  font-size: %?56?%;\n  font-weight: 800;\n  line-height: 1.1;\n  letter-spacing: %?2?%;\n}\n.hero__stats[data-v-57280228] {\n  margin-top: %?32?%;\n  background: #f2f7fa;\n  border-radius: %?24?%;\n  box-shadow: 0 %?4?% %?24?% rgba(15, 61, 53, 0.06);\n  padding: %?24?% 0;\n  display: flex;\n  align-items: center;\n}\n.hero__stat[data-v-57280228] {\n  flex: 1;\n  display: flex;\n  flex-direction: column;\n  align-items: center;\n}\n.hero__stat-v[data-v-57280228] {\n  color: #389a82;\n  font-size: %?44?%;\n  font-weight: 800;\n  line-height: 1.1;\n}\n.hero__stat-l[data-v-57280228] {\n  color: #64748b;\n  font-size: %?20?%;\n  margin-top: %?8?%;\n}\n.hero__stat-line[data-v-57280228] {\n  width: %?1?%;\n  height: %?48?%;\n  background: rgba(15, 61, 53, 0.06);\n}\n.wrap[data-v-57280228] {\n  padding: %?32?% %?32?% 0;\n}\n.rights[data-v-57280228] {\n  position: relative;\n  overflow: hidden;\n  background: linear-gradient(160deg, #ffffff 0%, #faf3e0 100%);\n  border: %?1?% solid rgba(184, 147, 46, 0.35);\n  border-radius: %?24?%;\n  box-shadow: 0 %?12?% %?48?% rgba(125, 212, 188, 0.18), inset 0 %?2?% 0 rgba(255, 255, 255, 0.9);\n  padding: %?32?% %?24?% %?32?%;\n}\n/* 顶部金色高光线：尊享感 */\n.rights[data-v-57280228]::before {\n  content: \"\";\n  position: absolute;\n  top: 0;\n  left: %?32?%;\n  right: %?32?%;\n  height: %?3?%;\n  border-radius: %?999?%;\n  background: linear-gradient(90deg, transparent, #b8932e 35%, #9a7420 50%, #b8932e 65%, transparent);\n  opacity: 0.9;\n}\n/* 右上角金色柔光 */\n.rights[data-v-57280228]::after {\n  content: \"\";\n  position: absolute;\n  top: %?-140?%;\n  right: %?-100?%;\n  width: %?360?%;\n  height: %?360?%;\n  border-radius: 50%;\n  background: radial-gradient(circle, rgba(184, 147, 46, 0.14) 0%, rgba(184, 147, 46, 0) 70%);\n}\n.rights__head[data-v-57280228] {\n  position: relative;\n  z-index: 1;\n  display: flex;\n  align-items: center;\n  justify-content: space-between;\n  padding: 0 %?8?%;\n}\n.rights__head-l[data-v-57280228] {\n  flex: 1;\n  overflow: hidden;\n}\n.rights__level[data-v-57280228] {\n  display: inline-flex;\n  align-items: center;\n  padding: %?8?% %?24?%;\n  border-radius: %?999?%;\n  background: linear-gradient(135deg, #faf3e0 0%, #ffffff 100%);\n  border: %?1?% solid rgba(184, 147, 46, 0.35);\n  box-shadow: 0 %?4?% %?24?% rgba(15, 61, 53, 0.06);\n}\n.rights__level-icon[data-v-57280228] {\n  font-size: %?24?%;\n  color: #b8932e;\n  margin-right: %?8?%;\n}\n.rights__level-t[data-v-57280228] {\n  font-size: %?28?%;\n  font-weight: 800;\n  color: #1a2a3c;\n  letter-spacing: %?2?%;\n}\n.rights__date[data-v-57280228] {\n  display: block;\n  font-size: %?24?%;\n  color: #64748b;\n  margin-top: %?16?%;\n  font-family: \"DIN Pro\", \"DIN Alternate\", \"Helvetica Neue\", Arial, sans-serif;\n}\n.rights__pts[data-v-57280228] {\n  position: relative;\n  z-index: 1;\n  display: flex;\n  align-items: baseline;\n  flex-shrink: 0;\n  margin-left: %?24?%;\n}\n.rights__pts-l[data-v-57280228] {\n  font-size: %?24?%;\n  color: #64748b;\n  margin-right: %?8?%;\n}\n.rights__pts-v[data-v-57280228] {\n  font-size: %?56?%;\n  font-weight: 800;\n  line-height: 1.1;\n  font-family: \"DIN Pro\", \"DIN Alternate\", \"Helvetica Neue\", Arial, sans-serif;\n  background: linear-gradient(135deg, #b8932e 0%, #9a7420 100%);\n  -webkit-background-clip: text;\n  background-clip: text;\n  color: transparent;\n}\n.rights__pts-arrow[data-v-57280228] {\n  font-size: %?28?%;\n  color: #b8932e;\n  margin-left: %?8?%;\n}\n.rights__grid[data-v-57280228] {\n  position: relative;\n  z-index: 1;\n  margin-top: %?32?%;\n  display: flex;\n  flex-wrap: wrap;\n}\n.rights__item[data-v-57280228] {\n  width: 25%;\n  display: flex;\n  flex-direction: column;\n  align-items: center;\n  margin-bottom: %?24?%;\n}\n.rights__item-icon[data-v-57280228] {\n  position: relative;\n  width: %?64?%;\n  height: %?64?%;\n  border-radius: %?20?%;\n  display: flex;\n  align-items: center;\n  justify-content: center;\n  box-shadow: 0 %?4?% %?24?% rgba(15, 61, 53, 0.06);\n}\n.rights__item-icon-t[data-v-57280228] {\n  font-size: %?32?%;\n}\n.rights__item-t[data-v-57280228] {\n  font-size: %?28?%;\n  color: #334155;\n  margin-top: %?8?%;\n}\n/* 入口下方剩余次数文字：无限制用淡色，剩余有限次数用金色突出 */\n.rights__item-q[data-v-57280228] {\n  font-size: %?20?%;\n  color: #94a3b8;\n  margin-top: %?2?%;\n  font-family: \"DIN Pro\", \"DIN Alternate\", \"Helvetica Neue\", Arial, sans-serif;\n  letter-spacing: %?0.5?%;\n}\n.rights__item-q--limited[data-v-57280228] {\n  color: #9a7420;\n  font-weight: 600;\n}\n.ongoing[data-v-57280228] {\n  background: #ffffff;\n  border-radius: %?24?%;\n  box-shadow: 0 %?12?% %?48?% rgba(125, 212, 188, 0.18);\n  padding: %?24?%;\n  display: flex;\n  align-items: center;\n}\n.ongoing__icon[data-v-57280228] {\n  width: %?88?%;\n  height: %?88?%;\n  border-radius: %?20?%;\n  display: flex;\n  align-items: center;\n  justify-content: center;\n  box-shadow: 0 %?12?% %?48?% rgba(125, 212, 188, 0.18);\n}\n.ongoing__icon-t[data-v-57280228] {\n  font-size: %?44?%;\n  color: rgba(0, 0, 0, 0.1);\n}\n.ongoing__main[data-v-57280228] {\n  flex: 1;\n  padding: 0 %?24?%;\n  overflow: hidden;\n}\n.ongoing__name[data-v-57280228] {\n  display: block;\n  font-size: %?32?%;\n  font-weight: 800;\n  line-height: 1.1;\n  color: #1a2a3c;\n}\n.ongoing__meta[data-v-57280228] {\n  display: block;\n  font-size: %?24?%;\n  color: #64748b;\n  margin-top: %?8?%;\n}\n.ongoing__act[data-v-57280228] {\n  padding: %?16?% %?24?%;\n  border-radius: %?999?%;\n}\n.ongoing__act-t[data-v-57280228] {\n  color: #ffffff;\n  font-size: %?24?%;\n  font-weight: 600;\n}\n.sec-head[data-v-57280228] {\n  display: flex;\n  align-items: flex-end;\n  justify-content: space-between;\n  margin-top: %?48?%;\n  margin-bottom: %?16?%;\n}\n.sec-head__side[data-v-57280228] {\n  display: flex;\n  align-items: center;\n  flex-shrink: 0;\n}\n.sec-head__side .hm-sec-sub[data-v-57280228] {\n  margin-right: %?16?%;\n  margin-bottom: 0;\n}\n.day-switch[data-v-57280228] {\n  display: flex;\n  background: #edf5f2;\n  border-radius: %?999?%;\n  padding: %?4?%;\n}\n.day-switch__item[data-v-57280228] {\n  padding: %?8?% %?16?%;\n  border-radius: %?999?%;\n}\n.day-switch__item--on[data-v-57280228] {\n  background: #ffffff;\n  box-shadow: 0 %?4?% %?24?% rgba(15, 61, 53, 0.06);\n}\n.day-switch__t[data-v-57280228] {\n  font-size: %?20?%;\n  color: #64748b;\n}\n.day-switch__item--on .day-switch__t[data-v-57280228] {\n  color: #389a82;\n  font-weight: 700;\n}\n.pkg[data-v-57280228] {\n  background: #ffffff;\n  border-radius: %?24?%;\n  overflow: hidden;\n  box-shadow: 0 %?4?% %?24?% rgba(15, 61, 53, 0.06);\n  margin-bottom: %?32?%;\n}\n.pkg__banner[data-v-57280228] {\n  padding: %?32?% %?24?%;\n  display: flex;\n  align-items: center;\n}\n.pkg__banner-l[data-v-57280228] {\n  flex: 1;\n  overflow: hidden;\n}\n.pkg__name[data-v-57280228] {\n  display: block;\n  color: #1a2a3c;\n  font-size: %?36?%;\n  font-weight: 800;\n  line-height: 1.1;\n  margin-top: 0;\n  letter-spacing: %?1?%;\n}\n.pkg__sub[data-v-57280228] {\n  display: block;\n  color: #334155;\n  font-size: %?24?%;\n  margin-top: %?8?%;\n}\n.pkg__emoji[data-v-57280228] {\n  font-size: %?48?%;\n  margin-left: %?16?%;\n  color: rgba(0, 0, 0, 0.1);\n}\n.pkg__body[data-v-57280228] {\n  padding: %?24?%;\n}\n.pkg__foot[data-v-57280228] {\n  display: flex;\n  align-items: flex-end;\n  justify-content: space-between;\n  margin-top: %?16?%;\n}\n.pkg__price[data-v-57280228] {\n  display: flex;\n  align-items: baseline;\n}\n.pkg__cur[data-v-57280228] {\n  font-size: %?24?%;\n  color: #f15533;\n  font-weight: 700;\n}\n.pkg__now[data-v-57280228] {\n  font-size: %?56?%;\n  color: #f15533;\n  font-weight: 800;\n  line-height: 1.1;\n  margin-left: %?2?%;\n}\n.pkg__origin[data-v-57280228] {\n  font-size: %?24?%;\n  color: #94a3b8;\n  text-decoration: line-through;\n  margin-left: %?8?%;\n}\n.pkg__dur[data-v-57280228] {\n  font-size: %?24?%;\n  color: #64748b;\n  margin-left: %?8?%;\n}\n.pkg__sold[data-v-57280228] {\n  flex-shrink: 0;\n  padding-bottom: %?8?%;\n}\n.pkg__sold-t[data-v-57280228] {\n  font-size: %?24?%;\n  color: #94a3b8;\n}\n.pkg__sold-star[data-v-57280228] {\n  color: #f2c94c;\n  margin-right: %?8?%;\n}\n.foot-tip[data-v-57280228] {\n  padding: %?40?% %?48?% %?24?%;\n  text-align: center;\n}\n.foot-tip__t[data-v-57280228] {\n  font-size: %?20?%;\n  color: #94a3b8;\n  line-height: 1.6;\n}\n/* 免费在线问诊入口卡片：复刻设计稿 */\n.consult[data-v-57280228] {\n  background: #ffffff;\n  border: %?1?% solid rgba(15, 61, 53, 0.06);\n  border-radius: %?24?%;\n  box-shadow: 0 %?4?% %?24?% rgba(15, 61, 53, 0.06);\n  padding: %?32?%;\n  overflow: hidden;\n}\n/* 顶部行：免费标签 + 在线问诊 + 认证 */\n.consult__top[data-v-57280228] {\n  display: flex;\n  align-items: center;\n  justify-content: space-between;\n}\n.consult__top-l[data-v-57280228] {\n  display: flex;\n  align-items: center;\n}\n.consult__free-tag[data-v-57280228] {\n  display: inline-block;\n  padding: %?8?% %?16?%;\n  border-radius: %?999?%;\n  background: #7dd4bc;\n  color: #ffffff;\n  font-size: %?20?%;\n  font-weight: 600;\n  letter-spacing: %?1?%;\n}\n.consult__title[data-v-57280228] {\n  margin-left: %?16?%;\n  font-size: %?36?%;\n  font-weight: 800;\n  color: #1a2a3c;\n}\n.consult__cert[data-v-57280228] {\n  display: flex;\n  align-items: center;\n}\n.consult__cert-ic[data-v-57280228] {\n  font-size: %?28?%;\n  color: #7dd4bc;\n}\n.consult__cert-t[data-v-57280228] {\n  margin-left: %?8?%;\n  font-size: %?20?%;\n  color: #64748b;\n}\n/* 输入框 */\n.consult__input[data-v-57280228] {\n  margin-top: %?24?%;\n  display: flex;\n  align-items: center;\n  background: #edf5f2;\n  border-radius: %?20?%;\n  padding: %?24?% %?32?%;\n}\n.consult__input-ph[data-v-57280228] {\n  flex: 1;\n  font-size: %?28?%;\n  color: #94a3b8;\n}\n.consult__input-cam[data-v-57280228] {\n  font-size: %?32?%;\n  color: #64748b;\n}\n/* 医学指导标签 */\n.consult__guide[data-v-57280228] {\n  margin-top: %?24?%;\n}\n.consult__guide-t[data-v-57280228] {\n  font-size: %?20?%;\n  color: #64748b;\n}\n/* 专家列表 */\n.consult__doctors[data-v-57280228] {\n  margin-top: %?24?%;\n  display: flex;\n  justify-content: space-between;\n}\n.consult__doctor[data-v-57280228] {\n  flex: 1;\n  display: flex;\n  flex-direction: column;\n}\n.consult__doctor-name[data-v-57280228] {\n  font-size: %?28?%;\n  font-weight: 600;\n  color: #1a2a3c;\n}\n.consult__doctor-title[data-v-57280228] {\n  margin-top: %?8?%;\n  font-size: %?20?%;\n  color: #64748b;\n  line-height: 1.1;\n}", ""]);
 // Exports
 module.exports = exports;
 

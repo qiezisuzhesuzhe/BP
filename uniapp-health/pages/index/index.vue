@@ -85,35 +85,38 @@
       </view>
     </view>
 
-    <!-- 免费在线问诊入口（参考平安好医生：快速问诊 + 在线医生数） -->
+    <!-- 免费在线问诊入口（复刻设计稿） -->
     <view class="wrap">
-      <view class="consult" @tap="goConsult">
-        <view class="consult__main">
-          <view class="consult__head">
-            <text class="consult__title">免费在线问诊</text>
-            <text class="consult__tag">免费</text>
+      <view class="consult">
+        <!-- 顶部行：免费标签 + 在线问诊标题 + 认证标识 -->
+        <view class="consult__top">
+          <view class="consult__top-l">
+            <text class="consult__free-tag">免费</text>
+            <text class="consult__title">在线问诊</text>
           </view>
-          <text class="consult__desc">三甲医生 24h 在线 · 平均 30 秒接诊</text>
-          <view class="consult__stats">
-            <view class="consult__stat">
-              <text class="consult__stat-v">{{ onlineDoctors }}</text>
-              <text class="consult__stat-l">在线医生</text>
-            </view>
-            <view class="consult__stat-line"></view>
-            <view class="consult__stat">
-              <text class="consult__stat-v">{{ todayConsulted }}</text>
-              <text class="consult__stat-l">今日接诊</text>
-            </view>
-            <view class="consult__stat-line"></view>
-            <view class="consult__stat">
-              <text class="consult__stat-v">{{ avgSeconds }}s</text>
-              <text class="consult__stat-l">平均响应</text>
-            </view>
+          <view class="consult__cert">
+            <text class="fa-solid fa-circle-check consult__cert-ic"></text>
+            <text class="consult__cert-t">国家认证医疗机构</text>
           </view>
         </view>
-        <view class="consult__cta">
-          <text class="consult__cta-t">立即问诊</text>
-          <text class="fa-solid fa-angle-right consult__cta-arrow"></text>
+
+        <!-- 输入框 -->
+        <view class="consult__input" @tap="goConsult">
+          <text class="consult__input-ph">输入问题或长按说话...</text>
+          <text class="fa-solid fa-camera consult__input-cam"></text>
+        </view>
+
+        <!-- 医学指导标签 -->
+        <view class="consult__guide">
+          <text class="consult__guide-t">医学指导：岐黄学者专家委员会</text>
+        </view>
+
+        <!-- 专家列表 -->
+        <view class="consult__doctors">
+          <view v-for="d in doctors" :key="d.name" class="consult__doctor">
+            <text class="consult__doctor-name">{{ d.name }}</text>
+            <text class="consult__doctor-title">{{ d.title }}</text>
+          </view>
         </view>
       </view>
     </view>
@@ -186,9 +189,11 @@ export default {
   data() {
     return {
       dayTabs: ['今天', '明天', '后天'],
-      onlineDoctors: 2386,
-      todayConsulted: 14287,
-      avgSeconds: 28
+      doctors: [
+        { name: '王伟教授', title: '中西医重点学科带头人' },
+        { name: '张学智教授', title: '中医老年病学学术带头人' },
+        { name: '冯利教授', title: '中西医肿瘤学科带头人' }
+      ]
     }
   },
   computed: {
@@ -764,53 +769,30 @@ export default {
   line-height: $line-height-relaxed;
 }
 
-/* 免费在线问诊入口卡片：参考平安好医生 */
+/* 免费在线问诊入口卡片：复刻设计稿 */
 .consult {
-  display: flex;
-  align-items: center;
-  background: linear-gradient(135deg, $brand-soft 0%, $bg-surface 100%);
-  border: 1rpx solid $label-soft-border;
+  background: $bg-surface;
+  border: 1rpx solid $border-subtle;
   border-radius: $radius-card;
   box-shadow: $shadow-sm;
-  padding: $space-4 $space-4 $space-4 $space-4;
-  position: relative;
+  padding: $space-4;
   overflow: hidden;
 }
 
-/* 右上角浅色装饰光斑 */
-.consult::after {
-  content: '';
-  position: absolute;
-  top: -120rpx;
-  right: -80rpx;
-  width: 280rpx;
-  height: 280rpx;
-  border-radius: 50%;
-  background: radial-gradient(circle, rgba(125, 212, 188, 0.22) 0%, rgba(125, 212, 188, 0) 70%);
-  pointer-events: none;
+/* 顶部行：免费标签 + 在线问诊 + 认证 */
+.consult__top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
 }
 
-.consult__main {
-  flex: 1;
-  position: relative;
-  z-index: 1;
-  overflow: hidden;
-}
-
-.consult__head {
+.consult__top-l {
   display: flex;
   align-items: center;
 }
 
-.consult__title {
-  font-size: $font-size-lg;
-  font-weight: $font-weight-heavy;
-  color: $text-primary;
-  letter-spacing: 1rpx;
-}
-
-.consult__tag {
-  margin-left: $space-2;
+.consult__free-tag {
+  display: inline-block;
   padding: $space-1 $space-2;
   border-radius: $radius-full;
   background: $brand-primary;
@@ -820,72 +802,83 @@ export default {
   letter-spacing: 1rpx;
 }
 
-.consult__desc {
-  display: block;
-  margin-top: $space-1;
-  font-size: $font-size-xs;
+.consult__title {
+  margin-left: $space-2;
+  font-size: $font-size-lg;
+  font-weight: $font-weight-heavy;
+  color: $text-primary;
+}
+
+.consult__cert {
+  display: flex;
+  align-items: center;
+}
+
+.consult__cert-ic {
+  font-size: $font-size-sm;
+  color: $brand-primary;
+}
+
+.consult__cert-t {
+  margin-left: $space-1;
+  font-size: $font-size-2xs;
   color: $text-muted;
 }
 
-.consult__stats {
+/* 输入框 */
+.consult__input {
   margin-top: $space-3;
   display: flex;
   align-items: center;
-  background: $bg-surface;
+  background: $bg-subtle;
   border-radius: $radius-card-child;
-  padding: $space-3 $space-2;
-  box-shadow: $shadow-sm;
+  padding: $space-3 $space-4;
 }
 
-.consult__stat {
+.consult__input-ph {
+  flex: 1;
+  font-size: $font-size-sm;
+  color: $text-disabled;
+}
+
+.consult__input-cam {
+  font-size: $font-size-md;
+  color: $text-muted;
+}
+
+/* 医学指导标签 */
+.consult__guide {
+  margin-top: $space-3;
+}
+
+.consult__guide-t {
+  font-size: $font-size-2xs;
+  color: $text-muted;
+}
+
+/* 专家列表 */
+.consult__doctors {
+  margin-top: $space-3;
+  display: flex;
+  justify-content: space-between;
+}
+
+.consult__doctor {
   flex: 1;
   display: flex;
   flex-direction: column;
-  align-items: center;
 }
 
-.consult__stat-v {
-  font-size: $font-size-md;
-  font-weight: $font-weight-heavy;
-  color: $brand-primary-active;
-  line-height: $line-height-tight;
-  font-family: $font-family-en;
+.consult__doctor-name {
+  font-size: $font-size-sm;
+  font-weight: $font-weight-semibold;
+  color: $text-primary;
 }
 
-.consult__stat-l {
+.consult__doctor-title {
+  margin-top: $space-1;
   font-size: $font-size-2xs;
   color: $text-muted;
-  margin-top: $space-1;
-}
-
-.consult__stat-line {
-  width: 1rpx;
-  height: $space-5;
-  background: $border-subtle;
-}
-
-.consult__cta {
-  position: relative;
-  z-index: 1;
-  display: flex;
-  align-items: center;
-  margin-left: $space-3;
-  padding: $space-2 $space-3;
-  border-radius: $radius-full;
-  background: $brand-primary-active;
-  box-shadow: $shadow-md;
-  flex-shrink: 0;
-}
-
-.consult__cta-t {
-  font-size: $font-size-xs;
-  color: $text-inverse;
-  font-weight: $font-weight-semibold;
-}
-
-.consult__cta-arrow {
-  font-size: $font-size-sm;
-  color: $text-inverse;
-  margin-left: $space-1;
+  line-height: $line-height-tight;
 }
 </style>

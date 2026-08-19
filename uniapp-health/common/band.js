@@ -36,7 +36,9 @@ export function fetchBandLatest(deviceid) {
               latest.steps != null ||
               latest.spo2 != null ||
               latest.ecgSamples != null ||
-              latest.sleep != null)
+              latest.sleep != null ||
+              latest.bodyTemp != null ||
+              latest.skinTemp != null)
           ) {
             resolve(latest)
             return

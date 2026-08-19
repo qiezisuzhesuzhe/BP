@@ -71,7 +71,9 @@ async function reportOnce(stepBase) {
         hr_data: { min_bpm: hr - 8, max_bpm: hr + 6, avg_bpm: hr },
         bp_data: { sbp, dbp },
         // 睡眠：最近 30 分钟睡眠状态（0 清醒 / 1 浅睡 / 2 深睡）
-        sleep_data: { sleep_data: [1, 1, 2, 2, 2, 2, 1, 1, 1, 2, 2, 2, 2, 1, 1, 0, 1, 2, 2, 2, 1, 1, 1, 2, 2, 1, 1, 1, 0, 1], shut_down: false, charge: false }
+        sleep_data: { sleep_data: [1, 1, 2, 2, 2, 2, 1, 1, 1, 2, 2, 2, 2, 1, 1, 0, 1, 2, 2, 2, 1, 1, 1, 2, 2, 1, 1, 1, 0, 1], shut_down: false, charge: false },
+        // 体温/皮肤温度：type=1 可用；evi_body=体温(×10)，esti_arm 高16位=体温、低16位=皮肤温度(×10)
+        temperature_data: { type: 1, evi_body: 375, esti_arm: (375 << 16) | 328 }
       }
     }
   })
@@ -113,7 +115,7 @@ async function reportOnce(stepBase) {
   })
   const ret = Buffer.from(await resp.arrayBuffer())[0]
   const t = new Date().toLocaleTimeString()
-  console.log('[' + t + '] POST /pb/upload bytes=' + body.length + ' resp=0x' + ret.toString(16).padStart(2, '0') + ' steps=' + steps + ' hr=' + hr + ' bp=' + sbp + '/' + dbp + (EXTRA ? ' +spo2 +ecg +sleep' : ''))
+  console.log('[' + t + '] POST /pb/upload bytes=' + body.length + ' resp=0x' + ret.toString(16).padStart(2, '0') + ' steps=' + steps + ' hr=' + hr + ' bp=' + sbp + '/' + dbp + ' temp=37.5/32.8' + (EXTRA ? ' +spo2 +ecg +sleep' : ''))
   return steps
 }
 

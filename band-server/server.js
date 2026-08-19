@@ -152,6 +152,14 @@ function parsePayload(opt, payload) {
         o.spo2Max = h.bxoy_data.max_oxy >>> 0
         o.spo2Min = h.bxoy_data.min_oxy >>> 0
       }
+      // 体温/皮肤温度：HisHealthTemp.type=1 可用（0=算法计算中，暂不可用）
+      // evi_body=体温，esti_arm 高位两字节=体温、低位两字节=皮肤温度；温度单位均为 0.1℃（如 375=37.5℃）
+      if (h.temperature_data) {
+        const t = h.temperature_data
+        o.tempOk = t.type === 1
+        if (t.evi_body != null) o.bodyTemp = (t.evi_body >>> 0) / 10
+        if (t.esti_arm != null) o.skinTemp = ((t.esti_arm >>> 0) & 0xffff) / 10
+      }
       return { type: 'health', data: o }
     }
     // 心电图：raw_data 为波形采样点（sfixed32），降采样到 ≤150 点供前端绘制
@@ -227,6 +235,9 @@ function mergeSamples(deviceid, packets) {
       if (data.spo2 !== undefined) snap.spo2 = data.spo2
       if (data.spo2Max !== undefined) snap.spo2Max = data.spo2Max
       if (data.spo2Min !== undefined) snap.spo2Min = data.spo2Min
+      if (data.bodyTemp !== undefined) snap.bodyTemp = data.bodyTemp
+      if (data.skinTemp !== undefined) snap.skinTemp = data.skinTemp
+      if (data.tempOk !== undefined) snap.tempOk = data.tempOk
       if (data.ts) snap.ts = data.ts
     } else if (type === 'ecg') {
       if (data.ecgN !== undefined) snap.ecgN = data.ecgN

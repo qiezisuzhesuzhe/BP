@@ -26,20 +26,55 @@
       </view>
     </view>
 
-    <!-- 心率 -->
+    <!-- 实时指标：心率/血氧/体温/皮肤温度 2×2 并排 -->
     <view class="wrap">
-      <view class="hr">
-        <view class="hr__top">
-          <view class="hr__label">
-            <text class="fa-solid fa-heart-pulse hr__label-icon"></text>
-            <text class="hr__label-t">实时心率</text>
+      <view class="vital">
+        <view class="vital__card vital__card--hr">
+          <view class="vital__head">
+            <text class="fa-solid fa-heart-pulse vital__icon vital__icon--hr"></text>
+            <text class="vital__name">实时心率</text>
           </view>
+          <view class="vital__value">
+            <text class="vital__num">{{ latest.hr != null ? latest.hr : '--' }}</text>
+            <text class="vital__unit">bpm</text>
+          </view>
+          <text class="vital__sub">测量自 {{ measuredAt }}</text>
         </view>
-        <view class="hr__value">
-          <text class="hr__num">{{ latest.hr != null ? latest.hr : '--' }}</text>
-          <text class="hr__unit">bpm</text>
+        <view class="vital__card vital__card--spo2">
+          <view class="vital__head">
+            <text class="fa-solid fa-droplet vital__icon vital__icon--spo2"></text>
+            <text class="vital__name">血氧</text>
+          </view>
+          <view class="vital__value">
+            <text class="vital__num">{{ latest.spo2 != null ? latest.spo2 : '--' }}</text>
+            <text class="vital__unit">%</text>
+          </view>
+          <text class="vital__sub">{{ spo2RangeText }}</text>
         </view>
-        <text class="hr__tip">测量自 {{ measuredAt }}</text>
+      </view>
+      <view class="vital">
+        <view class="vital__card vital__card--temp">
+          <view class="vital__head">
+            <text class="fa-solid fa-temperature-half vital__icon vital__icon--temp"></text>
+            <text class="vital__name">体温</text>
+          </view>
+          <view class="vital__value">
+            <text class="vital__num">{{ bodyTempText }}</text>
+            <text class="vital__unit">°C</text>
+          </view>
+          <text class="vital__sub">{{ tempOk ? '测量完成' : '算法计算中' }}</text>
+        </view>
+        <view class="vital__card vital__card--skin">
+          <view class="vital__head">
+            <text class="fa-solid fa-temperature-low vital__icon vital__icon--skin"></text>
+            <text class="vital__name">皮肤温度</text>
+          </view>
+          <view class="vital__value">
+            <text class="vital__num">{{ skinTempText }}</text>
+            <text class="vital__unit">°C</text>
+          </view>
+          <text class="vital__sub">{{ tempOk ? '体表温度' : '算法计算中' }}</text>
+        </view>
       </view>
     </view>
 
@@ -61,30 +96,6 @@
         <view class="bp__col">
           <text class="bp__num">{{ latest.dbp != null ? latest.dbp : '--' }}</text>
           <text class="bp__t">舒张压 mmHg</text>
-        </view>
-      </view>
-    </view>
-
-    <!-- 血氧 -->
-    <view class="wrap">
-      <view class="sec-head">
-        <text class="sec-title">血氧</text>
-        <view class="spo2-tag" :class="spo2TagClass">
-          <text class="spo2-tag__dot"></text>
-          <text class="spo2-tag__t">{{ spo2Label }}</text>
-        </view>
-      </view>
-      <view class="spo2">
-        <view class="spo2__main">
-          <text class="spo2__num">{{ latest.spo2 != null ? latest.spo2 : '--' }}</text>
-          <text class="spo2__unit">% 血氧饱和度</text>
-        </view>
-        <view class="spo2__meta">
-          <text v-if="latest.spo2 != null" class="spo2__meta-item">最低 {{ latest.spo2Min != null ? latest.spo2Min : '--' }} · 最高 {{ latest.spo2Max != null ? latest.spo2Max : '--' }}</text>
-          <text v-else class="spo2__meta-item">测量后显示血氧值</text>
-        </view>
-        <view class="spo2__bar">
-          <view class="spo2__bar-in" :style="{ width: spo2Pct + '%' }"></view>
         </view>
       </view>
     </view>
@@ -284,23 +295,23 @@ export default {
       return this.byteLen(this.msgText)
     },
     /* ---------- 血氧 ---------- */
-    spo2Pct() {
-      if (this.latest.spo2 == null) return 0
-      return Math.max(0, Math.min(100, Math.round(((this.latest.spo2 - 85) / 15) * 100)))
+    spo2RangeText() {
+      if (this.latest.spo2 == null) return '测量后显示血氧值'
+      const min = this.latest.spo2Min != null ? this.latest.spo2Min : '--'
+      const max = this.latest.spo2Max != null ? this.latest.spo2Max : '--'
+      return '最低 ' + min + ' · 最高 ' + max
     },
-    spo2Label() {
-      const s = this.latest.spo2
-      if (s == null) return '--'
-      if (s >= 95) return '正常'
-      if (s >= 90) return '偏低'
-      return '注意'
+    /* ---------- 体温 / 皮肤温度（HisHealthTemp：type=1 可用，值 ×10） ---------- */
+    tempOk() {
+      return this.latest.tempOk !== false && (this.latest.bodyTemp != null || this.latest.skinTemp != null)
     },
-    spo2TagClass() {
-      const s = this.latest.spo2
-      if (s == null) return 'spo2-tag--none'
-      if (s >= 95) return 'spo2-tag--ok'
-      if (s >= 90) return 'spo2-tag--low'
-      return 'spo2-tag--warn'
+    bodyTempText() {
+      if (this.latest.bodyTemp == null || this.latest.tempOk === false) return '--'
+      return this.latest.bodyTemp.toFixed(1)
+    },
+    skinTempText() {
+      if (this.latest.skinTemp == null || this.latest.tempOk === false) return '--'
+      return this.latest.skinTemp.toFixed(1)
     },
     /* ---------- 心电图 ---------- */
     ecgPoints() {
@@ -632,63 +643,111 @@ export default {
   color: $text-muted;
 }
 
-/* 心率卡 */
-.hr {
-  margin-top: $space-4;
-  background: linear-gradient(140deg, $brand-primary-hover 0%, $brand-green 100%);
+/* 实时指标 2×2 并排卡（心率/血氧/体温/皮肤温度） */
+.vital {
+  display: flex;
+}
+
+.vital__card {
+  flex: 1;
+  min-width: 0;
+  background: $bg-surface;
   border-radius: $radius-card-child;
+  box-shadow: $shadow-sm;
   padding: $space-4;
-  box-shadow: $shadow-md;
 }
 
-.hr__top {
+.vital__card + .vital__card {
+  margin-left: $space-3;
+}
+
+.vital:not(:first-child) {
+  margin-top: $space-3;
+}
+
+/* 心率卡：浅绿渐变弱强调，其余指标白卡 */
+.vital__card--hr {
+  background: linear-gradient(145deg, #e8f8f0 0%, $bg-surface 75%);
+}
+
+.vital__head {
   display: flex;
   align-items: center;
-  justify-content: space-between;
 }
 
-.hr__label {
-  display: flex;
-  align-items: center;
-}
-
-.hr__label-icon {
-  color: rgba(255, 255, 255, 0.9);
+.vital__icon {
   font-size: $font-size-sm;
   margin-right: $space-2;
 }
 
-.hr__label-t {
-  color: rgba(255, 255, 255, 0.92);
-  font-size: $font-size-xs;
-  font-weight: $font-weight-semibold;
+.vital__icon--hr {
+  color: $brand-green;
 }
 
-.hr__value {
+.vital__icon--spo2 {
+  color: #0ba5c3;
+}
+
+.vital__icon--temp {
+  color: #f2994a;
+}
+
+.vital__icon--skin {
+  color: #4a90d9;
+}
+
+.vital__name {
+  font-size: $font-size-2xs;
+  font-weight: $font-weight-semibold;
+  color: $text-secondary;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.vital__value {
   display: flex;
   align-items: baseline;
   margin-top: $space-3;
 }
 
-.hr__num {
-  font-size: $font-size-3xl;
+.vital__num {
+  font-size: $font-size-2xl;
   font-weight: $font-weight-heavy;
-  color: $text-inverse;
   font-family: $font-family-en;
   line-height: 1;
 }
 
-.hr__unit {
-  margin-left: $space-2;
-  font-size: $font-size-sm;
-  color: rgba(255, 255, 255, 0.85);
+.vital__card--hr .vital__num {
+  color: $brand-green;
 }
 
-.hr__tip {
+.vital__card--spo2 .vital__num {
+  color: #0ba5c3;
+}
+
+.vital__card--temp .vital__num {
+  color: #f2994a;
+}
+
+.vital__card--skin .vital__num {
+  color: #4a90d9;
+}
+
+.vital__unit {
+  margin-left: $space-1;
+  font-size: $font-size-2xs;
+  color: $text-muted;
+}
+
+.vital__sub {
   display: block;
   margin-top: $space-2;
   font-size: $font-size-2xs;
-  color: rgba(255, 255, 255, 0.7);
+  color: $text-hint;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 /* 血压卡 */
@@ -795,109 +854,6 @@ export default {
 .steps__meta-item {
   font-size: $font-size-2xs;
   color: $text-muted;
-}
-
-/* 血氧卡 */
-.spo2 {
-  background: $bg-surface;
-  border-radius: $radius-card-child;
-  box-shadow: $shadow-sm;
-  padding: $space-4;
-}
-
-.spo2__main {
-  display: flex;
-  align-items: baseline;
-}
-
-.spo2__num {
-  font-size: $font-size-3xl;
-  font-weight: $font-weight-heavy;
-  color: #0ba5c3;
-  font-family: $font-family-en;
-  line-height: 1;
-}
-
-.spo2__unit {
-  margin-left: $space-2;
-  font-size: $font-size-xs;
-  color: $text-muted;
-}
-
-.spo2__meta {
-  margin-top: $space-2;
-}
-
-.spo2__meta-item {
-  font-size: $font-size-2xs;
-  color: $text-muted;
-}
-
-.spo2__bar {
-  margin-top: $space-3;
-  height: $space-2;
-  border-radius: $radius-full;
-  background: $bg-section;
-  overflow: hidden;
-}
-
-.spo2__bar-in {
-  height: 100%;
-  border-radius: $radius-full;
-  background: linear-gradient(90deg, #22c3d8, #0ba5c3);
-  transition: width 0.6s ease;
-}
-
-.spo2-tag {
-  display: flex;
-  align-items: center;
-  padding: $space-1 $space-3;
-  border-radius: $radius-full;
-  font-size: $font-size-2xs;
-  font-weight: $font-weight-semibold;
-}
-
-.spo2-tag__dot {
-  width: $size-badge-sm;
-  height: $size-badge-sm;
-  border-radius: 50%;
-  margin-right: $space-1;
-}
-
-.spo2-tag--ok {
-  background: #ddf7ed;
-  color: #27ae60;
-}
-
-.spo2-tag--ok .spo2-tag__dot {
-  background: #27ae60;
-}
-
-.spo2-tag--low {
-  background: #fdf4ed;
-  color: #f2994a;
-}
-
-.spo2-tag--low .spo2-tag__dot {
-  background: #f2994a;
-}
-
-.spo2-tag--warn {
-  background: #fdeeee;
-  color: #eb5757;
-}
-
-.spo2-tag--warn .spo2-tag__dot {
-  background: #eb5757;
-}
-
-.spo2-tag--none {
-  background: #f2f7fa;
-  color: #94a3b8;
-}
-
-.spo2-tag--none .spo2-tag__dot {
-  background: #94a3b8;
 }
 
 /* 心电图卡（深色底，波形为唯一视觉重心） */

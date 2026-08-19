@@ -525,7 +525,7 @@ __webpack_require__.r(__webpack_exports__);
 /*!****************************!*\
   !*** ./src/common/band.js ***!
   \****************************/
-/*! exports provided: BAND_SERVER, bandApi, fetchBandLatest, bindBandDevice, simulateLatest, bpLevel */
+/*! exports provided: BAND_SERVER, bandApi, fetchBandLatest, bindBandDevice, simulateLatest, extractDeviceId, bpLevel */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -535,9 +535,22 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "fetchBandLatest", function() { return fetchBandLatest; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "bindBandDevice", function() { return bindBandDevice; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "simulateLatest", function() { return simulateLatest; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "extractDeviceId", function() { return extractDeviceId; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "bpLevel", function() { return bpLevel; });
 /* harmony import */ var core_js_modules_es_object_to_string_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! core-js/modules/es.object.to-string.js */ "07d7");
 /* harmony import */ var core_js_modules_es_object_to_string_js__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_object_to_string_js__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var core_js_modules_es_regexp_exec_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! core-js/modules/es.regexp.exec.js */ "rB9j");
+/* harmony import */ var core_js_modules_es_regexp_exec_js__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_regexp_exec_js__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var core_js_modules_es_string_match_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! core-js/modules/es.string.match.js */ "Rm1S");
+/* harmony import */ var core_js_modules_es_string_match_js__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_string_match_js__WEBPACK_IMPORTED_MODULE_2__);
+/* harmony import */ var core_js_modules_es_string_replace_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! core-js/modules/es.string.replace.js */ "UxlC");
+/* harmony import */ var core_js_modules_es_string_replace_js__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_string_replace_js__WEBPACK_IMPORTED_MODULE_3__);
+/* harmony import */ var core_js_modules_es_string_trim_js__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! core-js/modules/es.string.trim.js */ "SYor");
+/* harmony import */ var core_js_modules_es_string_trim_js__WEBPACK_IMPORTED_MODULE_4___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_string_trim_js__WEBPACK_IMPORTED_MODULE_4__);
+
+
+
+
 
 /**
  * 智能手环（血压款）—— 埃微 iwown 设备对云 数据桥接
@@ -620,6 +633,29 @@ function simulateLatest() {
     updatedAt: Date.now(),
     _sim: true
   };
+}
+
+// 从二维码文本中宽容提取设备号（IMEI/deviceid），兼容多种厂商二维码格式
+function extractDeviceId(text) {
+  var raw = String(text || '').trim();
+  if (!raw) return '';
+  // 1) 参数形式：imei/deviceid/device_id/sn/serial = 值
+  var p = raw.match(/(?:imei|device[_-]?id|device_id|sn|serial)\s*[=:"'：\s]\s*([A-Za-z0-9]{8,20})/i);
+  if (p) return p[1];
+  // 2) JSON 键值形式
+  var j = raw.match(/["']?(?:imei|device[_-]?id|device_id|sn|serial)["']?\s*[:=]\s*["']?([A-Za-z0-9]{8,20})/i);
+  if (j) return j[1];
+  // 3) 任意位置出现的 15 位连续数字（IMEI）
+  var d15 = raw.match(/(?:^|[^\d])(\d{15})(?:[^\d]|$)/);
+  if (d15) return d15[1];
+  // 3.5) 去除空格/横线后的连续数字（如 "86 0132 0608 7222 3"）
+  var compact = raw.replace(/[\s-]/g, '');
+  var d15c = compact.match(/(?:^|[^\d])(\d{15})(?:[^\d]|$)/);
+  if (d15c) return d15c[1];
+  // 4) 兜底：10~20 位连续数字
+  var d = raw.match(/(?:^|[^\d])(\d{10,20})(?:[^\d]|$)/);
+  if (d) return d[1];
+  return '';
 }
 
 // 血压状态分级

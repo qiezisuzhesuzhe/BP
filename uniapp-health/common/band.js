@@ -79,6 +79,29 @@ export function simulateLatest() {
   }
 }
 
+// 从二维码文本中宽容提取设备号（IMEI/deviceid），兼容多种厂商二维码格式
+export function extractDeviceId(text) {
+  const raw = String(text || '').trim()
+  if (!raw) return ''
+  // 1) 参数形式：imei/deviceid/device_id/sn/serial = 值
+  const p = raw.match(/(?:imei|device[_-]?id|device_id|sn|serial)\s*[=:"'：\s]\s*([A-Za-z0-9]{8,20})/i)
+  if (p) return p[1]
+  // 2) JSON 键值形式
+  const j = raw.match(/["']?(?:imei|device[_-]?id|device_id|sn|serial)["']?\s*[:=]\s*["']?([A-Za-z0-9]{8,20})/i)
+  if (j) return j[1]
+  // 3) 任意位置出现的 15 位连续数字（IMEI）
+  const d15 = raw.match(/(?:^|[^\d])(\d{15})(?:[^\d]|$)/)
+  if (d15) return d15[1]
+  // 3.5) 去除空格/横线后的连续数字（如 "86 0132 0608 7222 3"）
+  const compact = raw.replace(/[\s-]/g, '')
+  const d15c = compact.match(/(?:^|[^\d])(\d{15})(?:[^\d]|$)/)
+  if (d15c) return d15c[1]
+  // 4) 兜底：10~20 位连续数字
+  const d = raw.match(/(?:^|[^\d])(\d{10,20})(?:[^\d]|$)/)
+  if (d) return d[1]
+  return ''
+}
+
 // 血压状态分级
 export function bpLevel(sbp, dbp) {
   if (sbp == null || dbp == null) return { key: 'none', label: '--', color: '#94a3b8' }

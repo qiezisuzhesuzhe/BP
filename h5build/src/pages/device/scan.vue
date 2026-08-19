@@ -19,6 +19,35 @@
       <text class="scan-btn__t">{{ camState === 'on' ? '模拟识别（演示）' : '模拟扫码识别' }}</text>
     </view>
 
+    <view class="scan-manual" @tap="openManual">
+      <text class="fa-solid fa-keyboard scan-manual__icon"></text>
+      <text class="scan-manual__t">扫描不到？手动输入设备号</text>
+    </view>
+
+    <!-- 手动输入设备号 -->
+    <view v-if="manualVisible" class="sheet">
+      <view class="sheet__mask" @tap="manualVisible = false"></view>
+      <view class="sheet__card">
+        <text class="sheet__t">手动输入设备号</text>
+        <text class="sheet__d">输入手环机身上的 IMEI 或二维码中的设备编号</text>
+        <input
+          class="sheet__input"
+          v-model="manualInput"
+          type="number"
+          maxlength="20"
+          placeholder="如 860132060872223"
+          placeholder-class="sheet__ph"
+          focus
+        />
+        <view class="sheet__btns">
+          <view class="sheet__btn sheet__btn--cancel" @tap="manualVisible = false">取消</view>
+          <view class="sheet__btn" @tap="confirmManual">
+            <text class="sheet__btn-t">绑定设备</text>
+          </view>
+        </view>
+      </view>
+    </view>
+
     <!-- 识别结果确认 -->
     <view v-if="result" class="sheet">
       <view class="sheet__mask" @tap="result = null"></view>
@@ -32,6 +61,7 @@
             <text class="sheet__dev-name">{{ result.name }}</text>
             <text class="sheet__dev-sn">{{ result.model }}</text>
             <text class="sheet__dev-sn">SN：{{ fakeSn }}</text>
+            <text v-if="fakeDeviceId" class="sheet__dev-sn sheet__dev-sn--id">设备号：{{ fakeDeviceId }}</text>
           </view>
         </view>
         <view class="sheet__btns">
@@ -47,7 +77,7 @@
 
 <script>
 import { DEVICE_TYPES, deviceType } from '@/common/mock.js'
-import { bindBandDevice } from '@/common/band.js'
+import { bindBandDevice, extractDeviceId } from '@/common/band.js'
 
 let scanSeq = 0
 
@@ -58,6 +88,8 @@ export default {
       result: null,
       fakeSn: '',
       fakeDeviceId: '',
+      manualVisible: false,
+      manualInput: '',
       // 相机状态：idle 准备中 / starting 启动中 / on 已开启 / fail 不可用
       camState: 'idle',
       stream: null,
@@ -160,7 +192,8 @@ export default {
         if (!ctx) return
         ctx.drawImage(v, 0, 0, w, h)
         const img = ctx.getImageData(0, 0, w, h)
-        const code = window.jsQR(img.data, w, h, { inversionAttempts: 'dontInvert' })
+        // attemptBoth：兼容深色背景/反色二维码，提高真实手环小屏二维码识别率
+        const code = window.jsQR(img.data, w, h, { inversionAttempts: 'attemptBoth' })
         if (code && code.data) this.handleCode(code.data)
       }, 220)
     },
@@ -189,20 +222,24 @@ export default {
       }
       this.canvasEl = null
     },
-    // 解析设备机身二维码：ankang://device?type=xxx&sn=xxx[&deviceid=xxx]
-    // 兼容：纯 15 位数字（4G 手环 IMEI 二维码）按血压款手环识别
+    // 解析设备机身二维码：
+    // 1) 安康自定义格式 ankang://device?type=xxx&sn=xxx[&deviceid=xxx]
+    // 2) 通用格式（真实手环常见）：URL 带 imei/deviceid 参数、JSON、混有文本的 15 位数字等，
+    //    通过 extractDeviceId 宽容提取设备号，按血压款手环识别
     handleCode(text) {
       if (this.result) return false
       const raw = String(text || '').trim()
+      if (!raw) return false
       const m = raw.match(/ankang:\/\/device\?type=([a-z0-9-]+)(?:&sn=([A-Za-z0-9-]+))?(?:&deviceid=([A-Za-z0-9-]+))?/i)
       let type = null
       let deviceid = ''
       if (m) {
         type = deviceType(m[1])
         deviceid = m[3] || ''
-      } else if (/^\d{15}$/.test(raw)) {
-        type = deviceType('band-bp')
-        deviceid = raw
+      }
+      if (!type) {
+        deviceid = extractDeviceId(raw)
+        if (deviceid) type = deviceType('band-bp')
       }
       if (!type) return false
       this.stopScanLoop()
@@ -224,6 +261,22 @@ export default {
       } else {
         this.fakeDeviceId = ''
         this.handleCode('ankang://device?type=' + type.key + '&sn=' + this.fakeSn)
+      }
+    },
+    openManual() {
+      this.manualVisible = true
+      this.manualInput = ''
+    },
+    // 手动输入的设备号走与扫码相同的解析/绑定流程
+    confirmManual() {
+      const raw = String(this.manualInput || '').trim()
+      if (!raw) {
+        uni.showToast({ title: '请输入设备号', icon: 'none' })
+        return
+      }
+      this.manualVisible = false
+      if (!this.handleCode(raw)) {
+        uni.showToast({ title: '未识别到有效设备号，请检查后重试', icon: 'none' })
       }
     },
     async confirm() {
@@ -383,6 +436,28 @@ export default {
   font-weight: $font-weight-bold;
 }
 
+.scan-manual {
+  margin-top: $space-3;
+  display: flex;
+  align-items: center;
+  padding: $space-2 $space-4;
+  border-radius: $radius-full;
+  background: rgba(255, 255, 255, 0.08);
+  border: 1rpx solid rgba(255, 255, 255, 0.16);
+}
+
+.scan-manual__icon {
+  color: rgba(255, 255, 255, 0.85);
+  font-size: $font-size-2xs;
+  margin-right: $space-2;
+}
+
+.scan-manual__t {
+  color: rgba(255, 255, 255, 0.85);
+  font-size: $font-size-2xs;
+  letter-spacing: 1rpx;
+}
+
 .sheet {
   position: fixed;
   top: 0;
@@ -414,6 +489,31 @@ export default {
   font-weight: $font-weight-heavy;
   color: $text-primary;
   text-align: center;
+}
+
+.sheet__d {
+  display: block;
+  font-size: $font-size-2xs;
+  color: $text-muted;
+  text-align: center;
+  margin-top: $space-2;
+}
+
+.sheet__input {
+  margin-top: $space-4;
+  height: $size-input-height;
+  background: $bg-section;
+  border-radius: $radius-card-child;
+  padding: 0 $space-4;
+  font-size: $font-size-md;
+  color: $text-primary;
+  letter-spacing: 2rpx;
+}
+
+.sheet__ph {
+  color: $text-hint;
+  font-size: $font-size-sm;
+  letter-spacing: 0;
 }
 
 .sheet__dev {
@@ -456,6 +556,11 @@ export default {
   font-size: $font-size-2xs;
   color: $text-muted;
   margin-top: $space-1;
+}
+
+.sheet__dev-sn--id {
+  color: $brand-primary-active;
+  font-weight: $font-weight-semibold;
 }
 
 .sheet__btns {

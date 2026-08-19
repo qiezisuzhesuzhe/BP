@@ -125,16 +125,14 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var core_js_modules_es_object_to_string_js__WEBPACK_IMPORTED_MODULE_6___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_object_to_string_js__WEBPACK_IMPORTED_MODULE_6__);
 /* harmony import */ var core_js_modules_es_regexp_exec_js__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! core-js/modules/es.regexp.exec.js */ "rB9j");
 /* harmony import */ var core_js_modules_es_regexp_exec_js__WEBPACK_IMPORTED_MODULE_7___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_regexp_exec_js__WEBPACK_IMPORTED_MODULE_7__);
-/* harmony import */ var core_js_modules_es_regexp_test_js__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! core-js/modules/es.regexp.test.js */ "ALS0");
-/* harmony import */ var core_js_modules_es_regexp_test_js__WEBPACK_IMPORTED_MODULE_8___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_regexp_test_js__WEBPACK_IMPORTED_MODULE_8__);
-/* harmony import */ var core_js_modules_es_string_match_js__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! core-js/modules/es.string.match.js */ "Rm1S");
-/* harmony import */ var core_js_modules_es_string_match_js__WEBPACK_IMPORTED_MODULE_9___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_string_match_js__WEBPACK_IMPORTED_MODULE_9__);
-/* harmony import */ var core_js_modules_es_string_trim_js__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! core-js/modules/es.string.trim.js */ "SYor");
-/* harmony import */ var core_js_modules_es_string_trim_js__WEBPACK_IMPORTED_MODULE_10___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_string_trim_js__WEBPACK_IMPORTED_MODULE_10__);
-/* harmony import */ var core_js_modules_web_dom_collections_for_each_js__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! core-js/modules/web.dom-collections.for-each.js */ "FZtP");
-/* harmony import */ var core_js_modules_web_dom_collections_for_each_js__WEBPACK_IMPORTED_MODULE_11___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_web_dom_collections_for_each_js__WEBPACK_IMPORTED_MODULE_11__);
-/* harmony import */ var _common_mock_js__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! @/common/mock.js */ "rfkh");
-/* harmony import */ var _common_band_js__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(/*! @/common/band.js */ "YNKN");
+/* harmony import */ var core_js_modules_es_string_match_js__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! core-js/modules/es.string.match.js */ "Rm1S");
+/* harmony import */ var core_js_modules_es_string_match_js__WEBPACK_IMPORTED_MODULE_8___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_string_match_js__WEBPACK_IMPORTED_MODULE_8__);
+/* harmony import */ var core_js_modules_es_string_trim_js__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! core-js/modules/es.string.trim.js */ "SYor");
+/* harmony import */ var core_js_modules_es_string_trim_js__WEBPACK_IMPORTED_MODULE_9___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_string_trim_js__WEBPACK_IMPORTED_MODULE_9__);
+/* harmony import */ var core_js_modules_web_dom_collections_for_each_js__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! core-js/modules/web.dom-collections.for-each.js */ "FZtP");
+/* harmony import */ var core_js_modules_web_dom_collections_for_each_js__WEBPACK_IMPORTED_MODULE_10___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_web_dom_collections_for_each_js__WEBPACK_IMPORTED_MODULE_10__);
+/* harmony import */ var _common_mock_js__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! @/common/mock.js */ "rfkh");
+/* harmony import */ var _common_band_js__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! @/common/band.js */ "YNKN");
 
 
 
@@ -146,7 +144,36 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
-
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 //
 //
 //
@@ -201,10 +228,12 @@ var scanSeq = 0;
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
-      types: _common_mock_js__WEBPACK_IMPORTED_MODULE_12__["DEVICE_TYPES"],
+      types: _common_mock_js__WEBPACK_IMPORTED_MODULE_11__["DEVICE_TYPES"],
       result: null,
       fakeSn: '',
       fakeDeviceId: '',
+      manualVisible: false,
+      manualInput: '',
       // 相机状态：idle 准备中 / starting 启动中 / on 已开启 / fail 不可用
       camState: 'idle',
       stream: null,
@@ -341,8 +370,9 @@ var scanSeq = 0;
         if (!ctx) return;
         ctx.drawImage(v, 0, 0, w, h);
         var img = ctx.getImageData(0, 0, w, h);
+        // attemptBoth：兼容深色背景/反色二维码，提高真实手环小屏二维码识别率
         var code = window.jsQR(img.data, w, h, {
-          inversionAttempts: 'dontInvert'
+          inversionAttempts: 'attemptBoth'
         });
         if (code && code.data) _this2.handleCode(code.data);
       }, 220);
@@ -374,20 +404,24 @@ var scanSeq = 0;
       }
       this.canvasEl = null;
     },
-    // 解析设备机身二维码：ankang://device?type=xxx&sn=xxx[&deviceid=xxx]
-    // 兼容：纯 15 位数字（4G 手环 IMEI 二维码）按血压款手环识别
+    // 解析设备机身二维码：
+    // 1) 安康自定义格式 ankang://device?type=xxx&sn=xxx[&deviceid=xxx]
+    // 2) 通用格式（真实手环常见）：URL 带 imei/deviceid 参数、JSON、混有文本的 15 位数字等，
+    //    通过 extractDeviceId 宽容提取设备号，按血压款手环识别
     handleCode: function handleCode(text) {
       if (this.result) return false;
       var raw = String(text || '').trim();
+      if (!raw) return false;
       var m = raw.match(/ankang:\/\/device\?type=([a-z0-9-]+)(?:&sn=([A-Za-z0-9-]+))?(?:&deviceid=([A-Za-z0-9-]+))?/i);
       var type = null;
       var deviceid = '';
       if (m) {
-        type = Object(_common_mock_js__WEBPACK_IMPORTED_MODULE_12__["deviceType"])(m[1]);
+        type = Object(_common_mock_js__WEBPACK_IMPORTED_MODULE_11__["deviceType"])(m[1]);
         deviceid = m[3] || '';
-      } else if (/^\d{15}$/.test(raw)) {
-        type = Object(_common_mock_js__WEBPACK_IMPORTED_MODULE_12__["deviceType"])('band-bp');
-        deviceid = raw;
+      }
+      if (!type) {
+        deviceid = Object(_common_band_js__WEBPACK_IMPORTED_MODULE_12__["extractDeviceId"])(raw);
+        if (deviceid) type = Object(_common_mock_js__WEBPACK_IMPORTED_MODULE_11__["deviceType"])('band-bp');
       }
       if (!type) return false;
       this.stopScanLoop();
@@ -411,6 +445,28 @@ var scanSeq = 0;
         this.handleCode('ankang://device?type=' + type.key + '&sn=' + this.fakeSn);
       }
     },
+    openManual: function openManual() {
+      this.manualVisible = true;
+      this.manualInput = '';
+    },
+    // 手动输入的设备号走与扫码相同的解析/绑定流程
+    confirmManual: function confirmManual() {
+      var raw = String(this.manualInput || '').trim();
+      if (!raw) {
+        uni.showToast({
+          title: '请输入设备号',
+          icon: 'none'
+        });
+        return;
+      }
+      this.manualVisible = false;
+      if (!this.handleCode(raw)) {
+        uni.showToast({
+          title: '未识别到有效设备号，请检查后重试',
+          icon: 'none'
+        });
+      }
+    },
     confirm: function confirm() {
       var _this3 = this;
       return Object(_workspace_h5build_node_modules_babel_runtime_helpers_esm_asyncToGenerator_js__WEBPACK_IMPORTED_MODULE_1__["default"])(/*#__PURE__*/Object(_workspace_h5build_node_modules_babel_runtime_helpers_esm_regenerator_js__WEBPACK_IMPORTED_MODULE_0__["default"])().m(function _callee2() {
@@ -430,7 +486,7 @@ var scanSeq = 0;
               dev = _context2.v;
               // 血压款手环：注册到对接后端，进入手环状态页
               if (type.key === 'band-bp' && _this3.fakeDeviceId) {
-                Object(_common_band_js__WEBPACK_IMPORTED_MODULE_13__["bindBandDevice"])(_this3.fakeDeviceId, type.name);
+                Object(_common_band_js__WEBPACK_IMPORTED_MODULE_12__["bindBandDevice"])(_this3.fakeDeviceId, type.name);
               }
               uni.showToast({
                 title: '设备添加成功',
@@ -570,6 +626,113 @@ var render = function () {
         ],
         1
       ),
+      _c(
+        "v-uni-view",
+        {
+          staticClass: "scan-manual",
+          on: {
+            click: function ($event) {
+              arguments[0] = $event = _vm.$handleEvent($event)
+              _vm.openManual.apply(void 0, arguments)
+            },
+          },
+        },
+        [
+          _c("v-uni-text", {
+            staticClass: "fa-solid fa-keyboard scan-manual__icon",
+          }),
+          _c("v-uni-text", { staticClass: "scan-manual__t" }, [
+            _vm._v("扫描不到？手动输入设备号"),
+          ]),
+        ],
+        1
+      ),
+      _vm.manualVisible
+        ? _c(
+            "v-uni-view",
+            { staticClass: "sheet" },
+            [
+              _c("v-uni-view", {
+                staticClass: "sheet__mask",
+                on: {
+                  click: function ($event) {
+                    arguments[0] = $event = _vm.$handleEvent($event)
+                    _vm.manualVisible = false
+                  },
+                },
+              }),
+              _c(
+                "v-uni-view",
+                { staticClass: "sheet__card" },
+                [
+                  _c("v-uni-text", { staticClass: "sheet__t" }, [
+                    _vm._v("手动输入设备号"),
+                  ]),
+                  _c("v-uni-text", { staticClass: "sheet__d" }, [
+                    _vm._v("输入手环机身上的 IMEI 或二维码中的设备编号"),
+                  ]),
+                  _c("v-uni-input", {
+                    staticClass: "sheet__input",
+                    attrs: {
+                      type: "number",
+                      maxlength: "20",
+                      placeholder: "如 860132060872223",
+                      "placeholder-class": "sheet__ph",
+                      focus: true,
+                    },
+                    model: {
+                      value: _vm.manualInput,
+                      callback: function ($$v) {
+                        _vm.manualInput = $$v
+                      },
+                      expression: "manualInput",
+                    },
+                  }),
+                  _c(
+                    "v-uni-view",
+                    { staticClass: "sheet__btns" },
+                    [
+                      _c(
+                        "v-uni-view",
+                        {
+                          staticClass: "sheet__btn sheet__btn--cancel",
+                          on: {
+                            click: function ($event) {
+                              arguments[0] = $event = _vm.$handleEvent($event)
+                              _vm.manualVisible = false
+                            },
+                          },
+                        },
+                        [_vm._v("取消")]
+                      ),
+                      _c(
+                        "v-uni-view",
+                        {
+                          staticClass: "sheet__btn",
+                          on: {
+                            click: function ($event) {
+                              arguments[0] = $event = _vm.$handleEvent($event)
+                              _vm.confirmManual.apply(void 0, arguments)
+                            },
+                          },
+                        },
+                        [
+                          _c("v-uni-text", { staticClass: "sheet__btn-t" }, [
+                            _vm._v("绑定设备"),
+                          ]),
+                        ],
+                        1
+                      ),
+                    ],
+                    1
+                  ),
+                ],
+                1
+              ),
+            ],
+            1
+          )
+        : _vm._e(),
       _vm.result
         ? _c(
             "v-uni-view",
@@ -623,6 +786,16 @@ var render = function () {
                           _c("v-uni-text", { staticClass: "sheet__dev-sn" }, [
                             _vm._v("SN：" + _vm._s(_vm.fakeSn)),
                           ]),
+                          _vm.fakeDeviceId
+                            ? _c(
+                                "v-uni-text",
+                                {
+                                  staticClass:
+                                    "sheet__dev-sn sheet__dev-sn--id",
+                                },
+                                [_vm._v("设备号：" + _vm._s(_vm.fakeDeviceId))]
+                              )
+                            : _vm._e(),
                         ],
                         1
                       ),
@@ -691,7 +864,7 @@ render._withStripped = true
 /*!****************************!*\
   !*** ./src/common/band.js ***!
   \****************************/
-/*! exports provided: BAND_SERVER, bandApi, fetchBandLatest, bindBandDevice, simulateLatest, bpLevel */
+/*! exports provided: BAND_SERVER, bandApi, fetchBandLatest, bindBandDevice, simulateLatest, extractDeviceId, bpLevel */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -701,9 +874,22 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "fetchBandLatest", function() { return fetchBandLatest; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "bindBandDevice", function() { return bindBandDevice; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "simulateLatest", function() { return simulateLatest; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "extractDeviceId", function() { return extractDeviceId; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "bpLevel", function() { return bpLevel; });
 /* harmony import */ var core_js_modules_es_object_to_string_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! core-js/modules/es.object.to-string.js */ "07d7");
 /* harmony import */ var core_js_modules_es_object_to_string_js__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_object_to_string_js__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var core_js_modules_es_regexp_exec_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! core-js/modules/es.regexp.exec.js */ "rB9j");
+/* harmony import */ var core_js_modules_es_regexp_exec_js__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_regexp_exec_js__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var core_js_modules_es_string_match_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! core-js/modules/es.string.match.js */ "Rm1S");
+/* harmony import */ var core_js_modules_es_string_match_js__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_string_match_js__WEBPACK_IMPORTED_MODULE_2__);
+/* harmony import */ var core_js_modules_es_string_replace_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! core-js/modules/es.string.replace.js */ "UxlC");
+/* harmony import */ var core_js_modules_es_string_replace_js__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_string_replace_js__WEBPACK_IMPORTED_MODULE_3__);
+/* harmony import */ var core_js_modules_es_string_trim_js__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! core-js/modules/es.string.trim.js */ "SYor");
+/* harmony import */ var core_js_modules_es_string_trim_js__WEBPACK_IMPORTED_MODULE_4___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_string_trim_js__WEBPACK_IMPORTED_MODULE_4__);
+
+
+
+
 
 /**
  * 智能手环（血压款）—— 埃微 iwown 设备对云 数据桥接
@@ -786,6 +972,29 @@ function simulateLatest() {
     updatedAt: Date.now(),
     _sim: true
   };
+}
+
+// 从二维码文本中宽容提取设备号（IMEI/deviceid），兼容多种厂商二维码格式
+function extractDeviceId(text) {
+  var raw = String(text || '').trim();
+  if (!raw) return '';
+  // 1) 参数形式：imei/deviceid/device_id/sn/serial = 值
+  var p = raw.match(/(?:imei|device[_-]?id|device_id|sn|serial)\s*[=:"'：\s]\s*([A-Za-z0-9]{8,20})/i);
+  if (p) return p[1];
+  // 2) JSON 键值形式
+  var j = raw.match(/["']?(?:imei|device[_-]?id|device_id|sn|serial)["']?\s*[:=]\s*["']?([A-Za-z0-9]{8,20})/i);
+  if (j) return j[1];
+  // 3) 任意位置出现的 15 位连续数字（IMEI）
+  var d15 = raw.match(/(?:^|[^\d])(\d{15})(?:[^\d]|$)/);
+  if (d15) return d15[1];
+  // 3.5) 去除空格/横线后的连续数字（如 "86 0132 0608 7222 3"）
+  var compact = raw.replace(/[\s-]/g, '');
+  var d15c = compact.match(/(?:^|[^\d])(\d{15})(?:[^\d]|$)/);
+  if (d15c) return d15c[1];
+  // 4) 兜底：10~20 位连续数字
+  var d = raw.match(/(?:^|[^\d])(\d{10,20})(?:[^\d]|$)/);
+  if (d) return d[1];
+  return '';
 }
 
 // 血压状态分级
@@ -881,7 +1090,7 @@ component.options.__file = "pages/device/scan.vue"
 var ___CSS_LOADER_API_IMPORT___ = __webpack_require__(/*! ../../../node_modules/css-loader/dist/runtime/api.js */ "JPst");
 exports = ___CSS_LOADER_API_IMPORT___(false);
 // Module
-exports.push([module.i, "@charset \"UTF-8\";\n/* 安康健康管理 · 设计令牌\n   来源：/workspace/DESIGN.md\n   方案：rpx + SCSS 变量（1px = 2rpx，基于 750rpx 设计基准） */\n/* ---------- 品牌色 ---------- */\n/* ---------- 头像 ---------- */\n/* ---------- 语义状态色 ---------- */\n/* ---------- 金色（尊享装饰） ---------- */\n/* ---------- 背景 ---------- */\n/* 斜向两色渐变：左上(#ddf7ed) → 右下(#f3f3f3)，末端即底色；\n   配合 App.vue 中 background-attachment: fixed 铺满视口固定，不随页面滚动/变长 */\n/* ---------- 文字 ---------- */\n/* ---------- 描边 / 遮罩 ---------- */\n/* ---------- 字体 ---------- */\n/* 英文/数字优先匹配 DIN Pro（Mac 自带 DIN Alternate 作为备选），中文回退苹方/雅黑 */\n/* 移动端最小舒适字号（可读正文下限）：\n   说明/入口/数据标签等可读文字不得小于 12px(24rpx)；\n   $font-size-2xs(10px) 仅限角标、徽标、装饰性元素 */\n/* ---------- 语义排版 ---------- */\n/* ---------- 间距 ---------- */\n/* ---------- 区块标题 ---------- */\n/* 标题下间距 = 列表间距；上间距 = 下间距 × 2 */\n/* ---------- 尺寸 ---------- */\n/* ---------- 圆角（已减半，更克制干净） ---------- */\n/* ---------- 阴影 ---------- */\n/* ---------- 层级 ---------- */\n/* ---------- 动效 ---------- */\n.scan-page[data-v-eaa578a6] {\n  min-height: 100vh;\n  background: #0f1f2e;\n  display: flex;\n  flex-direction: column;\n  align-items: center;\n}\n.scan-frame[data-v-eaa578a6] {\n  position: relative;\n  margin-top: %?96?%;\n  width: %?520?%;\n  height: %?520?%;\n}\n.scan-frame__inner[data-v-eaa578a6] {\n  position: absolute;\n  inset: 0;\n  display: flex;\n  align-items: center;\n  justify-content: center;\n  border-radius: %?24?%;\n  overflow: hidden;\n  background: rgba(255, 255, 255, 0.04);\n}\n.scan-frame__icon[data-v-eaa578a6] {\n  font-size: %?160?%;\n  color: rgba(255, 255, 255, 0.18);\n}\n.scan-frame__corner[data-v-eaa578a6] {\n  position: absolute;\n  width: %?64?%;\n  height: %?64?%;\n  border: %?8?% solid #7dd4bc;\n  z-index: 2;\n}\n.scan-frame__corner--tl[data-v-eaa578a6] {\n  top: 0;\n  left: 0;\n  border-right: none;\n  border-bottom: none;\n  border-radius: %?12?% 0 0 0;\n}\n.scan-frame__corner--tr[data-v-eaa578a6] {\n  top: 0;\n  right: 0;\n  border-left: none;\n  border-bottom: none;\n  border-radius: 0 %?12?% 0 0;\n}\n.scan-frame__corner--bl[data-v-eaa578a6] {\n  bottom: 0;\n  left: 0;\n  border-right: none;\n  border-top: none;\n  border-radius: 0 0 0 %?12?%;\n}\n.scan-frame__corner--br[data-v-eaa578a6] {\n  bottom: 0;\n  right: 0;\n  border-left: none;\n  border-top: none;\n  border-radius: 0 0 %?12?% 0;\n}\n.scan-line[data-v-eaa578a6] {\n  position: absolute;\n  left: %?24?%;\n  right: %?24?%;\n  top: %?16?%;\n  height: %?4?%;\n  border-radius: %?2?%;\n  background: linear-gradient(90deg, transparent, #7dd4bc, transparent);\n  box-shadow: 0 0 %?24?% rgba(125, 212, 188, 0.9);\n  -webkit-animation: scan-move-data-v-eaa578a6 2.4s ease-in-out infinite;\n          animation: scan-move-data-v-eaa578a6 2.4s ease-in-out infinite;\n  z-index: 1;\n}\n@-webkit-keyframes scan-move-data-v-eaa578a6 {\n0% {\n    top: %?16?%;\n    opacity: 0.4;\n}\n50% {\n    top: %?488?%;\n    opacity: 1;\n}\n100% {\n    top: %?16?%;\n    opacity: 0.4;\n}\n}\n@keyframes scan-move-data-v-eaa578a6 {\n0% {\n    top: %?16?%;\n    opacity: 0.4;\n}\n50% {\n    top: %?488?%;\n    opacity: 1;\n}\n100% {\n    top: %?16?%;\n    opacity: 0.4;\n}\n}\n.scan-tip[data-v-eaa578a6] {\n  margin-top: %?48?%;\n  font-size: %?24?%;\n  color: rgba(255, 255, 255, 0.72);\n  letter-spacing: %?2?%;\n  text-align: center;\n  padding: 0 %?48?%;\n  line-height: 1.6;\n}\n.scan-btn[data-v-eaa578a6] {\n  margin-top: %?64?%;\n  display: flex;\n  align-items: center;\n  background: #7dd4bc;\n  border-radius: %?999?%;\n  padding: %?24?% %?64?%;\n  box-shadow: 0 %?16?% %?96?% rgba(15, 61, 53, 0.1);\n}\n.scan-btn__icon[data-v-eaa578a6] {\n  color: #1a2a3c;\n  font-size: %?32?%;\n  margin-right: %?16?%;\n}\n.scan-btn__t[data-v-eaa578a6] {\n  color: #1a2a3c;\n  font-size: %?28?%;\n  font-weight: 700;\n}\n.sheet[data-v-eaa578a6] {\n  position: fixed;\n  top: 0;\n  left: 0;\n  right: 0;\n  bottom: 0;\n  z-index: 4000;\n  display: flex;\n  align-items: flex-end;\n}\n.sheet__mask[data-v-eaa578a6] {\n  position: absolute;\n  inset: 0;\n  background: rgba(15, 31, 46, 0.55);\n}\n.sheet__card[data-v-eaa578a6] {\n  position: relative;\n  width: 100%;\n  background: #ffffff;\n  border-radius: %?24?% %?24?% 0 0;\n  padding: %?40?% %?32?% calc(env(safe-area-inset-bottom) + %?40?%);\n}\n.sheet__t[data-v-eaa578a6] {\n  display: block;\n  font-size: %?32?%;\n  font-weight: 800;\n  color: #1a2a3c;\n  text-align: center;\n}\n.sheet__dev[data-v-eaa578a6] {\n  margin-top: %?32?%;\n  display: flex;\n  align-items: center;\n  background: #f2f7fa;\n  border-radius: %?20?%;\n  padding: %?24?%;\n}\n.sheet__dev-icon[data-v-eaa578a6] {\n  width: %?88?%;\n  height: %?88?%;\n  border-radius: %?20?%;\n  display: flex;\n  align-items: center;\n  justify-content: center;\n  flex-shrink: 0;\n}\n.sheet__dev-icon-t[data-v-eaa578a6] {\n  font-size: %?44?%;\n}\n.sheet__dev-main[data-v-eaa578a6] {\n  flex: 1;\n  padding-left: %?24?%;\n}\n.sheet__dev-name[data-v-eaa578a6] {\n  display: block;\n  font-size: %?28?%;\n  font-weight: 600;\n  color: #1a2a3c;\n}\n.sheet__dev-sn[data-v-eaa578a6] {\n  display: block;\n  font-size: %?20?%;\n  color: #64748b;\n  margin-top: %?8?%;\n}\n.sheet__btns[data-v-eaa578a6] {\n  margin-top: %?40?%;\n  display: flex;\n}\n.sheet__btn[data-v-eaa578a6] {\n  flex: 1;\n  height: %?88?%;\n  border-radius: %?999?%;\n  display: flex;\n  align-items: center;\n  justify-content: center;\n  font-size: %?28?%;\n  font-weight: 700;\n  color: #ffffff;\n}\n.sheet__btn--cancel[data-v-eaa578a6] {\n  background: #f2f7fa;\n  color: #334155;\n  margin-right: %?24?%;\n}\n.sheet__btn-t[data-v-eaa578a6] {\n  color: #ffffff;\n}", ""]);
+exports.push([module.i, "@charset \"UTF-8\";\n/* 安康健康管理 · 设计令牌\n   来源：/workspace/DESIGN.md\n   方案：rpx + SCSS 变量（1px = 2rpx，基于 750rpx 设计基准） */\n/* ---------- 品牌色 ---------- */\n/* ---------- 头像 ---------- */\n/* ---------- 语义状态色 ---------- */\n/* ---------- 金色（尊享装饰） ---------- */\n/* ---------- 背景 ---------- */\n/* 斜向两色渐变：左上(#ddf7ed) → 右下(#f3f3f3)，末端即底色；\n   配合 App.vue 中 background-attachment: fixed 铺满视口固定，不随页面滚动/变长 */\n/* ---------- 文字 ---------- */\n/* ---------- 描边 / 遮罩 ---------- */\n/* ---------- 字体 ---------- */\n/* 英文/数字优先匹配 DIN Pro（Mac 自带 DIN Alternate 作为备选），中文回退苹方/雅黑 */\n/* 移动端最小舒适字号（可读正文下限）：\n   说明/入口/数据标签等可读文字不得小于 12px(24rpx)；\n   $font-size-2xs(10px) 仅限角标、徽标、装饰性元素 */\n/* ---------- 语义排版 ---------- */\n/* ---------- 间距 ---------- */\n/* ---------- 区块标题 ---------- */\n/* 标题下间距 = 列表间距；上间距 = 下间距 × 2 */\n/* ---------- 尺寸 ---------- */\n/* ---------- 圆角（已减半，更克制干净） ---------- */\n/* ---------- 阴影 ---------- */\n/* ---------- 层级 ---------- */\n/* ---------- 动效 ---------- */\n.scan-page[data-v-eaa578a6] {\n  min-height: 100vh;\n  background: #0f1f2e;\n  display: flex;\n  flex-direction: column;\n  align-items: center;\n}\n.scan-frame[data-v-eaa578a6] {\n  position: relative;\n  margin-top: %?96?%;\n  width: %?520?%;\n  height: %?520?%;\n}\n.scan-frame__inner[data-v-eaa578a6] {\n  position: absolute;\n  inset: 0;\n  display: flex;\n  align-items: center;\n  justify-content: center;\n  border-radius: %?24?%;\n  overflow: hidden;\n  background: rgba(255, 255, 255, 0.04);\n}\n.scan-frame__icon[data-v-eaa578a6] {\n  font-size: %?160?%;\n  color: rgba(255, 255, 255, 0.18);\n}\n.scan-frame__corner[data-v-eaa578a6] {\n  position: absolute;\n  width: %?64?%;\n  height: %?64?%;\n  border: %?8?% solid #7dd4bc;\n  z-index: 2;\n}\n.scan-frame__corner--tl[data-v-eaa578a6] {\n  top: 0;\n  left: 0;\n  border-right: none;\n  border-bottom: none;\n  border-radius: %?12?% 0 0 0;\n}\n.scan-frame__corner--tr[data-v-eaa578a6] {\n  top: 0;\n  right: 0;\n  border-left: none;\n  border-bottom: none;\n  border-radius: 0 %?12?% 0 0;\n}\n.scan-frame__corner--bl[data-v-eaa578a6] {\n  bottom: 0;\n  left: 0;\n  border-right: none;\n  border-top: none;\n  border-radius: 0 0 0 %?12?%;\n}\n.scan-frame__corner--br[data-v-eaa578a6] {\n  bottom: 0;\n  right: 0;\n  border-left: none;\n  border-top: none;\n  border-radius: 0 0 %?12?% 0;\n}\n.scan-line[data-v-eaa578a6] {\n  position: absolute;\n  left: %?24?%;\n  right: %?24?%;\n  top: %?16?%;\n  height: %?4?%;\n  border-radius: %?2?%;\n  background: linear-gradient(90deg, transparent, #7dd4bc, transparent);\n  box-shadow: 0 0 %?24?% rgba(125, 212, 188, 0.9);\n  -webkit-animation: scan-move-data-v-eaa578a6 2.4s ease-in-out infinite;\n          animation: scan-move-data-v-eaa578a6 2.4s ease-in-out infinite;\n  z-index: 1;\n}\n@-webkit-keyframes scan-move-data-v-eaa578a6 {\n0% {\n    top: %?16?%;\n    opacity: 0.4;\n}\n50% {\n    top: %?488?%;\n    opacity: 1;\n}\n100% {\n    top: %?16?%;\n    opacity: 0.4;\n}\n}\n@keyframes scan-move-data-v-eaa578a6 {\n0% {\n    top: %?16?%;\n    opacity: 0.4;\n}\n50% {\n    top: %?488?%;\n    opacity: 1;\n}\n100% {\n    top: %?16?%;\n    opacity: 0.4;\n}\n}\n.scan-tip[data-v-eaa578a6] {\n  margin-top: %?48?%;\n  font-size: %?24?%;\n  color: rgba(255, 255, 255, 0.72);\n  letter-spacing: %?2?%;\n  text-align: center;\n  padding: 0 %?48?%;\n  line-height: 1.6;\n}\n.scan-btn[data-v-eaa578a6] {\n  margin-top: %?64?%;\n  display: flex;\n  align-items: center;\n  background: #7dd4bc;\n  border-radius: %?999?%;\n  padding: %?24?% %?64?%;\n  box-shadow: 0 %?16?% %?96?% rgba(15, 61, 53, 0.1);\n}\n.scan-btn__icon[data-v-eaa578a6] {\n  color: #1a2a3c;\n  font-size: %?32?%;\n  margin-right: %?16?%;\n}\n.scan-btn__t[data-v-eaa578a6] {\n  color: #1a2a3c;\n  font-size: %?28?%;\n  font-weight: 700;\n}\n.scan-manual[data-v-eaa578a6] {\n  margin-top: %?24?%;\n  display: flex;\n  align-items: center;\n  padding: %?16?% %?32?%;\n  border-radius: %?999?%;\n  background: rgba(255, 255, 255, 0.08);\n  border: %?1?% solid rgba(255, 255, 255, 0.16);\n}\n.scan-manual__icon[data-v-eaa578a6] {\n  color: rgba(255, 255, 255, 0.85);\n  font-size: %?20?%;\n  margin-right: %?16?%;\n}\n.scan-manual__t[data-v-eaa578a6] {\n  color: rgba(255, 255, 255, 0.85);\n  font-size: %?20?%;\n  letter-spacing: %?1?%;\n}\n.sheet[data-v-eaa578a6] {\n  position: fixed;\n  top: 0;\n  left: 0;\n  right: 0;\n  bottom: 0;\n  z-index: 4000;\n  display: flex;\n  align-items: flex-end;\n}\n.sheet__mask[data-v-eaa578a6] {\n  position: absolute;\n  inset: 0;\n  background: rgba(15, 31, 46, 0.55);\n}\n.sheet__card[data-v-eaa578a6] {\n  position: relative;\n  width: 100%;\n  background: #ffffff;\n  border-radius: %?24?% %?24?% 0 0;\n  padding: %?40?% %?32?% calc(env(safe-area-inset-bottom) + %?40?%);\n}\n.sheet__t[data-v-eaa578a6] {\n  display: block;\n  font-size: %?32?%;\n  font-weight: 800;\n  color: #1a2a3c;\n  text-align: center;\n}\n.sheet__d[data-v-eaa578a6] {\n  display: block;\n  font-size: %?20?%;\n  color: #64748b;\n  text-align: center;\n  margin-top: %?16?%;\n}\n.sheet__input[data-v-eaa578a6] {\n  margin-top: %?32?%;\n  height: %?88?%;\n  background: #f2f7fa;\n  border-radius: %?20?%;\n  padding: 0 %?32?%;\n  font-size: %?32?%;\n  color: #1a2a3c;\n  letter-spacing: %?2?%;\n}\n.sheet__ph[data-v-eaa578a6] {\n  color: #c6d2de;\n  font-size: %?28?%;\n  letter-spacing: 0;\n}\n.sheet__dev[data-v-eaa578a6] {\n  margin-top: %?32?%;\n  display: flex;\n  align-items: center;\n  background: #f2f7fa;\n  border-radius: %?20?%;\n  padding: %?24?%;\n}\n.sheet__dev-icon[data-v-eaa578a6] {\n  width: %?88?%;\n  height: %?88?%;\n  border-radius: %?20?%;\n  display: flex;\n  align-items: center;\n  justify-content: center;\n  flex-shrink: 0;\n}\n.sheet__dev-icon-t[data-v-eaa578a6] {\n  font-size: %?44?%;\n}\n.sheet__dev-main[data-v-eaa578a6] {\n  flex: 1;\n  padding-left: %?24?%;\n}\n.sheet__dev-name[data-v-eaa578a6] {\n  display: block;\n  font-size: %?28?%;\n  font-weight: 600;\n  color: #1a2a3c;\n}\n.sheet__dev-sn[data-v-eaa578a6] {\n  display: block;\n  font-size: %?20?%;\n  color: #64748b;\n  margin-top: %?8?%;\n}\n.sheet__dev-sn--id[data-v-eaa578a6] {\n  color: #389a82;\n  font-weight: 600;\n}\n.sheet__btns[data-v-eaa578a6] {\n  margin-top: %?40?%;\n  display: flex;\n}\n.sheet__btn[data-v-eaa578a6] {\n  flex: 1;\n  height: %?88?%;\n  border-radius: %?999?%;\n  display: flex;\n  align-items: center;\n  justify-content: center;\n  font-size: %?28?%;\n  font-weight: 700;\n  color: #ffffff;\n}\n.sheet__btn--cancel[data-v-eaa578a6] {\n  background: #f2f7fa;\n  color: #334155;\n  margin-right: %?24?%;\n}\n.sheet__btn-t[data-v-eaa578a6] {\n  color: #ffffff;\n}", ""]);
 // Exports
 module.exports = exports;
 

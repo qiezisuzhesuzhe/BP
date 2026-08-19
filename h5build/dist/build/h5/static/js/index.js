@@ -2834,52 +2834,52 @@ var KNOWLEDGE = [{
   desc: '每次 30 分钟，快走、慢跑、太极拳、八段锦均可'
 }];
 
-// 首页"我的权益"入口（图标统一品牌主色，视觉更清爽；quota 表示剩余次数，无则不限）
+// 首页"我的权益"入口（图标统一金色，与权益卡片金色装饰呼应；quota 表示剩余次数，无则不限）
 var RIGHT_ENTRIES = [{
   key: 'ai',
   label: 'AI自测',
   icon: 'fa-solid fa-face-grin-tongue',
-  color: '#389a82',
-  bg: '#d4f5ee'
+  color: '#b8932e',
+  bg: '#faf3e0'
 }, {
   key: 'consult',
   label: '免费问诊',
   icon: 'fa-solid fa-comments',
-  color: '#389a82',
-  bg: '#d4f5ee'
+  color: '#b8932e',
+  bg: '#faf3e0'
 }, {
   key: 'expert',
   label: '专家预约',
   icon: 'fa-solid fa-user-doctor',
-  color: '#389a82',
-  bg: '#d4f5ee',
+  color: '#b8932e',
+  bg: '#faf3e0',
   quota: 3
 }, {
   key: 'video',
   label: '视频问诊',
   icon: 'fa-solid fa-video',
-  color: '#389a82',
-  bg: '#d4f5ee',
+  color: '#b8932e',
+  bg: '#faf3e0',
   quota: 6
 }, {
   key: 'accompany',
   label: '陪诊',
   icon: 'fa-solid fa-hand-holding-heart',
-  color: '#389a82',
-  bg: '#d4f5ee',
+  color: '#b8932e',
+  bg: '#faf3e0',
   quota: 12
 }, {
   key: 'psycho',
   label: '心理评估',
   icon: 'fa-solid fa-heart-pulse',
-  color: '#389a82',
-  bg: '#d4f5ee'
+  color: '#b8932e',
+  bg: '#faf3e0'
 }, {
   key: 'nurse',
   label: '上门换药',
   icon: 'fa-solid fa-house-medical',
-  color: '#389a82',
-  bg: '#d4f5ee'
+  color: '#b8932e',
+  bg: '#faf3e0'
 }];
 
 // 健康商城商品（积分换购：price 现金价 / points 所需积分 / img 商品图）

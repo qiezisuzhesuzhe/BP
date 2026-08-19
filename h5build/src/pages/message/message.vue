@@ -15,7 +15,7 @@
       </view>
     </view>
 
-    <scroll-view class="tabs" scroll-x show-scrollbar="false" :scroll-into-view="scrollIntoId" scroll-with-animation>
+    <scroll-view class="tabs" scroll-x :show-scrollbar="false" :scroll-into-view="scrollIntoId" scroll-with-animation>
       <view class="tabs__inner">
         <view
           v-for="t in tabs"
@@ -240,9 +240,13 @@ export default {
 
 .tabs {
   width: 100%;
-  background: $bg-surface;
-  box-shadow: $shadow-sm;
   white-space: nowrap;
+  overflow: hidden;
+}
+
+/* 隐藏 webkit 滚动条 */
+.tabs ::-webkit-scrollbar {
+  display: none;
 }
 
 .tabs__inner {

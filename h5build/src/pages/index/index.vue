@@ -2,7 +2,7 @@
   <view class="hm-page">
     <!-- 顶部渐变头 -->
     <view class="hero">
-      <hm-navbar title="" :show-back="false" bg-color="transparent" :sticky="false"></hm-navbar>
+      <hm-navbar title="" :show-back="false" bg-color="transparent"></hm-navbar>
 
       <view class="hero__body">
         <text class="hero__org">新华保险北京分公司</text>

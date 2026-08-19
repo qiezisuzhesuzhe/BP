@@ -48,7 +48,6 @@ var render = function () {
           title: "我的设备",
           "show-back": false,
           "bg-color": "transparent",
-          sticky: true,
         },
       }),
       _c(

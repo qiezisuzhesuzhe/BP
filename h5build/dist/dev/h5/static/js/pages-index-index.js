@@ -465,12 +465,7 @@ var render = function () {
         { staticClass: "hero" },
         [
           _c("hm-navbar", {
-            attrs: {
-              title: "",
-              "show-back": false,
-              "bg-color": "transparent",
-              sticky: false,
-            },
+            attrs: { title: "", "show-back": false, "bg-color": "transparent" },
           }),
           _c(
             "v-uni-view",

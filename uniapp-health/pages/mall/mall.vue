@@ -1,6 +1,6 @@
 <template>
   <view class="hm-page">
-    <hm-navbar title="健康商城" :show-back="false" bg-color="transparent" :sticky="true"></hm-navbar>
+    <hm-navbar title="健康商城" :show-back="false" bg-color="transparent"></hm-navbar>
 
     <!-- 搜索栏 -->
     <view class="wrap">

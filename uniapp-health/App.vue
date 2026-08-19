@@ -22,8 +22,11 @@ export default {
 </script>
 
 <style lang="scss">
-/* uni-app 全局安全区：状态栏高度由 hm-navbar 组件内部统一处理（padding-top: var(--status-bar-height)） */
-/* 不在 uni-page-body 叠加 padding-top，避免与 navbar 内部占位双重下移 */
+/* uni-app 全局说明：
+   - 所有页面均为 navigationStyle: custom，使用自定义 hm-navbar
+   - hm-navbar 采用 position: static（文档流内），导航栏随页面内容自然向上滚动消失
+   - 顶部安全区 padding-top: var(--status-bar-height) 由 hm-navbar 内部处理
+   - 不在 uni-page-body 叠加 padding-top，避免与 navbar 内部占位双重下移 */
 
 page {
   background: $bg-page-base;

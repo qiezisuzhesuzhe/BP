@@ -92,7 +92,6 @@ var render = function () {
           title: "健康商城",
           "show-back": false,
           "bg-color": "transparent",
-          sticky: true,
         },
       }),
       _c(

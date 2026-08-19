@@ -1,6 +1,6 @@
 <template>
   <view class="hm-page">
-    <hm-navbar title="我的设备" :show-back="false" bg-color="transparent" :sticky="true"></hm-navbar>
+    <hm-navbar title="我的设备" :show-back="false" bg-color="transparent"></hm-navbar>
 
     <view class="wrap">
       <!-- 空状态：引导扫描添加 -->

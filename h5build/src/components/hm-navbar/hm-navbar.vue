@@ -1,11 +1,19 @@
 <template>
-  <view class="nav" :class="{ 'nav--static': !sticky }" :style="{ background: bgColor, color: textColor }">
-    <view class="nav__bar">
-      <view class="nav__left" @tap="onBack">
-        <text v-if="showBack" class="nav__back">‹</text>
+  <view>
+    <!-- 导航栏在文档流中，按 uni-app 推荐方案实现：
+         使用 position: static，导航栏作为页面内容的一部分，
+         会跟随页面自然向上滚动消失，不占据视口固定位置 -->
+    <view
+      class="nav nav--block"
+      :style="{ background: bgColor, color: textColor }"
+    >
+      <view class="nav__bar">
+        <view class="nav__left" @tap="onBack">
+          <text v-if="showBack" class="nav__back">‹</text>
+        </view>
+        <text class="nav__title ellipsis">{{ title }}</text>
+        <view class="nav__right"><slot name="right"></slot></view>
       </view>
-      <text class="nav__title ellipsis">{{ title }}</text>
-      <view class="nav__right"><slot name="right"></slot></view>
     </view>
   </view>
 </template>
@@ -18,8 +26,7 @@ export default {
     showBack: { type: Boolean, default: true },
     bgColor: { type: String, default: 'transparent' },
     textColor: { type: String, default: '#1a2a3c' },
-    backTo: { type: String, default: '' },
-    sticky: { type: Boolean, default: true }
+    backTo: { type: String, default: '' }
   },
   methods: {
     onBack() {
@@ -40,15 +47,11 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.nav {
-  position: sticky;
-  top: 0;
-  z-index: $z-nav;
-  padding-top: var(--status-bar-height);
-}
-
-.nav--static {
+/* block 模式：导航栏在文档流中，随页面内容自然滚动（uni-app 推荐方案） */
+.nav--block {
   position: static;
+  width: 100%;
+  padding-top: var(--status-bar-height);
 }
 
 .nav__bar {

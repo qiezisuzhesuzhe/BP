@@ -125,11 +125,16 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var core_js_modules_es_object_to_string_js__WEBPACK_IMPORTED_MODULE_6___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_object_to_string_js__WEBPACK_IMPORTED_MODULE_6__);
 /* harmony import */ var core_js_modules_es_regexp_exec_js__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! core-js/modules/es.regexp.exec.js */ "rB9j");
 /* harmony import */ var core_js_modules_es_regexp_exec_js__WEBPACK_IMPORTED_MODULE_7___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_regexp_exec_js__WEBPACK_IMPORTED_MODULE_7__);
-/* harmony import */ var core_js_modules_es_string_match_js__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! core-js/modules/es.string.match.js */ "Rm1S");
-/* harmony import */ var core_js_modules_es_string_match_js__WEBPACK_IMPORTED_MODULE_8___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_string_match_js__WEBPACK_IMPORTED_MODULE_8__);
-/* harmony import */ var core_js_modules_web_dom_collections_for_each_js__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! core-js/modules/web.dom-collections.for-each.js */ "FZtP");
-/* harmony import */ var core_js_modules_web_dom_collections_for_each_js__WEBPACK_IMPORTED_MODULE_9___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_web_dom_collections_for_each_js__WEBPACK_IMPORTED_MODULE_9__);
-/* harmony import */ var _common_mock_js__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! @/common/mock.js */ "rfkh");
+/* harmony import */ var core_js_modules_es_regexp_test_js__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! core-js/modules/es.regexp.test.js */ "ALS0");
+/* harmony import */ var core_js_modules_es_regexp_test_js__WEBPACK_IMPORTED_MODULE_8___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_regexp_test_js__WEBPACK_IMPORTED_MODULE_8__);
+/* harmony import */ var core_js_modules_es_string_match_js__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! core-js/modules/es.string.match.js */ "Rm1S");
+/* harmony import */ var core_js_modules_es_string_match_js__WEBPACK_IMPORTED_MODULE_9___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_string_match_js__WEBPACK_IMPORTED_MODULE_9__);
+/* harmony import */ var core_js_modules_es_string_trim_js__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! core-js/modules/es.string.trim.js */ "SYor");
+/* harmony import */ var core_js_modules_es_string_trim_js__WEBPACK_IMPORTED_MODULE_10___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_string_trim_js__WEBPACK_IMPORTED_MODULE_10__);
+/* harmony import */ var core_js_modules_web_dom_collections_for_each_js__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! core-js/modules/web.dom-collections.for-each.js */ "FZtP");
+/* harmony import */ var core_js_modules_web_dom_collections_for_each_js__WEBPACK_IMPORTED_MODULE_11___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_web_dom_collections_for_each_js__WEBPACK_IMPORTED_MODULE_11__);
+/* harmony import */ var _common_mock_js__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! @/common/mock.js */ "rfkh");
+/* harmony import */ var _common_band_js__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(/*! @/common/band.js */ "YNKN");
 
 
 
@@ -140,6 +145,8 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
+
+
 //
 //
 //
@@ -187,15 +194,17 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+
 
 
 var scanSeq = 0;
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
-      types: _common_mock_js__WEBPACK_IMPORTED_MODULE_10__["DEVICE_TYPES"],
+      types: _common_mock_js__WEBPACK_IMPORTED_MODULE_12__["DEVICE_TYPES"],
       result: null,
       fakeSn: '',
+      fakeDeviceId: '',
       // 相机状态：idle 准备中 / starting 启动中 / on 已开启 / fail 不可用
       camState: 'idle',
       stream: null,
@@ -365,15 +374,25 @@ var scanSeq = 0;
       }
       this.canvasEl = null;
     },
-    // 解析设备机身二维码：ankang://device?type=xxx&sn=xxx
+    // 解析设备机身二维码：ankang://device?type=xxx&sn=xxx[&deviceid=xxx]
+    // 兼容：纯 15 位数字（4G 手环 IMEI 二维码）按血压款手环识别
     handleCode: function handleCode(text) {
       if (this.result) return false;
-      var m = String(text || '').match(/ankang:\/\/device\?type=([a-z0-9-]+)(?:&sn=([A-Za-z0-9-]+))?/i);
-      if (!m) return false;
-      var type = Object(_common_mock_js__WEBPACK_IMPORTED_MODULE_10__["deviceType"])(m[1]);
+      var raw = String(text || '').trim();
+      var m = raw.match(/ankang:\/\/device\?type=([a-z0-9-]+)(?:&sn=([A-Za-z0-9-]+))?(?:&deviceid=([A-Za-z0-9-]+))?/i);
+      var type = null;
+      var deviceid = '';
+      if (m) {
+        type = Object(_common_mock_js__WEBPACK_IMPORTED_MODULE_12__["deviceType"])(m[1]);
+        deviceid = m[3] || '';
+      } else if (/^\d{15}$/.test(raw)) {
+        type = Object(_common_mock_js__WEBPACK_IMPORTED_MODULE_12__["deviceType"])('band-bp');
+        deviceid = raw;
+      }
       if (!type) return false;
       this.stopScanLoop();
-      this.fakeSn = m[2] || 'AK-' + String(100000 + Math.floor(Math.random() * 899999));
+      this.fakeSn = m && m[2] || 'AK-' + String(100000 + Math.floor(Math.random() * 899999));
+      this.fakeDeviceId = deviceid || '86' + String(Math.floor(Math.random() * 9000000000000 + 1000000000000));
       this.result = type;
       return true;
     },
@@ -383,7 +402,14 @@ var scanSeq = 0;
       var type = this.types[scanSeq % this.types.length];
       scanSeq++;
       this.fakeSn = 'AK-' + String(100000 + Math.floor(Math.random() * 899999));
-      this.handleCode('ankang://device?type=' + type.key + '&sn=' + this.fakeSn);
+      if (type.key === 'band-bp') {
+        var imei = '86' + String(Math.floor(Math.random() * 9000000000000 + 1000000000000));
+        this.fakeDeviceId = imei;
+        this.handleCode('ankang://device?type=' + type.key + '&sn=' + this.fakeSn + '&deviceid=' + imei);
+      } else {
+        this.fakeDeviceId = '';
+        this.handleCode('ankang://device?type=' + type.key + '&sn=' + this.fakeSn);
+      }
     },
     confirm: function confirm() {
       var _this3 = this;
@@ -397,18 +423,29 @@ var scanSeq = 0;
               _context2.n = 1;
               return _this3.$store.dispatch('addDevice', {
                 typeKey: type.key,
-                sn: _this3.fakeSn
+                sn: _this3.fakeSn,
+                deviceid: _this3.fakeDeviceId
               });
             case 1:
               dev = _context2.v;
+              // 血压款手环：注册到对接后端，进入手环状态页
+              if (type.key === 'band-bp' && _this3.fakeDeviceId) {
+                Object(_common_band_js__WEBPACK_IMPORTED_MODULE_13__["bindBandDevice"])(_this3.fakeDeviceId, type.name);
+              }
               uni.showToast({
                 title: '设备添加成功',
                 icon: 'success'
               });
               setTimeout(function () {
-                uni.redirectTo({
-                  url: '/pages/device/detail?id=' + dev.id
-                });
+                if (type.key === 'band-bp') {
+                  uni.redirectTo({
+                    url: '/pages/band/status?id=' + dev.id
+                  });
+                } else {
+                  uni.redirectTo({
+                    url: '/pages/device/detail?id=' + dev.id
+                  });
+                }
               }, 600);
             case 2:
               return _context2.a(2);
@@ -647,6 +684,133 @@ var staticRenderFns = []
 render._withStripped = true
 
 
+
+/***/ }),
+
+/***/ "YNKN":
+/*!****************************!*\
+  !*** ./src/common/band.js ***!
+  \****************************/
+/*! exports provided: BAND_SERVER, bandApi, fetchBandLatest, bindBandDevice, simulateLatest, bpLevel */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "BAND_SERVER", function() { return BAND_SERVER; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "bandApi", function() { return bandApi; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "fetchBandLatest", function() { return fetchBandLatest; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "bindBandDevice", function() { return bindBandDevice; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "simulateLatest", function() { return simulateLatest; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "bpLevel", function() { return bpLevel; });
+/* harmony import */ var core_js_modules_es_object_to_string_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! core-js/modules/es.object.to-string.js */ "07d7");
+/* harmony import */ var core_js_modules_es_object_to_string_js__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_object_to_string_js__WEBPACK_IMPORTED_MODULE_0__);
+
+/**
+ * 智能手环（血压款）—— 埃微 iwown 设备对云 数据桥接
+ *
+ * 后端接收服务：/workspace/band-server（Node.js，默认端口 8091）
+ *  - /pb/upload 等 6 个路径接收手环 4G 直传数据（埃微自定义二进制 + protobuf）
+ *  - /api/devices 供 H5 查询最新心率/血压/步数
+ *
+ * 本模块：后端地址配置 + 拉取/绑定封装；后端不可达时降级为本地模拟，保证原型可演示。
+ */
+
+var BAND_SERVER = 'http://localhost:8091';
+function bandApi(path) {
+  return BAND_SERVER + path;
+}
+
+// 从后端拉取手环最新状态（心率 hr / 收缩压 sbp / 舒张压 dbp / 步数 steps / 电量 battery / 时间戳 ts）
+function fetchBandLatest(deviceid) {
+  return new Promise(function (resolve) {
+    uni.request({
+      url: bandApi('/api/devices/' + deviceid),
+      method: 'GET',
+      timeout: 5000,
+      success: function success(res) {
+        if (res.statusCode === 200 && res.data && res.data.code === 0) {
+          var latest = res.data.data && res.data.data.latest;
+          if (latest && (latest.hr != null || latest.sbp != null || latest.steps != null)) {
+            resolve(latest);
+            return;
+          }
+        }
+        resolve(simulateLatest());
+      },
+      fail: function fail() {
+        resolve(simulateLatest());
+      }
+    });
+  });
+}
+
+// 把手环设备注册到后端（绑定 deviceid 与用户）
+function bindBandDevice(deviceid, name) {
+  return new Promise(function (resolve) {
+    uni.request({
+      url: bandApi('/api/devices'),
+      method: 'POST',
+      data: {
+        deviceid: deviceid,
+        name: name
+      },
+      timeout: 5000,
+      success: function success(res) {
+        if (res.statusCode === 200 && res.data && res.data.code === 0) {
+          resolve(res.data.data);
+        } else {
+          resolve(null);
+        }
+      },
+      fail: function fail() {
+        resolve(null);
+      }
+    });
+  });
+}
+
+// 降级模拟：后端未启动时生成本地演示数据
+var simSeq = 0;
+function simulateLatest() {
+  simSeq++;
+  var hr = 66 + Math.floor(Math.random() * 18);
+  var sbp = 116 + Math.floor(Math.random() * 18);
+  var dbp = 74 + Math.floor(Math.random() * 14);
+  return {
+    steps: simSeq * 38 + Math.floor(Math.random() * 60),
+    hr: hr,
+    sbp: sbp,
+    dbp: dbp,
+    battery: 7,
+    ts: Math.floor(Date.now() / 1000),
+    updatedAt: Date.now(),
+    _sim: true
+  };
+}
+
+// 血压状态分级
+function bpLevel(sbp, dbp) {
+  if (sbp == null || dbp == null) return {
+    key: 'none',
+    label: '--',
+    color: '#94a3b8'
+  };
+  if (sbp >= 140 || dbp >= 90) return {
+    key: 'high',
+    label: '偏高',
+    color: '#f15533'
+  };
+  if (sbp >= 120 || dbp >= 80) return {
+    key: 'normal-h',
+    label: '正常偏高',
+    color: '#f2994a'
+  };
+  return {
+    key: 'normal',
+    label: '正常',
+    color: '#27ae60'
+  };
+}
 
 /***/ }),
 

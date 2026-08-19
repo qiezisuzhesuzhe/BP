@@ -415,6 +415,14 @@ __webpack_require__.r(__webpack_exports__);
       }) || _common_mock_js__WEBPACK_IMPORTED_MODULE_6__["DEVICE_TYPES"][0];
     },
     goDetail: function goDetail(id) {
+      var dev = this.$store.getters.deviceById(id);
+      if (dev && dev.typeKey === 'band-bp') {
+        // 血压款手环：进入实时状态页（对接后端数据，每 1 分钟刷新）
+        uni.navigateTo({
+          url: '/pages/band/status?id=' + id
+        });
+        return;
+      }
       uni.navigateTo({
         url: '/pages/device/detail?id=' + id
       });

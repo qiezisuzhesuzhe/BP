@@ -1,0 +1,14 @@
+{
+  "name": "band-server",
+  "version": "1.0.0",
+  "description": "埃微 iwown 智能手环(血压款) 设备对云接收服务 + H5 查询 API",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "dependencies": {
+    "cors": "^2.8.5",
+    "express": "^4.19.2",
+    "protobufjs": "^7.3.2"
+  }
+}

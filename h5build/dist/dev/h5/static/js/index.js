@@ -64,7 +64,7 @@
 /******/
 /******/ 	// script path function
 /******/ 	function jsonpScriptSrc(chunkId) {
-/******/ 		return __webpack_require__.p + "static/js/" + ({"pages-chat-chat~pages-device-detail~pages-device-device~pages-device-scan~pages-health-health~pages-~f02bc6bb":"pages-chat-chat~pages-device-detail~pages-device-device~pages-device-scan~pages-health-health~pages-~f02bc6bb","pages-chat-chat~pages-index-index":"pages-chat-chat~pages-index-index","pages-chat-chat":"pages-chat-chat","pages-index-index":"pages-index-index","pages-device-detail":"pages-device-detail","pages-device-device":"pages-device-device","pages-device-scan":"pages-device-scan","pages-health-health":"pages-health-health","pages-mall-mall":"pages-mall-mall","pages-message-message":"pages-message-message","pages-mine-agreement":"pages-mine-agreement","pages-mine-mine":"pages-mine-mine","pages-mine-orders":"pages-mine-orders","pages-mine-profile":"pages-mine-profile","pages-pay-pay":"pages-pay-pay","pages-rights-detail":"pages-rights-detail","pages-rights-rights":"pages-rights-rights","pages-service-detail":"pages-service-detail"}[chunkId]||chunkId) + ".js"
+/******/ 		return __webpack_require__.p + "static/js/" + ({"pages-band-status~pages-chat-chat~pages-device-detail~pages-device-device~pages-device-scan~pages-he~d57aada1":"pages-band-status~pages-chat-chat~pages-device-detail~pages-device-device~pages-device-scan~pages-he~d57aada1","pages-band-status":"pages-band-status","pages-chat-chat~pages-index-index":"pages-chat-chat~pages-index-index","pages-chat-chat":"pages-chat-chat","pages-index-index":"pages-index-index","pages-device-detail":"pages-device-detail","pages-device-device":"pages-device-device","pages-device-scan":"pages-device-scan","pages-health-health":"pages-health-health","pages-mall-mall":"pages-mall-mall","pages-message-message":"pages-message-message","pages-mine-agreement":"pages-mine-agreement","pages-mine-mine":"pages-mine-mine","pages-mine-orders":"pages-mine-orders","pages-mine-profile":"pages-mine-profile","pages-pay-pay":"pages-pay-pay","pages-rights-detail":"pages-rights-detail","pages-rights-rights":"pages-rights-rights","pages-service-detail":"pages-service-detail"}[chunkId]||chunkId) + ".js"
 /******/ 	}
 /******/
 /******/ 	// The require function
@@ -842,6 +842,7 @@ var store = new vuex__WEBPACK_IMPORTED_MODULE_22___default.a.Store({
         name: payload.name || type.name,
         model: type.model,
         sn: payload.sn || 'SN' + Math.floor(Math.random() * 900000 + 100000),
+        deviceid: payload.deviceid || '',
         addedAt: fmtDateTime(now()),
         lastSync: fmtDateTime(now()),
         online: true,
@@ -931,6 +932,13 @@ __webpack_require__.r(__webpack_exports__);
     "path": "pages/health/health",
     "style": {
       "navigationBarTitleText": "我的健康",
+      "navigationStyle": "custom",
+      "enablePullDownRefresh": false
+    }
+  }, {
+    "path": "pages/band/status",
+    "style": {
+      "navigationBarTitleText": "手环状态",
       "navigationStyle": "custom",
       "enablePullDownRefresh": false
     }
@@ -1301,7 +1309,7 @@ global.__uniConfig.nvue = {
 global.__uniConfig.__webpack_chunk_load__ = __webpack_require__.e;
 vue__WEBPACK_IMPORTED_MODULE_6__["default"].component('pages-index-index', function (resolve) {
   var component = {
-    component: Promise.all(/*! require.ensure | pages-index-index */[__webpack_require__.e("pages-chat-chat~pages-device-detail~pages-device-device~pages-device-scan~pages-health-health~pages-~f02bc6bb"), __webpack_require__.e("pages-chat-chat~pages-index-index"), __webpack_require__.e("pages-index-index")]).then((function () {
+    component: Promise.all(/*! require.ensure | pages-index-index */[__webpack_require__.e("pages-band-status~pages-chat-chat~pages-device-detail~pages-device-device~pages-device-scan~pages-he~d57aada1"), __webpack_require__.e("pages-chat-chat~pages-index-index"), __webpack_require__.e("pages-index-index")]).then((function () {
       return resolve(__webpack_require__(/*! ./src/pages/index/index.vue */ "91rt"));
     }).bind(null, __webpack_require__)).catch(__webpack_require__.oe),
     delay: __uniConfig['async'].delay,
@@ -1327,8 +1335,34 @@ vue__WEBPACK_IMPORTED_MODULE_6__["default"].component('pages-index-index', funct
 });
 vue__WEBPACK_IMPORTED_MODULE_6__["default"].component('pages-health-health', function (resolve) {
   var component = {
-    component: Promise.all(/*! require.ensure | pages-health-health */[__webpack_require__.e("pages-chat-chat~pages-device-detail~pages-device-device~pages-device-scan~pages-health-health~pages-~f02bc6bb"), __webpack_require__.e("pages-health-health")]).then((function () {
+    component: Promise.all(/*! require.ensure | pages-health-health */[__webpack_require__.e("pages-band-status~pages-chat-chat~pages-device-detail~pages-device-device~pages-device-scan~pages-he~d57aada1"), __webpack_require__.e("pages-health-health")]).then((function () {
       return resolve(__webpack_require__(/*! ./src/pages/health/health.vue */ "vQF3"));
+    }).bind(null, __webpack_require__)).catch(__webpack_require__.oe),
+    delay: __uniConfig['async'].delay,
+    timeout: __uniConfig['async'].timeout
+  };
+  if (__uniConfig['async']['loading']) {
+    component.loading = {
+      name: 'SystemAsyncLoading',
+      render: function render(createElement) {
+        return createElement(__uniConfig['async']['loading']);
+      }
+    };
+  }
+  if (__uniConfig['async']['error']) {
+    component.error = {
+      name: 'SystemAsyncError',
+      render: function render(createElement) {
+        return createElement(__uniConfig['async']['error']);
+      }
+    };
+  }
+  return component;
+});
+vue__WEBPACK_IMPORTED_MODULE_6__["default"].component('pages-band-status', function (resolve) {
+  var component = {
+    component: Promise.all(/*! require.ensure | pages-band-status */[__webpack_require__.e("pages-band-status~pages-chat-chat~pages-device-detail~pages-device-device~pages-device-scan~pages-he~d57aada1"), __webpack_require__.e("pages-band-status")]).then((function () {
+      return resolve(__webpack_require__(/*! ./src/pages/band/status.vue */ "4TEP"));
     }).bind(null, __webpack_require__)).catch(__webpack_require__.oe),
     delay: __uniConfig['async'].delay,
     timeout: __uniConfig['async'].timeout
@@ -1353,7 +1387,7 @@ vue__WEBPACK_IMPORTED_MODULE_6__["default"].component('pages-health-health', fun
 });
 vue__WEBPACK_IMPORTED_MODULE_6__["default"].component('pages-service-detail', function (resolve) {
   var component = {
-    component: Promise.all(/*! require.ensure | pages-service-detail */[__webpack_require__.e("pages-chat-chat~pages-device-detail~pages-device-device~pages-device-scan~pages-health-health~pages-~f02bc6bb"), __webpack_require__.e("pages-service-detail")]).then((function () {
+    component: Promise.all(/*! require.ensure | pages-service-detail */[__webpack_require__.e("pages-band-status~pages-chat-chat~pages-device-detail~pages-device-device~pages-device-scan~pages-he~d57aada1"), __webpack_require__.e("pages-service-detail")]).then((function () {
       return resolve(__webpack_require__(/*! ./src/pages/service/detail.vue */ "qioJ"));
     }).bind(null, __webpack_require__)).catch(__webpack_require__.oe),
     delay: __uniConfig['async'].delay,
@@ -1379,7 +1413,7 @@ vue__WEBPACK_IMPORTED_MODULE_6__["default"].component('pages-service-detail', fu
 });
 vue__WEBPACK_IMPORTED_MODULE_6__["default"].component('pages-pay-pay', function (resolve) {
   var component = {
-    component: Promise.all(/*! require.ensure | pages-pay-pay */[__webpack_require__.e("pages-chat-chat~pages-device-detail~pages-device-device~pages-device-scan~pages-health-health~pages-~f02bc6bb"), __webpack_require__.e("pages-pay-pay")]).then((function () {
+    component: Promise.all(/*! require.ensure | pages-pay-pay */[__webpack_require__.e("pages-band-status~pages-chat-chat~pages-device-detail~pages-device-device~pages-device-scan~pages-he~d57aada1"), __webpack_require__.e("pages-pay-pay")]).then((function () {
       return resolve(__webpack_require__(/*! ./src/pages/pay/pay.vue */ "dVnC"));
     }).bind(null, __webpack_require__)).catch(__webpack_require__.oe),
     delay: __uniConfig['async'].delay,
@@ -1405,7 +1439,7 @@ vue__WEBPACK_IMPORTED_MODULE_6__["default"].component('pages-pay-pay', function 
 });
 vue__WEBPACK_IMPORTED_MODULE_6__["default"].component('pages-rights-rights', function (resolve) {
   var component = {
-    component: Promise.all(/*! require.ensure | pages-rights-rights */[__webpack_require__.e("pages-chat-chat~pages-device-detail~pages-device-device~pages-device-scan~pages-health-health~pages-~f02bc6bb"), __webpack_require__.e("pages-rights-rights")]).then((function () {
+    component: Promise.all(/*! require.ensure | pages-rights-rights */[__webpack_require__.e("pages-band-status~pages-chat-chat~pages-device-detail~pages-device-device~pages-device-scan~pages-he~d57aada1"), __webpack_require__.e("pages-rights-rights")]).then((function () {
       return resolve(__webpack_require__(/*! ./src/pages/rights/rights.vue */ "eIcC"));
     }).bind(null, __webpack_require__)).catch(__webpack_require__.oe),
     delay: __uniConfig['async'].delay,
@@ -1431,7 +1465,7 @@ vue__WEBPACK_IMPORTED_MODULE_6__["default"].component('pages-rights-rights', fun
 });
 vue__WEBPACK_IMPORTED_MODULE_6__["default"].component('pages-rights-detail', function (resolve) {
   var component = {
-    component: Promise.all(/*! require.ensure | pages-rights-detail */[__webpack_require__.e("pages-chat-chat~pages-device-detail~pages-device-device~pages-device-scan~pages-health-health~pages-~f02bc6bb"), __webpack_require__.e("pages-rights-detail")]).then((function () {
+    component: Promise.all(/*! require.ensure | pages-rights-detail */[__webpack_require__.e("pages-band-status~pages-chat-chat~pages-device-detail~pages-device-device~pages-device-scan~pages-he~d57aada1"), __webpack_require__.e("pages-rights-detail")]).then((function () {
       return resolve(__webpack_require__(/*! ./src/pages/rights/detail.vue */ "8uOI"));
     }).bind(null, __webpack_require__)).catch(__webpack_require__.oe),
     delay: __uniConfig['async'].delay,
@@ -1457,7 +1491,7 @@ vue__WEBPACK_IMPORTED_MODULE_6__["default"].component('pages-rights-detail', fun
 });
 vue__WEBPACK_IMPORTED_MODULE_6__["default"].component('pages-chat-chat', function (resolve) {
   var component = {
-    component: Promise.all(/*! require.ensure | pages-chat-chat */[__webpack_require__.e("pages-chat-chat~pages-device-detail~pages-device-device~pages-device-scan~pages-health-health~pages-~f02bc6bb"), __webpack_require__.e("pages-chat-chat~pages-index-index"), __webpack_require__.e("pages-chat-chat")]).then((function () {
+    component: Promise.all(/*! require.ensure | pages-chat-chat */[__webpack_require__.e("pages-band-status~pages-chat-chat~pages-device-detail~pages-device-device~pages-device-scan~pages-he~d57aada1"), __webpack_require__.e("pages-chat-chat~pages-index-index"), __webpack_require__.e("pages-chat-chat")]).then((function () {
       return resolve(__webpack_require__(/*! ./src/pages/chat/chat.vue */ "XFJV"));
     }).bind(null, __webpack_require__)).catch(__webpack_require__.oe),
     delay: __uniConfig['async'].delay,
@@ -1483,7 +1517,7 @@ vue__WEBPACK_IMPORTED_MODULE_6__["default"].component('pages-chat-chat', functio
 });
 vue__WEBPACK_IMPORTED_MODULE_6__["default"].component('pages-message-message', function (resolve) {
   var component = {
-    component: Promise.all(/*! require.ensure | pages-message-message */[__webpack_require__.e("pages-chat-chat~pages-device-detail~pages-device-device~pages-device-scan~pages-health-health~pages-~f02bc6bb"), __webpack_require__.e("pages-message-message")]).then((function () {
+    component: Promise.all(/*! require.ensure | pages-message-message */[__webpack_require__.e("pages-band-status~pages-chat-chat~pages-device-detail~pages-device-device~pages-device-scan~pages-he~d57aada1"), __webpack_require__.e("pages-message-message")]).then((function () {
       return resolve(__webpack_require__(/*! ./src/pages/message/message.vue */ "Iq/L"));
     }).bind(null, __webpack_require__)).catch(__webpack_require__.oe),
     delay: __uniConfig['async'].delay,
@@ -1509,7 +1543,7 @@ vue__WEBPACK_IMPORTED_MODULE_6__["default"].component('pages-message-message', f
 });
 vue__WEBPACK_IMPORTED_MODULE_6__["default"].component('pages-mine-mine', function (resolve) {
   var component = {
-    component: Promise.all(/*! require.ensure | pages-mine-mine */[__webpack_require__.e("pages-chat-chat~pages-device-detail~pages-device-device~pages-device-scan~pages-health-health~pages-~f02bc6bb"), __webpack_require__.e("pages-mine-mine")]).then((function () {
+    component: Promise.all(/*! require.ensure | pages-mine-mine */[__webpack_require__.e("pages-band-status~pages-chat-chat~pages-device-detail~pages-device-device~pages-device-scan~pages-he~d57aada1"), __webpack_require__.e("pages-mine-mine")]).then((function () {
       return resolve(__webpack_require__(/*! ./src/pages/mine/mine.vue */ "5VC8"));
     }).bind(null, __webpack_require__)).catch(__webpack_require__.oe),
     delay: __uniConfig['async'].delay,
@@ -1535,7 +1569,7 @@ vue__WEBPACK_IMPORTED_MODULE_6__["default"].component('pages-mine-mine', functio
 });
 vue__WEBPACK_IMPORTED_MODULE_6__["default"].component('pages-mine-profile', function (resolve) {
   var component = {
-    component: Promise.all(/*! require.ensure | pages-mine-profile */[__webpack_require__.e("pages-chat-chat~pages-device-detail~pages-device-device~pages-device-scan~pages-health-health~pages-~f02bc6bb"), __webpack_require__.e("pages-mine-profile")]).then((function () {
+    component: Promise.all(/*! require.ensure | pages-mine-profile */[__webpack_require__.e("pages-band-status~pages-chat-chat~pages-device-detail~pages-device-device~pages-device-scan~pages-he~d57aada1"), __webpack_require__.e("pages-mine-profile")]).then((function () {
       return resolve(__webpack_require__(/*! ./src/pages/mine/profile.vue */ "RxTe"));
     }).bind(null, __webpack_require__)).catch(__webpack_require__.oe),
     delay: __uniConfig['async'].delay,
@@ -1561,7 +1595,7 @@ vue__WEBPACK_IMPORTED_MODULE_6__["default"].component('pages-mine-profile', func
 });
 vue__WEBPACK_IMPORTED_MODULE_6__["default"].component('pages-mine-orders', function (resolve) {
   var component = {
-    component: Promise.all(/*! require.ensure | pages-mine-orders */[__webpack_require__.e("pages-chat-chat~pages-device-detail~pages-device-device~pages-device-scan~pages-health-health~pages-~f02bc6bb"), __webpack_require__.e("pages-mine-orders")]).then((function () {
+    component: Promise.all(/*! require.ensure | pages-mine-orders */[__webpack_require__.e("pages-band-status~pages-chat-chat~pages-device-detail~pages-device-device~pages-device-scan~pages-he~d57aada1"), __webpack_require__.e("pages-mine-orders")]).then((function () {
       return resolve(__webpack_require__(/*! ./src/pages/mine/orders.vue */ "NC20"));
     }).bind(null, __webpack_require__)).catch(__webpack_require__.oe),
     delay: __uniConfig['async'].delay,
@@ -1587,7 +1621,7 @@ vue__WEBPACK_IMPORTED_MODULE_6__["default"].component('pages-mine-orders', funct
 });
 vue__WEBPACK_IMPORTED_MODULE_6__["default"].component('pages-mine-agreement', function (resolve) {
   var component = {
-    component: Promise.all(/*! require.ensure | pages-mine-agreement */[__webpack_require__.e("pages-chat-chat~pages-device-detail~pages-device-device~pages-device-scan~pages-health-health~pages-~f02bc6bb"), __webpack_require__.e("pages-mine-agreement")]).then((function () {
+    component: Promise.all(/*! require.ensure | pages-mine-agreement */[__webpack_require__.e("pages-band-status~pages-chat-chat~pages-device-detail~pages-device-device~pages-device-scan~pages-he~d57aada1"), __webpack_require__.e("pages-mine-agreement")]).then((function () {
       return resolve(__webpack_require__(/*! ./src/pages/mine/agreement.vue */ "Nana"));
     }).bind(null, __webpack_require__)).catch(__webpack_require__.oe),
     delay: __uniConfig['async'].delay,
@@ -1613,7 +1647,7 @@ vue__WEBPACK_IMPORTED_MODULE_6__["default"].component('pages-mine-agreement', fu
 });
 vue__WEBPACK_IMPORTED_MODULE_6__["default"].component('pages-mall-mall', function (resolve) {
   var component = {
-    component: Promise.all(/*! require.ensure | pages-mall-mall */[__webpack_require__.e("pages-chat-chat~pages-device-detail~pages-device-device~pages-device-scan~pages-health-health~pages-~f02bc6bb"), __webpack_require__.e("pages-mall-mall")]).then((function () {
+    component: Promise.all(/*! require.ensure | pages-mall-mall */[__webpack_require__.e("pages-band-status~pages-chat-chat~pages-device-detail~pages-device-device~pages-device-scan~pages-he~d57aada1"), __webpack_require__.e("pages-mall-mall")]).then((function () {
       return resolve(__webpack_require__(/*! ./src/pages/mall/mall.vue */ "vRJf"));
     }).bind(null, __webpack_require__)).catch(__webpack_require__.oe),
     delay: __uniConfig['async'].delay,
@@ -1639,7 +1673,7 @@ vue__WEBPACK_IMPORTED_MODULE_6__["default"].component('pages-mall-mall', functio
 });
 vue__WEBPACK_IMPORTED_MODULE_6__["default"].component('pages-device-device', function (resolve) {
   var component = {
-    component: Promise.all(/*! require.ensure | pages-device-device */[__webpack_require__.e("pages-chat-chat~pages-device-detail~pages-device-device~pages-device-scan~pages-health-health~pages-~f02bc6bb"), __webpack_require__.e("pages-device-device")]).then((function () {
+    component: Promise.all(/*! require.ensure | pages-device-device */[__webpack_require__.e("pages-band-status~pages-chat-chat~pages-device-detail~pages-device-device~pages-device-scan~pages-he~d57aada1"), __webpack_require__.e("pages-device-device")]).then((function () {
       return resolve(__webpack_require__(/*! ./src/pages/device/device.vue */ "vjPZ"));
     }).bind(null, __webpack_require__)).catch(__webpack_require__.oe),
     delay: __uniConfig['async'].delay,
@@ -1665,7 +1699,7 @@ vue__WEBPACK_IMPORTED_MODULE_6__["default"].component('pages-device-device', fun
 });
 vue__WEBPACK_IMPORTED_MODULE_6__["default"].component('pages-device-scan', function (resolve) {
   var component = {
-    component: Promise.all(/*! require.ensure | pages-device-scan */[__webpack_require__.e("pages-chat-chat~pages-device-detail~pages-device-device~pages-device-scan~pages-health-health~pages-~f02bc6bb"), __webpack_require__.e("pages-device-scan")]).then((function () {
+    component: Promise.all(/*! require.ensure | pages-device-scan */[__webpack_require__.e("pages-band-status~pages-chat-chat~pages-device-detail~pages-device-device~pages-device-scan~pages-he~d57aada1"), __webpack_require__.e("pages-device-scan")]).then((function () {
       return resolve(__webpack_require__(/*! ./src/pages/device/scan.vue */ "vG3x"));
     }).bind(null, __webpack_require__)).catch(__webpack_require__.oe),
     delay: __uniConfig['async'].delay,
@@ -1691,7 +1725,7 @@ vue__WEBPACK_IMPORTED_MODULE_6__["default"].component('pages-device-scan', funct
 });
 vue__WEBPACK_IMPORTED_MODULE_6__["default"].component('pages-device-detail', function (resolve) {
   var component = {
-    component: Promise.all(/*! require.ensure | pages-device-detail */[__webpack_require__.e("pages-chat-chat~pages-device-detail~pages-device-device~pages-device-scan~pages-health-health~pages-~f02bc6bb"), __webpack_require__.e("pages-device-detail")]).then((function () {
+    component: Promise.all(/*! require.ensure | pages-device-detail */[__webpack_require__.e("pages-band-status~pages-chat-chat~pages-device-detail~pages-device-device~pages-device-scan~pages-he~d57aada1"), __webpack_require__.e("pages-device-detail")]).then((function () {
       return resolve(__webpack_require__(/*! ./src/pages/device/detail.vue */ "ngQi"));
     }).bind(null, __webpack_require__)).catch(__webpack_require__.oe),
     delay: __uniConfig['async'].delay,
@@ -1776,6 +1810,28 @@ global.__uniRoutes = [{
     isQuit: true,
     isTabBar: true,
     tabBarIndex: 1,
+    windowTop: 0
+  }
+}, {
+  path: '/pages/band/status',
+  component: {
+    render: function render(createElement) {
+      return createElement('Page', {
+        props: Object.assign({}, __uniConfig.globalStyle, {
+          "navigationBarTitleText": "手环状态",
+          "navigationStyle": "custom",
+          "enablePullDownRefresh": false
+        })
+      }, [createElement('pages-band-status', {
+        slot: 'page'
+      })]);
+    }
+  },
+  meta: {
+    name: 'pages-band-status',
+    isNVue: false,
+    maxWidth: 0,
+    pagePath: 'pages/band/status',
     windowTop: 0
   }
 }, {

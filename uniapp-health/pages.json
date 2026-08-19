@@ -23,6 +23,14 @@
       }
     },
     {
+      "path": "pages/band/status",
+      "style": {
+        "navigationBarTitleText": "手环状态",
+        "navigationStyle": "custom",
+        "enablePullDownRefresh": false
+      }
+    },
+    {
       "path": "pages/service/detail",
       "style": {
         "navigationBarTitleText": "服务详情",

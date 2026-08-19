@@ -80,6 +80,12 @@ export default {
       return DEVICE_TYPES.find((t) => t.key === dev.typeKey) || DEVICE_TYPES[0]
     },
     goDetail(id) {
+      const dev = this.$store.getters.deviceById(id)
+      if (dev && dev.typeKey === 'band-bp') {
+        // 血压款手环：进入实时状态页（对接后端数据，每 1 分钟刷新）
+        uni.navigateTo({ url: '/pages/band/status?id=' + id })
+        return
+      }
       uni.navigateTo({ url: '/pages/device/detail?id=' + id })
     },
     goScan() {

@@ -47,6 +47,7 @@
 
 <script>
 import { DEVICE_TYPES, deviceType } from '@/common/mock.js'
+import { bindBandDevice } from '@/common/band.js'
 
 let scanSeq = 0
 
@@ -56,6 +57,7 @@ export default {
       types: DEVICE_TYPES,
       result: null,
       fakeSn: '',
+      fakeDeviceId: '',
       // 相机状态：idle 准备中 / starting 启动中 / on 已开启 / fail 不可用
       camState: 'idle',
       stream: null,
@@ -187,15 +189,25 @@ export default {
       }
       this.canvasEl = null
     },
-    // 解析设备机身二维码：ankang://device?type=xxx&sn=xxx
+    // 解析设备机身二维码：ankang://device?type=xxx&sn=xxx[&deviceid=xxx]
+    // 兼容：纯 15 位数字（4G 手环 IMEI 二维码）按血压款手环识别
     handleCode(text) {
       if (this.result) return false
-      const m = String(text || '').match(/ankang:\/\/device\?type=([a-z0-9-]+)(?:&sn=([A-Za-z0-9-]+))?/i)
-      if (!m) return false
-      const type = deviceType(m[1])
+      const raw = String(text || '').trim()
+      const m = raw.match(/ankang:\/\/device\?type=([a-z0-9-]+)(?:&sn=([A-Za-z0-9-]+))?(?:&deviceid=([A-Za-z0-9-]+))?/i)
+      let type = null
+      let deviceid = ''
+      if (m) {
+        type = deviceType(m[1])
+        deviceid = m[3] || ''
+      } else if (/^\d{15}$/.test(raw)) {
+        type = deviceType('band-bp')
+        deviceid = raw
+      }
       if (!type) return false
       this.stopScanLoop()
-      this.fakeSn = m[2] || 'AK-' + String(100000 + Math.floor(Math.random() * 899999))
+      this.fakeSn = (m && m[2]) || 'AK-' + String(100000 + Math.floor(Math.random() * 899999))
+      this.fakeDeviceId = deviceid || '86' + String(Math.floor(Math.random() * 9000000000000 + 1000000000000))
       this.result = type
       return true
     },
@@ -205,15 +217,34 @@ export default {
       const type = this.types[scanSeq % this.types.length]
       scanSeq++
       this.fakeSn = 'AK-' + String(100000 + Math.floor(Math.random() * 899999))
-      this.handleCode('ankang://device?type=' + type.key + '&sn=' + this.fakeSn)
+      if (type.key === 'band-bp') {
+        const imei = '86' + String(Math.floor(Math.random() * 9000000000000 + 1000000000000))
+        this.fakeDeviceId = imei
+        this.handleCode('ankang://device?type=' + type.key + '&sn=' + this.fakeSn + '&deviceid=' + imei)
+      } else {
+        this.fakeDeviceId = ''
+        this.handleCode('ankang://device?type=' + type.key + '&sn=' + this.fakeSn)
+      }
     },
     async confirm() {
       const type = this.result
       this.result = null
-      const dev = await this.$store.dispatch('addDevice', { typeKey: type.key, sn: this.fakeSn })
+      const dev = await this.$store.dispatch('addDevice', {
+        typeKey: type.key,
+        sn: this.fakeSn,
+        deviceid: this.fakeDeviceId
+      })
+      // 血压款手环：注册到对接后端，进入手环状态页
+      if (type.key === 'band-bp' && this.fakeDeviceId) {
+        bindBandDevice(this.fakeDeviceId, type.name)
+      }
       uni.showToast({ title: '设备添加成功', icon: 'success' })
       setTimeout(() => {
-        uni.redirectTo({ url: '/pages/device/detail?id=' + dev.id })
+        if (type.key === 'band-bp') {
+          uni.redirectTo({ url: '/pages/band/status?id=' + dev.id })
+        } else {
+          uni.redirectTo({ url: '/pages/device/detail?id=' + dev.id })
+        }
       }, 600)
     }
   }

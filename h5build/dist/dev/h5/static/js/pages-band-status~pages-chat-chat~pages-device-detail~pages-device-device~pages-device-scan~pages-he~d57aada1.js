@@ -1,4 +1,4 @@
-(window["webpackJsonp"] = window["webpackJsonp"] || []).push([["pages-chat-chat~pages-device-detail~pages-device-device~pages-device-scan~pages-health-health~pages-~f02bc6bb"],{
+(window["webpackJsonp"] = window["webpackJsonp"] || []).push([["pages-band-status~pages-chat-chat~pages-device-detail~pages-device-device~pages-device-scan~pages-he~d57aada1"],{
 
 /***/ "0gc2":
 /*!************************************************!*\

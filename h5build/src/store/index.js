@@ -376,6 +376,7 @@ const store = new Vuex.Store({
         name: payload.name || type.name,
         model: type.model,
         sn: payload.sn || 'SN' + Math.floor(Math.random() * 900000 + 100000),
+        deviceid: payload.deviceid || '',
         addedAt: fmtDateTime(now()),
         lastSync: fmtDateTime(now()),
         online: true,

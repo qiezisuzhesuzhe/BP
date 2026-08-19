@@ -119,8 +119,8 @@ $space-12: 96rpx;
 $space-data-list-gap: $space-4;
 
 /* ---------- 区块标题 ---------- */
-/* 标题上间距（叠加容器顶部 $space-4 后共 40rpx）、下间距 16rpx：上远下近 */
-$space-sec-head-top: $space-1;
+/* 标题上间距三倍于下间距：上远下近，强化层级 */
+$space-sec-head-top: $space-6;
 $space-sec-head-bottom: $space-2;
 
 /* ---------- 尺寸 ---------- */

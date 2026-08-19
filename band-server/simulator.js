@@ -9,6 +9,8 @@ const protobuf = require('protobufjs')
 const DEVICEID = process.argv[2] || '860132060872223'
 const INTERVAL = parseInt(process.argv[3] || '0', 10) || 0
 const BASE = process.env.SERVER_URL || 'http://localhost:8091'
+// 是否附带心电图/血氧/睡眠数据（默认开启；加 4 参数可关闭：node simulator.js <id> <秒> noextra）
+const EXTRA = !(process.argv[4] === 'noextra')
 
 let OM0Report, HisNotification
 
@@ -24,9 +26,29 @@ function buildFrame(opt, msgObj, encodeFn) {
   return buf
 }
 
+// 生成一段近似 PQRST 的心电图采样（真实波形数值，非占位）
+function genEcgSamples(n) {
+  const out = []
+  for (let i = 0; i < n; i++) {
+    const t = i / 40 // 每 40 点一个周期
+    const phase = t - Math.floor(t)
+    let v = Math.sin(t * Math.PI * 2) * 28
+    // P 波
+    if (phase > 0.02 && phase < 0.14) v += Math.sin(((phase - 0.08) / 0.06) * Math.PI) * 34
+    // QRS 波群
+    if (phase > 0.3 && phase < 0.36) v -= 140
+    if (phase > 0.36 && phase < 0.42) v += 180
+    // T 波
+    if (phase > 0.5 && phase < 0.66) v += Math.sin(((phase - 0.58) / 0.08) * Math.PI) * 55
+    out.push(Math.round(v))
+  }
+  return out
+}
+
 async function reportOnce(stepBase) {
   const now = Math.floor(Date.now() / 1000)
   const steps = stepBase + Math.floor(Math.random() * 120 + 30)
+  const frames = []
 
   const om0 = OM0Report.fromObject({
     date_time: { date_time: { seconds: now }, time_zone: 8 },
@@ -34,7 +56,7 @@ async function reportOnce(stepBase) {
     battery: { level: 6 + Math.floor(Math.random() * 3), charging: false },
     rssi: -60 - Math.floor(Math.random() * 20)
   })
-  const frame0A = buildFrame(0x0a, om0, m => OM0Report.encode(m).finish())
+  frames.push(buildFrame(0x0a, om0, m => OM0Report.encode(m).finish()))
 
   const hr = 65 + Math.floor(Math.random() * 20)
   const sbp = 118 + Math.floor(Math.random() * 18)
@@ -47,13 +69,43 @@ async function reportOnce(stepBase) {
         time_stamp: { date_time: { seconds: now }, time_zone: 8 },
         pedo_data: { type: 0, state: 0, calorie: Math.round(steps * 0.04), step: steps, distance: steps * 70 },
         hr_data: { min_bpm: hr - 8, max_bpm: hr + 6, avg_bpm: hr },
-        bp_data: { sbp, dbp }
+        bp_data: { sbp, dbp },
+        // 睡眠：最近 30 分钟睡眠状态（0 清醒 / 1 浅睡 / 2 深睡）
+        sleep_data: { sleep_data: [1, 1, 2, 2, 2, 2, 1, 1, 1, 2, 2, 2, 2, 1, 1, 0, 1, 2, 2, 2, 1, 1, 1, 2, 2, 1, 1, 1, 0, 1], shut_down: false, charge: false }
       }
     }
   })
-  const frame80 = buildFrame(0x80, his, m => HisNotification.encode(m).finish())
+  frames.push(buildFrame(0x80, his, m => HisNotification.encode(m).finish()))
 
-  const body = Buffer.concat([Buffer.from(DEVICEID.padEnd(15, ' ').slice(0, 15)), frame0A, frame80])
+  if (EXTRA) {
+    // 血氧测量（type=6 SPO2_DATA）：一次测量一串血氧值
+    const spo2His = HisNotification.fromObject({
+      type: 6,
+      his_data: {
+        seq: Math.floor(Math.random() * 0xffffff),
+        spo2: {
+          time_stamp: { date_time: { seconds: now }, time_zone: 8 },
+          spo2_data: [96, 97, 97, 98, 98, 98, 97, 98, 98, 99, 98, 98, 97, 98, 98, 99, 98, 98, 98, 97]
+        }
+      }
+    })
+    frames.push(buildFrame(0x80, spo2His, m => HisNotification.encode(m).finish()))
+
+    // 心电图测量（type=2 ECG_DATA）：480 个波形采样点
+    const ecgHis = HisNotification.fromObject({
+      type: 2,
+      his_data: {
+        seq: Math.floor(Math.random() * 0xffffff),
+        ecg: {
+          time_stamp: { date_time: { seconds: now }, time_zone: 8 },
+          raw_data: genEcgSamples(480)
+        }
+      }
+    })
+    frames.push(buildFrame(0x80, ecgHis, m => HisNotification.encode(m).finish()))
+  }
+
+  const body = Buffer.concat([Buffer.from(DEVICEID.padEnd(15, ' ').slice(0, 15))].concat(frames))
   const resp = await fetch(BASE + '/pb/upload', {
     method: 'POST',
     headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
@@ -61,7 +113,7 @@ async function reportOnce(stepBase) {
   })
   const ret = Buffer.from(await resp.arrayBuffer())[0]
   const t = new Date().toLocaleTimeString()
-  console.log('[' + t + '] POST /pb/upload bytes=' + body.length + ' resp=0x' + ret.toString(16).padStart(2, '0') + ' steps=' + steps + ' hr=' + hr + ' bp=' + sbp + '/' + dbp)
+  console.log('[' + t + '] POST /pb/upload bytes=' + body.length + ' resp=0x' + ret.toString(16).padStart(2, '0') + ' steps=' + steps + ' hr=' + hr + ' bp=' + sbp + '/' + dbp + (EXTRA ? ' +spo2 +ecg +sleep' : ''))
   return steps
 }
 

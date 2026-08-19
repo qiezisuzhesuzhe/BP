@@ -921,7 +921,7 @@ function fetchBandLatest(deviceid) {
       success: function success(res) {
         if (res.statusCode === 200 && res.data && res.data.code === 0) {
           var latest = res.data.data && res.data.data.latest;
-          if (latest && (latest.hr != null || latest.sbp != null || latest.steps != null)) {
+          if (latest && (latest.hr != null || latest.sbp != null || latest.steps != null || latest.spo2 != null || latest.ecgSamples != null || latest.sleep != null)) {
             resolve(latest);
             return;
           }

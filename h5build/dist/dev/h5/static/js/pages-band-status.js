@@ -342,6 +342,283 @@ var render = function () {
             "v-uni-view",
             { staticClass: "sec-head" },
             [
+              _c("v-uni-text", { staticClass: "sec-title" }, [_vm._v("血氧")]),
+              _c(
+                "v-uni-view",
+                { staticClass: "spo2-tag", class: _vm.spo2TagClass },
+                [
+                  _c("v-uni-text", { staticClass: "spo2-tag__dot" }),
+                  _c("v-uni-text", { staticClass: "spo2-tag__t" }, [
+                    _vm._v(_vm._s(_vm.spo2Label)),
+                  ]),
+                ],
+                1
+              ),
+            ],
+            1
+          ),
+          _c(
+            "v-uni-view",
+            { staticClass: "spo2" },
+            [
+              _c(
+                "v-uni-view",
+                { staticClass: "spo2__main" },
+                [
+                  _c("v-uni-text", { staticClass: "spo2__num" }, [
+                    _vm._v(
+                      _vm._s(_vm.latest.spo2 != null ? _vm.latest.spo2 : "--")
+                    ),
+                  ]),
+                  _c("v-uni-text", { staticClass: "spo2__unit" }, [
+                    _vm._v("% 血氧饱和度"),
+                  ]),
+                ],
+                1
+              ),
+              _c(
+                "v-uni-view",
+                { staticClass: "spo2__meta" },
+                [
+                  _vm.latest.spo2 != null
+                    ? _c("v-uni-text", { staticClass: "spo2__meta-item" }, [
+                        _vm._v(
+                          "最低 " +
+                            _vm._s(
+                              _vm.latest.spo2Min != null
+                                ? _vm.latest.spo2Min
+                                : "--"
+                            ) +
+                            " · 最高 " +
+                            _vm._s(
+                              _vm.latest.spo2Max != null
+                                ? _vm.latest.spo2Max
+                                : "--"
+                            )
+                        ),
+                      ])
+                    : _c("v-uni-text", { staticClass: "spo2__meta-item" }, [
+                        _vm._v("测量后显示血氧值"),
+                      ]),
+                ],
+                1
+              ),
+              _c(
+                "v-uni-view",
+                { staticClass: "spo2__bar" },
+                [
+                  _c("v-uni-view", {
+                    staticClass: "spo2__bar-in",
+                    style: { width: _vm.spo2Pct + "%" },
+                  }),
+                ],
+                1
+              ),
+            ],
+            1
+          ),
+        ],
+        1
+      ),
+      _c(
+        "v-uni-view",
+        { staticClass: "wrap" },
+        [
+          _c(
+            "v-uni-view",
+            { staticClass: "sec-head" },
+            [
+              _c("v-uni-text", { staticClass: "sec-title" }, [
+                _vm._v("心电图"),
+              ]),
+              _c("v-uni-text", { staticClass: "sec-sub" }, [
+                _vm._v(_vm._s(_vm.ecgTimeText)),
+              ]),
+            ],
+            1
+          ),
+          _c(
+            "v-uni-view",
+            { staticClass: "ecg" },
+            [
+              _vm.ecgPoints
+                ? _c(
+                    "svg",
+                    {
+                      staticClass: "ecg__svg",
+                      attrs: {
+                        viewBox: "0 0 660 170",
+                        preserveAspectRatio: "none",
+                      },
+                    },
+                    [
+                      _c("polyline", {
+                        staticClass: "ecg__line",
+                        attrs: {
+                          points: _vm.ecgPoints,
+                          fill: "none",
+                          "vector-effect": "non-scaling-stroke",
+                        },
+                      }),
+                    ]
+                  )
+                : _c(
+                    "v-uni-view",
+                    { staticClass: "ecg__empty" },
+                    [
+                      _c("v-uni-text", { staticClass: "ecg__empty-t" }, [
+                        _vm._v("-- 暂无心电图数据"),
+                      ]),
+                    ],
+                    1
+                  ),
+              _c("v-uni-text", { staticClass: "ecg__meta" }, [
+                _vm._v(_vm._s(_vm.ecgMetaText)),
+              ]),
+            ],
+            1
+          ),
+        ],
+        1
+      ),
+      _c(
+        "v-uni-view",
+        { staticClass: "wrap" },
+        [
+          _c(
+            "v-uni-view",
+            { staticClass: "sec-head" },
+            [
+              _c("v-uni-text", { staticClass: "sec-title" }, [_vm._v("睡眠")]),
+              _c("v-uni-text", { staticClass: "sec-sub" }, [
+                _vm._v(_vm._s(_vm.sleepTotalText)),
+              ]),
+            ],
+            1
+          ),
+          _c(
+            "v-uni-view",
+            { staticClass: "sleep" },
+            [
+              _c(
+                "v-uni-view",
+                { staticClass: "sleep__stats" },
+                [
+                  _c(
+                    "v-uni-view",
+                    { staticClass: "sleep__stat" },
+                    [
+                      _c(
+                        "v-uni-text",
+                        {
+                          staticClass: "sleep__stat-num sleep__stat-num--deep",
+                        },
+                        [
+                          _vm._v(
+                            _vm._s(
+                              _vm.sleep.deep != null
+                                ? _vm.fmtSleepMin(_vm.sleep.deep)
+                                : "--"
+                            )
+                          ),
+                        ]
+                      ),
+                      _c("v-uni-text", { staticClass: "sleep__stat-t" }, [
+                        _vm._v("深睡"),
+                      ]),
+                    ],
+                    1
+                  ),
+                  _c(
+                    "v-uni-view",
+                    { staticClass: "sleep__stat" },
+                    [
+                      _c(
+                        "v-uni-text",
+                        {
+                          staticClass: "sleep__stat-num sleep__stat-num--light",
+                        },
+                        [
+                          _vm._v(
+                            _vm._s(
+                              _vm.sleep.light != null
+                                ? _vm.fmtSleepMin(_vm.sleep.light)
+                                : "--"
+                            )
+                          ),
+                        ]
+                      ),
+                      _c("v-uni-text", { staticClass: "sleep__stat-t" }, [
+                        _vm._v("浅睡"),
+                      ]),
+                    ],
+                    1
+                  ),
+                  _c(
+                    "v-uni-view",
+                    { staticClass: "sleep__stat" },
+                    [
+                      _c(
+                        "v-uni-text",
+                        {
+                          staticClass: "sleep__stat-num sleep__stat-num--wake",
+                        },
+                        [
+                          _vm._v(
+                            _vm._s(
+                              _vm.sleep.wake != null
+                                ? _vm.fmtSleepMin(_vm.sleep.wake)
+                                : "--"
+                            )
+                          ),
+                        ]
+                      ),
+                      _c("v-uni-text", { staticClass: "sleep__stat-t" }, [
+                        _vm._v("清醒"),
+                      ]),
+                    ],
+                    1
+                  ),
+                ],
+                1
+              ),
+              _vm.sleep.total
+                ? _c(
+                    "v-uni-view",
+                    { staticClass: "sleep__strip" },
+                    [
+                      _c("v-uni-view", {
+                        staticClass: "sleep__strip-seg sleep__strip-seg--deep",
+                        style: { width: _vm.sleepPct.deep + "%" },
+                      }),
+                      _c("v-uni-view", {
+                        staticClass: "sleep__strip-seg sleep__strip-seg--light",
+                        style: { width: _vm.sleepPct.light + "%" },
+                      }),
+                      _c("v-uni-view", {
+                        staticClass: "sleep__strip-seg sleep__strip-seg--wake",
+                        style: { width: _vm.sleepPct.wake + "%" },
+                      }),
+                    ],
+                    1
+                  )
+                : _c("v-uni-view", {
+                    staticClass: "sleep__strip sleep__strip--empty",
+                  }),
+            ],
+            1
+          ),
+        ],
+        1
+      ),
+      _c(
+        "v-uni-view",
+        { staticClass: "wrap" },
+        [
+          _c(
+            "v-uni-view",
+            { staticClass: "sec-head" },
+            [
               _c("v-uni-text", { staticClass: "sec-title" }, [
                 _vm._v("今日活动"),
               ]),
@@ -771,7 +1048,7 @@ function fetchBandLatest(deviceid) {
       success: function success(res) {
         if (res.statusCode === 200 && res.data && res.data.code === 0) {
           var latest = res.data.data && res.data.data.latest;
-          if (latest && (latest.hr != null || latest.sbp != null || latest.steps != null)) {
+          if (latest && (latest.hr != null || latest.sbp != null || latest.steps != null || latest.spo2 != null || latest.ecgSamples != null || latest.sleep != null)) {
             resolve(latest);
             return;
           }
@@ -919,7 +1196,7 @@ function bpLevel(sbp, dbp) {
 var ___CSS_LOADER_API_IMPORT___ = __webpack_require__(/*! ../../../node_modules/css-loader/dist/runtime/api.js */ "JPst");
 exports = ___CSS_LOADER_API_IMPORT___(false);
 // Module
-exports.push([module.i, "@charset \"UTF-8\";\n/* 安康健康管理 · 设计令牌\n   来源：/workspace/DESIGN.md\n   方案：rpx + SCSS 变量（1px = 2rpx，基于 750rpx 设计基准） */\n/* ---------- 品牌色 ---------- */\n/* ---------- 头像 ---------- */\n/* ---------- 语义状态色 ---------- */\n/* ---------- 金色（尊享装饰） ---------- */\n/* ---------- 背景 ---------- */\n/* 斜向两色渐变：左上(#ddf7ed) → 右下(#f3f3f3)，末端即底色；\n   配合 App.vue 中 background-attachment: fixed 铺满视口固定，不随页面滚动/变长 */\n/* ---------- 文字 ---------- */\n/* ---------- 描边 / 遮罩 ---------- */\n/* ---------- 字体 ---------- */\n/* 英文/数字优先匹配 DIN Pro（Mac 自带 DIN Alternate 作为备选），中文回退苹方/雅黑 */\n/* 移动端最小舒适字号（可读正文下限）：\n   说明/入口/数据标签等可读文字不得小于 12px(24rpx)；\n   $font-size-2xs(10px) 仅限角标、徽标、装饰性元素 */\n/* ---------- 语义排版 ---------- */\n/* ---------- 间距 ---------- */\n/* ---------- 区块标题 ---------- */\n/* 标题下间距 = 列表间距；上间距 = 下间距 × 2 */\n/* ---------- 尺寸 ---------- */\n/* ---------- 圆角（已减半，更克制干净） ---------- */\n/* ---------- 阴影 ---------- */\n/* ---------- 层级 ---------- */\n/* ---------- 动效 ---------- */\n/* ---------- 页面容器 ---------- */\n.wrap[data-v-20cccf23] {\n  height: auto;\n  padding: %?32?% %?32?% 0;\n}\n/* 非首个容器顶部贴齐：卡片间距由自身撑开，区块标题由 sec-head 撑开 */\n.wrap[data-v-20cccf23]:not(.wrap--first) {\n  padding-top: 0;\n}\n/* ---------- 区块标题 ---------- */\n.sec-head[data-v-20cccf23] {\n  display: flex;\n  align-items: flex-end;\n  justify-content: space-between;\n  margin-top: %?64?%;\n  margin-bottom: %?32?%;\n}\n.sec-title[data-v-20cccf23] {\n  font-size: %?36?%;\n  font-weight: 800;\n  line-height: 1.1;\n  color: #1a2a3c;\n  letter-spacing: %?1?%;\n}\n.sec-sub[data-v-20cccf23] {\n  font-size: %?24?%;\n  color: #64748b;\n  margin-top: %?16?%;\n}\n.head[data-v-20cccf23] {\n  display: flex;\n  align-items: center;\n  background: #ffffff;\n  border-radius: %?20?%;\n  box-shadow: 0 %?4?% %?24?% rgba(15, 61, 53, 0.06);\n  padding: %?32?%;\n}\n.head__icon[data-v-20cccf23] {\n  position: relative;\n  width: %?88?%;\n  height: %?88?%;\n  border-radius: %?20?%;\n  background: rgba(212, 245, 238, 0.72);\n  display: flex;\n  align-items: center;\n  justify-content: center;\n  flex-shrink: 0;\n}\n/* 图标右下角小徽标：眼睛=地址区块可见，闭眼=隐藏 */\n.head__icon-eye[data-v-20cccf23] {\n  position: absolute;\n  right: %?-6?%;\n  bottom: %?-6?%;\n  width: %?34?%;\n  height: %?34?%;\n  border-radius: %?999?%;\n  background: #389a82;\n  color: #ffffff;\n  font-size: %?16?%;\n  display: flex;\n  align-items: center;\n  justify-content: center;\n  border: %?4?% solid #ffffff;\n  box-sizing: border-box;\n}\n.head__icon-t[data-v-20cccf23] {\n  font-size: %?44?%;\n  color: #389a82;\n}\n.head__main[data-v-20cccf23] {\n  flex: 1;\n  padding: 0 %?24?%;\n  overflow: hidden;\n}\n.head__name[data-v-20cccf23] {\n  display: block;\n  font-size: %?32?%;\n  font-weight: 800;\n  color: #1a2a3c;\n  line-height: 1.1;\n}\n.head__sn[data-v-20cccf23] {\n  display: block;\n  font-size: %?20?%;\n  color: #64748b;\n  margin-top: %?8?%;\n  white-space: nowrap;\n  overflow: hidden;\n  text-overflow: ellipsis;\n}\n.head__status[data-v-20cccf23] {\n  display: flex;\n  align-items: center;\n  flex-shrink: 0;\n  padding: %?8?% %?16?%;\n  border-radius: %?999?%;\n  background: #27ae60;\n}\n.head__status--off[data-v-20cccf23] {\n  background: #f2f7fa;\n}\n.head__dot[data-v-20cccf23] {\n  width: %?12?%;\n  height: %?12?%;\n  border-radius: 50%;\n  background: #ffffff;\n  margin-right: %?8?%;\n}\n.head__status--off .head__dot[data-v-20cccf23] {\n  background: #94a3b8;\n}\n.head__status-t[data-v-20cccf23] {\n  font-size: %?20?%;\n  color: #ffffff;\n  font-weight: 600;\n}\n.head__status--off .head__status-t[data-v-20cccf23] {\n  color: #64748b;\n}\n/* 心率卡 */\n.hr[data-v-20cccf23] {\n  margin-top: %?32?%;\n  background: linear-gradient(140deg, #4ab89e 0%, #84e8c2 100%);\n  border-radius: %?20?%;\n  padding: %?32?%;\n  box-shadow: 0 %?12?% %?48?% rgba(125, 212, 188, 0.18);\n}\n.hr__top[data-v-20cccf23] {\n  display: flex;\n  align-items: center;\n  justify-content: space-between;\n}\n.hr__label[data-v-20cccf23] {\n  display: flex;\n  align-items: center;\n}\n.hr__label-icon[data-v-20cccf23] {\n  color: rgba(255, 255, 255, 0.9);\n  font-size: %?28?%;\n  margin-right: %?16?%;\n}\n.hr__label-t[data-v-20cccf23] {\n  color: rgba(255, 255, 255, 0.92);\n  font-size: %?24?%;\n  font-weight: 600;\n}\n.hr__value[data-v-20cccf23] {\n  display: flex;\n  align-items: baseline;\n  margin-top: %?24?%;\n}\n.hr__num[data-v-20cccf23] {\n  font-size: %?72?%;\n  font-weight: 800;\n  color: #ffffff;\n  font-family: \"DIN Pro\", \"DIN Alternate\", \"Helvetica Neue\", Arial, sans-serif;\n  line-height: 1;\n}\n.hr__unit[data-v-20cccf23] {\n  margin-left: %?16?%;\n  font-size: %?28?%;\n  color: rgba(255, 255, 255, 0.85);\n}\n.hr__tip[data-v-20cccf23] {\n  display: block;\n  margin-top: %?16?%;\n  font-size: %?20?%;\n  color: rgba(255, 255, 255, 0.7);\n}\n/* 血压卡 */\n.bp[data-v-20cccf23] {\n  display: flex;\n  align-items: center;\n  background: #ffffff;\n  border-radius: %?20?%;\n  box-shadow: 0 %?4?% %?24?% rgba(15, 61, 53, 0.06);\n  padding: %?32?% 0;\n}\n.bp__col[data-v-20cccf23] {\n  flex: 1;\n  display: flex;\n  flex-direction: column;\n  align-items: center;\n}\n.bp__num[data-v-20cccf23] {\n  font-size: %?56?%;\n  font-weight: 800;\n  color: #1a2a3c;\n  font-family: \"DIN Pro\", \"DIN Alternate\", \"Helvetica Neue\", Arial, sans-serif;\n  line-height: 1;\n}\n.bp__t[data-v-20cccf23] {\n  margin-top: %?16?%;\n  font-size: %?20?%;\n  color: #64748b;\n}\n.bp__divider[data-v-20cccf23] {\n  width: %?1?%;\n  height: %?48?%;\n  background: #f2f7fa;\n}\n.bp-tag[data-v-20cccf23] {\n  display: flex;\n  align-items: center;\n  padding: %?8?% %?24?%;\n  border-radius: %?999?%;\n  font-size: %?20?%;\n  font-weight: 600;\n}\n.bp-tag__dot[data-v-20cccf23] {\n  width: %?12?%;\n  height: %?12?%;\n  border-radius: 50%;\n  margin-right: %?8?%;\n}\n/* 步数卡 */\n.steps[data-v-20cccf23] {\n  background: #ffffff;\n  border-radius: %?20?%;\n  box-shadow: 0 %?4?% %?24?% rgba(15, 61, 53, 0.06);\n  padding: %?32?%;\n}\n.steps__main[data-v-20cccf23] {\n  display: flex;\n  align-items: baseline;\n}\n.steps__num[data-v-20cccf23] {\n  font-size: %?56?%;\n  font-weight: 800;\n  color: #1a2a3c;\n  font-family: \"DIN Pro\", \"DIN Alternate\", \"Helvetica Neue\", Arial, sans-serif;\n  line-height: 1;\n}\n.steps__unit[data-v-20cccf23] {\n  margin-left: %?16?%;\n  font-size: %?24?%;\n  color: #64748b;\n}\n.steps__bar[data-v-20cccf23] {\n  margin-top: %?24?%;\n  height: %?16?%;\n  border-radius: %?999?%;\n  background: #f2f7fa;\n  overflow: hidden;\n}\n.steps__bar-in[data-v-20cccf23] {\n  height: 100%;\n  border-radius: %?999?%;\n  background: linear-gradient(90deg, #7dd4bc, #4ab89e);\n  transition: width 0.6s ease;\n}\n.steps__meta[data-v-20cccf23] {\n  margin-top: %?16?%;\n  display: flex;\n  justify-content: space-between;\n}\n.steps__meta-item[data-v-20cccf23] {\n  font-size: %?20?%;\n  color: #64748b;\n}\n/* 上报地址卡 */\n.addr[data-v-20cccf23] {\n  background: #ffffff;\n  border-radius: %?20?%;\n  box-shadow: 0 %?4?% %?24?% rgba(15, 61, 53, 0.06);\n  padding: %?32?%;\n}\n.addr__row[data-v-20cccf23] {\n  display: flex;\n  align-items: center;\n}\n.addr__icon[data-v-20cccf23] {\n  font-size: %?28?%;\n  color: #389a82;\n  margin-right: %?16?%;\n  flex-shrink: 0;\n}\n.addr__url[data-v-20cccf23] {\n  flex: 1;\n  font-size: %?28?%;\n  font-family: \"DIN Pro\", \"DIN Alternate\", \"Helvetica Neue\", Arial, sans-serif;\n  font-weight: 600;\n  color: #1a2a3c;\n  overflow: hidden;\n  white-space: nowrap;\n  text-overflow: ellipsis;\n}\n.addr__url--off[data-v-20cccf23] {\n  color: #64748b;\n}\n.addr__tag[data-v-20cccf23] {\n  flex-shrink: 0;\n  margin-left: %?16?%;\n  padding: %?8?% %?16?%;\n  border-radius: %?999?%;\n  font-size: %?20?%;\n  font-weight: 600;\n  color: #f2994a;\n  background: #fdf4ed;\n}\n.addr__tip[data-v-20cccf23] {\n  display: block;\n  margin-top: %?16?%;\n  font-size: %?20?%;\n  color: #64748b;\n}\n/* 底部状态 */\n.foot[data-v-20cccf23] {\n  display: flex;\n  align-items: center;\n  justify-content: space-between;\n  padding: %?32?% %?32?% 0;\n}\n.foot__left[data-v-20cccf23] {\n  display: flex;\n  align-items: center;\n}\n.foot__dot[data-v-20cccf23] {\n  width: %?12?%;\n  height: %?12?%;\n  border-radius: 50%;\n  background: #c6d2de;\n  margin-right: %?16?%;\n}\n.foot__dot--ok[data-v-20cccf23] {\n  background: #27ae60;\n}\n.foot__t[data-v-20cccf23] {\n  font-size: %?20?%;\n  color: #64748b;\n}\n.foot__sync[data-v-20cccf23] {\n  font-size: %?20?%;\n  color: #94a3b8;\n}\n.foot__right[data-v-20cccf23] {\n  display: flex;\n  align-items: center;\n}\n/* 顶部右上角刷新按钮 */\n.nav-refresh[data-v-20cccf23] {\n  width: %?60?%;\n  height: %?60?%;\n  border-radius: %?999?%;\n  background: #389a82;\n  box-shadow: 0 %?4?% %?24?% rgba(15, 61, 53, 0.06);\n  display: flex;\n  align-items: center;\n  justify-content: center;\n}\n.nav-refresh--busy[data-v-20cccf23] {\n  opacity: 0.7;\n}\n.nav-refresh__icon[data-v-20cccf23] {\n  color: #ffffff;\n  font-size: %?24?%;\n}\n.nav-refresh__icon--spin[data-v-20cccf23] {\n  -webkit-animation: spin-data-v-20cccf23 0.8s linear infinite;\n          animation: spin-data-v-20cccf23 0.8s linear infinite;\n}\n@-webkit-keyframes spin-data-v-20cccf23 {\nfrom {\n    -webkit-transform: rotate(0deg);\n            transform: rotate(0deg);\n}\nto {\n    -webkit-transform: rotate(360deg);\n            transform: rotate(360deg);\n}\n}\n@keyframes spin-data-v-20cccf23 {\nfrom {\n    -webkit-transform: rotate(0deg);\n            transform: rotate(0deg);\n}\nto {\n    -webkit-transform: rotate(360deg);\n            transform: rotate(360deg);\n}\n}\n/* 发送消息卡 */\n.msg[data-v-20cccf23] {\n  background: #ffffff;\n  border-radius: %?20?%;\n  box-shadow: 0 %?4?% %?24?% rgba(15, 61, 53, 0.06);\n  padding: %?32?%;\n}\n.msg__input[data-v-20cccf23] {\n  height: %?88?%;\n  background: #f2f7fa;\n  border-radius: %?20?%;\n  padding: 0 %?24?%;\n  font-size: %?28?%;\n  color: #1a2a3c;\n}\n.msg__area[data-v-20cccf23] {\n  margin-top: %?24?%;\n  width: 100%;\n  height: %?180?%;\n  background: #f2f7fa;\n  border-radius: %?20?%;\n  padding: %?24?%;\n  font-size: %?28?%;\n  color: #1a2a3c;\n  box-sizing: border-box;\n  line-height: 1.6;\n}\n.msg__ph[data-v-20cccf23] {\n  color: #c6d2de;\n  font-size: %?24?%;\n}\n/* 快捷提醒语 */\n.msg__presets[data-v-20cccf23] {\n  margin-top: %?24?%;\n  display: flex;\n  flex-wrap: wrap;\n}\n.msg__chip[data-v-20cccf23] {\n  margin: 0 %?16?% %?16?% 0;\n  padding: %?8?% %?24?%;\n  border-radius: %?999?%;\n  background: #f2f7fa;\n  border: %?1?% solid rgba(15, 61, 53, 0.06);\n}\n.msg__chip-t[data-v-20cccf23] {\n  font-size: %?20?%;\n  color: #334155;\n}\n.msg__bar[data-v-20cccf23] {\n  margin-top: %?24?%;\n  display: flex;\n  align-items: center;\n  justify-content: space-between;\n}\n.msg__len[data-v-20cccf23] {\n  font-size: %?20?%;\n  color: #64748b;\n}\n.msg__btn[data-v-20cccf23] {\n  display: flex;\n  align-items: center;\n  background: #389a82;\n  border-radius: %?999?%;\n  padding: %?16?% %?40?%;\n}\n.msg__btn--busy[data-v-20cccf23] {\n  opacity: 0.7;\n}\n.msg__btn-icon[data-v-20cccf23] {\n  color: #ffffff;\n  font-size: %?20?%;\n  margin-right: %?8?%;\n}\n.msg__btn-t[data-v-20cccf23] {\n  color: #ffffff;\n  font-size: %?24?%;\n  font-weight: 600;\n}", ""]);
+exports.push([module.i, "@charset \"UTF-8\";\n/* 安康健康管理 · 设计令牌\n   来源：/workspace/DESIGN.md\n   方案：rpx + SCSS 变量（1px = 2rpx，基于 750rpx 设计基准） */\n/* ---------- 品牌色 ---------- */\n/* ---------- 头像 ---------- */\n/* ---------- 语义状态色 ---------- */\n/* ---------- 金色（尊享装饰） ---------- */\n/* ---------- 背景 ---------- */\n/* 斜向两色渐变：左上(#ddf7ed) → 右下(#f3f3f3)，末端即底色；\n   配合 App.vue 中 background-attachment: fixed 铺满视口固定，不随页面滚动/变长 */\n/* ---------- 文字 ---------- */\n/* ---------- 描边 / 遮罩 ---------- */\n/* ---------- 字体 ---------- */\n/* 英文/数字优先匹配 DIN Pro（Mac 自带 DIN Alternate 作为备选），中文回退苹方/雅黑 */\n/* 移动端最小舒适字号（可读正文下限）：\n   说明/入口/数据标签等可读文字不得小于 12px(24rpx)；\n   $font-size-2xs(10px) 仅限角标、徽标、装饰性元素 */\n/* ---------- 语义排版 ---------- */\n/* ---------- 间距 ---------- */\n/* ---------- 区块标题 ---------- */\n/* 标题下间距 = 列表间距；上间距 = 下间距 × 2 */\n/* ---------- 尺寸 ---------- */\n/* ---------- 圆角（已减半，更克制干净） ---------- */\n/* ---------- 阴影 ---------- */\n/* ---------- 层级 ---------- */\n/* ---------- 动效 ---------- */\n/* ---------- 页面容器 ---------- */\n.wrap[data-v-20cccf23] {\n  height: auto;\n  padding: %?32?% %?32?% 0;\n}\n/* 非首个容器顶部贴齐：卡片间距由自身撑开，区块标题由 sec-head 撑开 */\n.wrap[data-v-20cccf23]:not(.wrap--first) {\n  padding-top: 0;\n}\n/* ---------- 区块标题 ---------- */\n.sec-head[data-v-20cccf23] {\n  display: flex;\n  align-items: flex-end;\n  justify-content: space-between;\n  margin-top: %?64?%;\n  margin-bottom: %?32?%;\n}\n.sec-title[data-v-20cccf23] {\n  font-size: %?36?%;\n  font-weight: 800;\n  line-height: 1.1;\n  color: #1a2a3c;\n  letter-spacing: %?1?%;\n}\n.sec-sub[data-v-20cccf23] {\n  font-size: %?24?%;\n  color: #64748b;\n  margin-top: %?16?%;\n}\n.head[data-v-20cccf23] {\n  display: flex;\n  align-items: center;\n  background: #ffffff;\n  border-radius: %?20?%;\n  box-shadow: 0 %?4?% %?24?% rgba(15, 61, 53, 0.06);\n  padding: %?32?%;\n}\n.head__icon[data-v-20cccf23] {\n  position: relative;\n  width: %?88?%;\n  height: %?88?%;\n  border-radius: %?20?%;\n  background: rgba(212, 245, 238, 0.72);\n  display: flex;\n  align-items: center;\n  justify-content: center;\n  flex-shrink: 0;\n}\n/* 图标右下角小徽标：眼睛=地址区块可见，闭眼=隐藏 */\n.head__icon-eye[data-v-20cccf23] {\n  position: absolute;\n  right: %?-6?%;\n  bottom: %?-6?%;\n  width: %?34?%;\n  height: %?34?%;\n  border-radius: %?999?%;\n  background: #389a82;\n  color: #ffffff;\n  font-size: %?16?%;\n  display: flex;\n  align-items: center;\n  justify-content: center;\n  border: %?4?% solid #ffffff;\n  box-sizing: border-box;\n}\n.head__icon-t[data-v-20cccf23] {\n  font-size: %?44?%;\n  color: #389a82;\n}\n.head__main[data-v-20cccf23] {\n  flex: 1;\n  padding: 0 %?24?%;\n  overflow: hidden;\n}\n.head__name[data-v-20cccf23] {\n  display: block;\n  font-size: %?32?%;\n  font-weight: 800;\n  color: #1a2a3c;\n  line-height: 1.1;\n}\n.head__sn[data-v-20cccf23] {\n  display: block;\n  font-size: %?20?%;\n  color: #64748b;\n  margin-top: %?8?%;\n  white-space: nowrap;\n  overflow: hidden;\n  text-overflow: ellipsis;\n}\n.head__status[data-v-20cccf23] {\n  display: flex;\n  align-items: center;\n  flex-shrink: 0;\n  padding: %?8?% %?16?%;\n  border-radius: %?999?%;\n  background: #27ae60;\n}\n.head__status--off[data-v-20cccf23] {\n  background: #f2f7fa;\n}\n.head__dot[data-v-20cccf23] {\n  width: %?12?%;\n  height: %?12?%;\n  border-radius: 50%;\n  background: #ffffff;\n  margin-right: %?8?%;\n}\n.head__status--off .head__dot[data-v-20cccf23] {\n  background: #94a3b8;\n}\n.head__status-t[data-v-20cccf23] {\n  font-size: %?20?%;\n  color: #ffffff;\n  font-weight: 600;\n}\n.head__status--off .head__status-t[data-v-20cccf23] {\n  color: #64748b;\n}\n/* 心率卡 */\n.hr[data-v-20cccf23] {\n  margin-top: %?32?%;\n  background: linear-gradient(140deg, #4ab89e 0%, #84e8c2 100%);\n  border-radius: %?20?%;\n  padding: %?32?%;\n  box-shadow: 0 %?12?% %?48?% rgba(125, 212, 188, 0.18);\n}\n.hr__top[data-v-20cccf23] {\n  display: flex;\n  align-items: center;\n  justify-content: space-between;\n}\n.hr__label[data-v-20cccf23] {\n  display: flex;\n  align-items: center;\n}\n.hr__label-icon[data-v-20cccf23] {\n  color: rgba(255, 255, 255, 0.9);\n  font-size: %?28?%;\n  margin-right: %?16?%;\n}\n.hr__label-t[data-v-20cccf23] {\n  color: rgba(255, 255, 255, 0.92);\n  font-size: %?24?%;\n  font-weight: 600;\n}\n.hr__value[data-v-20cccf23] {\n  display: flex;\n  align-items: baseline;\n  margin-top: %?24?%;\n}\n.hr__num[data-v-20cccf23] {\n  font-size: %?72?%;\n  font-weight: 800;\n  color: #ffffff;\n  font-family: \"DIN Pro\", \"DIN Alternate\", \"Helvetica Neue\", Arial, sans-serif;\n  line-height: 1;\n}\n.hr__unit[data-v-20cccf23] {\n  margin-left: %?16?%;\n  font-size: %?28?%;\n  color: rgba(255, 255, 255, 0.85);\n}\n.hr__tip[data-v-20cccf23] {\n  display: block;\n  margin-top: %?16?%;\n  font-size: %?20?%;\n  color: rgba(255, 255, 255, 0.7);\n}\n/* 血压卡 */\n.bp[data-v-20cccf23] {\n  display: flex;\n  align-items: center;\n  background: #ffffff;\n  border-radius: %?20?%;\n  box-shadow: 0 %?4?% %?24?% rgba(15, 61, 53, 0.06);\n  padding: %?32?% 0;\n}\n.bp__col[data-v-20cccf23] {\n  flex: 1;\n  display: flex;\n  flex-direction: column;\n  align-items: center;\n}\n.bp__num[data-v-20cccf23] {\n  font-size: %?56?%;\n  font-weight: 800;\n  color: #1a2a3c;\n  font-family: \"DIN Pro\", \"DIN Alternate\", \"Helvetica Neue\", Arial, sans-serif;\n  line-height: 1;\n}\n.bp__t[data-v-20cccf23] {\n  margin-top: %?16?%;\n  font-size: %?20?%;\n  color: #64748b;\n}\n.bp__divider[data-v-20cccf23] {\n  width: %?1?%;\n  height: %?48?%;\n  background: #f2f7fa;\n}\n.bp-tag[data-v-20cccf23] {\n  display: flex;\n  align-items: center;\n  padding: %?8?% %?24?%;\n  border-radius: %?999?%;\n  font-size: %?20?%;\n  font-weight: 600;\n}\n.bp-tag__dot[data-v-20cccf23] {\n  width: %?12?%;\n  height: %?12?%;\n  border-radius: 50%;\n  margin-right: %?8?%;\n}\n/* 步数卡 */\n.steps[data-v-20cccf23] {\n  background: #ffffff;\n  border-radius: %?20?%;\n  box-shadow: 0 %?4?% %?24?% rgba(15, 61, 53, 0.06);\n  padding: %?32?%;\n}\n.steps__main[data-v-20cccf23] {\n  display: flex;\n  align-items: baseline;\n}\n.steps__num[data-v-20cccf23] {\n  font-size: %?56?%;\n  font-weight: 800;\n  color: #1a2a3c;\n  font-family: \"DIN Pro\", \"DIN Alternate\", \"Helvetica Neue\", Arial, sans-serif;\n  line-height: 1;\n}\n.steps__unit[data-v-20cccf23] {\n  margin-left: %?16?%;\n  font-size: %?24?%;\n  color: #64748b;\n}\n.steps__bar[data-v-20cccf23] {\n  margin-top: %?24?%;\n  height: %?16?%;\n  border-radius: %?999?%;\n  background: #f2f7fa;\n  overflow: hidden;\n}\n.steps__bar-in[data-v-20cccf23] {\n  height: 100%;\n  border-radius: %?999?%;\n  background: linear-gradient(90deg, #7dd4bc, #4ab89e);\n  transition: width 0.6s ease;\n}\n.steps__meta[data-v-20cccf23] {\n  margin-top: %?16?%;\n  display: flex;\n  justify-content: space-between;\n}\n.steps__meta-item[data-v-20cccf23] {\n  font-size: %?20?%;\n  color: #64748b;\n}\n/* 血氧卡 */\n.spo2[data-v-20cccf23] {\n  background: #ffffff;\n  border-radius: %?20?%;\n  box-shadow: 0 %?4?% %?24?% rgba(15, 61, 53, 0.06);\n  padding: %?32?%;\n}\n.spo2__main[data-v-20cccf23] {\n  display: flex;\n  align-items: baseline;\n}\n.spo2__num[data-v-20cccf23] {\n  font-size: %?72?%;\n  font-weight: 800;\n  color: #0ba5c3;\n  font-family: \"DIN Pro\", \"DIN Alternate\", \"Helvetica Neue\", Arial, sans-serif;\n  line-height: 1;\n}\n.spo2__unit[data-v-20cccf23] {\n  margin-left: %?16?%;\n  font-size: %?24?%;\n  color: #64748b;\n}\n.spo2__meta[data-v-20cccf23] {\n  margin-top: %?16?%;\n}\n.spo2__meta-item[data-v-20cccf23] {\n  font-size: %?20?%;\n  color: #64748b;\n}\n.spo2__bar[data-v-20cccf23] {\n  margin-top: %?24?%;\n  height: %?16?%;\n  border-radius: %?999?%;\n  background: #f2f7fa;\n  overflow: hidden;\n}\n.spo2__bar-in[data-v-20cccf23] {\n  height: 100%;\n  border-radius: %?999?%;\n  background: linear-gradient(90deg, #22c3d8, #0ba5c3);\n  transition: width 0.6s ease;\n}\n.spo2-tag[data-v-20cccf23] {\n  display: flex;\n  align-items: center;\n  padding: %?8?% %?24?%;\n  border-radius: %?999?%;\n  font-size: %?20?%;\n  font-weight: 600;\n}\n.spo2-tag__dot[data-v-20cccf23] {\n  width: %?12?%;\n  height: %?12?%;\n  border-radius: 50%;\n  margin-right: %?8?%;\n}\n.spo2-tag--ok[data-v-20cccf23] {\n  background: #ddf7ed;\n  color: #27ae60;\n}\n.spo2-tag--ok .spo2-tag__dot[data-v-20cccf23] {\n  background: #27ae60;\n}\n.spo2-tag--low[data-v-20cccf23] {\n  background: #fdf4ed;\n  color: #f2994a;\n}\n.spo2-tag--low .spo2-tag__dot[data-v-20cccf23] {\n  background: #f2994a;\n}\n.spo2-tag--warn[data-v-20cccf23] {\n  background: #fdeeee;\n  color: #eb5757;\n}\n.spo2-tag--warn .spo2-tag__dot[data-v-20cccf23] {\n  background: #eb5757;\n}\n.spo2-tag--none[data-v-20cccf23] {\n  background: #f2f7fa;\n  color: #94a3b8;\n}\n.spo2-tag--none .spo2-tag__dot[data-v-20cccf23] {\n  background: #94a3b8;\n}\n/* 心电图卡（深色底，波形为唯一视觉重心） */\n.ecg[data-v-20cccf23] {\n  position: relative;\n  background: linear-gradient(155deg, #0c2b2e 0%, #113f40 100%);\n  border-radius: %?20?%;\n  padding: %?32?%;\n  box-shadow: 0 %?12?% %?48?% rgba(125, 212, 188, 0.18);\n  overflow: hidden;\n}\n.ecg[data-v-20cccf23]::before {\n  content: \"\";\n  position: absolute;\n  inset: 0;\n  background-image: linear-gradient(rgba(255, 255, 255, 0.045) %?1?%, transparent %?1?%), linear-gradient(90deg, rgba(255, 255, 255, 0.045) %?1?%, transparent %?1?%);\n  background-size: %?48?% %?48?%;\n  pointer-events: none;\n}\n.ecg__svg[data-v-20cccf23] {\n  position: relative;\n  display: block;\n  width: 100%;\n  height: %?220?%;\n}\n.ecg__line[data-v-20cccf23] {\n  stroke: #6ff0c3;\n  stroke-width: 2;\n  stroke-linejoin: round;\n  stroke-linecap: round;\n  -webkit-filter: drop-shadow(0 0 %?6?% rgba(111, 240, 195, 0.65));\n          filter: drop-shadow(0 0 %?6?% rgba(111, 240, 195, 0.65));\n}\n.ecg__empty[data-v-20cccf23] {\n  position: relative;\n  height: %?220?%;\n  display: flex;\n  align-items: center;\n  justify-content: center;\n}\n.ecg__empty-t[data-v-20cccf23] {\n  color: rgba(255, 255, 255, 0.45);\n  font-size: %?24?%;\n  letter-spacing: %?2?%;\n}\n.ecg__meta[data-v-20cccf23] {\n  position: relative;\n  display: block;\n  margin-top: %?16?%;\n  font-size: %?20?%;\n  color: rgba(255, 255, 255, 0.6);\n}\n/* 睡眠卡 */\n.sleep[data-v-20cccf23] {\n  background: #ffffff;\n  border-radius: %?20?%;\n  box-shadow: 0 %?4?% %?24?% rgba(15, 61, 53, 0.06);\n  padding: %?32?%;\n}\n.sleep__stats[data-v-20cccf23] {\n  display: flex;\n}\n.sleep__stat[data-v-20cccf23] {\n  flex: 1;\n  display: flex;\n  flex-direction: column;\n  align-items: center;\n}\n.sleep__stat-num[data-v-20cccf23] {\n  font-size: %?36?%;\n  font-weight: 800;\n  font-family: \"DIN Pro\", \"DIN Alternate\", \"Helvetica Neue\", Arial, sans-serif;\n  line-height: 1.1;\n}\n.sleep__stat-num--deep[data-v-20cccf23] {\n  color: #1e6f5c;\n}\n.sleep__stat-num--light[data-v-20cccf23] {\n  color: #3eb98f;\n}\n.sleep__stat-num--wake[data-v-20cccf23] {\n  color: #94a3b8;\n}\n.sleep__stat-t[data-v-20cccf23] {\n  margin-top: %?8?%;\n  font-size: %?20?%;\n  color: #64748b;\n}\n.sleep__strip[data-v-20cccf23] {\n  margin-top: %?24?%;\n  height: %?24?%;\n  border-radius: %?999?%;\n  overflow: hidden;\n  display: flex;\n}\n.sleep__strip-seg[data-v-20cccf23] {\n  height: 100%;\n  transition: width 0.6s ease;\n}\n.sleep__strip-seg--deep[data-v-20cccf23] {\n  background: #1e6f5c;\n}\n.sleep__strip-seg--light[data-v-20cccf23] {\n  background: #7dd4bc;\n}\n.sleep__strip-seg--wake[data-v-20cccf23] {\n  background: #c8d5df;\n}\n.sleep__strip--empty[data-v-20cccf23] {\n  background: #f2f7fa;\n}\n/* 上报地址卡 */\n.addr[data-v-20cccf23] {\n  background: #ffffff;\n  border-radius: %?20?%;\n  box-shadow: 0 %?4?% %?24?% rgba(15, 61, 53, 0.06);\n  padding: %?32?%;\n}\n.addr__row[data-v-20cccf23] {\n  display: flex;\n  align-items: center;\n}\n.addr__icon[data-v-20cccf23] {\n  font-size: %?28?%;\n  color: #389a82;\n  margin-right: %?16?%;\n  flex-shrink: 0;\n}\n.addr__url[data-v-20cccf23] {\n  flex: 1;\n  font-size: %?28?%;\n  font-family: \"DIN Pro\", \"DIN Alternate\", \"Helvetica Neue\", Arial, sans-serif;\n  font-weight: 600;\n  color: #1a2a3c;\n  overflow: hidden;\n  white-space: nowrap;\n  text-overflow: ellipsis;\n}\n.addr__url--off[data-v-20cccf23] {\n  color: #64748b;\n}\n.addr__tag[data-v-20cccf23] {\n  flex-shrink: 0;\n  margin-left: %?16?%;\n  padding: %?8?% %?16?%;\n  border-radius: %?999?%;\n  font-size: %?20?%;\n  font-weight: 600;\n  color: #f2994a;\n  background: #fdf4ed;\n}\n.addr__tip[data-v-20cccf23] {\n  display: block;\n  margin-top: %?16?%;\n  font-size: %?20?%;\n  color: #64748b;\n}\n/* 底部状态 */\n.foot[data-v-20cccf23] {\n  display: flex;\n  align-items: center;\n  justify-content: space-between;\n  padding: %?32?% %?32?% 0;\n}\n.foot__left[data-v-20cccf23] {\n  display: flex;\n  align-items: center;\n}\n.foot__dot[data-v-20cccf23] {\n  width: %?12?%;\n  height: %?12?%;\n  border-radius: 50%;\n  background: #c6d2de;\n  margin-right: %?16?%;\n}\n.foot__dot--ok[data-v-20cccf23] {\n  background: #27ae60;\n}\n.foot__t[data-v-20cccf23] {\n  font-size: %?20?%;\n  color: #64748b;\n}\n.foot__sync[data-v-20cccf23] {\n  font-size: %?20?%;\n  color: #94a3b8;\n}\n.foot__right[data-v-20cccf23] {\n  display: flex;\n  align-items: center;\n}\n/* 顶部右上角刷新按钮 */\n.nav-refresh[data-v-20cccf23] {\n  width: %?60?%;\n  height: %?60?%;\n  border-radius: %?999?%;\n  background: #389a82;\n  box-shadow: 0 %?4?% %?24?% rgba(15, 61, 53, 0.06);\n  display: flex;\n  align-items: center;\n  justify-content: center;\n}\n.nav-refresh--busy[data-v-20cccf23] {\n  opacity: 0.7;\n}\n.nav-refresh__icon[data-v-20cccf23] {\n  color: #ffffff;\n  font-size: %?24?%;\n}\n.nav-refresh__icon--spin[data-v-20cccf23] {\n  -webkit-animation: spin-data-v-20cccf23 0.8s linear infinite;\n          animation: spin-data-v-20cccf23 0.8s linear infinite;\n}\n@-webkit-keyframes spin-data-v-20cccf23 {\nfrom {\n    -webkit-transform: rotate(0deg);\n            transform: rotate(0deg);\n}\nto {\n    -webkit-transform: rotate(360deg);\n            transform: rotate(360deg);\n}\n}\n@keyframes spin-data-v-20cccf23 {\nfrom {\n    -webkit-transform: rotate(0deg);\n            transform: rotate(0deg);\n}\nto {\n    -webkit-transform: rotate(360deg);\n            transform: rotate(360deg);\n}\n}\n/* 发送消息卡 */\n.msg[data-v-20cccf23] {\n  background: #ffffff;\n  border-radius: %?20?%;\n  box-shadow: 0 %?4?% %?24?% rgba(15, 61, 53, 0.06);\n  padding: %?32?%;\n}\n.msg__input[data-v-20cccf23] {\n  height: %?88?%;\n  background: #f2f7fa;\n  border-radius: %?20?%;\n  padding: 0 %?24?%;\n  font-size: %?28?%;\n  color: #1a2a3c;\n}\n.msg__area[data-v-20cccf23] {\n  margin-top: %?24?%;\n  width: 100%;\n  height: %?180?%;\n  background: #f2f7fa;\n  border-radius: %?20?%;\n  padding: %?24?%;\n  font-size: %?28?%;\n  color: #1a2a3c;\n  box-sizing: border-box;\n  line-height: 1.6;\n}\n.msg__ph[data-v-20cccf23] {\n  color: #c6d2de;\n  font-size: %?24?%;\n}\n/* 快捷提醒语 */\n.msg__presets[data-v-20cccf23] {\n  margin-top: %?24?%;\n  display: flex;\n  flex-wrap: wrap;\n}\n.msg__chip[data-v-20cccf23] {\n  margin: 0 %?16?% %?16?% 0;\n  padding: %?8?% %?24?%;\n  border-radius: %?999?%;\n  background: #f2f7fa;\n  border: %?1?% solid rgba(15, 61, 53, 0.06);\n}\n.msg__chip-t[data-v-20cccf23] {\n  font-size: %?20?%;\n  color: #334155;\n}\n.msg__bar[data-v-20cccf23] {\n  margin-top: %?24?%;\n  display: flex;\n  align-items: center;\n  justify-content: space-between;\n}\n.msg__len[data-v-20cccf23] {\n  font-size: %?20?%;\n  color: #64748b;\n}\n.msg__btn[data-v-20cccf23] {\n  display: flex;\n  align-items: center;\n  background: #389a82;\n  border-radius: %?999?%;\n  padding: %?16?% %?40?%;\n}\n.msg__btn--busy[data-v-20cccf23] {\n  opacity: 0.7;\n}\n.msg__btn-icon[data-v-20cccf23] {\n  color: #ffffff;\n  font-size: %?20?%;\n  margin-right: %?8?%;\n}\n.msg__btn-t[data-v-20cccf23] {\n  color: #ffffff;\n  font-size: %?24?%;\n  font-weight: 600;\n}", ""]);
 // Exports
 module.exports = exports;
 
@@ -951,18 +1228,94 @@ __webpack_require__.r(__webpack_exports__);
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _workspace_h5build_node_modules_babel_runtime_helpers_esm_regenerator_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./node_modules/@babel/runtime/helpers/esm/regenerator.js */ "wU9g");
 /* harmony import */ var _workspace_h5build_node_modules_babel_runtime_helpers_esm_asyncToGenerator_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./node_modules/@babel/runtime/helpers/esm/asyncToGenerator.js */ "HaE+");
-/* harmony import */ var core_js_modules_es_regexp_exec_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! core-js/modules/es.regexp.exec.js */ "rB9j");
-/* harmony import */ var core_js_modules_es_regexp_exec_js__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_regexp_exec_js__WEBPACK_IMPORTED_MODULE_2__);
-/* harmony import */ var core_js_modules_es_string_replace_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! core-js/modules/es.string.replace.js */ "UxlC");
-/* harmony import */ var core_js_modules_es_string_replace_js__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_string_replace_js__WEBPACK_IMPORTED_MODULE_3__);
-/* harmony import */ var core_js_modules_es_string_trim_js__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! core-js/modules/es.string.trim.js */ "SYor");
-/* harmony import */ var core_js_modules_es_string_trim_js__WEBPACK_IMPORTED_MODULE_4___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_string_trim_js__WEBPACK_IMPORTED_MODULE_4__);
-/* harmony import */ var _common_band_js__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! @/common/band.js */ "YNKN");
+/* harmony import */ var _workspace_h5build_node_modules_babel_runtime_helpers_esm_createForOfIteratorHelper_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./node_modules/@babel/runtime/helpers/esm/createForOfIteratorHelper.js */ "uFwe");
+/* harmony import */ var core_js_modules_es_array_push_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! core-js/modules/es.array.push.js */ "FNk8");
+/* harmony import */ var core_js_modules_es_array_push_js__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_array_push_js__WEBPACK_IMPORTED_MODULE_3__);
+/* harmony import */ var core_js_modules_es_regexp_exec_js__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! core-js/modules/es.regexp.exec.js */ "rB9j");
+/* harmony import */ var core_js_modules_es_regexp_exec_js__WEBPACK_IMPORTED_MODULE_4___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_regexp_exec_js__WEBPACK_IMPORTED_MODULE_4__);
+/* harmony import */ var core_js_modules_es_string_replace_js__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! core-js/modules/es.string.replace.js */ "UxlC");
+/* harmony import */ var core_js_modules_es_string_replace_js__WEBPACK_IMPORTED_MODULE_5___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_string_replace_js__WEBPACK_IMPORTED_MODULE_5__);
+/* harmony import */ var core_js_modules_es_string_trim_js__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! core-js/modules/es.string.trim.js */ "SYor");
+/* harmony import */ var core_js_modules_es_string_trim_js__WEBPACK_IMPORTED_MODULE_6___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_string_trim_js__WEBPACK_IMPORTED_MODULE_6__);
+/* harmony import */ var _common_band_js__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! @/common/band.js */ "YNKN");
 
 
 
 
 
+
+
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 //
 //
 //
@@ -1146,7 +1499,7 @@ var POLL_MS = 60 * 1000; // 每 1 分钟刷新
       return this.$store.getters.deviceById(this.id) || null;
     },
     bp: function bp() {
-      var lv = Object(_common_band_js__WEBPACK_IMPORTED_MODULE_5__["bpLevel"])(this.latest.sbp, this.latest.dbp);
+      var lv = Object(_common_band_js__WEBPACK_IMPORTED_MODULE_7__["bpLevel"])(this.latest.sbp, this.latest.dbp);
       var bgMap = {
         normal: '#ddf7ed',
         'normal-h': '#fdf4ed',
@@ -1191,6 +1544,88 @@ var POLL_MS = 60 * 1000; // 每 1 分钟刷新
     },
     msgBytes: function msgBytes() {
       return this.byteLen(this.msgText);
+    },
+    /* ---------- 血氧 ---------- */spo2Pct: function spo2Pct() {
+      if (this.latest.spo2 == null) return 0;
+      return Math.max(0, Math.min(100, Math.round((this.latest.spo2 - 85) / 15 * 100)));
+    },
+    spo2Label: function spo2Label() {
+      var s = this.latest.spo2;
+      if (s == null) return '--';
+      if (s >= 95) return '正常';
+      if (s >= 90) return '偏低';
+      return '注意';
+    },
+    spo2TagClass: function spo2TagClass() {
+      var s = this.latest.spo2;
+      if (s == null) return 'spo2-tag--none';
+      if (s >= 95) return 'spo2-tag--ok';
+      if (s >= 90) return 'spo2-tag--low';
+      return 'spo2-tag--warn';
+    },
+    /* ---------- 心电图 ---------- */ecgPoints: function ecgPoints() {
+      var s = this.latest.ecgSamples;
+      if (!s || !s.length) return '';
+      var W = 660;
+      var H = 170;
+      var min = Infinity;
+      var max = -Infinity;
+      var _iterator = Object(_workspace_h5build_node_modules_babel_runtime_helpers_esm_createForOfIteratorHelper_js__WEBPACK_IMPORTED_MODULE_2__["default"])(s),
+        _step;
+      try {
+        for (_iterator.s(); !(_step = _iterator.n()).done;) {
+          var v = _step.value;
+          if (v < min) min = v;
+          if (v > max) max = v;
+        }
+      } catch (err) {
+        _iterator.e(err);
+      } finally {
+        _iterator.f();
+      }
+      var span = max - min || 1;
+      var pts = [];
+      for (var i = 0; i < s.length; i++) {
+        var x = i / (s.length - 1) * W;
+        var y = 10 + (1 - (s[i] - min) / span) * (H - 20);
+        pts.push(x.toFixed(1) + ',' + y.toFixed(1));
+      }
+      return pts.join(' ');
+    },
+    ecgTimeText: function ecgTimeText() {
+      if (!this.latest.ecgTs) return '最近测量 --';
+      var d = new Date(this.latest.ecgTs * 1000);
+      var p = function p(n) {
+        return n < 10 ? '0' + n : n;
+      };
+      return '最近测量 ' + p(d.getHours()) + ':' + p(d.getMinutes());
+    },
+    ecgMetaText: function ecgMetaText() {
+      if (this.latest.ecgN == null) return '测量后显示心电图波形';
+      return this.latest.ecgN + ' 个采样 · 约 ' + Math.round(this.latest.ecgN / 40) + ' 秒';
+    },
+    /* ---------- 睡眠 ---------- */sleep: function sleep() {
+      return this.latest.sleep || {};
+    },
+    sleepTotalText: function sleepTotalText() {
+      var s = this.latest.sleep;
+      if (!s || s.total == null) return '暂无睡眠数据';
+      return '共 ' + this.fmtSleepMin(s.total);
+    },
+    sleepPct: function sleepPct() {
+      var s = this.latest.sleep;
+      if (!s || !s.total) return {
+        deep: 0,
+        light: 0,
+        wake: 0
+      };
+      var deep = Math.round(s.deep / s.total * 100);
+      var light = Math.round(s.light / s.total * 100);
+      return {
+        deep: deep,
+        light: light,
+        wake: Math.max(0, 100 - deep - light)
+      };
     }
   },
   onLoad: function onLoad(options) {
@@ -1226,6 +1661,13 @@ var POLL_MS = 60 * 1000; // 每 1 分钟刷新
     },
     fmt: function fmt(n) {
       return String(n == null ? 0 : n).replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+    },
+    // 分钟 → "X小时Y分 / Y分钟"
+    fmtSleepMin: function fmtSleepMin(min) {
+      if (min == null) return '--';
+      var h = Math.floor(min / 60);
+      var m = min % 60;
+      return h ? h + '小时' + m + '分' : m + '分钟';
     },
     // UTF-8 字节数（手环消息标题 ≤15B、内容 ≤240B）
     byteLen: function byteLen(s) {
@@ -1298,7 +1740,7 @@ var POLL_MS = 60 * 1000; // 每 1 分钟刷新
             case 4:
               _this2.msgSending = true;
               _context.n = 5;
-              return Object(_common_band_js__WEBPACK_IMPORTED_MODULE_5__["sendBandMessage"])(_this2.deviceid, title, text);
+              return Object(_common_band_js__WEBPACK_IMPORTED_MODULE_7__["sendBandMessage"])(_this2.deviceid, title, text);
             case 5:
               err = _context.v;
               _this2.msgSending = false;
@@ -1360,7 +1802,7 @@ var POLL_MS = 60 * 1000; // 每 1 分钟刷新
     // 每次刷新都核对当前上报地址；与上次不同则标记"已变化"
     refreshAddress: function refreshAddress() {
       var _this4 = this;
-      Object(_common_band_js__WEBPACK_IMPORTED_MODULE_5__["fetchBandAddress"])().then(function (info) {
+      Object(_common_band_js__WEBPACK_IMPORTED_MODULE_7__["fetchBandAddress"])().then(function (info) {
         if (!info || !info.public) {
           _this4.address = '';
           return;
@@ -1386,7 +1828,7 @@ var POLL_MS = 60 * 1000; // 每 1 分钟刷新
               return _context3.a(2);
             case 1:
               _context3.n = 2;
-              return Object(_common_band_js__WEBPACK_IMPORTED_MODULE_5__["fetchBandLatest"])(_this5.deviceid);
+              return Object(_common_band_js__WEBPACK_IMPORTED_MODULE_7__["fetchBandLatest"])(_this5.deviceid);
             case 2:
               latest = _context3.v;
               _this5.latest = latest || {};

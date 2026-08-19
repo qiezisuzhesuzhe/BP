@@ -73,7 +73,7 @@ function touch(deviceid) {
 }
 
 /* ---------------- protobuf 加载 ---------------- */
-let OM0Report, HisNotification, HisDataHealth, HisHealthPedo, HisHealthHr, HisHealthBp, RtHealth, RtBattery
+let OM0Report, HisNotification, HisDataHealth, HisHealthPedo, HisHealthHr, HisHealthBp, HisDataECG, HisDataSpo2, RtHealth, RtBattery
 
 async function loadProtos() {
   const root = new protobuf.Root()
@@ -84,6 +84,8 @@ async function loadProtos() {
   HisHealthPedo = root.lookupType('HisHealthPedo')
   HisHealthHr = root.lookupType('HisHealthHr')
   HisHealthBp = root.lookupType('HisHealthBp')
+  HisDataECG = root.lookupType('HisDataECG')
+  HisDataSpo2 = root.lookupType('HisDataSpo2')
   RtHealth = root.lookupType('RtHealth')
   RtBattery = root.lookupType('RtBattery')
 }
@@ -109,28 +111,72 @@ function parsePayload(opt, payload) {
   }
   if (opt === 0x80) {
     const notif = HisNotification.decode(payload)
-    // 只有 his_data 分支才有健康数据；index_table 为历史索引表（可忽略）
+    // 只有 his_data 分支才有数据；index_table 为历史索引表（可忽略）
     if (!notif.his_data) return null
     const his = notif.his_data
-    if (!his.health) return null
-    const h = his.health
-    const o = { seq: his.seq >>> 0 }
-    if (h.time_stamp && h.time_stamp.date_time) o.ts = h.time_stamp.date_time.seconds >>> 0
-    if (h.pedo_data) {
-      o.steps = h.pedo_data.step >>> 0
-      o.distance = Math.round(h.pedo_data.distance / 10)
-      o.calorie = Math.round(h.pedo_data.calorie / 10)
+    // 健康数据：心率/血压/步数 + 睡眠/血氧(部分机型在 health 里)
+    if (his.health) {
+      const h = his.health
+      const o = { seq: his.seq >>> 0 }
+      if (h.time_stamp && h.time_stamp.date_time) o.ts = h.time_stamp.date_time.seconds >>> 0
+      if (h.pedo_data) {
+        o.steps = h.pedo_data.step >>> 0
+        o.distance = Math.round(h.pedo_data.distance / 10)
+        o.calorie = Math.round(h.pedo_data.calorie / 10)
+      }
+      if (h.hr_data) {
+        o.hr = h.hr_data.avg_bpm >>> 0
+        o.hrMax = h.hr_data.max_bpm >>> 0
+        o.hrMin = h.hr_data.min_bpm >>> 0
+      }
+      if (h.bp_data) {
+        o.sbp = h.bp_data.sbp >>> 0
+        o.dbp = h.bp_data.dbp >>> 0
+      }
+      // 睡眠：sleep_data 为每分钟睡眠状态（0 清醒 / 1 浅睡 / 2 深睡）
+      if (h.sleep_data && h.sleep_data.sleep_data && h.sleep_data.sleep_data.length) {
+        const arr = Array.from(h.sleep_data.sleep_data)
+        let deep = 0
+        let light = 0
+        let wake = 0
+        arr.forEach((v) => {
+          if (v === 2) deep++
+          else if (v === 1) light++
+          else wake++
+        })
+        o.sleep = { deep, light, wake, total: arr.length }
+      }
+      // 血氧（部分机型在 HisDataHealth.bxoy_data 里）
+      if (h.bxoy_data && h.bxoy_data.agv_oxy != null) {
+        o.spo2 = h.bxoy_data.agv_oxy >>> 0
+        o.spo2Max = h.bxoy_data.max_oxy >>> 0
+        o.spo2Min = h.bxoy_data.min_oxy >>> 0
+      }
+      return { type: 'health', data: o }
     }
-    if (h.hr_data) {
-      o.hr = h.hr_data.avg_bpm >>> 0
-      o.hrMax = h.hr_data.max_bpm >>> 0
-      o.hrMin = h.hr_data.min_bpm >>> 0
+    // 心电图：raw_data 为波形采样点（sfixed32），降采样到 ≤150 点供前端绘制
+    if (his.ecg) {
+      const samples = Array.from(his.ecg.raw_data || [])
+      const step = Math.max(1, Math.floor(samples.length / 150))
+      const down = []
+      for (let i = 0; i < samples.length; i += step) down.push(samples[i])
+      const o = { ecgN: samples.length, ecgSamples: down }
+      if (his.ecg.time_stamp && his.ecg.time_stamp.date_time) o.ecgTs = his.ecg.time_stamp.date_time.seconds >>> 0
+      return { type: 'ecg', data: o }
     }
-    if (h.bp_data) {
-      o.sbp = h.bp_data.sbp >>> 0
-      o.dbp = h.bp_data.dbp >>> 0
+    // 血氧：spo2_data 为一次测量的血氧值序列
+    if (his.spo2) {
+      const vals = Array.from(his.spo2.spo2_data || [])
+      const o = { spo2N: vals.length }
+      if (vals.length) {
+        o.spo2 = Math.round(vals.reduce((a, b) => a + b, 0) / vals.length)
+        o.spo2Max = Math.max.apply(null, vals)
+        o.spo2Min = Math.min.apply(null, vals)
+      }
+      if (his.spo2.time_stamp && his.spo2.time_stamp.date_time) o.ts = his.spo2.time_stamp.date_time.seconds >>> 0
+      return { type: 'spo2', data: o }
     }
-    return { type: 'health', data: o }
+    return null
   }
   return null
 }
@@ -177,6 +223,20 @@ function mergeSamples(deviceid, packets) {
       if (data.sbp !== undefined) snap.sbp = data.sbp
       if (data.dbp !== undefined) snap.dbp = data.dbp
       if (data.steps !== undefined) snap.steps = data.steps
+      if (data.sleep !== undefined) snap.sleep = data.sleep
+      if (data.spo2 !== undefined) snap.spo2 = data.spo2
+      if (data.spo2Max !== undefined) snap.spo2Max = data.spo2Max
+      if (data.spo2Min !== undefined) snap.spo2Min = data.spo2Min
+      if (data.ts) snap.ts = data.ts
+    } else if (type === 'ecg') {
+      if (data.ecgN !== undefined) snap.ecgN = data.ecgN
+      if (data.ecgSamples) snap.ecgSamples = data.ecgSamples
+      if (data.ecgTs) snap.ecgTs = data.ecgTs
+    } else if (type === 'spo2') {
+      if (data.spo2 !== undefined) snap.spo2 = data.spo2
+      if (data.spo2Max !== undefined) snap.spo2Max = data.spo2Max
+      if (data.spo2Min !== undefined) snap.spo2Min = data.spo2Min
+      if (data.spo2N !== undefined) snap.spo2N = data.spo2N
       if (data.ts) snap.ts = data.ts
     }
   }

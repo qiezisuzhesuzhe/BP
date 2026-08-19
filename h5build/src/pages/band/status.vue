@@ -65,6 +65,77 @@
       </view>
     </view>
 
+    <!-- 血氧 -->
+    <view class="wrap">
+      <view class="sec-head">
+        <text class="sec-title">血氧</text>
+        <view class="spo2-tag" :class="spo2TagClass">
+          <text class="spo2-tag__dot"></text>
+          <text class="spo2-tag__t">{{ spo2Label }}</text>
+        </view>
+      </view>
+      <view class="spo2">
+        <view class="spo2__main">
+          <text class="spo2__num">{{ latest.spo2 != null ? latest.spo2 : '--' }}</text>
+          <text class="spo2__unit">% 血氧饱和度</text>
+        </view>
+        <view class="spo2__meta">
+          <text v-if="latest.spo2 != null" class="spo2__meta-item">最低 {{ latest.spo2Min != null ? latest.spo2Min : '--' }} · 最高 {{ latest.spo2Max != null ? latest.spo2Max : '--' }}</text>
+          <text v-else class="spo2__meta-item">测量后显示血氧值</text>
+        </view>
+        <view class="spo2__bar">
+          <view class="spo2__bar-in" :style="{ width: spo2Pct + '%' }"></view>
+        </view>
+      </view>
+    </view>
+
+    <!-- 心电图 -->
+    <view class="wrap">
+      <view class="sec-head">
+        <text class="sec-title">心电图</text>
+        <text class="sec-sub">{{ ecgTimeText }}</text>
+      </view>
+      <view class="ecg">
+        <svg v-if="ecgPoints" class="ecg__svg" viewBox="0 0 660 170" preserveAspectRatio="none">
+          <polyline :points="ecgPoints" class="ecg__line" fill="none" vector-effect="non-scaling-stroke" />
+        </svg>
+        <view v-else class="ecg__empty">
+          <text class="ecg__empty-t">-- 暂无心电图数据</text>
+        </view>
+        <text class="ecg__meta">{{ ecgMetaText }}</text>
+      </view>
+    </view>
+
+    <!-- 睡眠 -->
+    <view class="wrap">
+      <view class="sec-head">
+        <text class="sec-title">睡眠</text>
+        <text class="sec-sub">{{ sleepTotalText }}</text>
+      </view>
+      <view class="sleep">
+        <view class="sleep__stats">
+          <view class="sleep__stat">
+            <text class="sleep__stat-num sleep__stat-num--deep">{{ sleep.deep != null ? fmtSleepMin(sleep.deep) : '--' }}</text>
+            <text class="sleep__stat-t">深睡</text>
+          </view>
+          <view class="sleep__stat">
+            <text class="sleep__stat-num sleep__stat-num--light">{{ sleep.light != null ? fmtSleepMin(sleep.light) : '--' }}</text>
+            <text class="sleep__stat-t">浅睡</text>
+          </view>
+          <view class="sleep__stat">
+            <text class="sleep__stat-num sleep__stat-num--wake">{{ sleep.wake != null ? fmtSleepMin(sleep.wake) : '--' }}</text>
+            <text class="sleep__stat-t">清醒</text>
+          </view>
+        </view>
+        <view v-if="sleep.total" class="sleep__strip">
+          <view class="sleep__strip-seg sleep__strip-seg--deep" :style="{ width: sleepPct.deep + '%' }"></view>
+          <view class="sleep__strip-seg sleep__strip-seg--light" :style="{ width: sleepPct.light + '%' }"></view>
+          <view class="sleep__strip-seg sleep__strip-seg--wake" :style="{ width: sleepPct.wake + '%' }"></view>
+        </view>
+        <view v-else class="sleep__strip sleep__strip--empty"></view>
+      </view>
+    </view>
+
     <!-- 步数 -->
     <view class="wrap">
       <view class="sec-head">
@@ -211,6 +282,72 @@ export default {
     },
     msgBytes() {
       return this.byteLen(this.msgText)
+    },
+    /* ---------- 血氧 ---------- */
+    spo2Pct() {
+      if (this.latest.spo2 == null) return 0
+      return Math.max(0, Math.min(100, Math.round(((this.latest.spo2 - 85) / 15) * 100)))
+    },
+    spo2Label() {
+      const s = this.latest.spo2
+      if (s == null) return '--'
+      if (s >= 95) return '正常'
+      if (s >= 90) return '偏低'
+      return '注意'
+    },
+    spo2TagClass() {
+      const s = this.latest.spo2
+      if (s == null) return 'spo2-tag--none'
+      if (s >= 95) return 'spo2-tag--ok'
+      if (s >= 90) return 'spo2-tag--low'
+      return 'spo2-tag--warn'
+    },
+    /* ---------- 心电图 ---------- */
+    ecgPoints() {
+      const s = this.latest.ecgSamples
+      if (!s || !s.length) return ''
+      const W = 660
+      const H = 170
+      let min = Infinity
+      let max = -Infinity
+      for (const v of s) {
+        if (v < min) min = v
+        if (v > max) max = v
+      }
+      const span = max - min || 1
+      const pts = []
+      for (let i = 0; i < s.length; i++) {
+        const x = (i / (s.length - 1)) * W
+        const y = 10 + (1 - (s[i] - min) / span) * (H - 20)
+        pts.push(x.toFixed(1) + ',' + y.toFixed(1))
+      }
+      return pts.join(' ')
+    },
+    ecgTimeText() {
+      if (!this.latest.ecgTs) return '最近测量 --'
+      const d = new Date(this.latest.ecgTs * 1000)
+      const p = (n) => (n < 10 ? '0' + n : n)
+      return '最近测量 ' + p(d.getHours()) + ':' + p(d.getMinutes())
+    },
+    ecgMetaText() {
+      if (this.latest.ecgN == null) return '测量后显示心电图波形'
+      return this.latest.ecgN + ' 个采样 · 约 ' + Math.round(this.latest.ecgN / 40) + ' 秒'
+    },
+    /* ---------- 睡眠 ---------- */
+    sleep() {
+      return this.latest.sleep || {}
+    },
+    sleepTotalText() {
+      const s = this.latest.sleep
+      if (!s || s.total == null) return '暂无睡眠数据'
+      return '共 ' + this.fmtSleepMin(s.total)
+    },
+    sleepPct() {
+      const s = this.latest.sleep
+      if (!s || !s.total) return { deep: 0, light: 0, wake: 0 }
+      const deep = Math.round((s.deep / s.total) * 100)
+      const light = Math.round((s.light / s.total) * 100)
+      return { deep: deep, light: light, wake: Math.max(0, 100 - deep - light) }
     }
   },
   onLoad(options) {
@@ -243,6 +380,13 @@ export default {
     },
     fmt(n) {
       return String(n == null ? 0 : n).replace(/\B(?=(\d{3})+(?!\d))/g, ',')
+    },
+    // 分钟 → "X小时Y分 / Y分钟"
+    fmtSleepMin(min) {
+      if (min == null) return '--'
+      const h = Math.floor(min / 60)
+      const m = min % 60
+      return h ? h + '小时' + m + '分' : m + '分钟'
     },
     // UTF-8 字节数（手环消息标题 ≤15B、内容 ≤240B）
     byteLen(s) {
@@ -651,6 +795,239 @@ export default {
 .steps__meta-item {
   font-size: $font-size-2xs;
   color: $text-muted;
+}
+
+/* 血氧卡 */
+.spo2 {
+  background: $bg-surface;
+  border-radius: $radius-card-child;
+  box-shadow: $shadow-sm;
+  padding: $space-4;
+}
+
+.spo2__main {
+  display: flex;
+  align-items: baseline;
+}
+
+.spo2__num {
+  font-size: $font-size-3xl;
+  font-weight: $font-weight-heavy;
+  color: #0ba5c3;
+  font-family: $font-family-en;
+  line-height: 1;
+}
+
+.spo2__unit {
+  margin-left: $space-2;
+  font-size: $font-size-xs;
+  color: $text-muted;
+}
+
+.spo2__meta {
+  margin-top: $space-2;
+}
+
+.spo2__meta-item {
+  font-size: $font-size-2xs;
+  color: $text-muted;
+}
+
+.spo2__bar {
+  margin-top: $space-3;
+  height: $space-2;
+  border-radius: $radius-full;
+  background: $bg-section;
+  overflow: hidden;
+}
+
+.spo2__bar-in {
+  height: 100%;
+  border-radius: $radius-full;
+  background: linear-gradient(90deg, #22c3d8, #0ba5c3);
+  transition: width 0.6s ease;
+}
+
+.spo2-tag {
+  display: flex;
+  align-items: center;
+  padding: $space-1 $space-3;
+  border-radius: $radius-full;
+  font-size: $font-size-2xs;
+  font-weight: $font-weight-semibold;
+}
+
+.spo2-tag__dot {
+  width: $size-badge-sm;
+  height: $size-badge-sm;
+  border-radius: 50%;
+  margin-right: $space-1;
+}
+
+.spo2-tag--ok {
+  background: #ddf7ed;
+  color: #27ae60;
+}
+
+.spo2-tag--ok .spo2-tag__dot {
+  background: #27ae60;
+}
+
+.spo2-tag--low {
+  background: #fdf4ed;
+  color: #f2994a;
+}
+
+.spo2-tag--low .spo2-tag__dot {
+  background: #f2994a;
+}
+
+.spo2-tag--warn {
+  background: #fdeeee;
+  color: #eb5757;
+}
+
+.spo2-tag--warn .spo2-tag__dot {
+  background: #eb5757;
+}
+
+.spo2-tag--none {
+  background: #f2f7fa;
+  color: #94a3b8;
+}
+
+.spo2-tag--none .spo2-tag__dot {
+  background: #94a3b8;
+}
+
+/* 心电图卡（深色底，波形为唯一视觉重心） */
+.ecg {
+  position: relative;
+  background: linear-gradient(155deg, #0c2b2e 0%, #113f40 100%);
+  border-radius: $radius-card-child;
+  padding: $space-4;
+  box-shadow: $shadow-md;
+  overflow: hidden;
+}
+
+.ecg::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image: linear-gradient(rgba(255, 255, 255, 0.045) 1rpx, transparent 1rpx),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.045) 1rpx, transparent 1rpx);
+  background-size: 48rpx 48rpx;
+  pointer-events: none;
+}
+
+.ecg__svg {
+  position: relative;
+  display: block;
+  width: 100%;
+  height: 220rpx;
+}
+
+.ecg__line {
+  stroke: #6ff0c3;
+  stroke-width: 2;
+  stroke-linejoin: round;
+  stroke-linecap: round;
+  filter: drop-shadow(0 0 6rpx rgba(111, 240, 195, 0.65));
+}
+
+.ecg__empty {
+  position: relative;
+  height: 220rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.ecg__empty-t {
+  color: rgba(255, 255, 255, 0.45);
+  font-size: $font-size-xs;
+  letter-spacing: 2rpx;
+}
+
+.ecg__meta {
+  position: relative;
+  display: block;
+  margin-top: $space-2;
+  font-size: $font-size-2xs;
+  color: rgba(255, 255, 255, 0.6);
+}
+
+/* 睡眠卡 */
+.sleep {
+  background: $bg-surface;
+  border-radius: $radius-card-child;
+  box-shadow: $shadow-sm;
+  padding: $space-4;
+}
+
+.sleep__stats {
+  display: flex;
+}
+
+.sleep__stat {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.sleep__stat-num {
+  font-size: $font-size-lg;
+  font-weight: $font-weight-heavy;
+  font-family: $font-family-en;
+  line-height: 1.1;
+}
+
+.sleep__stat-num--deep {
+  color: #1e6f5c;
+}
+
+.sleep__stat-num--light {
+  color: #3eb98f;
+}
+
+.sleep__stat-num--wake {
+  color: #94a3b8;
+}
+
+.sleep__stat-t {
+  margin-top: $space-1;
+  font-size: $font-size-2xs;
+  color: $text-muted;
+}
+
+.sleep__strip {
+  margin-top: $space-3;
+  height: $space-3;
+  border-radius: $radius-full;
+  overflow: hidden;
+  display: flex;
+}
+
+.sleep__strip-seg {
+  height: 100%;
+  transition: width 0.6s ease;
+}
+
+.sleep__strip-seg--deep {
+  background: #1e6f5c;
+}
+
+.sleep__strip-seg--light {
+  background: #7dd4bc;
+}
+
+.sleep__strip-seg--wake {
+  background: #c8d5df;
+}
+
+.sleep__strip--empty {
+  background: $bg-section;
 }
 
 /* 上报地址卡 */

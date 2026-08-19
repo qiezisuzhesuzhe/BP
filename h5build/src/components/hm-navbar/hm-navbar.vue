@@ -1,6 +1,5 @@
 <template>
   <view class="nav" :class="{ 'nav--static': !sticky }" :style="{ background: bgColor, color: textColor }">
-    <view class="nav__status" :style="{ height: statusBarHeight + 'px' }"></view>
     <view class="nav__bar">
       <view class="nav__left" @tap="onBack">
         <text v-if="showBack" class="nav__back">‹</text>
@@ -21,21 +20,6 @@ export default {
     textColor: { type: String, default: '#1a2a3c' },
     backTo: { type: String, default: '' },
     sticky: { type: Boolean, default: true }
-  },
-  data() {
-    return { statusBarHeight: 8 }
-  },
-  created() {
-    try {
-      // H5 下浏览器无系统状态栏，安全区取小值避免顶部过宽
-      // #ifdef H5
-      this.statusBarHeight = 8
-      // #endif
-      // #ifndef H5
-      const info = uni.getSystemInfoSync()
-      this.statusBarHeight = info.statusBarHeight || 20
-      // #endif
-    } catch (e) {}
   },
   methods: {
     onBack() {
@@ -60,6 +44,7 @@ export default {
   position: sticky;
   top: 0;
   z-index: $z-nav;
+  padding-top: var(--status-bar-height);
 }
 
 .nav--static {

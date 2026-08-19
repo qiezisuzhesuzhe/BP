@@ -328,7 +328,7 @@ export default {
 }
 
 .hero__body {
-  padding: $space-1 $space-4 0;
+  padding: 0 $space-4 0;
 }
 
 .hero__org {
@@ -354,7 +354,7 @@ export default {
 }
 
 .hero__stats {
-  margin-top: $space-4;
+  margin-top: $space-2;
   background: $bg-section;
   border-radius: $radius-card;
   box-shadow: $shadow-sm;

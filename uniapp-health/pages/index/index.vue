@@ -390,6 +390,7 @@ export default {
 }
 
 .wrap {
+  height: auto;
   padding: $space-4 $space-4 0;
 }
 

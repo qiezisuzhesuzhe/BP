@@ -262,7 +262,7 @@ export default {
   flex-shrink: 0;
   padding: $space-2 $space-3;
   border-radius: $radius-full;
-  background: $bg-subtle;
+  background: #ffffff;
   margin-right: $space-2;
 }
 

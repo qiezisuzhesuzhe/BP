@@ -1,23 +1,7 @@
 <script>
 export default {
-  onLaunch() {
-    // 兼容小程序/H5：启动时同步一次未读角标
-    this.syncBadge()
-  },
-  onShow() {
-    this.syncBadge()
-  },
-  methods: {
-    syncBadge() {
-      const n = this.$store.getters.unreadCount
-      // tabBar 顺序：首页(0)/健康商城(1)/消息(2)/设备(3)/我的(4)
-      if (n > 0) {
-        uni.setTabBarBadge({ index: 2, text: n > 99 ? '99+' : '' + n, fail() {} })
-      } else {
-        uni.removeTabBarBadge({ index: 2, fail() {} })
-      }
-    }
-  }
+  onLaunch() {},
+  onShow() {}
 }
 </script>
 

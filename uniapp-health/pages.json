@@ -15,6 +15,14 @@
       }
     },
     {
+      "path": "pages/health/health",
+      "style": {
+        "navigationBarTitleText": "我的健康",
+        "navigationStyle": "custom",
+        "enablePullDownRefresh": false
+      }
+    },
+    {
       "path": "pages/service/detail",
       "style": {
         "navigationBarTitleText": "服务详情",
@@ -136,16 +144,16 @@
         "selectedIconPath": "static/tab/home-active.png"
       },
       {
+        "pagePath": "pages/health/health",
+        "text": "我的健康",
+        "iconPath": "static/tab/health.png",
+        "selectedIconPath": "static/tab/health-active.png"
+      },
+      {
         "pagePath": "pages/mall/mall",
         "text": "健康商城",
         "iconPath": "static/tab/mall.png",
         "selectedIconPath": "static/tab/mall-active.png"
-      },
-      {
-        "pagePath": "pages/message/message",
-        "text": "消息",
-        "iconPath": "static/tab/msg.png",
-        "selectedIconPath": "static/tab/msg-active.png"
       },
       {
         "pagePath": "pages/device/device",

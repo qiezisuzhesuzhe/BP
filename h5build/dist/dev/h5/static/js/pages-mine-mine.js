@@ -254,15 +254,7 @@ __webpack_require__.r(__webpack_exports__);
   },
   methods: {
     syncBadge: function syncBadge() {
-      var n = this.$store.getters.unreadCount;
-      if (n > 0) uni.setTabBarBadge({
-        index: 1,
-        text: n > 99 ? '99+' : '' + n,
-        fail: function fail() {}
-      });else uni.removeTabBarBadge({
-        index: 1,
-        fail: function fail() {}
-      });
+      // 消息已不在 tabBar 中，未读数改由页面内入口展示，无需设置 tabBar 角标
     },
     goProfile: function goProfile() {
       uni.navigateTo({
@@ -285,7 +277,7 @@ __webpack_require__.r(__webpack_exports__);
       });
     },
     goMsg: function goMsg() {
-      uni.switchTab({
+      uni.navigateTo({
         url: '/pages/message/message'
       });
     },

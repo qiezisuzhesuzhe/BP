@@ -1,7 +1,7 @@
 <template>
   <view class="hm-page">
     <view class="top">
-      <hm-navbar title="消息" :show-back="false" bg-color="transparent" />
+      <hm-navbar title="消息" bg-color="transparent" />
       <view class="top__body">
         <view class="top__row">
           <view class="top__l">
@@ -185,9 +185,7 @@ export default {
       uni.showToast({ title: '已全部标记已读', icon: 'none' })
     },
     syncBadge() {
-      const n = this.$store.getters.unreadCount
-      if (n > 0) uni.setTabBarBadge({ index: 1, text: n > 99 ? '99+' : '' + n, fail() {} })
-      else uni.removeTabBarBadge({ index: 1, fail() {} })
+      // 消息已不在 tabBar 中，未读数改由页面内入口展示，无需设置 tabBar 角标
     }
   }
 }

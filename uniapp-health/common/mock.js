@@ -415,3 +415,136 @@ export function makeDeviceSnapshot(type, prev) {
   }
   return d
 }
+
+/* ---------- 我的健康页 ---------- */
+// 顶部家庭成员切换
+export const HEALTH_MEMBERS = [
+  { key: 'self', name: '本人', avatarText: '周' },
+  { key: 'mother', name: '母亲', avatarText: '母' },
+  { key: 'father', name: '父亲', avatarText: '父' }
+]
+
+// 快捷入口
+export const HEALTH_QUICK = [
+  { key: 'report', label: '上传报告', icon: 'fa-solid fa-file-medical', color: '#389a82', bg: '#d4f5ee' },
+  { key: 'diet', label: '健康饮食', icon: 'fa-solid fa-bowl-food', color: '#e8945a', bg: '#fdf4ed' },
+  { key: 'record', label: '健康记录', icon: 'fa-solid fa-notes-medical', color: '#4a9fd8', bg: '#e2f2f6' },
+  { key: 'manual', label: '手工记录', icon: 'fa-solid fa-pen-to-square', color: '#8b7ad8', bg: '#eeecfb' },
+  { key: 'checkin', label: '每日打卡', icon: 'fa-solid fa-calendar-check', color: '#27ae60', bg: '#ddf7ed' },
+  { key: 'more', label: '更多服务', icon: 'fa-solid fa-ellipsis', color: '#64748b', bg: '#f2f7fa' }
+]
+
+// 今日健康评分
+export const HEALTH_SCORE = {
+  score: 88,
+  total: 100,
+  date: '6月11日 周三',
+  deltaText: '较昨日下降 6分',
+  deltaDown: true,
+  items: [
+    { label: '睡眠不足', delta: -1, icon: 'fa-solid fa-moon' },
+    { label: '压力偏高', delta: -1, icon: 'fa-solid fa-brain' },
+    { label: '运动缺少', delta: -1, icon: 'fa-solid fa-person-running' }
+  ]
+}
+
+// 今日重点建议
+export const HEALTH_FOCUS = {
+  title: '完成 5,000 步目标',
+  current: 2340,
+  target: 5000,
+  unit: '步',
+  remainText: '剩余 13 天完成挑战，加油！',
+  btnText: '去散步打卡',
+  bonusText: '完成今日重点建议',
+  bonus: 10
+}
+
+// 成就
+export const HEALTH_ACHIEVE = [
+  { key: 'a1', label: '步数达标', icon: 'fa-solid fa-shoe-prints', done: true },
+  { key: 'a2', label: '早睡守护', icon: 'fa-solid fa-bed', done: true },
+  { key: 'a3', label: '全项达成', icon: 'fa-solid fa-medal', done: false }
+]
+
+// 今日健康计划（时间线）
+export const HEALTH_PLAN = {
+  done: 4,
+  total: 8,
+  items: [
+    { time: '08:00', cat: 'med', title: '用药提醒', desc: '苯磺酸氨氯地平片 5mg，早餐后温水送服', done: true },
+    { time: '09:30', cat: 'diet', title: '健康饮食', desc: '早餐建议：燕麦粥 + 鸡蛋 1 个 + 凉拌菠菜，控盐 2g 以内', done: true },
+    {
+      time: '10:30',
+      cat: 'tea',
+      title: '养生茶推荐',
+      desc: '上午代谢活跃期，饮用决明子菊花茶有助于平肝降压',
+      done: true,
+      goods: [
+        { id: 't1', name: '决明子菊花茶', price: 39.9, img: '/static/img/mall/g4.jpg' },
+        { id: 't2', name: '桑叶枸杞茶', price: 29.9, img: '/static/img/mall/g6.jpg' }
+      ]
+    },
+    { time: '14:00', cat: 'visit', title: '复诊提醒', desc: '距上次门诊已 28 天，建议本周复查血压与肝功能', done: true },
+    { time: '16:00', cat: 'sport', title: '八段锦练习', desc: '第三式「调理脾胃须单举」，跟练 12 分钟', done: false, video: true },
+    {
+      time: '18:30',
+      cat: 'diet',
+      title: '晚餐建议',
+      desc: '低钠高纤：杂粮饭 + 清蒸鲈鱼 + 西兰花，晚餐七分饱',
+      done: false,
+      goods: [
+        { id: 'd1', name: '低钠杂粮米', price: 49, img: '/static/img/mall/g3.jpg' },
+        { id: 'd2', name: '控盐调味组合', price: 35, img: '/static/img/mall/g8.jpg' }
+      ]
+    },
+    { time: '21:30', cat: 'sleep', title: '睡眠准备', desc: '放下手机，泡脚 15 分钟并做 4-7-8 呼吸放松', done: false }
+  ]
+}
+
+// 计划分类元数据
+export const HEALTH_PLAN_META = {
+  med: { label: '用药', color: '#389a82', bg: '#d4f5ee', icon: 'fa-solid fa-pills' },
+  diet: { label: '饮食', color: '#e8945a', bg: '#fdf4ed', icon: 'fa-solid fa-bowl-food' },
+  tea: { label: '养生', color: '#27ae60', bg: '#ddf7ed', icon: 'fa-solid fa-mug-hot' },
+  visit: { label: '就医', color: '#4a9fd8', bg: '#e2f2f6', icon: 'fa-solid fa-stethoscope' },
+  sport: { label: '运动', color: '#8b7ad8', bg: '#eeecfb', icon: 'fa-solid fa-person-running' },
+  sleep: { label: '睡眠', color: '#5b6b9e', bg: '#eaeefb', icon: 'fa-solid fa-moon' }
+}
+
+// 健康风险预测
+export const HEALTH_RISK_FORECAST = [
+  {
+    key: 'fatigue',
+    period: '未来 30 天',
+    name: '疲劳风险',
+    percent: 28,
+    level: 'warn',
+    plans: ['保证每日 7 小时睡眠，23 点前入睡', '每工作 1 小时起身活动 5 分钟', '补充 B 族维生素与优质蛋白'],
+    btnText: '领取专属睡眠管理'
+  },
+  {
+    key: 'glucose',
+    period: '未来 180 天',
+    name: '血糖偏高风险',
+    percent: 30,
+    level: 'warn',
+    plans: ['主食替换 1/3 为杂粮，减少精制碳水', '每周 150 分钟中等强度有氧运动', '每月监测一次空腹血糖'],
+    btnText: '领取控糖饮食方案'
+  }
+]
+
+// 疾病风险评分
+export const HEALTH_DISEASE_RISK = [
+  { key: 'hbp', name: '高血压', score: 66, level: '高风险', color: '#eb5757', bg: '#fdeeee' },
+  { key: 'dm2', name: '2型糖尿病', score: 54, level: '中风险', color: '#f2994a', bg: '#fdf4ed' },
+  { key: 'chd', name: '冠状动脉异常', score: 10, level: '低风险', color: '#27ae60', bg: '#ddf7ed' }
+]
+
+// 推荐
+export const HEALTH_RECOMMEND = [
+  { id: 'r1', name: '糖尿病专家调理服务', desc: '三甲内分泌专家 1v1 制定 12 周控糖方案', price: 99, tag: 'AI专家提供方案', btnText: '立即查看', img: '/static/img/mall/g1.jpg' },
+  { id: 'r2', name: '大麦荷叶纤纤丸', desc: '药食同源配方 · 辅助代谢管理', price: 69.9, tag: '新品折扣', btnText: '立即查看', img: '/static/img/mall/g5.jpg' },
+  { id: 'r3', name: '玫瑰四物茶', desc: '温和调理气血 · 每日一袋冲泡即饮', price: 69.9, tag: '甄选好物', btnText: '立即查看', img: '/static/img/mall/g4.jpg' }
+]
+

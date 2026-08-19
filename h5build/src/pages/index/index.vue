@@ -238,18 +238,8 @@ export default {
       return n > 0 ? n + '天' : '已到期'
     }
   },
-  onShow() {
-    this.syncBadge()
-  },
+  onShow() {},
   methods: {
-    syncBadge() {
-      const n = this.unreadCount
-      if (n > 0) {
-        uni.setTabBarBadge({ index: 2, text: n > 99 ? '99+' : '' + n, fail() {} })
-      } else {
-        uni.removeTabBarBadge({ index: 2, fail() {} })
-      }
-    },
     setDay(i) {
       this.$store.commit('SET_DAY', i)
     },
@@ -278,7 +268,7 @@ export default {
       uni.switchTab({ url: '/pages/mall/mall' })
     },
     goMsg() {
-      uni.switchTab({ url: '/pages/message/message' })
+      uni.navigateTo({ url: '/pages/message/message' })
     },
     goConsult() {
       uni.showToast({ title: '正在为您匹配在线医生（演示）', icon: 'none' })

@@ -144,9 +144,7 @@ export default {
   },
   methods: {
     syncBadge() {
-      const n = this.$store.getters.unreadCount
-      if (n > 0) uni.setTabBarBadge({ index: 1, text: n > 99 ? '99+' : '' + n, fail() {} })
-      else uni.removeTabBarBadge({ index: 1, fail() {} })
+      // 消息已不在 tabBar 中，未读数改由页面内入口展示，无需设置 tabBar 角标
     },
     goProfile() {
       uni.navigateTo({ url: '/pages/mine/profile' })
@@ -161,7 +159,7 @@ export default {
       uni.navigateTo({ url: '/pages/rights/detail?id=' + this.activeRight.id })
     },
     goMsg() {
-      uni.switchTab({ url: '/pages/message/message' })
+      uni.navigateTo({ url: '/pages/message/message' })
     },
     onMenu(it) {
       if (it.key === 'profile') return this.goProfile()

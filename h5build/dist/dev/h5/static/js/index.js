@@ -64,7 +64,7 @@
 /******/
 /******/ 	// script path function
 /******/ 	function jsonpScriptSrc(chunkId) {
-/******/ 		return __webpack_require__.p + "static/js/" + ({"pages-chat-chat~pages-device-detail~pages-device-device~pages-device-scan~pages-index-index~pages-ma~f385059b":"pages-chat-chat~pages-device-detail~pages-device-device~pages-device-scan~pages-index-index~pages-ma~f385059b","pages-chat-chat~pages-index-index":"pages-chat-chat~pages-index-index","pages-chat-chat":"pages-chat-chat","pages-index-index":"pages-index-index","pages-device-detail":"pages-device-detail","pages-device-device":"pages-device-device","pages-device-scan":"pages-device-scan","pages-mall-mall":"pages-mall-mall","pages-message-message":"pages-message-message","pages-mine-agreement":"pages-mine-agreement","pages-mine-mine":"pages-mine-mine","pages-mine-orders":"pages-mine-orders","pages-mine-profile":"pages-mine-profile","pages-pay-pay":"pages-pay-pay","pages-rights-detail":"pages-rights-detail","pages-rights-rights":"pages-rights-rights","pages-service-detail":"pages-service-detail"}[chunkId]||chunkId) + ".js"
+/******/ 		return __webpack_require__.p + "static/js/" + ({"pages-chat-chat~pages-device-detail~pages-device-device~pages-device-scan~pages-health-health~pages-~f02bc6bb":"pages-chat-chat~pages-device-detail~pages-device-device~pages-device-scan~pages-health-health~pages-~f02bc6bb","pages-chat-chat~pages-index-index":"pages-chat-chat~pages-index-index","pages-chat-chat":"pages-chat-chat","pages-index-index":"pages-index-index","pages-device-detail":"pages-device-detail","pages-device-device":"pages-device-device","pages-device-scan":"pages-device-scan","pages-health-health":"pages-health-health","pages-mall-mall":"pages-mall-mall","pages-message-message":"pages-message-message","pages-mine-agreement":"pages-mine-agreement","pages-mine-mine":"pages-mine-mine","pages-mine-orders":"pages-mine-orders","pages-mine-profile":"pages-mine-profile","pages-pay-pay":"pages-pay-pay","pages-rights-detail":"pages-rights-detail","pages-rights-rights":"pages-rights-rights","pages-service-detail":"pages-service-detail"}[chunkId]||chunkId) + ".js"
 /******/ 	}
 /******/
 /******/ 	// The require function
@@ -332,31 +332,8 @@ __webpack_require__.r(__webpack_exports__);
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony default export */ __webpack_exports__["default"] = ({
-  onLaunch: function onLaunch() {
-    // 兼容小程序/H5：启动时同步一次未读角标
-    this.syncBadge();
-  },
-  onShow: function onShow() {
-    this.syncBadge();
-  },
-  methods: {
-    syncBadge: function syncBadge() {
-      var n = this.$store.getters.unreadCount;
-      // tabBar 顺序：首页(0)/健康商城(1)/消息(2)/设备(3)/我的(4)
-      if (n > 0) {
-        uni.setTabBarBadge({
-          index: 2,
-          text: n > 99 ? '99+' : '' + n,
-          fail: function fail() {}
-        });
-      } else {
-        uni.removeTabBarBadge({
-          index: 2,
-          fail: function fail() {}
-        });
-      }
-    }
-  }
+  onLaunch: function onLaunch() {},
+  onShow: function onShow() {}
 });
 
 /***/ }),
@@ -951,6 +928,13 @@ __webpack_require__.r(__webpack_exports__);
       "enablePullDownRefresh": false
     }
   }, {
+    "path": "pages/health/health",
+    "style": {
+      "navigationBarTitleText": "我的健康",
+      "navigationStyle": "custom",
+      "enablePullDownRefresh": false
+    }
+  }, {
     "path": "pages/service/detail",
     "style": {
       "navigationBarTitleText": "服务详情",
@@ -1056,15 +1040,15 @@ __webpack_require__.r(__webpack_exports__);
       "iconPath": "static/tab/home.png",
       "selectedIconPath": "static/tab/home-active.png"
     }, {
+      "pagePath": "pages/health/health",
+      "text": "我的健康",
+      "iconPath": "static/tab/health.png",
+      "selectedIconPath": "static/tab/health-active.png"
+    }, {
       "pagePath": "pages/mall/mall",
       "text": "健康商城",
       "iconPath": "static/tab/mall.png",
       "selectedIconPath": "static/tab/mall-active.png"
-    }, {
-      "pagePath": "pages/message/message",
-      "text": "消息",
-      "iconPath": "static/tab/msg.png",
-      "selectedIconPath": "static/tab/msg-active.png"
     }, {
       "pagePath": "pages/device/device",
       "text": "设备",
@@ -1241,17 +1225,17 @@ global.__uniConfig = {
       "redDot": false,
       "badge": ""
     }, {
+      "pagePath": "pages/health/health",
+      "text": "我的健康",
+      "iconPath": "static/tab/health.png",
+      "selectedIconPath": "static/tab/health-active.png",
+      "redDot": false,
+      "badge": ""
+    }, {
       "pagePath": "pages/mall/mall",
       "text": "健康商城",
       "iconPath": "static/tab/mall.png",
       "selectedIconPath": "static/tab/mall-active.png",
-      "redDot": false,
-      "badge": ""
-    }, {
-      "pagePath": "pages/message/message",
-      "text": "消息",
-      "iconPath": "static/tab/msg.png",
-      "selectedIconPath": "static/tab/msg-active.png",
       "redDot": false,
       "badge": ""
     }, {
@@ -1317,8 +1301,34 @@ global.__uniConfig.nvue = {
 global.__uniConfig.__webpack_chunk_load__ = __webpack_require__.e;
 vue__WEBPACK_IMPORTED_MODULE_6__["default"].component('pages-index-index', function (resolve) {
   var component = {
-    component: Promise.all(/*! require.ensure | pages-index-index */[__webpack_require__.e("pages-chat-chat~pages-device-detail~pages-device-device~pages-device-scan~pages-index-index~pages-ma~f385059b"), __webpack_require__.e("pages-chat-chat~pages-index-index"), __webpack_require__.e("pages-index-index")]).then((function () {
+    component: Promise.all(/*! require.ensure | pages-index-index */[__webpack_require__.e("pages-chat-chat~pages-device-detail~pages-device-device~pages-device-scan~pages-health-health~pages-~f02bc6bb"), __webpack_require__.e("pages-chat-chat~pages-index-index"), __webpack_require__.e("pages-index-index")]).then((function () {
       return resolve(__webpack_require__(/*! ./src/pages/index/index.vue */ "91rt"));
+    }).bind(null, __webpack_require__)).catch(__webpack_require__.oe),
+    delay: __uniConfig['async'].delay,
+    timeout: __uniConfig['async'].timeout
+  };
+  if (__uniConfig['async']['loading']) {
+    component.loading = {
+      name: 'SystemAsyncLoading',
+      render: function render(createElement) {
+        return createElement(__uniConfig['async']['loading']);
+      }
+    };
+  }
+  if (__uniConfig['async']['error']) {
+    component.error = {
+      name: 'SystemAsyncError',
+      render: function render(createElement) {
+        return createElement(__uniConfig['async']['error']);
+      }
+    };
+  }
+  return component;
+});
+vue__WEBPACK_IMPORTED_MODULE_6__["default"].component('pages-health-health', function (resolve) {
+  var component = {
+    component: Promise.all(/*! require.ensure | pages-health-health */[__webpack_require__.e("pages-chat-chat~pages-device-detail~pages-device-device~pages-device-scan~pages-health-health~pages-~f02bc6bb"), __webpack_require__.e("pages-health-health")]).then((function () {
+      return resolve(__webpack_require__(/*! ./src/pages/health/health.vue */ "vQF3"));
     }).bind(null, __webpack_require__)).catch(__webpack_require__.oe),
     delay: __uniConfig['async'].delay,
     timeout: __uniConfig['async'].timeout
@@ -1343,7 +1353,7 @@ vue__WEBPACK_IMPORTED_MODULE_6__["default"].component('pages-index-index', funct
 });
 vue__WEBPACK_IMPORTED_MODULE_6__["default"].component('pages-service-detail', function (resolve) {
   var component = {
-    component: Promise.all(/*! require.ensure | pages-service-detail */[__webpack_require__.e("pages-chat-chat~pages-device-detail~pages-device-device~pages-device-scan~pages-index-index~pages-ma~f385059b"), __webpack_require__.e("pages-service-detail")]).then((function () {
+    component: Promise.all(/*! require.ensure | pages-service-detail */[__webpack_require__.e("pages-chat-chat~pages-device-detail~pages-device-device~pages-device-scan~pages-health-health~pages-~f02bc6bb"), __webpack_require__.e("pages-service-detail")]).then((function () {
       return resolve(__webpack_require__(/*! ./src/pages/service/detail.vue */ "qioJ"));
     }).bind(null, __webpack_require__)).catch(__webpack_require__.oe),
     delay: __uniConfig['async'].delay,
@@ -1369,7 +1379,7 @@ vue__WEBPACK_IMPORTED_MODULE_6__["default"].component('pages-service-detail', fu
 });
 vue__WEBPACK_IMPORTED_MODULE_6__["default"].component('pages-pay-pay', function (resolve) {
   var component = {
-    component: Promise.all(/*! require.ensure | pages-pay-pay */[__webpack_require__.e("pages-chat-chat~pages-device-detail~pages-device-device~pages-device-scan~pages-index-index~pages-ma~f385059b"), __webpack_require__.e("pages-pay-pay")]).then((function () {
+    component: Promise.all(/*! require.ensure | pages-pay-pay */[__webpack_require__.e("pages-chat-chat~pages-device-detail~pages-device-device~pages-device-scan~pages-health-health~pages-~f02bc6bb"), __webpack_require__.e("pages-pay-pay")]).then((function () {
       return resolve(__webpack_require__(/*! ./src/pages/pay/pay.vue */ "dVnC"));
     }).bind(null, __webpack_require__)).catch(__webpack_require__.oe),
     delay: __uniConfig['async'].delay,
@@ -1395,7 +1405,7 @@ vue__WEBPACK_IMPORTED_MODULE_6__["default"].component('pages-pay-pay', function 
 });
 vue__WEBPACK_IMPORTED_MODULE_6__["default"].component('pages-rights-rights', function (resolve) {
   var component = {
-    component: Promise.all(/*! require.ensure | pages-rights-rights */[__webpack_require__.e("pages-chat-chat~pages-device-detail~pages-device-device~pages-device-scan~pages-index-index~pages-ma~f385059b"), __webpack_require__.e("pages-rights-rights")]).then((function () {
+    component: Promise.all(/*! require.ensure | pages-rights-rights */[__webpack_require__.e("pages-chat-chat~pages-device-detail~pages-device-device~pages-device-scan~pages-health-health~pages-~f02bc6bb"), __webpack_require__.e("pages-rights-rights")]).then((function () {
       return resolve(__webpack_require__(/*! ./src/pages/rights/rights.vue */ "eIcC"));
     }).bind(null, __webpack_require__)).catch(__webpack_require__.oe),
     delay: __uniConfig['async'].delay,
@@ -1421,7 +1431,7 @@ vue__WEBPACK_IMPORTED_MODULE_6__["default"].component('pages-rights-rights', fun
 });
 vue__WEBPACK_IMPORTED_MODULE_6__["default"].component('pages-rights-detail', function (resolve) {
   var component = {
-    component: Promise.all(/*! require.ensure | pages-rights-detail */[__webpack_require__.e("pages-chat-chat~pages-device-detail~pages-device-device~pages-device-scan~pages-index-index~pages-ma~f385059b"), __webpack_require__.e("pages-rights-detail")]).then((function () {
+    component: Promise.all(/*! require.ensure | pages-rights-detail */[__webpack_require__.e("pages-chat-chat~pages-device-detail~pages-device-device~pages-device-scan~pages-health-health~pages-~f02bc6bb"), __webpack_require__.e("pages-rights-detail")]).then((function () {
       return resolve(__webpack_require__(/*! ./src/pages/rights/detail.vue */ "8uOI"));
     }).bind(null, __webpack_require__)).catch(__webpack_require__.oe),
     delay: __uniConfig['async'].delay,
@@ -1447,7 +1457,7 @@ vue__WEBPACK_IMPORTED_MODULE_6__["default"].component('pages-rights-detail', fun
 });
 vue__WEBPACK_IMPORTED_MODULE_6__["default"].component('pages-chat-chat', function (resolve) {
   var component = {
-    component: Promise.all(/*! require.ensure | pages-chat-chat */[__webpack_require__.e("pages-chat-chat~pages-device-detail~pages-device-device~pages-device-scan~pages-index-index~pages-ma~f385059b"), __webpack_require__.e("pages-chat-chat~pages-index-index"), __webpack_require__.e("pages-chat-chat")]).then((function () {
+    component: Promise.all(/*! require.ensure | pages-chat-chat */[__webpack_require__.e("pages-chat-chat~pages-device-detail~pages-device-device~pages-device-scan~pages-health-health~pages-~f02bc6bb"), __webpack_require__.e("pages-chat-chat~pages-index-index"), __webpack_require__.e("pages-chat-chat")]).then((function () {
       return resolve(__webpack_require__(/*! ./src/pages/chat/chat.vue */ "XFJV"));
     }).bind(null, __webpack_require__)).catch(__webpack_require__.oe),
     delay: __uniConfig['async'].delay,
@@ -1473,7 +1483,7 @@ vue__WEBPACK_IMPORTED_MODULE_6__["default"].component('pages-chat-chat', functio
 });
 vue__WEBPACK_IMPORTED_MODULE_6__["default"].component('pages-message-message', function (resolve) {
   var component = {
-    component: Promise.all(/*! require.ensure | pages-message-message */[__webpack_require__.e("pages-chat-chat~pages-device-detail~pages-device-device~pages-device-scan~pages-index-index~pages-ma~f385059b"), __webpack_require__.e("pages-message-message")]).then((function () {
+    component: Promise.all(/*! require.ensure | pages-message-message */[__webpack_require__.e("pages-chat-chat~pages-device-detail~pages-device-device~pages-device-scan~pages-health-health~pages-~f02bc6bb"), __webpack_require__.e("pages-message-message")]).then((function () {
       return resolve(__webpack_require__(/*! ./src/pages/message/message.vue */ "Iq/L"));
     }).bind(null, __webpack_require__)).catch(__webpack_require__.oe),
     delay: __uniConfig['async'].delay,
@@ -1499,7 +1509,7 @@ vue__WEBPACK_IMPORTED_MODULE_6__["default"].component('pages-message-message', f
 });
 vue__WEBPACK_IMPORTED_MODULE_6__["default"].component('pages-mine-mine', function (resolve) {
   var component = {
-    component: Promise.all(/*! require.ensure | pages-mine-mine */[__webpack_require__.e("pages-chat-chat~pages-device-detail~pages-device-device~pages-device-scan~pages-index-index~pages-ma~f385059b"), __webpack_require__.e("pages-mine-mine")]).then((function () {
+    component: Promise.all(/*! require.ensure | pages-mine-mine */[__webpack_require__.e("pages-chat-chat~pages-device-detail~pages-device-device~pages-device-scan~pages-health-health~pages-~f02bc6bb"), __webpack_require__.e("pages-mine-mine")]).then((function () {
       return resolve(__webpack_require__(/*! ./src/pages/mine/mine.vue */ "5VC8"));
     }).bind(null, __webpack_require__)).catch(__webpack_require__.oe),
     delay: __uniConfig['async'].delay,
@@ -1525,7 +1535,7 @@ vue__WEBPACK_IMPORTED_MODULE_6__["default"].component('pages-mine-mine', functio
 });
 vue__WEBPACK_IMPORTED_MODULE_6__["default"].component('pages-mine-profile', function (resolve) {
   var component = {
-    component: Promise.all(/*! require.ensure | pages-mine-profile */[__webpack_require__.e("pages-chat-chat~pages-device-detail~pages-device-device~pages-device-scan~pages-index-index~pages-ma~f385059b"), __webpack_require__.e("pages-mine-profile")]).then((function () {
+    component: Promise.all(/*! require.ensure | pages-mine-profile */[__webpack_require__.e("pages-chat-chat~pages-device-detail~pages-device-device~pages-device-scan~pages-health-health~pages-~f02bc6bb"), __webpack_require__.e("pages-mine-profile")]).then((function () {
       return resolve(__webpack_require__(/*! ./src/pages/mine/profile.vue */ "RxTe"));
     }).bind(null, __webpack_require__)).catch(__webpack_require__.oe),
     delay: __uniConfig['async'].delay,
@@ -1551,7 +1561,7 @@ vue__WEBPACK_IMPORTED_MODULE_6__["default"].component('pages-mine-profile', func
 });
 vue__WEBPACK_IMPORTED_MODULE_6__["default"].component('pages-mine-orders', function (resolve) {
   var component = {
-    component: Promise.all(/*! require.ensure | pages-mine-orders */[__webpack_require__.e("pages-chat-chat~pages-device-detail~pages-device-device~pages-device-scan~pages-index-index~pages-ma~f385059b"), __webpack_require__.e("pages-mine-orders")]).then((function () {
+    component: Promise.all(/*! require.ensure | pages-mine-orders */[__webpack_require__.e("pages-chat-chat~pages-device-detail~pages-device-device~pages-device-scan~pages-health-health~pages-~f02bc6bb"), __webpack_require__.e("pages-mine-orders")]).then((function () {
       return resolve(__webpack_require__(/*! ./src/pages/mine/orders.vue */ "NC20"));
     }).bind(null, __webpack_require__)).catch(__webpack_require__.oe),
     delay: __uniConfig['async'].delay,
@@ -1577,7 +1587,7 @@ vue__WEBPACK_IMPORTED_MODULE_6__["default"].component('pages-mine-orders', funct
 });
 vue__WEBPACK_IMPORTED_MODULE_6__["default"].component('pages-mine-agreement', function (resolve) {
   var component = {
-    component: Promise.all(/*! require.ensure | pages-mine-agreement */[__webpack_require__.e("pages-chat-chat~pages-device-detail~pages-device-device~pages-device-scan~pages-index-index~pages-ma~f385059b"), __webpack_require__.e("pages-mine-agreement")]).then((function () {
+    component: Promise.all(/*! require.ensure | pages-mine-agreement */[__webpack_require__.e("pages-chat-chat~pages-device-detail~pages-device-device~pages-device-scan~pages-health-health~pages-~f02bc6bb"), __webpack_require__.e("pages-mine-agreement")]).then((function () {
       return resolve(__webpack_require__(/*! ./src/pages/mine/agreement.vue */ "Nana"));
     }).bind(null, __webpack_require__)).catch(__webpack_require__.oe),
     delay: __uniConfig['async'].delay,
@@ -1603,7 +1613,7 @@ vue__WEBPACK_IMPORTED_MODULE_6__["default"].component('pages-mine-agreement', fu
 });
 vue__WEBPACK_IMPORTED_MODULE_6__["default"].component('pages-mall-mall', function (resolve) {
   var component = {
-    component: Promise.all(/*! require.ensure | pages-mall-mall */[__webpack_require__.e("pages-chat-chat~pages-device-detail~pages-device-device~pages-device-scan~pages-index-index~pages-ma~f385059b"), __webpack_require__.e("pages-mall-mall")]).then((function () {
+    component: Promise.all(/*! require.ensure | pages-mall-mall */[__webpack_require__.e("pages-chat-chat~pages-device-detail~pages-device-device~pages-device-scan~pages-health-health~pages-~f02bc6bb"), __webpack_require__.e("pages-mall-mall")]).then((function () {
       return resolve(__webpack_require__(/*! ./src/pages/mall/mall.vue */ "vRJf"));
     }).bind(null, __webpack_require__)).catch(__webpack_require__.oe),
     delay: __uniConfig['async'].delay,
@@ -1629,7 +1639,7 @@ vue__WEBPACK_IMPORTED_MODULE_6__["default"].component('pages-mall-mall', functio
 });
 vue__WEBPACK_IMPORTED_MODULE_6__["default"].component('pages-device-device', function (resolve) {
   var component = {
-    component: Promise.all(/*! require.ensure | pages-device-device */[__webpack_require__.e("pages-chat-chat~pages-device-detail~pages-device-device~pages-device-scan~pages-index-index~pages-ma~f385059b"), __webpack_require__.e("pages-device-device")]).then((function () {
+    component: Promise.all(/*! require.ensure | pages-device-device */[__webpack_require__.e("pages-chat-chat~pages-device-detail~pages-device-device~pages-device-scan~pages-health-health~pages-~f02bc6bb"), __webpack_require__.e("pages-device-device")]).then((function () {
       return resolve(__webpack_require__(/*! ./src/pages/device/device.vue */ "vjPZ"));
     }).bind(null, __webpack_require__)).catch(__webpack_require__.oe),
     delay: __uniConfig['async'].delay,
@@ -1655,7 +1665,7 @@ vue__WEBPACK_IMPORTED_MODULE_6__["default"].component('pages-device-device', fun
 });
 vue__WEBPACK_IMPORTED_MODULE_6__["default"].component('pages-device-scan', function (resolve) {
   var component = {
-    component: Promise.all(/*! require.ensure | pages-device-scan */[__webpack_require__.e("pages-chat-chat~pages-device-detail~pages-device-device~pages-device-scan~pages-index-index~pages-ma~f385059b"), __webpack_require__.e("pages-device-scan")]).then((function () {
+    component: Promise.all(/*! require.ensure | pages-device-scan */[__webpack_require__.e("pages-chat-chat~pages-device-detail~pages-device-device~pages-device-scan~pages-health-health~pages-~f02bc6bb"), __webpack_require__.e("pages-device-scan")]).then((function () {
       return resolve(__webpack_require__(/*! ./src/pages/device/scan.vue */ "vG3x"));
     }).bind(null, __webpack_require__)).catch(__webpack_require__.oe),
     delay: __uniConfig['async'].delay,
@@ -1681,7 +1691,7 @@ vue__WEBPACK_IMPORTED_MODULE_6__["default"].component('pages-device-scan', funct
 });
 vue__WEBPACK_IMPORTED_MODULE_6__["default"].component('pages-device-detail', function (resolve) {
   var component = {
-    component: Promise.all(/*! require.ensure | pages-device-detail */[__webpack_require__.e("pages-chat-chat~pages-device-detail~pages-device-device~pages-device-scan~pages-index-index~pages-ma~f385059b"), __webpack_require__.e("pages-device-detail")]).then((function () {
+    component: Promise.all(/*! require.ensure | pages-device-detail */[__webpack_require__.e("pages-chat-chat~pages-device-detail~pages-device-device~pages-device-scan~pages-health-health~pages-~f02bc6bb"), __webpack_require__.e("pages-device-detail")]).then((function () {
       return resolve(__webpack_require__(/*! ./src/pages/device/detail.vue */ "ngQi"));
     }).bind(null, __webpack_require__)).catch(__webpack_require__.oe),
     delay: __uniConfig['async'].delay,
@@ -1736,6 +1746,36 @@ global.__uniRoutes = [{
     isEntry: true,
     isTabBar: true,
     tabBarIndex: 0,
+    windowTop: 0
+  }
+}, {
+  path: '/pages/health/health',
+  component: {
+    render: function render(createElement) {
+      return createElement('Page', {
+        props: Object.assign({
+          isQuit: true,
+          isTabBar: true,
+          tabBarIndex: 1
+        }, __uniConfig.globalStyle, {
+          "navigationBarTitleText": "我的健康",
+          "navigationStyle": "custom",
+          "enablePullDownRefresh": false
+        })
+      }, [createElement('pages-health-health', {
+        slot: 'page'
+      })]);
+    }
+  },
+  meta: {
+    id: 2,
+    name: 'pages-health-health',
+    isNVue: false,
+    maxWidth: 0,
+    pagePath: 'pages/health/health',
+    isQuit: true,
+    isTabBar: true,
+    tabBarIndex: 1,
     windowTop: 0
   }
 }, {
@@ -1848,11 +1888,7 @@ global.__uniRoutes = [{
   component: {
     render: function render(createElement) {
       return createElement('Page', {
-        props: Object.assign({
-          isQuit: true,
-          isTabBar: true,
-          tabBarIndex: 2
-        }, __uniConfig.globalStyle, {
+        props: Object.assign({}, __uniConfig.globalStyle, {
           "navigationBarTitleText": "消息",
           "navigationStyle": "custom"
         })
@@ -1862,14 +1898,10 @@ global.__uniRoutes = [{
     }
   },
   meta: {
-    id: 2,
     name: 'pages-message-message',
     isNVue: false,
     maxWidth: 0,
     pagePath: 'pages/message/message',
-    isQuit: true,
-    isTabBar: true,
-    tabBarIndex: 2,
     windowTop: 0
   }
 }, {
@@ -1972,7 +2004,7 @@ global.__uniRoutes = [{
         props: Object.assign({
           isQuit: true,
           isTabBar: true,
-          tabBarIndex: 1
+          tabBarIndex: 2
         }, __uniConfig.globalStyle, {
           "navigationBarTitleText": "健康商城",
           "navigationStyle": "custom"
@@ -1990,7 +2022,7 @@ global.__uniRoutes = [{
     pagePath: 'pages/mall/mall',
     isQuit: true,
     isTabBar: true,
-    tabBarIndex: 1,
+    tabBarIndex: 2,
     windowTop: 0
   }
 }, {
@@ -2108,7 +2140,7 @@ global.UniApp && new global.UniApp();
 /*!****************************!*\
   !*** ./src/common/mock.js ***!
   \****************************/
-/*! exports provided: PACKAGES, TIMELINE, CAT_META, QUESTIONS, QUESTIONS_DM, KNOWLEDGE, RIGHT_ENTRIES, SHOP_GOODS, makeOrderNo, DEVICE_TYPES, deviceType, makeDeviceSnapshot */
+/*! exports provided: PACKAGES, TIMELINE, CAT_META, QUESTIONS, QUESTIONS_DM, KNOWLEDGE, RIGHT_ENTRIES, SHOP_GOODS, makeOrderNo, DEVICE_TYPES, deviceType, makeDeviceSnapshot, HEALTH_MEMBERS, HEALTH_QUICK, HEALTH_SCORE, HEALTH_FOCUS, HEALTH_ACHIEVE, HEALTH_PLAN, HEALTH_PLAN_META, HEALTH_RISK_FORECAST, HEALTH_DISEASE_RISK, HEALTH_RECOMMEND */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -2125,6 +2157,16 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "DEVICE_TYPES", function() { return DEVICE_TYPES; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "deviceType", function() { return deviceType; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "makeDeviceSnapshot", function() { return makeDeviceSnapshot; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "HEALTH_MEMBERS", function() { return HEALTH_MEMBERS; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "HEALTH_QUICK", function() { return HEALTH_QUICK; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "HEALTH_SCORE", function() { return HEALTH_SCORE; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "HEALTH_FOCUS", function() { return HEALTH_FOCUS; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "HEALTH_ACHIEVE", function() { return HEALTH_ACHIEVE; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "HEALTH_PLAN", function() { return HEALTH_PLAN; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "HEALTH_PLAN_META", function() { return HEALTH_PLAN_META; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "HEALTH_RISK_FORECAST", function() { return HEALTH_RISK_FORECAST; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "HEALTH_DISEASE_RISK", function() { return HEALTH_DISEASE_RISK; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "HEALTH_RECOMMEND", function() { return HEALTH_RECOMMEND; });
 /* harmony import */ var core_js_modules_es_array_find_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! core-js/modules/es.array.find.js */ "fbCW");
 /* harmony import */ var core_js_modules_es_array_find_js__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_array_find_js__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var core_js_modules_es_object_to_string_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! core-js/modules/es.object.to-string.js */ "07d7");
@@ -3149,6 +3191,295 @@ function makeDeviceSnapshot(type, prev) {
   }
   return d;
 }
+
+/* ---------- 我的健康页 ---------- */
+// 顶部家庭成员切换
+var HEALTH_MEMBERS = [{
+  key: 'self',
+  name: '本人',
+  avatarText: '周'
+}, {
+  key: 'mother',
+  name: '母亲',
+  avatarText: '母'
+}, {
+  key: 'father',
+  name: '父亲',
+  avatarText: '父'
+}];
+
+// 快捷入口
+var HEALTH_QUICK = [{
+  key: 'report',
+  label: '上传报告',
+  icon: 'fa-solid fa-file-medical',
+  color: '#389a82',
+  bg: '#d4f5ee'
+}, {
+  key: 'diet',
+  label: '健康饮食',
+  icon: 'fa-solid fa-bowl-food',
+  color: '#e8945a',
+  bg: '#fdf4ed'
+}, {
+  key: 'record',
+  label: '健康记录',
+  icon: 'fa-solid fa-notes-medical',
+  color: '#4a9fd8',
+  bg: '#e2f2f6'
+}, {
+  key: 'manual',
+  label: '手工记录',
+  icon: 'fa-solid fa-pen-to-square',
+  color: '#8b7ad8',
+  bg: '#eeecfb'
+}, {
+  key: 'checkin',
+  label: '每日打卡',
+  icon: 'fa-solid fa-calendar-check',
+  color: '#27ae60',
+  bg: '#ddf7ed'
+}, {
+  key: 'more',
+  label: '更多服务',
+  icon: 'fa-solid fa-ellipsis',
+  color: '#64748b',
+  bg: '#f2f7fa'
+}];
+
+// 今日健康评分
+var HEALTH_SCORE = {
+  score: 88,
+  total: 100,
+  date: '6月11日 周三',
+  deltaText: '较昨日下降 6分',
+  deltaDown: true,
+  items: [{
+    label: '睡眠不足',
+    delta: -1,
+    icon: 'fa-solid fa-moon'
+  }, {
+    label: '压力偏高',
+    delta: -1,
+    icon: 'fa-solid fa-brain'
+  }, {
+    label: '运动缺少',
+    delta: -1,
+    icon: 'fa-solid fa-person-running'
+  }]
+};
+
+// 今日重点建议
+var HEALTH_FOCUS = {
+  title: '完成 5,000 步目标',
+  current: 2340,
+  target: 5000,
+  unit: '步',
+  remainText: '剩余 13 天完成挑战，加油！',
+  btnText: '去散步打卡',
+  bonusText: '完成今日重点建议',
+  bonus: 10
+};
+
+// 成就
+var HEALTH_ACHIEVE = [{
+  key: 'a1',
+  label: '步数达标',
+  icon: 'fa-solid fa-shoe-prints',
+  done: true
+}, {
+  key: 'a2',
+  label: '早睡守护',
+  icon: 'fa-solid fa-bed',
+  done: true
+}, {
+  key: 'a3',
+  label: '全项达成',
+  icon: 'fa-solid fa-medal',
+  done: false
+}];
+
+// 今日健康计划（时间线）
+var HEALTH_PLAN = {
+  done: 4,
+  total: 8,
+  items: [{
+    time: '08:00',
+    cat: 'med',
+    title: '用药提醒',
+    desc: '苯磺酸氨氯地平片 5mg，早餐后温水送服',
+    done: true
+  }, {
+    time: '09:30',
+    cat: 'diet',
+    title: '健康饮食',
+    desc: '早餐建议：燕麦粥 + 鸡蛋 1 个 + 凉拌菠菜，控盐 2g 以内',
+    done: true
+  }, {
+    time: '10:30',
+    cat: 'tea',
+    title: '养生茶推荐',
+    desc: '上午代谢活跃期，饮用决明子菊花茶有助于平肝降压',
+    done: true,
+    goods: [{
+      id: 't1',
+      name: '决明子菊花茶',
+      price: 39.9,
+      img: '/static/img/mall/g4.jpg'
+    }, {
+      id: 't2',
+      name: '桑叶枸杞茶',
+      price: 29.9,
+      img: '/static/img/mall/g6.jpg'
+    }]
+  }, {
+    time: '14:00',
+    cat: 'visit',
+    title: '复诊提醒',
+    desc: '距上次门诊已 28 天，建议本周复查血压与肝功能',
+    done: true
+  }, {
+    time: '16:00',
+    cat: 'sport',
+    title: '八段锦练习',
+    desc: '第三式「调理脾胃须单举」，跟练 12 分钟',
+    done: false,
+    video: true
+  }, {
+    time: '18:30',
+    cat: 'diet',
+    title: '晚餐建议',
+    desc: '低钠高纤：杂粮饭 + 清蒸鲈鱼 + 西兰花，晚餐七分饱',
+    done: false,
+    goods: [{
+      id: 'd1',
+      name: '低钠杂粮米',
+      price: 49,
+      img: '/static/img/mall/g3.jpg'
+    }, {
+      id: 'd2',
+      name: '控盐调味组合',
+      price: 35,
+      img: '/static/img/mall/g8.jpg'
+    }]
+  }, {
+    time: '21:30',
+    cat: 'sleep',
+    title: '睡眠准备',
+    desc: '放下手机，泡脚 15 分钟并做 4-7-8 呼吸放松',
+    done: false
+  }]
+};
+
+// 计划分类元数据
+var HEALTH_PLAN_META = {
+  med: {
+    label: '用药',
+    color: '#389a82',
+    bg: '#d4f5ee',
+    icon: 'fa-solid fa-pills'
+  },
+  diet: {
+    label: '饮食',
+    color: '#e8945a',
+    bg: '#fdf4ed',
+    icon: 'fa-solid fa-bowl-food'
+  },
+  tea: {
+    label: '养生',
+    color: '#27ae60',
+    bg: '#ddf7ed',
+    icon: 'fa-solid fa-mug-hot'
+  },
+  visit: {
+    label: '就医',
+    color: '#4a9fd8',
+    bg: '#e2f2f6',
+    icon: 'fa-solid fa-stethoscope'
+  },
+  sport: {
+    label: '运动',
+    color: '#8b7ad8',
+    bg: '#eeecfb',
+    icon: 'fa-solid fa-person-running'
+  },
+  sleep: {
+    label: '睡眠',
+    color: '#5b6b9e',
+    bg: '#eaeefb',
+    icon: 'fa-solid fa-moon'
+  }
+};
+
+// 健康风险预测
+var HEALTH_RISK_FORECAST = [{
+  key: 'fatigue',
+  period: '未来 30 天',
+  name: '疲劳风险',
+  percent: 28,
+  level: 'warn',
+  plans: ['保证每日 7 小时睡眠，23 点前入睡', '每工作 1 小时起身活动 5 分钟', '补充 B 族维生素与优质蛋白'],
+  btnText: '领取专属睡眠管理'
+}, {
+  key: 'glucose',
+  period: '未来 180 天',
+  name: '血糖偏高风险',
+  percent: 30,
+  level: 'warn',
+  plans: ['主食替换 1/3 为杂粮，减少精制碳水', '每周 150 分钟中等强度有氧运动', '每月监测一次空腹血糖'],
+  btnText: '领取控糖饮食方案'
+}];
+
+// 疾病风险评分
+var HEALTH_DISEASE_RISK = [{
+  key: 'hbp',
+  name: '高血压',
+  score: 66,
+  level: '高风险',
+  color: '#eb5757',
+  bg: '#fdeeee'
+}, {
+  key: 'dm2',
+  name: '2型糖尿病',
+  score: 54,
+  level: '中风险',
+  color: '#f2994a',
+  bg: '#fdf4ed'
+}, {
+  key: 'chd',
+  name: '冠状动脉异常',
+  score: 10,
+  level: '低风险',
+  color: '#27ae60',
+  bg: '#ddf7ed'
+}];
+
+// 推荐
+var HEALTH_RECOMMEND = [{
+  id: 'r1',
+  name: '糖尿病专家调理服务',
+  desc: '三甲内分泌专家 1v1 制定 12 周控糖方案',
+  price: 99,
+  tag: 'AI专家提供方案',
+  btnText: '立即查看',
+  img: '/static/img/mall/g1.jpg'
+}, {
+  id: 'r2',
+  name: '大麦荷叶纤纤丸',
+  desc: '药食同源配方 · 辅助代谢管理',
+  price: 69.9,
+  tag: '新品折扣',
+  btnText: '立即查看',
+  img: '/static/img/mall/g5.jpg'
+}, {
+  id: 'r3',
+  name: '玫瑰四物茶',
+  desc: '温和调理气血 · 每日一袋冲泡即饮',
+  price: 69.9,
+  tag: '甄选好物',
+  btnText: '立即查看',
+  img: '/static/img/mall/g4.jpg'
+}];
 
 /***/ }),
 

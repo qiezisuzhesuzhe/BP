@@ -324,25 +324,8 @@ __webpack_require__.r(__webpack_exports__);
       return n > 0 ? n + '天' : '已到期';
     }
   },
-  onShow: function onShow() {
-    this.syncBadge();
-  },
+  onShow: function onShow() {},
   methods: {
-    syncBadge: function syncBadge() {
-      var n = this.unreadCount;
-      if (n > 0) {
-        uni.setTabBarBadge({
-          index: 2,
-          text: n > 99 ? '99+' : '' + n,
-          fail: function fail() {}
-        });
-      } else {
-        uni.removeTabBarBadge({
-          index: 2,
-          fail: function fail() {}
-        });
-      }
-    },
     setDay: function setDay(i) {
       this.$store.commit('SET_DAY', i);
     },
@@ -379,7 +362,7 @@ __webpack_require__.r(__webpack_exports__);
       });
     },
     goMsg: function goMsg() {
-      uni.switchTab({
+      uni.navigateTo({
         url: '/pages/message/message'
       });
     },

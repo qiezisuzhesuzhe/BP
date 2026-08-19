@@ -38,7 +38,7 @@
 
     <!-- 血压 -->
     <view class="wrap">
-      <view class="sec-head sec-head--first">
+      <view class="sec-head">
         <text class="sec-title">血压</text>
         <view class="bp-tag" :style="{ background: bp.bg, color: bp.color }">
           <text class="bp-tag__dot" :style="{ background: bp.color }"></text>
@@ -60,7 +60,7 @@
 
     <!-- 步数 -->
     <view class="wrap">
-      <view class="sec-head sec-head--first">
+      <view class="sec-head">
         <text class="sec-title">今日活动</text>
         <text class="sec-sub">每 1 分钟自动刷新</text>
       </view>
@@ -224,6 +224,40 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+/* ---------- 页面容器 ---------- */
+.wrap {
+  height: auto;
+  padding: $space-4 $space-4 0;
+}
+
+/* 非首个容器顶部贴齐：卡片间距由自身撑开，区块标题由 sec-head 撑开 */
+.wrap:not(.wrap--first) {
+  padding-top: 0;
+}
+
+/* ---------- 区块标题 ---------- */
+.sec-head {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  margin-top: $space-sec-head-top;
+  margin-bottom: $space-sec-head-bottom;
+}
+
+.sec-title {
+  font-size: $font-size-lg;
+  font-weight: $font-weight-heavy;
+  line-height: $line-height-tight;
+  color: $text-primary;
+  letter-spacing: 1rpx;
+}
+
+.sec-sub {
+  font-size: $font-size-xs;
+  color: $text-muted;
+  margin-top: $space-2;
+}
+
 .head {
   display: flex;
   align-items: center;
@@ -310,6 +344,7 @@ export default {
 
 /* 心率卡 */
 .hr {
+  margin-top: $space-4;
   background: linear-gradient(140deg, $brand-primary-hover 0%, $brand-green 100%);
   border-radius: $radius-card-child;
   padding: $space-4;

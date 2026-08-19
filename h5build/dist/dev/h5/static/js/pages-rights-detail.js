@@ -283,6 +283,92 @@ var render = function () {
               ],
               1
             ),
+            !_vm.right.wecomAdded
+              ? _c(
+                  "v-uni-view",
+                  { staticClass: "hm-card entry" },
+                  [
+                    _c(
+                      "v-uni-view",
+                      { staticClass: "entry__left" },
+                      [
+                        _c(
+                          "v-uni-view",
+                          {
+                            staticClass: "entry__badge",
+                            style: { background: _vm.right.accentSoft },
+                          },
+                          [
+                            _c("v-uni-text", {
+                              staticClass:
+                                "entry__badge-icon fa-solid fa-user-doctor",
+                              style: { color: _vm.right.accent },
+                            }),
+                          ],
+                          1
+                        ),
+                        _c(
+                          "v-uni-view",
+                          { staticClass: "entry__main" },
+                          [
+                            _c("v-uni-text", { staticClass: "entry__t" }, [
+                              _vm._v("加企业微信 · 1v1 专属管理师"),
+                            ]),
+                            _c("v-uni-text", { staticClass: "entry__d" }, [
+                              _vm._v(
+                                "添加后将协助您完成首次健康问询，并全程跟踪方案"
+                              ),
+                            ]),
+                          ],
+                          1
+                        ),
+                      ],
+                      1
+                    ),
+                    _c(
+                      "v-uni-view",
+                      {
+                        staticClass: "entry__btn",
+                        on: {
+                          click: function ($event) {
+                            arguments[0] = $event = _vm.$handleEvent($event)
+                            _vm.openWecom.apply(void 0, arguments)
+                          },
+                        },
+                      },
+                      [
+                        _c("v-uni-text", { staticClass: "entry__btn-t" }, [
+                          _vm._v("立即添加"),
+                        ]),
+                      ],
+                      1
+                    ),
+                  ],
+                  1
+                )
+              : _c(
+                  "v-uni-view",
+                  { staticClass: "hm-card entry entry--done" },
+                  [
+                    _c("v-uni-view", {
+                      staticClass: "entry__ok fa-solid fa-circle-check",
+                    }),
+                    _c(
+                      "v-uni-view",
+                      { staticClass: "entry__main" },
+                      [
+                        _c("v-uni-text", { staticClass: "entry__t" }, [
+                          _vm._v("已添加健康管理师 · 李静"),
+                        ]),
+                        _c("v-uni-text", { staticClass: "entry__d" }, [
+                          _vm._v("您可在对话中随时发起沟通，或开始首次问询"),
+                        ]),
+                      ],
+                      1
+                    ),
+                  ],
+                  1
+                ),
             _c(
               "v-uni-view",
               { staticClass: "sec" },
@@ -514,22 +600,10 @@ var render = function () {
                   { staticClass: "buybar__l" },
                   [
                     _c("v-uni-text", { staticClass: "buybar__t" }, [
-                      _vm._v(
-                        _vm._s(
-                          _vm.right.chatStarted
-                            ? "方案进行中"
-                            : "请完成首次问询"
-                        )
-                      ),
+                      _vm._v(_vm._s(_vm.ctaHint)),
                     ]),
                     _c("v-uni-text", { staticClass: "buybar__d" }, [
-                      _vm._v(
-                        _vm._s(
-                          _vm.right.chatStarted
-                            ? "每日健康指导已推送至首页"
-                            : "约 2 分钟，共 5 个问题"
-                        )
-                      ),
+                      _vm._v(_vm._s(_vm.ctaDesc)),
                     ]),
                   ],
                   1
@@ -548,13 +622,7 @@ var render = function () {
                   },
                   [
                     _c("v-uni-text", { staticClass: "buybar__btn-t" }, [
-                      _vm._v(
-                        _vm._s(
-                          _vm.right.chatStarted
-                            ? "继续健康对话"
-                            : "开始首次问询"
-                        )
-                      ),
+                      _vm._v(_vm._s(_vm.ctaLabel)),
                     ]),
                   ],
                   1
@@ -563,6 +631,252 @@ var render = function () {
               1
             ),
           ],
+      _vm.wecom.show
+        ? _c(
+            "v-uni-view",
+            { staticClass: "mask" },
+            [
+              _c(
+                "v-uni-view",
+                { staticClass: "sheet" },
+                [
+                  _vm.wecom.step === 1
+                    ? _c(
+                        "v-uni-view",
+                        { staticClass: "sheet__pane" },
+                        [
+                          _c("v-uni-text", {
+                            staticClass: "sheet__icon fa-solid fa-user-doctor",
+                          }),
+                          _c("v-uni-text", { staticClass: "sheet__t" }, [
+                            _vm._v("添加您的专属健康管理师"),
+                          ]),
+                          _c("v-uni-text", { staticClass: "sheet__d" }, [
+                            _vm._v(
+                              "添加企业微信后，管理师将协助您完成首次健康问询，并全程跟踪服务方案"
+                            ),
+                          ]),
+                          _c(
+                            "v-uni-view",
+                            { staticClass: "qr" },
+                            [
+                              _c(
+                                "v-uni-view",
+                                { staticClass: "qr__box" },
+                                [
+                                  _vm._l(9, function (n) {
+                                    return _c("v-uni-view", {
+                                      key: n,
+                                      staticClass: "qr__cell",
+                                      class: { "qr__cell--on": _vm.qrOn(n) },
+                                    })
+                                  }),
+                                  _c(
+                                    "v-uni-view",
+                                    { staticClass: "qr__logo" },
+                                    [
+                                      _c(
+                                        "v-uni-text",
+                                        { staticClass: "qr__logo-t" },
+                                        [_vm._v("企")]
+                                      ),
+                                    ],
+                                    1
+                                  ),
+                                ],
+                                2
+                              ),
+                              _c("v-uni-text", { staticClass: "qr__hint" }, [
+                                _vm._v("长按识别二维码 · 企业微信认证"),
+                              ]),
+                            ],
+                            1
+                          ),
+                          _c(
+                            "v-uni-view",
+                            { staticClass: "who" },
+                            [
+                              _c(
+                                "v-uni-view",
+                                { staticClass: "who__avatar" },
+                                [
+                                  _c(
+                                    "v-uni-text",
+                                    { staticClass: "who__avatar-t" },
+                                    [_vm._v("李")]
+                                  ),
+                                ],
+                                1
+                              ),
+                              _c(
+                                "v-uni-view",
+                                { staticClass: "who__main" },
+                                [
+                                  _c(
+                                    "v-uni-text",
+                                    { staticClass: "who__name" },
+                                    [_vm._v("李静 · 高级健康管理师")]
+                                  ),
+                                  _c(
+                                    "v-uni-text",
+                                    { staticClass: "who__meta" },
+                                    [_vm._v("中级营养师 / 8 年慢病管理经验")]
+                                  ),
+                                ],
+                                1
+                              ),
+                              _c(
+                                "v-uni-view",
+                                { staticClass: "who__badge" },
+                                [
+                                  _c(
+                                    "v-uni-text",
+                                    { staticClass: "who__badge-t" },
+                                    [_vm._v("认证")]
+                                  ),
+                                ],
+                                1
+                              ),
+                            ],
+                            1
+                          ),
+                          _c(
+                            "v-uni-view",
+                            {
+                              staticClass: "sheet__btn",
+                              on: {
+                                click: function ($event) {
+                                  arguments[0] = $event =
+                                    _vm.$handleEvent($event)
+                                  _vm.stepAdd.apply(void 0, arguments)
+                                },
+                              },
+                            },
+                            [
+                              _c(
+                                "v-uni-text",
+                                { staticClass: "sheet__btn-t" },
+                                [_vm._v("已保存二维码，添加好友")]
+                              ),
+                            ],
+                            1
+                          ),
+                          _c(
+                            "v-uni-text",
+                            {
+                              staticClass: "sheet__cancel",
+                              on: {
+                                click: function ($event) {
+                                  arguments[0] = $event =
+                                    _vm.$handleEvent($event)
+                                  _vm.closeWecom.apply(void 0, arguments)
+                                },
+                              },
+                            },
+                            [_vm._v("稍后再说")]
+                          ),
+                        ],
+                        1
+                      )
+                    : _vm.wecom.step === 2
+                    ? _c(
+                        "v-uni-view",
+                        { staticClass: "sheet__pane sheet__pane--center" },
+                        [
+                          _c("v-uni-view", { staticClass: "spin" }),
+                          _c("v-uni-text", { staticClass: "sheet__t" }, [
+                            _vm._v("正在发送好友申请…"),
+                          ]),
+                          _c("v-uni-text", { staticClass: "sheet__d" }, [
+                            _vm._v("管理师将在 1 分钟内通过您的申请"),
+                          ]),
+                        ],
+                        1
+                      )
+                    : _c(
+                        "v-uni-view",
+                        { staticClass: "sheet__pane sheet__pane--center" },
+                        [
+                          _c(
+                            "v-uni-view",
+                            { staticClass: "ok" },
+                            [
+                              _c("v-uni-text", { staticClass: "ok__t" }, [
+                                _vm._v("✓"),
+                              ]),
+                            ],
+                            1
+                          ),
+                          _c("v-uni-text", { staticClass: "sheet__t" }, [
+                            _vm._v("已添加成功"),
+                          ]),
+                          _c("v-uni-text", { staticClass: "sheet__d" }, [
+                            _vm._v(
+                              "李静 已通过您的好友申请，对话页会询问是否激活本服务包"
+                            ),
+                          ]),
+                          _c(
+                            "v-uni-view",
+                            { staticClass: "sheet__row" },
+                            [
+                              _c(
+                                "v-uni-view",
+                                {
+                                  staticClass: "sheet__btn sheet__btn--sub",
+                                  on: {
+                                    click: function ($event) {
+                                      arguments[0] = $event =
+                                        _vm.$handleEvent($event)
+                                      _vm.closeWecom.apply(void 0, arguments)
+                                    },
+                                  },
+                                },
+                                [
+                                  _c(
+                                    "v-uni-text",
+                                    {
+                                      staticClass:
+                                        "sheet__btn-t sheet__btn-t--sub",
+                                    },
+                                    [_vm._v("先看权益")]
+                                  ),
+                                ],
+                                1
+                              ),
+                              _c(
+                                "v-uni-view",
+                                {
+                                  staticClass: "sheet__btn",
+                                  on: {
+                                    click: function ($event) {
+                                      arguments[0] = $event =
+                                        _vm.$handleEvent($event)
+                                      _vm.enterChat.apply(void 0, arguments)
+                                    },
+                                  },
+                                },
+                                [
+                                  _c(
+                                    "v-uni-text",
+                                    { staticClass: "sheet__btn-t" },
+                                    [_vm._v("进入对话")]
+                                  ),
+                                ],
+                                1
+                              ),
+                            ],
+                            1
+                          ),
+                        ],
+                        1
+                      ),
+                ],
+                1
+              ),
+            ],
+            1
+          )
+        : _vm._e(),
     ],
     2
   )
@@ -688,7 +1002,7 @@ if(false) {}
 var ___CSS_LOADER_API_IMPORT___ = __webpack_require__(/*! ../../../node_modules/css-loader/dist/runtime/api.js */ "JPst");
 exports = ___CSS_LOADER_API_IMPORT___(false);
 // Module
-exports.push([module.i, "@charset \"UTF-8\";\n/* 安康健康管理 · 设计令牌\n   来源：/workspace/DESIGN.md\n   方案：rpx + SCSS 变量（1px = 2rpx，基于 750rpx 设计基准） */\n/* ---------- 品牌色 ---------- */\n/* ---------- 头像 ---------- */\n/* ---------- 语义状态色 ---------- */\n/* ---------- 金色（尊享装饰） ---------- */\n/* ---------- 背景 ---------- */\n/* 斜向两色渐变：左上(#ddf7ed) → 右下(#f3f3f3)，末端即底色；\n   配合 App.vue 中 background-attachment: fixed 铺满视口固定，不随页面滚动/变长 */\n/* ---------- 文字 ---------- */\n/* ---------- 描边 / 遮罩 ---------- */\n/* ---------- 字体 ---------- */\n/* 英文/数字优先匹配 DIN Pro（Mac 自带 DIN Alternate 作为备选），中文回退苹方/雅黑 */\n/* 移动端最小舒适字号（可读正文下限）：\n   说明/入口/数据标签等可读文字不得小于 12px(24rpx)；\n   $font-size-2xs(10px) 仅限角标、徽标、装饰性元素 */\n/* ---------- 语义排版 ---------- */\n/* ---------- 间距 ---------- */\n/* ---------- 区块标题 ---------- */\n/* 标题下间距 = 列表间距；上间距 = 下间距 × 2 */\n/* ---------- 尺寸 ---------- */\n/* ---------- 圆角（已减半，更克制干净） ---------- */\n/* ---------- 阴影 ---------- */\n/* ---------- 层级 ---------- */\n/* ---------- 动效 ---------- */\n.top[data-v-3a209140] {\n  background: transparent;\n  padding-bottom: %?40?%;\n}\n.top__body[data-v-3a209140] {\n  padding: %?16?% %?32?% 0;\n}\n.top__row[data-v-3a209140] {\n  display: flex;\n  align-items: center;\n}\n.top__emoji[data-v-3a209140] {\n  color: rgba(0, 0, 0, 0.1);\n  width: %?96?%;\n  height: %?96?%;\n  border-radius: %?20?%;\n  background: #ffffff;\n  box-shadow: 0 %?4?% %?24?% rgba(15, 61, 53, 0.06);\n  font-size: %?48?%;\n  text-align: center;\n  line-height: %?96?%;\n  margin-right: %?24?%;\n}\n.top__main[data-v-3a209140] {\n  flex: 1;\n}\n.top__name[data-v-3a209140] {\n  display: block;\n  font-size: %?56?%;\n  font-weight: 800;\n  line-height: 1.1;\n  color: #1a2a3c;\n  letter-spacing: %?1?%;\n}\n.top__sub[data-v-3a209140] {\n  display: block;\n  margin-top: %?8?%;\n  font-size: %?24?%;\n  color: #64748b;\n  line-height: 1.4;\n}\n.top__chips[data-v-3a209140] {\n  display: flex;\n  flex-wrap: wrap;\n  margin-top: %?24?%;\n}\n.chip[data-v-3a209140] {\n  padding: %?8?% %?24?%;\n  border-radius: %?999?%;\n  background: rgba(212, 245, 238, 0.72);\n  border: %?1?% solid rgba(56, 154, 130, 0.12);\n  margin-right: %?16?%;\n  margin-bottom: %?8?%;\n}\n.chip__t[data-v-3a209140] {\n  font-size: %?20?%;\n  color: #389a82;\n}\n.hm-card[data-v-3a209140] {\n  margin: %?32?% %?32?% 0;\n  padding: %?24?%;\n}\n.prog__head[data-v-3a209140] {\n  display: flex;\n  justify-content: space-between;\n  align-items: baseline;\n}\n.prog__t[data-v-3a209140] {\n  font-size: %?28?%;\n  font-weight: 600;\n  color: #1a2a3c;\n}\n.prog__n[data-v-3a209140] {\n  font-size: %?24?%;\n  color: #64748b;\n}\n.prog__bar[data-v-3a209140] {\n  height: %?16?%;\n  border-radius: %?999?%;\n  background: #f2f7fa;\n  margin-top: %?16?%;\n  overflow: hidden;\n}\n.prog__fill[data-v-3a209140] {\n  height: 100%;\n  border-radius: %?999?%;\n}\n.prog__foot[data-v-3a209140] {\n  display: flex;\n  justify-content: space-between;\n  margin-top: %?16?%;\n}\n.prog__d[data-v-3a209140] {\n  font-size: %?20?%;\n  color: #94a3b8;\n}\n.stat[data-v-3a209140] {\n  display: flex;\n  align-items: center;\n}\n.stat__i[data-v-3a209140] {\n  flex: 1;\n  text-align: center;\n}\n.stat__n[data-v-3a209140] {\n  display: block;\n  font-size: %?36?%;\n  font-weight: 700;\n}\n.stat__l[data-v-3a209140] {\n  display: block;\n  margin-top: %?8?%;\n  font-size: %?20?%;\n  color: #64748b;\n}\n.stat__sep[data-v-3a209140] {\n  width: %?1?%;\n  height: %?64?%;\n  background: #f2f7fa;\n}\n.sec[data-v-3a209140] {\n  padding: %?40?% %?32?% %?16?%;\n  display: flex;\n  align-items: baseline;\n  justify-content: space-between;\n}\n.srv[data-v-3a209140] {\n  display: flex;\n  align-items: center;\n  padding-bottom: %?24?%;\n  margin-bottom: %?24?%;\n  border-bottom: %?1?% solid rgba(15, 61, 53, 0.06);\n}\n.srv--last[data-v-3a209140] {\n  padding-bottom: 0;\n  margin-bottom: 0;\n  border-bottom: none;\n}\n.srv__dot[data-v-3a209140] {\n  width: %?48?%;\n  height: %?48?%;\n  border-radius: %?6?%;\n  text-align: center;\n  line-height: %?48?%;\n  margin-right: %?24?%;\n}\n.srv__dot-t[data-v-3a209140] {\n  font-size: %?24?%;\n  font-weight: 700;\n}\n.srv__main[data-v-3a209140] {\n  flex: 1;\n}\n.srv__name[data-v-3a209140] {\n  display: block;\n  font-size: %?28?%;\n  font-weight: 600;\n  color: #1a2a3c;\n}\n.srv__spec[data-v-3a209140] {\n  display: block;\n  margin-top: %?8?%;\n  font-size: %?24?%;\n  color: #64748b;\n}\n.srv__tag[data-v-3a209140] {\n  padding: %?8?% %?16?%;\n  border-radius: %?999?%;\n  font-size: %?20?%;\n}\n.row[data-v-3a209140] {\n  display: flex;\n  justify-content: space-between;\n  align-items: center;\n  padding: %?24?% 0;\n  border-bottom: %?1?% solid rgba(15, 61, 53, 0.06);\n}\n.row[data-v-3a209140]:last-child {\n  border-bottom: none;\n}\n.row__l[data-v-3a209140] {\n  font-size: %?28?%;\n  color: #64748b;\n}\n.row__v[data-v-3a209140] {\n  font-size: %?28?%;\n  color: #1a2a3c;\n  font-weight: 500;\n}\n.row__v--mono[data-v-3a209140] {\n  font-size: %?24?%;\n  letter-spacing: %?1?%;\n}\n.row__v--price[data-v-3a209140] {\n  color: #f15533;\n  font-weight: 700;\n}\n.row__v--link[data-v-3a209140] {\n  color: #389a82;\n}\n.note__p[data-v-3a209140] {\n  display: block;\n  font-size: %?24?%;\n  color: #64748b;\n  line-height: 1.6;\n  margin-bottom: %?16?%;\n}\n.note__p[data-v-3a209140]:last-child {\n  margin-bottom: 0;\n}\n.bar-holder[data-v-3a209140] {\n  height: calc(env(safe-area-inset-bottom) + %?144?%);\n}\n.buybar[data-v-3a209140] {\n  position: fixed;\n  left: 0;\n  right: 0;\n  bottom: 0;\n  z-index: 3000;\n  display: flex;\n  align-items: center;\n  padding: %?16?% %?32?%;\n  padding-bottom: calc(env(safe-area-inset-bottom) + %?16?%);\n  background: rgba(255, 255, 255, 0.78);\n  -webkit-backdrop-filter: blur(18px) saturate(180%);\n          backdrop-filter: blur(18px) saturate(180%);\n  box-shadow: 0 %?16?% %?96?% rgba(15, 61, 53, 0.1);\n}\n.buybar__l[data-v-3a209140] {\n  flex: 1;\n}\n.buybar__t[data-v-3a209140] {\n  display: block;\n  font-size: %?28?%;\n  font-weight: 600;\n  color: #1a2a3c;\n}\n.buybar__d[data-v-3a209140] {\n  display: block;\n  margin-top: %?8?%;\n  font-size: %?20?%;\n  color: #94a3b8;\n}\n.buybar__btn[data-v-3a209140] {\n  padding: %?24?% %?40?%;\n  border-radius: %?999?%;\n  box-shadow: 0 %?12?% %?48?% rgba(125, 212, 188, 0.18);\n}\n.buybar__btn-t[data-v-3a209140] {\n  font-size: %?28?%;\n  font-weight: 700;\n  color: #ffffff;\n}\n.miss[data-v-3a209140] {\n  padding-bottom: %?96?%;\n  text-align: center;\n}\n.miss__icon[data-v-3a209140] {\n  display: block;\n  margin-top: %?96?%;\n  font-size: %?88?%;\n}\n.miss__t[data-v-3a209140] {\n  display: block;\n  margin-top: %?24?%;\n  font-size: %?32?%;\n  color: #64748b;\n}\n.miss__btn[data-v-3a209140] {\n  display: inline-block;\n  margin-top: %?40?%;\n  padding: %?24?% %?48?%;\n  border-radius: %?999?%;\n  background: #7dd4bc;\n}\n.miss__btn-t[data-v-3a209140] {\n  font-size: %?28?%;\n  font-weight: 600;\n  color: #ffffff;\n}", ""]);
+exports.push([module.i, "@charset \"UTF-8\";\n/* 安康健康管理 · 设计令牌\n   来源：/workspace/DESIGN.md\n   方案：rpx + SCSS 变量（1px = 2rpx，基于 750rpx 设计基准） */\n/* ---------- 品牌色 ---------- */\n/* ---------- 头像 ---------- */\n/* ---------- 语义状态色 ---------- */\n/* ---------- 金色（尊享装饰） ---------- */\n/* ---------- 背景 ---------- */\n/* 斜向两色渐变：左上(#ddf7ed) → 右下(#f3f3f3)，末端即底色；\n   配合 App.vue 中 background-attachment: fixed 铺满视口固定，不随页面滚动/变长 */\n/* ---------- 文字 ---------- */\n/* ---------- 描边 / 遮罩 ---------- */\n/* ---------- 字体 ---------- */\n/* 英文/数字优先匹配 DIN Pro（Mac 自带 DIN Alternate 作为备选），中文回退苹方/雅黑 */\n/* 移动端最小舒适字号（可读正文下限）：\n   说明/入口/数据标签等可读文字不得小于 12px(24rpx)；\n   $font-size-2xs(10px) 仅限角标、徽标、装饰性元素 */\n/* ---------- 语义排版 ---------- */\n/* ---------- 间距 ---------- */\n/* ---------- 区块标题 ---------- */\n/* 标题下间距 = 列表间距；上间距 = 下间距 × 2 */\n/* ---------- 尺寸 ---------- */\n/* ---------- 圆角（已减半，更克制干净） ---------- */\n/* ---------- 阴影 ---------- */\n/* ---------- 层级 ---------- */\n/* ---------- 动效 ---------- */\n.top[data-v-3a209140] {\n  background: transparent;\n  padding-bottom: %?40?%;\n}\n.top__body[data-v-3a209140] {\n  padding: %?16?% %?32?% 0;\n}\n.top__row[data-v-3a209140] {\n  display: flex;\n  align-items: center;\n}\n.top__emoji[data-v-3a209140] {\n  color: rgba(0, 0, 0, 0.1);\n  width: %?96?%;\n  height: %?96?%;\n  border-radius: %?20?%;\n  background: #ffffff;\n  box-shadow: 0 %?4?% %?24?% rgba(15, 61, 53, 0.06);\n  font-size: %?48?%;\n  text-align: center;\n  line-height: %?96?%;\n  margin-right: %?24?%;\n}\n.top__main[data-v-3a209140] {\n  flex: 1;\n}\n.top__name[data-v-3a209140] {\n  display: block;\n  font-size: %?56?%;\n  font-weight: 800;\n  line-height: 1.1;\n  color: #1a2a3c;\n  letter-spacing: %?1?%;\n}\n.top__sub[data-v-3a209140] {\n  display: block;\n  margin-top: %?8?%;\n  font-size: %?24?%;\n  color: #64748b;\n  line-height: 1.4;\n}\n.top__chips[data-v-3a209140] {\n  display: flex;\n  flex-wrap: wrap;\n  margin-top: %?24?%;\n}\n.chip[data-v-3a209140] {\n  padding: %?8?% %?24?%;\n  border-radius: %?999?%;\n  background: rgba(212, 245, 238, 0.72);\n  border: %?1?% solid rgba(56, 154, 130, 0.12);\n  margin-right: %?16?%;\n  margin-bottom: %?8?%;\n}\n.chip__t[data-v-3a209140] {\n  font-size: %?20?%;\n  color: #389a82;\n}\n.hm-card[data-v-3a209140] {\n  margin: %?32?% %?32?% 0;\n  padding: %?24?%;\n}\n.prog__head[data-v-3a209140] {\n  display: flex;\n  justify-content: space-between;\n  align-items: baseline;\n}\n.prog__t[data-v-3a209140] {\n  font-size: %?28?%;\n  font-weight: 600;\n  color: #1a2a3c;\n}\n.prog__n[data-v-3a209140] {\n  font-size: %?24?%;\n  color: #64748b;\n}\n.prog__bar[data-v-3a209140] {\n  height: %?16?%;\n  border-radius: %?999?%;\n  background: #f2f7fa;\n  margin-top: %?16?%;\n  overflow: hidden;\n}\n.prog__fill[data-v-3a209140] {\n  height: 100%;\n  border-radius: %?999?%;\n}\n.prog__foot[data-v-3a209140] {\n  display: flex;\n  justify-content: space-between;\n  margin-top: %?16?%;\n}\n.prog__d[data-v-3a209140] {\n  font-size: %?20?%;\n  color: #94a3b8;\n}\n.stat[data-v-3a209140] {\n  display: flex;\n  align-items: center;\n}\n.stat__i[data-v-3a209140] {\n  flex: 1;\n  text-align: center;\n}\n.stat__n[data-v-3a209140] {\n  display: block;\n  font-size: %?36?%;\n  font-weight: 700;\n}\n.stat__l[data-v-3a209140] {\n  display: block;\n  margin-top: %?8?%;\n  font-size: %?20?%;\n  color: #64748b;\n}\n.stat__sep[data-v-3a209140] {\n  width: %?1?%;\n  height: %?64?%;\n  background: #f2f7fa;\n}\n.sec[data-v-3a209140] {\n  padding: %?40?% %?32?% %?16?%;\n  display: flex;\n  align-items: baseline;\n  justify-content: space-between;\n}\n.srv[data-v-3a209140] {\n  display: flex;\n  align-items: center;\n  padding-bottom: %?24?%;\n  margin-bottom: %?24?%;\n  border-bottom: %?1?% solid rgba(15, 61, 53, 0.06);\n}\n.srv--last[data-v-3a209140] {\n  padding-bottom: 0;\n  margin-bottom: 0;\n  border-bottom: none;\n}\n.srv__dot[data-v-3a209140] {\n  width: %?48?%;\n  height: %?48?%;\n  border-radius: %?6?%;\n  text-align: center;\n  line-height: %?48?%;\n  margin-right: %?24?%;\n}\n.srv__dot-t[data-v-3a209140] {\n  font-size: %?24?%;\n  font-weight: 700;\n}\n.srv__main[data-v-3a209140] {\n  flex: 1;\n}\n.srv__name[data-v-3a209140] {\n  display: block;\n  font-size: %?28?%;\n  font-weight: 600;\n  color: #1a2a3c;\n}\n.srv__spec[data-v-3a209140] {\n  display: block;\n  margin-top: %?8?%;\n  font-size: %?24?%;\n  color: #64748b;\n}\n.srv__tag[data-v-3a209140] {\n  padding: %?8?% %?16?%;\n  border-radius: %?999?%;\n  font-size: %?20?%;\n}\n.row[data-v-3a209140] {\n  display: flex;\n  justify-content: space-between;\n  align-items: center;\n  padding: %?24?% 0;\n  border-bottom: %?1?% solid rgba(15, 61, 53, 0.06);\n}\n.row[data-v-3a209140]:last-child {\n  border-bottom: none;\n}\n.row__l[data-v-3a209140] {\n  font-size: %?28?%;\n  color: #64748b;\n}\n.row__v[data-v-3a209140] {\n  font-size: %?28?%;\n  color: #1a2a3c;\n  font-weight: 500;\n}\n.row__v--mono[data-v-3a209140] {\n  font-size: %?24?%;\n  letter-spacing: %?1?%;\n}\n.row__v--price[data-v-3a209140] {\n  color: #f15533;\n  font-weight: 700;\n}\n.row__v--link[data-v-3a209140] {\n  color: #389a82;\n}\n.note__p[data-v-3a209140] {\n  display: block;\n  font-size: %?24?%;\n  color: #64748b;\n  line-height: 1.6;\n  margin-bottom: %?16?%;\n}\n.note__p[data-v-3a209140]:last-child {\n  margin-bottom: 0;\n}\n.bar-holder[data-v-3a209140] {\n  height: calc(env(safe-area-inset-bottom) + %?144?%);\n}\n.buybar[data-v-3a209140] {\n  position: fixed;\n  left: 0;\n  right: 0;\n  bottom: 0;\n  z-index: 3000;\n  display: flex;\n  align-items: center;\n  padding: %?16?% %?32?%;\n  padding-bottom: calc(env(safe-area-inset-bottom) + %?16?%);\n  background: rgba(255, 255, 255, 0.78);\n  -webkit-backdrop-filter: blur(18px) saturate(180%);\n          backdrop-filter: blur(18px) saturate(180%);\n  box-shadow: 0 %?16?% %?96?% rgba(15, 61, 53, 0.1);\n}\n.buybar__l[data-v-3a209140] {\n  flex: 1;\n}\n.buybar__t[data-v-3a209140] {\n  display: block;\n  font-size: %?28?%;\n  font-weight: 600;\n  color: #1a2a3c;\n}\n.buybar__d[data-v-3a209140] {\n  display: block;\n  margin-top: %?8?%;\n  font-size: %?20?%;\n  color: #94a3b8;\n}\n.buybar__btn[data-v-3a209140] {\n  padding: %?24?% %?40?%;\n  border-radius: %?999?%;\n  box-shadow: 0 %?12?% %?48?% rgba(125, 212, 188, 0.18);\n}\n.buybar__btn-t[data-v-3a209140] {\n  font-size: %?28?%;\n  font-weight: 700;\n  color: #ffffff;\n}\n.miss[data-v-3a209140] {\n  padding-bottom: %?96?%;\n  text-align: center;\n}\n.miss__icon[data-v-3a209140] {\n  display: block;\n  margin-top: %?96?%;\n  font-size: %?88?%;\n}\n.miss__t[data-v-3a209140] {\n  display: block;\n  margin-top: %?24?%;\n  font-size: %?32?%;\n  color: #64748b;\n}\n.miss__btn[data-v-3a209140] {\n  display: inline-block;\n  margin-top: %?40?%;\n  padding: %?24?% %?48?%;\n  border-radius: %?999?%;\n  background: #7dd4bc;\n}\n.miss__btn-t[data-v-3a209140] {\n  font-size: %?28?%;\n  font-weight: 600;\n  color: #ffffff;\n}\n/* 健康管理师引导卡 */\n.entry[data-v-3a209140] {\n  margin: %?32?% %?32?% 0;\n  padding: %?24?%;\n  display: flex;\n  align-items: center;\n  gap: %?16?%;\n  background: #ffffff;\n  border: %?1?% solid rgba(15, 61, 53, 0.06);\n  box-shadow: 0 %?4?% %?24?% rgba(15, 61, 53, 0.06);\n}\n.entry__left[data-v-3a209140] {\n  display: flex;\n  align-items: center;\n  flex: 1;\n  min-width: 0;\n}\n.entry__badge[data-v-3a209140] {\n  width: %?64?%;\n  height: %?64?%;\n  border-radius: %?20?%;\n  display: flex;\n  align-items: center;\n  justify-content: center;\n  flex-shrink: 0;\n}\n.entry__badge-icon[data-v-3a209140] {\n  font-size: %?36?%;\n}\n.entry__main[data-v-3a209140] {\n  padding-left: %?16?%;\n  flex: 1;\n  min-width: 0;\n}\n.entry__t[data-v-3a209140] {\n  display: block;\n  font-size: %?28?%;\n  font-weight: 700;\n  color: #1a2a3c;\n}\n.entry__d[data-v-3a209140] {\n  display: block;\n  font-size: %?20?%;\n  color: #64748b;\n  margin-top: %?8?%;\n  line-height: 1.4;\n}\n.entry__btn[data-v-3a209140] {\n  padding: %?16?% %?32?%;\n  border-radius: %?999?%;\n  background: #7dd4bc;\n  flex-shrink: 0;\n  box-shadow: 0 %?4?% %?24?% rgba(15, 61, 53, 0.06);\n}\n.entry__btn-t[data-v-3a209140] {\n  color: #ffffff;\n  font-size: %?24?%;\n  font-weight: 700;\n  white-space: nowrap;\n}\n.entry--done[data-v-3a209140] {\n  background: #d4f5ee;\n  border-color: transparent;\n}\n.entry__ok[data-v-3a209140] {\n  font-size: %?48?%;\n  color: #27ae60;\n  flex-shrink: 0;\n}\n/* 加企微弹层（bottom sheet） */\n.mask[data-v-3a209140] {\n  position: fixed;\n  left: 0;\n  right: 0;\n  top: 0;\n  bottom: 0;\n  background: rgba(15, 61, 53, 0.1);\n  z-index: 4000;\n  display: flex;\n  align-items: flex-end;\n}\n.sheet[data-v-3a209140] {\n  width: 100%;\n  background: #ffffff;\n  border-top-left-radius: %?24?%;\n  border-top-right-radius: %?24?%;\n  padding: %?40?% %?40?% calc(env(safe-area-inset-bottom) + %?48?%);\n  -webkit-animation: rise-data-v-3a209140 0.28s ease-out;\n          animation: rise-data-v-3a209140 0.28s ease-out;\n}\n@-webkit-keyframes rise-data-v-3a209140 {\nfrom {\n    -webkit-transform: translateY(%?60?%);\n            transform: translateY(%?60?%);\n    opacity: 0.4;\n}\nto {\n    -webkit-transform: translateY(0);\n            transform: translateY(0);\n    opacity: 1;\n}\n}\n@keyframes rise-data-v-3a209140 {\nfrom {\n    -webkit-transform: translateY(%?60?%);\n            transform: translateY(%?60?%);\n    opacity: 0.4;\n}\nto {\n    -webkit-transform: translateY(0);\n            transform: translateY(0);\n    opacity: 1;\n}\n}\n.sheet__pane[data-v-3a209140] {\n  display: flex;\n  flex-direction: column;\n}\n.sheet__pane--center[data-v-3a209140] {\n  align-items: center;\n  padding: %?32?% 0 %?16?%;\n}\n.sheet__icon[data-v-3a209140] {\n  font-size: %?64?%;\n  text-align: center;\n}\n.sheet__t[data-v-3a209140] {\n  font-size: %?36?%;\n  font-weight: 700;\n  color: #1a2a3c;\n  text-align: center;\n  margin-top: %?16?%;\n}\n.sheet__d[data-v-3a209140] {\n  font-size: %?24?%;\n  color: #64748b;\n  text-align: center;\n  margin-top: %?16?%;\n  line-height: 1.6;\n}\n.qr[data-v-3a209140] {\n  margin-top: %?32?%;\n  display: flex;\n  flex-direction: column;\n  align-items: center;\n}\n.qr__box[data-v-3a209140] {\n  width: %?300?%;\n  height: %?300?%;\n  background: #f3f3f3;\n  border: %?1?% solid rgba(15, 61, 53, 0.06);\n  border-radius: %?20?%;\n  padding: %?16?%;\n  display: flex;\n  flex-wrap: wrap;\n  justify-content: space-between;\n  align-content: space-between;\n  position: relative;\n}\n.qr__cell[data-v-3a209140] {\n  width: %?78?%;\n  height: %?78?%;\n  border-radius: %?10?%;\n  background: #edf5f2;\n}\n.qr__cell--on[data-v-3a209140] {\n  background: #7dd4bc;\n}\n.qr__logo[data-v-3a209140] {\n  position: absolute;\n  left: 50%;\n  top: 50%;\n  width: %?78?%;\n  height: %?78?%;\n  margin: %?-39?% 0 0 %?-39?%;\n  border-radius: %?14?%;\n  background: #ffffff;\n  border: %?4?% solid #7dd4bc;\n  display: flex;\n  align-items: center;\n  justify-content: center;\n}\n.qr__logo-t[data-v-3a209140] {\n  font-size: %?36?%;\n  font-weight: 700;\n  color: #389a82;\n}\n.qr__hint[data-v-3a209140] {\n  font-size: %?20?%;\n  color: #94a3b8;\n  margin-top: %?16?%;\n}\n.who[data-v-3a209140] {\n  margin-top: %?32?%;\n  background: #d4f5ee;\n  border-radius: %?20?%;\n  padding: %?24?%;\n  display: flex;\n  align-items: center;\n}\n.who__avatar[data-v-3a209140] {\n  width: %?64?%;\n  height: %?64?%;\n  border-radius: 50%;\n  background: #7dd4bc;\n  display: flex;\n  align-items: center;\n  justify-content: center;\n}\n.who__avatar-t[data-v-3a209140] {\n  color: #ffffff;\n  font-size: %?32?%;\n  font-weight: 700;\n}\n.who__main[data-v-3a209140] {\n  flex: 1;\n  padding: 0 %?16?%;\n}\n.who__name[data-v-3a209140] {\n  display: block;\n  font-size: %?28?%;\n  font-weight: 700;\n  color: #389a82;\n}\n.who__meta[data-v-3a209140] {\n  display: block;\n  font-size: %?20?%;\n  color: #389a82;\n  opacity: 0.8;\n  margin-top: %?8?%;\n}\n.who__badge[data-v-3a209140] {\n  background: #7dd4bc;\n  border-radius: %?999?%;\n  padding: %?8?% %?16?%;\n}\n.who__badge-t[data-v-3a209140] {\n  color: #ffffff;\n  font-size: %?20?%;\n}\n.sheet__row[data-v-3a209140] {\n  width: 100%;\n  margin-top: %?32?%;\n  display: flex;\n  gap: %?16?%;\n}\n.sheet__btn[data-v-3a209140] {\n  flex: 1;\n  background: #7dd4bc;\n  border-radius: %?999?%;\n  padding: %?24?% 0;\n  text-align: center;\n  box-shadow: 0 %?4?% %?24?% rgba(15, 61, 53, 0.06);\n}\n.sheet__btn--sub[data-v-3a209140] {\n  background: transparent;\n  border: %?1?% solid #c6d2de;\n  box-shadow: none;\n}\n.sheet__btn-t[data-v-3a209140] {\n  color: #ffffff;\n  font-size: %?32?%;\n  font-weight: 700;\n  letter-spacing: %?1?%;\n}\n.sheet__btn-t--sub[data-v-3a209140] {\n  color: #334155;\n}\n.sheet__cancel[data-v-3a209140] {\n  text-align: center;\n  font-size: %?24?%;\n  color: #94a3b8;\n  margin-top: %?24?%;\n}\n.spin[data-v-3a209140] {\n  width: %?64?%;\n  height: %?64?%;\n  border: %?4?% solid rgba(15, 61, 53, 0.06);\n  border-top-color: #389a82;\n  border-radius: 50%;\n  -webkit-animation: spin-data-v-3a209140 0.8s linear infinite;\n          animation: spin-data-v-3a209140 0.8s linear infinite;\n}\n@-webkit-keyframes spin-data-v-3a209140 {\nto {\n    -webkit-transform: rotate(360deg);\n            transform: rotate(360deg);\n}\n}\n@keyframes spin-data-v-3a209140 {\nto {\n    -webkit-transform: rotate(360deg);\n            transform: rotate(360deg);\n}\n}\n.ok[data-v-3a209140] {\n  width: %?96?%;\n  height: %?96?%;\n  border-radius: 50%;\n  background: #27ae60;\n  display: flex;\n  align-items: center;\n  justify-content: center;\n  -webkit-animation: pop-data-v-3a209140 0.4s ease-out;\n          animation: pop-data-v-3a209140 0.4s ease-out;\n}\n.ok__t[data-v-3a209140] {\n  color: #ffffff;\n  font-size: %?56?%;\n  font-weight: 700;\n}\n@-webkit-keyframes pop-data-v-3a209140 {\n0% {\n    -webkit-transform: scale(0.3);\n            transform: scale(0.3);\n    opacity: 0;\n}\n60% {\n    -webkit-transform: scale(1.14);\n            transform: scale(1.14);\n    opacity: 1;\n}\n100% {\n    -webkit-transform: scale(1);\n            transform: scale(1);\n}\n}\n@keyframes pop-data-v-3a209140 {\n0% {\n    -webkit-transform: scale(0.3);\n            transform: scale(0.3);\n    opacity: 0;\n}\n60% {\n    -webkit-transform: scale(1.14);\n            transform: scale(1.14);\n    opacity: 1;\n}\n100% {\n    -webkit-transform: scale(1);\n            transform: scale(1);\n}\n}", ""]);
 // Exports
 module.exports = exports;
 
@@ -718,6 +1032,109 @@ __webpack_require__.r(__webpack_exports__);
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
+/* harmony import */ var core_js_modules_es_array_index_of_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! core-js/modules/es.array.index-of.js */ "yXV3");
+/* harmony import */ var core_js_modules_es_array_index_of_js__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_array_index_of_js__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var core_js_modules_es_array_push_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! core-js/modules/es.array.push.js */ "FNk8");
+/* harmony import */ var core_js_modules_es_array_push_js__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_array_push_js__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var core_js_modules_es_iterator_constructor_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! core-js/modules/es.iterator.constructor.js */ "6fVz");
+/* harmony import */ var core_js_modules_es_iterator_constructor_js__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_iterator_constructor_js__WEBPACK_IMPORTED_MODULE_2__);
+/* harmony import */ var core_js_modules_es_iterator_for_each_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! core-js/modules/es.iterator.for-each.js */ "fVRX");
+/* harmony import */ var core_js_modules_es_iterator_for_each_js__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_iterator_for_each_js__WEBPACK_IMPORTED_MODULE_3__);
+/* harmony import */ var core_js_modules_es_object_to_string_js__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! core-js/modules/es.object.to-string.js */ "07d7");
+/* harmony import */ var core_js_modules_es_object_to_string_js__WEBPACK_IMPORTED_MODULE_4___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_object_to_string_js__WEBPACK_IMPORTED_MODULE_4__);
+/* harmony import */ var core_js_modules_web_dom_collections_for_each_js__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! core-js/modules/web.dom-collections.for-each.js */ "FZtP");
+/* harmony import */ var core_js_modules_web_dom_collections_for_each_js__WEBPACK_IMPORTED_MODULE_5___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_web_dom_collections_for_each_js__WEBPACK_IMPORTED_MODULE_5__);
+
+
+
+
+
+
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 //
 //
 //
@@ -864,7 +1281,12 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
-      id: ''
+      id: '',
+      wecom: {
+        show: false,
+        step: 1
+      },
+      timers: []
     };
   },
   computed: {
@@ -897,6 +1319,28 @@ __webpack_require__.r(__webpack_exports__);
       if (!r) return '';
       var o = this.$store.getters.orderByNo(r.orderNo);
       return o && o.payAt || r.startAt;
+    },
+    // 底部 CTA 文案（三步状态）
+    ctaLabel: function ctaLabel() {
+      var r = this.right;
+      if (!r) return '';
+      if (!r.wecomAdded) return '添加企业微信';
+      if (r.chatStarted) return '继续健康对话';
+      return '开始首次问询';
+    },
+    ctaHint: function ctaHint() {
+      var r = this.right;
+      if (!r) return '';
+      if (!r.wecomAdded) return '先加健康管理师';
+      if (r.chatStarted) return '方案进行中';
+      return '请完成首次问询';
+    },
+    ctaDesc: function ctaDesc() {
+      var r = this.right;
+      if (!r) return '';
+      if (!r.wecomAdded) return '1v1 专属管理师协助激活服务包';
+      if (r.chatStarted) return '每日健康指导已推送至首页';
+      return '约 2 分钟，共 5 个问题';
     }
   },
   onLoad: function onLoad(opt) {
@@ -906,25 +1350,51 @@ __webpack_require__.r(__webpack_exports__);
       if (a) this.id = a.id;
     }
   },
+  onUnload: function onUnload() {
+    this.timers.forEach(function (t) {
+      return clearTimeout(t);
+    });
+    this.timers = [];
+  },
   methods: {
+    delay: function delay(fn, ms) {
+      this.timers.push(setTimeout(fn, ms));
+    },
+    qrOn: function qrOn(n) {
+      return [1, 2, 3, 4, 6, 7, 9].indexOf(n) > -1;
+    },
+    openWecom: function openWecom() {
+      this.wecom = {
+        show: true,
+        step: 1
+      };
+    },
+    closeWecom: function closeWecom() {
+      this.wecom.show = false;
+    },
+    stepAdd: function stepAdd() {
+      var _this = this;
+      this.wecom.step = 2;
+      this.delay(function () {
+        _this.wecom.step = 3;
+        _this.$store.dispatch('bindWecom', _this.id);
+      }, 1800);
+    },
+    enterChat: function enterChat() {
+      this.wecom.show = false;
+      uni.navigateTo({
+        url: '/pages/chat/chat?rightId=' + this.id
+      });
+    },
     onUse: function onUse() {
       var r = this.right;
       if (!r) return;
-      if (r.wecomAdded || r.chatStarted) {
-        uni.navigateTo({
-          url: '/pages/chat/chat?rightId=' + r.id
-        });
+      if (!r.wecomAdded) {
+        this.openWecom();
         return;
       }
-      uni.showModal({
-        title: '先添加健康管理师',
-        content: '请返回「我的权益」点击立即使用，添加企业微信后开始首次问询。',
-        confirmText: '去添加',
-        success: function success(res) {
-          if (res.confirm) uni.reLaunch({
-            url: '/pages/rights/rights'
-          });
-        }
+      uni.navigateTo({
+        url: '/pages/chat/chat?rightId=' + r.id
       });
     },
     goRights: function goRights() {

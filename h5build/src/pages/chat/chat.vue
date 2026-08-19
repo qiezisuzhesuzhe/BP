@@ -117,6 +117,32 @@
           </view>
         </view>
 
+        <!-- 阶段：欢迎是否激活本服务包（新购+已加企微，首次进入对话时显示） -->
+        <view v-if="phase === 'greeting'" class="activate">
+          <view class="activate__head">
+            <text class="activate__badge">{{ right ? right.name : '健康管理服务包' }}</text>
+            <text class="activate__status">已购买 · 待激活</text>
+          </view>
+          <text class="activate__t">您的服务包尚未激活，是否现在开始？</text>
+          <text class="activate__d">激活后将进入首次健康问询（约 2 分钟，共 5 个问题），完成即生成您的个性化健康方案。</text>
+          <view class="activate__row">
+            <view class="activate__btn activate__btn--ghost" @tap="skipActivation">
+              <text class="activate__btn-t activate__btn-t--ghost">稍后再说</text>
+            </view>
+            <view class="activate__btn" @tap="confirmActivate">
+              <text class="activate__btn-t">立即激活</text>
+            </view>
+          </view>
+        </view>
+
+        <!-- 激活引导：用户点「稍后再说」后显示的二次引导卡 -->
+        <view v-if="phase === 'done' && right && right.wecomAdded && !right.chatStarted && !activationSkipped" class="activate activate--lite">
+          <text class="activate__t">您的「{{ right.name }}」尚未激活</text>
+          <view class="activate__btn activate__btn--sm" @tap="confirmActivate">
+            <text class="activate__btn-t">立即激活服务包</text>
+          </view>
+        </view>
+
         <view v-if="awaiting && currentQuestion" class="opts">
           <text class="opts__hint">请选择最接近您情况的一项</text>
           <view
@@ -180,6 +206,7 @@ export default {
       genStep: 0,
       genStages: ['分析问卷数据', '进行危险分层', '匹配干预方案', '生成健康时间线'],
       assessDone: false,
+      activationSkipped: false,
       draft: '',
       tick: 0,
       scrollInto: '',
@@ -201,6 +228,7 @@ export default {
       return this.questions[this.step] || null
     },
     freeMode() {
+      // 欢迎 / 询问中都不可自由输入；激活跳过/做完都可
       return this.phase === 'done'
     },
     canSend() {
@@ -234,15 +262,35 @@ export default {
       this.answers = Object.assign({}, history.answers || {})
       this.phase = 'done'
       this.assessDone = !!history.done
+      this.activationSkipped = !!history.activationSkipped
       this.scrollBottom()
       return
     }
-    this.phase = 'asking'
-    this.typing = true
-    this.delay(800, () => {
-      this.typing = false
-      this.pushQuestion(0)
-    })
+
+    // 首次进入：根据 wecomAdded/chatStarted 决定进入的初始态
+    // 1) chatStarted=true 但无 history → 直接开始问（理论上不会发生，但兜底）
+    // 2) wecomAdded=true 且 chatStarted=false → 欢迎语 + 激活询问卡
+    // 3) 尚未加企微（老链路兜底）→ 直接开始问（兼容原来从列表点进来但没走企微的情况）
+    if (r && r.wecomAdded && !r.chatStarted) {
+      this.phase = 'greeting'
+      this.typing = true
+      this.delay(900, () => {
+        this.typing = false
+        const pkgName = (r && r.name) || '您刚购买的健康管理服务包'
+        this.push({
+          role: 'ai',
+          kind: 'text',
+          text: '您好，我是您的专属健康管理师李静 👋。欢迎来到安康健康管理！我在服务后台已经看到您刚刚购买了「' + pkgName + '」，咱们正式开始之前，想先跟您确认一下是否现在就激活服务包、为您做首次健康评估？'
+        })
+      })
+    } else {
+      this.phase = 'asking'
+      this.typing = true
+      this.delay(800, () => {
+        this.typing = false
+        this.pushQuestion(0)
+      })
+    }
   },
   onUnload() {
     this.timers.forEach((t) => clearTimeout(t))
@@ -271,12 +319,51 @@ export default {
       if (!this.rightId) return
       this.$store.dispatch('saveChat', {
         rightId: this.rightId,
-        data: { messages: this.messages, answers: this.answers, done: this.assessDone }
+        data: {
+          messages: this.messages,
+          answers: this.answers,
+          done: this.assessDone,
+          activationSkipped: this.activationSkipped
+        }
       })
     },
     toggleVoice() {
       this.voiceOn = !this.voiceOn
       uni.showToast({ title: this.voiceOn ? '语音播报已开启' : '语音播报已关闭', icon: 'none' })
+    },
+    // 用户在欢迎态点击"立即激活"：AI 响应一句确认 → 开始问卷
+    confirmActivate() {
+      if (this.phase !== 'greeting' && !(this.right && !this.right.chatStarted)) return
+      this.phase = 'asking'
+      this.activationSkipped = false
+      this.save()
+      this.typing = true
+      this.delay(600, () => {
+        this.typing = false
+        this.push({
+          role: 'ai',
+          kind: 'text',
+          text: '好的，为您立即激活服务包 🔓。接下来我会问您几个问题，来初步了解当前身体与生活方式的情况，方便后面生成更适合您的个性化健康方案——我们现在开始吧～'
+        })
+        this.delay(900, () => {
+          this.pushQuestion(0)
+        })
+      })
+    },
+    // 稍后再说：AI 提示可随时开始 → 进入自由模式；底部会有二次引导卡
+    skipActivation() {
+      this.phase = 'done'
+      this.activationSkipped = true
+      this.save()
+      this.typing = true
+      this.delay(600, () => {
+        this.typing = false
+        this.push({
+          role: 'ai',
+          kind: 'text',
+          text: '没问题，已经为您暂存服务包 🔖。您可以先随便逛逛，任何时候想开始评估了直接告诉我，或点击下方「立即激活服务包」就可以继续～'
+        })
+      })
     },
     pushQuestion(i) {
       this.step = i
@@ -1101,5 +1188,105 @@ export default {
 
 .bar__safe {
   height: env(safe-area-inset-bottom);
+}
+
+/* 服务包激活引导卡 */
+.activate {
+  margin: $space-4 $space-4 $space-2;
+  padding: $space-4;
+  background: $bg-surface;
+  border-radius: $radius-card-child;
+  box-shadow: $shadow-md;
+  border: 1rpx solid $border-subtle;
+}
+
+.activate--lite {
+  margin-top: $space-2;
+  padding: $space-3;
+  box-shadow: none;
+  background: $brand-soft;
+  border-color: transparent;
+  display: flex;
+  align-items: center;
+  gap: $space-3;
+}
+
+.activate--lite .activate__t {
+  flex: 1;
+  margin: 0;
+  font-size: $font-size-xs;
+}
+
+.activate__head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: $space-2;
+}
+
+.activate__badge {
+  font-size: $font-size-2xs;
+  font-weight: $font-weight-semibold;
+  color: $brand-primary-active;
+  background: $brand-soft;
+  padding: $space-1 $space-2;
+  border-radius: $radius-full;
+}
+
+.activate__status {
+  font-size: $font-size-2xs;
+  color: $text-secondary;
+}
+
+.activate__t {
+  display: block;
+  font-size: $font-size-md;
+  font-weight: $font-weight-bold;
+  color: $text-primary;
+  margin-bottom: $space-2;
+}
+
+.activate__d {
+  display: block;
+  font-size: $font-size-xs;
+  color: $text-muted;
+  line-height: $line-height-relaxed;
+  margin-bottom: $space-4;
+}
+
+.activate__row {
+  display: flex;
+  gap: $space-2;
+}
+
+.activate__btn {
+  flex: 1;
+  padding: $space-3 0;
+  border-radius: $radius-full;
+  background: $brand-primary;
+  text-align: center;
+  box-shadow: $shadow-sm;
+}
+
+.activate__btn--sm {
+  flex: 0 0 auto;
+  padding: $space-2 $space-4;
+  margin-left: auto;
+}
+
+.activate__btn--ghost {
+  background: transparent;
+  border: 1rpx solid $text-hint;
+  box-shadow: none;
+}
+
+.activate__btn-t {
+  color: $text-inverse;
+  font-size: $font-size-sm;
+  font-weight: $font-weight-bold;
+}
+
+.activate__btn-t--ghost {
+  color: $text-secondary;
 }
 </style>

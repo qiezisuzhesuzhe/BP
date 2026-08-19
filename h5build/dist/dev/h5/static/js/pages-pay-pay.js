@@ -837,12 +837,20 @@ __webpack_require__.r(__webpack_exports__);
       }, 1200));
       this.timers.push(setTimeout(function () {
         _this2.stage = 3;
-        _this2.$store.dispatch('payOrder', _this2.orderNo);
-        _this2.timers.push(setTimeout(function () {
-          uni.reLaunch({
-            url: '/pages/rights/rights'
-          });
-        }, 1500));
+        _this2.$store.dispatch('payOrder', _this2.orderNo).then(function (right) {
+          _this2.timers.push(setTimeout(function () {
+            // 支付成功 → 直接进入该权益的详情页（展示刚买服务包 + 引导加企微）
+            var url = right ? '/pages/rights/detail?id=' + right.id : '/pages/rights/rights';
+            uni.redirectTo({
+              url: url,
+              fail: function fail() {
+                return uni.reLaunch({
+                  url: url
+                });
+              }
+            });
+          }, 1500));
+        });
       }, 2600));
     }
   }

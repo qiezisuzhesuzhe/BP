@@ -207,12 +207,17 @@ export default {
       this.timers.push(
         setTimeout(() => {
           this.stage = 3
-          this.$store.dispatch('payOrder', this.orderNo)
-          this.timers.push(
-            setTimeout(() => {
-              uni.reLaunch({ url: '/pages/rights/rights' })
-            }, 1500)
-          )
+          this.$store.dispatch('payOrder', this.orderNo).then((right) => {
+            this.timers.push(
+              setTimeout(() => {
+                // 支付成功 → 直接进入该权益的详情页（展示刚买服务包 + 引导加企微）
+                const url = right
+                  ? '/pages/rights/detail?id=' + right.id
+                  : '/pages/rights/rights'
+                uni.redirectTo({ url, fail: () => uni.reLaunch({ url }) })
+              }, 1500)
+            )
+          })
         }, 2600)
       )
     }

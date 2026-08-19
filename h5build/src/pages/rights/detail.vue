@@ -69,6 +69,30 @@
         </view>
       </view>
 
+      <!-- 健康管理服务包 → 专属健康管理师（加企业微信引导卡） -->
+      <view v-if="!right.wecomAdded" class="hm-card entry">
+        <view class="entry__left">
+          <view class="entry__badge" :style="{ background: right.accentSoft }">
+            <text class="entry__badge-icon fa-solid fa-user-doctor" :style="{ color: right.accent }"></text>
+          </view>
+          <view class="entry__main">
+            <text class="entry__t">加企业微信 · 1v1 专属管理师</text>
+            <text class="entry__d">添加后将协助您完成首次健康问询，并全程跟踪方案</text>
+          </view>
+        </view>
+        <view class="entry__btn" @tap="openWecom">
+          <text class="entry__btn-t">立即添加</text>
+        </view>
+      </view>
+
+      <view v-else class="hm-card entry entry--done">
+        <view class="entry__ok fa-solid fa-circle-check"></view>
+        <view class="entry__main">
+          <text class="entry__t">已添加健康管理师 · 李静</text>
+          <text class="entry__d">您可在对话中随时发起沟通，或开始首次问询</text>
+        </view>
+      </view>
+
       <view class="sec">
         <text class="hm-sec-title">权益内容</text>
         <text class="hm-sec-sub">服务期内可使用的全部项目</text>
@@ -129,14 +153,75 @@
       <view class="bar-holder"></view>
       <view class="buybar">
         <view class="buybar__l">
-          <text class="buybar__t">{{ right.chatStarted ? '方案进行中' : '请完成首次问询' }}</text>
-          <text class="buybar__d">{{ right.chatStarted ? '每日健康指导已推送至首页' : '约 2 分钟，共 5 个问题' }}</text>
+          <text class="buybar__t">{{ ctaHint }}</text>
+          <text class="buybar__d">{{ ctaDesc }}</text>
         </view>
         <view class="buybar__btn" :style="{ background: right.accent }" @tap="onUse">
-          <text class="buybar__btn-t">{{ right.chatStarted ? '继续健康对话' : '开始首次问询' }}</text>
+          <text class="buybar__btn-t">{{ ctaLabel }}</text>
         </view>
       </view>
     </block>
+
+    <!-- 加企业微信流程弹层（同权益列表页那套模拟流程：二维码→申请→通过） -->
+    <view v-if="wecom.show" class="mask">
+      <view class="sheet">
+        <view v-if="wecom.step === 1" class="sheet__pane">
+          <text class="sheet__icon fa-solid fa-user-doctor"></text>
+          <text class="sheet__t">添加您的专属健康管理师</text>
+          <text class="sheet__d">添加企业微信后，管理师将协助您完成首次健康问询，并全程跟踪服务方案</text>
+
+          <view class="qr">
+            <view class="qr__box">
+              <view v-for="n in 9" :key="n" class="qr__cell" :class="{ 'qr__cell--on': qrOn(n) }"></view>
+              <view class="qr__logo">
+                <text class="qr__logo-t">企</text>
+              </view>
+            </view>
+            <text class="qr__hint">长按识别二维码 · 企业微信认证</text>
+          </view>
+
+          <view class="who">
+            <view class="who__avatar">
+              <text class="who__avatar-t">李</text>
+            </view>
+            <view class="who__main">
+              <text class="who__name">李静 · 高级健康管理师</text>
+              <text class="who__meta">中级营养师 / 8 年慢病管理经验</text>
+            </view>
+            <view class="who__badge">
+              <text class="who__badge-t">认证</text>
+            </view>
+          </view>
+
+          <view class="sheet__btn" @tap="stepAdd">
+            <text class="sheet__btn-t">已保存二维码，添加好友</text>
+          </view>
+          <text class="sheet__cancel" @tap="closeWecom">稍后再说</text>
+        </view>
+
+        <view v-else-if="wecom.step === 2" class="sheet__pane sheet__pane--center">
+          <view class="spin"></view>
+          <text class="sheet__t">正在发送好友申请…</text>
+          <text class="sheet__d">管理师将在 1 分钟内通过您的申请</text>
+        </view>
+
+        <view v-else class="sheet__pane sheet__pane--center">
+          <view class="ok">
+            <text class="ok__t">✓</text>
+          </view>
+          <text class="sheet__t">已添加成功</text>
+          <text class="sheet__d">李静 已通过您的好友申请，对话页会询问是否激活本服务包</text>
+          <view class="sheet__row">
+            <view class="sheet__btn sheet__btn--sub" @tap="closeWecom">
+              <text class="sheet__btn-t sheet__btn-t--sub">先看权益</text>
+            </view>
+            <view class="sheet__btn" @tap="enterChat">
+              <text class="sheet__btn-t">进入对话</text>
+            </view>
+          </view>
+        </view>
+      </view>
+    </view>
   </view>
 </template>
 
@@ -144,7 +229,9 @@
 export default {
   data() {
     return {
-      id: ''
+      id: '',
+      wecom: { show: false, step: 1 },
+      timers: []
     }
   },
   computed: {
@@ -177,6 +264,28 @@ export default {
       if (!r) return ''
       const o = this.$store.getters.orderByNo(r.orderNo)
       return (o && o.payAt) || r.startAt
+    },
+    // 底部 CTA 文案（三步状态）
+    ctaLabel() {
+      const r = this.right
+      if (!r) return ''
+      if (!r.wecomAdded) return '添加企业微信'
+      if (r.chatStarted) return '继续健康对话'
+      return '开始首次问询'
+    },
+    ctaHint() {
+      const r = this.right
+      if (!r) return ''
+      if (!r.wecomAdded) return '先加健康管理师'
+      if (r.chatStarted) return '方案进行中'
+      return '请完成首次问询'
+    },
+    ctaDesc() {
+      const r = this.right
+      if (!r) return ''
+      if (!r.wecomAdded) return '1v1 专属管理师协助激活服务包'
+      if (r.chatStarted) return '每日健康指导已推送至首页'
+      return '约 2 分钟，共 5 个问题'
     }
   },
   onLoad(opt) {
@@ -186,22 +295,42 @@ export default {
       if (a) this.id = a.id
     }
   },
+  onUnload() {
+    this.timers.forEach((t) => clearTimeout(t))
+    this.timers = []
+  },
   methods: {
+    delay(fn, ms) {
+      this.timers.push(setTimeout(fn, ms))
+    },
+    qrOn(n) {
+      return [1, 2, 3, 4, 6, 7, 9].indexOf(n) > -1
+    },
+    openWecom() {
+      this.wecom = { show: true, step: 1 }
+    },
+    closeWecom() {
+      this.wecom.show = false
+    },
+    stepAdd() {
+      this.wecom.step = 2
+      this.delay(() => {
+        this.wecom.step = 3
+        this.$store.dispatch('bindWecom', this.id)
+      }, 1800)
+    },
+    enterChat() {
+      this.wecom.show = false
+      uni.navigateTo({ url: '/pages/chat/chat?rightId=' + this.id })
+    },
     onUse() {
       const r = this.right
       if (!r) return
-      if (r.wecomAdded || r.chatStarted) {
-        uni.navigateTo({ url: '/pages/chat/chat?rightId=' + r.id })
+      if (!r.wecomAdded) {
+        this.openWecom()
         return
       }
-      uni.showModal({
-        title: '先添加健康管理师',
-        content: '请返回「我的权益」点击立即使用，添加企业微信后开始首次问询。',
-        confirmText: '去添加',
-        success: (res) => {
-          if (res.confirm) uni.reLaunch({ url: '/pages/rights/rights' })
-        }
-      })
+      uni.navigateTo({ url: '/pages/chat/chat?rightId=' + r.id })
     },
     goRights() {
       uni.reLaunch({ url: '/pages/rights/rights' })
@@ -544,5 +673,350 @@ export default {
   font-size: $font-size-sm;
   font-weight: $font-weight-semibold;
   color: $text-inverse;
+}
+
+/* 健康管理师引导卡 */
+.entry {
+  margin: $space-data-list-gap $space-4 0;
+  padding: $space-3;
+  display: flex;
+  align-items: center;
+  gap: $space-2;
+  background: $bg-surface;
+  border: 1rpx solid $border-subtle;
+  box-shadow: $shadow-sm;
+}
+
+.entry__left {
+  display: flex;
+  align-items: center;
+  flex: 1;
+  min-width: 0;
+}
+
+.entry__badge {
+  width: $size-avatar-sm;
+  height: $size-avatar-sm;
+  border-radius: $radius-card-child;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.entry__badge-icon {
+  font-size: $size-icon-sm;
+}
+
+.entry__main {
+  padding-left: $space-2;
+  flex: 1;
+  min-width: 0;
+}
+
+.entry__t {
+  display: block;
+  font-size: $font-size-sm;
+  font-weight: $font-weight-bold;
+  color: $text-primary;
+}
+
+.entry__d {
+  display: block;
+  font-size: $font-size-2xs;
+  color: $text-muted;
+  margin-top: $space-1;
+  line-height: $line-height-normal;
+}
+
+.entry__btn {
+  padding: $space-2 $space-4;
+  border-radius: $radius-full;
+  background: $brand-primary;
+  flex-shrink: 0;
+  box-shadow: $shadow-sm;
+}
+
+.entry__btn-t {
+  color: $text-inverse;
+  font-size: $font-size-xs;
+  font-weight: $font-weight-bold;
+  white-space: nowrap;
+}
+
+.entry--done {
+  background: $brand-soft;
+  border-color: transparent;
+}
+
+.entry__ok {
+  font-size: $size-icon-md;
+  color: $success;
+  flex-shrink: 0;
+}
+
+/* 加企微弹层（bottom sheet） */
+.mask {
+  position: fixed;
+  left: 0;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  background: $overlay;
+  z-index: $z-modal;
+  display: flex;
+  align-items: flex-end;
+}
+
+.sheet {
+  width: 100%;
+  background: $bg-surface;
+  border-top-left-radius: $radius-card;
+  border-top-right-radius: $radius-card;
+  padding: $space-5 $space-5 calc(env(safe-area-inset-bottom) + #{$space-6});
+  animation: rise 0.28s ease-out;
+}
+
+@keyframes rise {
+  from {
+    transform: translateY(60rpx);
+    opacity: 0.4;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+.sheet__pane {
+  display: flex;
+  flex-direction: column;
+}
+
+.sheet__pane--center {
+  align-items: center;
+  padding: $space-4 0 $space-2;
+}
+
+.sheet__icon {
+  font-size: $size-icon-lg;
+  text-align: center;
+}
+
+.sheet__t {
+  font-size: $font-size-lg;
+  font-weight: 700;
+  color: $text-primary;
+  text-align: center;
+  margin-top: $space-2;
+}
+
+.sheet__d {
+  font-size: $font-size-xs;
+  color: $text-muted;
+  text-align: center;
+  margin-top: $space-2;
+  line-height: $line-height-relaxed;
+}
+
+.qr {
+  margin-top: $space-4;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.qr__box {
+  width: 300rpx;
+  height: 300rpx;
+  background: $bg-page-base;
+  border: 1rpx solid $border-subtle;
+  border-radius: $radius-card-child;
+  padding: $space-2;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-content: space-between;
+  position: relative;
+}
+
+.qr__cell {
+  width: 78rpx;
+  height: 78rpx;
+  border-radius: 10rpx;
+  background: $bg-subtle;
+}
+
+.qr__cell--on {
+  background: $brand-primary;
+}
+
+.qr__logo {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 78rpx;
+  height: 78rpx;
+  margin: -39rpx 0 0 -39rpx;
+  border-radius: 14rpx;
+  background: $bg-surface;
+  border: 4rpx solid $brand-primary;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.qr__logo-t {
+  font-size: $font-size-lg;
+  font-weight: 700;
+  color: $brand-primary-active;
+}
+
+.qr__hint {
+  font-size: $font-size-2xs;
+  color: $text-disabled;
+  margin-top: $space-2;
+}
+
+.who {
+  margin-top: $space-4;
+  background: $brand-soft;
+  border-radius: $radius-card-child;
+  padding: $space-3;
+  display: flex;
+  align-items: center;
+}
+
+.who__avatar {
+  width: $size-avatar-sm;
+  height: $size-avatar-sm;
+  border-radius: 50%;
+  background: $brand-primary;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.who__avatar-t {
+  color: $text-inverse;
+  font-size: $font-size-md;
+  font-weight: 700;
+}
+
+.who__main {
+  flex: 1;
+  padding: 0 $space-2;
+}
+
+.who__name {
+  display: block;
+  font-size: $font-size-sm;
+  font-weight: 700;
+  color: $brand-primary-active;
+}
+
+.who__meta {
+  display: block;
+  font-size: $font-size-2xs;
+  color: $brand-primary-active;
+  opacity: 0.8;
+  margin-top: $space-1;
+}
+
+.who__badge {
+  background: $brand-primary;
+  border-radius: $radius-full;
+  padding: $space-1 $space-2;
+}
+
+.who__badge-t {
+  color: $text-inverse;
+  font-size: $font-size-2xs;
+}
+
+.sheet__row {
+  width: 100%;
+  margin-top: $space-4;
+  display: flex;
+  gap: $space-2;
+}
+
+.sheet__btn {
+  flex: 1;
+  background: $brand-primary;
+  border-radius: $radius-full;
+  padding: $space-3 0;
+  text-align: center;
+  box-shadow: $shadow-sm;
+}
+
+.sheet__btn--sub {
+  background: transparent;
+  border: 1rpx solid $text-hint;
+  box-shadow: none;
+}
+
+.sheet__btn-t {
+  color: $text-inverse;
+  font-size: $font-size-md;
+  font-weight: 700;
+  letter-spacing: 1rpx;
+}
+
+.sheet__btn-t--sub {
+  color: $text-secondary;
+}
+
+.sheet__cancel {
+  text-align: center;
+  font-size: $font-size-xs;
+  color: $text-disabled;
+  margin-top: $space-3;
+}
+
+.spin {
+  width: $size-avatar-sm;
+  height: $size-avatar-sm;
+  border: 4rpx solid $border-subtle;
+  border-top-color: $brand-primary-active;
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.ok {
+  width: $size-avatar-md;
+  height: $size-avatar-md;
+  border-radius: 50%;
+  background: $success;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  animation: pop 0.4s ease-out;
+}
+
+.ok__t {
+  color: $text-inverse;
+  font-size: $font-size-2xl;
+  font-weight: 700;
+}
+
+@keyframes pop {
+  0% {
+    transform: scale(0.3);
+    opacity: 0;
+  }
+  60% {
+    transform: scale(1.14);
+    opacity: 1;
+  }
+  100% {
+    transform: scale(1);
+  }
 }
 </style>

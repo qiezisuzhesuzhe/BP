@@ -63,7 +63,7 @@ __webpack_require__.r(__webpack_exports__);
 var ___CSS_LOADER_API_IMPORT___ = __webpack_require__(/*! ../../../node_modules/css-loader/dist/runtime/api.js */ "JPst");
 exports = ___CSS_LOADER_API_IMPORT___(false);
 // Module
-exports.push([module.i, "@charset \"UTF-8\";\n/* 安康健康管理 · 设计令牌\n   来源：/workspace/DESIGN.md\n   方案：rpx + SCSS 变量（1px = 2rpx，基于 750rpx 设计基准） */\n/* ---------- 品牌色 ---------- */\n/* ---------- 头像 ---------- */\n/* ---------- 语义状态色 ---------- */\n/* ---------- 金色（尊享装饰） ---------- */\n/* ---------- 背景 ---------- */\n/* 斜向两色渐变：左上(#ddf7ed) → 右下(#f3f3f3)，末端即底色；\n   配合 App.vue 中 background-attachment: fixed 铺满视口固定，不随页面滚动/变长 */\n/* ---------- 文字 ---------- */\n/* ---------- 描边 / 遮罩 ---------- */\n/* ---------- 字体 ---------- */\n/* 英文/数字优先匹配 DIN Pro（Mac 自带 DIN Alternate 作为备选），中文回退苹方/雅黑 */\n/* 移动端最小舒适字号（可读正文下限）：\n   说明/入口/数据标签等可读文字不得小于 12px(24rpx)；\n   $font-size-2xs(10px) 仅限角标、徽标、装饰性元素 */\n/* ---------- 语义排版 ---------- */\n/* ---------- 间距 ---------- */\n/* ---------- 区块标题 ---------- */\n/* 标题下间距 = 列表间距；上间距 = 下间距 × 2 */\n/* ---------- 尺寸 ---------- */\n/* ---------- 圆角（已减半，更克制干净） ---------- */\n/* ---------- 阴影 ---------- */\n/* ---------- 层级 ---------- */\n/* ---------- 动效 ---------- */\n.chat[data-v-bf16e7f4] {\n  height: 100vh;\n  display: flex;\n  flex-direction: column;\n  background: #f3f3f3;\n}\n.chat__voice[data-v-bf16e7f4] {\n  width: %?64?%;\n  height: %?64?%;\n  border-radius: 50%;\n  background: #d4f5ee;\n  display: flex;\n  align-items: center;\n  justify-content: center;\n}\n.chat__voice-icon[data-v-bf16e7f4] {\n  font-size: %?32?%;\n  color: rgba(0, 0, 0, 0.1);\n}\n.chat__head[data-v-bf16e7f4] {\n  background: #ffffff;\n  padding: %?8?% %?24?% %?24?%;\n  display: flex;\n  align-items: center;\n  box-shadow: 0 %?4?% %?24?% rgba(15, 61, 53, 0.06);\n  z-index: 20;\n}\n.chat__head-avatar[data-v-bf16e7f4] {\n  width: %?64?%;\n  height: %?64?%;\n  border-radius: 50%;\n  background: linear-gradient(140deg, #7dd4bc 0%, #389a82 100%);\n  display: flex;\n  align-items: center;\n  justify-content: center;\n}\n.chat__head-emoji[data-v-bf16e7f4] {\n  font-size: %?32?%;\n  color: #ffffff;\n}\n.chat__head-main[data-v-bf16e7f4] {\n  flex: 1;\n  padding-left: %?16?%;\n}\n.chat__head-name[data-v-bf16e7f4] {\n  display: block;\n  font-size: %?32?%;\n  font-weight: 700;\n  color: #1a2a3c;\n  letter-spacing: %?1?%;\n}\n.chat__head-state[data-v-bf16e7f4] {\n  display: flex;\n  align-items: center;\n  margin-top: %?8?%;\n}\n.chat__dot-live[data-v-bf16e7f4] {\n  width: %?12?%;\n  height: %?12?%;\n  border-radius: 50%;\n  background: #27ae60;\n  margin-right: %?8?%;\n  -webkit-animation: live-data-v-bf16e7f4 1.6s ease-in-out infinite;\n          animation: live-data-v-bf16e7f4 1.6s ease-in-out infinite;\n}\n@-webkit-keyframes live-data-v-bf16e7f4 {\n0%, 100% {\n    opacity: 1;\n    -webkit-transform: scale(1);\n            transform: scale(1);\n}\n50% {\n    opacity: 0.45;\n    -webkit-transform: scale(0.7);\n            transform: scale(0.7);\n}\n}\n@keyframes live-data-v-bf16e7f4 {\n0%, 100% {\n    opacity: 1;\n    -webkit-transform: scale(1);\n            transform: scale(1);\n}\n50% {\n    opacity: 0.45;\n    -webkit-transform: scale(0.7);\n            transform: scale(0.7);\n}\n}\n.chat__head-status[data-v-bf16e7f4] {\n  font-size: %?20?%;\n  color: #64748b;\n}\n.chat__scroll[data-v-bf16e7f4] {\n  flex: 1;\n  height: 0;\n}\n.chat__list[data-v-bf16e7f4] {\n  padding: %?24?% %?24?% %?16?%;\n}\n.chat__notice[data-v-bf16e7f4] {\n  text-align: center;\n  padding: 0 %?40?% %?24?%;\n}\n.chat__notice-t[data-v-bf16e7f4] {\n  font-size: %?20?%;\n  color: #94a3b8;\n  background: #edf5f2;\n  padding: %?8?% %?16?%;\n  border-radius: %?999?%;\n  line-height: 1.6;\n}\n.chat__anchor[data-v-bf16e7f4] {\n  height: %?8?%;\n}\n.msg[data-v-bf16e7f4] {\n  display: flex;\n  align-items: flex-start;\n  margin-bottom: %?24?%;\n}\n.msg--user[data-v-bf16e7f4] {\n  justify-content: flex-end;\n}\n.msg__avatar[data-v-bf16e7f4] {\n  width: %?64?%;\n  height: %?64?%;\n  border-radius: 50%;\n  background: linear-gradient(140deg, #7dd4bc 0%, #389a82 100%);\n  display: flex;\n  align-items: center;\n  justify-content: center;\n  flex-shrink: 0;\n  box-shadow: 0 %?4?% %?24?% rgba(15, 61, 53, 0.06);\n}\n.msg__avatar-t[data-v-bf16e7f4] {\n  font-size: %?32?%;\n  color: #ffffff;\n}\n.msg__body[data-v-bf16e7f4] {\n  max-width: 78%;\n  padding-left: %?16?%;\n}\n.msg--user .msg__body[data-v-bf16e7f4] {\n  padding-left: 0;\n}\n.bubble[data-v-bf16e7f4] {\n  padding: %?24?%;\n  border-radius: %?6?% %?20?% %?20?% %?20?%;\n}\n.bubble--ai[data-v-bf16e7f4] {\n  background: #ffffff;\n  box-shadow: 0 %?4?% %?24?% rgba(15, 61, 53, 0.06);\n}\n.bubble--user[data-v-bf16e7f4] {\n  background: #7dd4bc;\n  border-radius: %?20?% %?6?% %?20?% %?20?%;\n}\n.bubble__t[data-v-bf16e7f4] {\n  font-size: %?28?%;\n  line-height: 1.6;\n}\n.bubble__t--ai[data-v-bf16e7f4] {\n  color: #1a2a3c;\n}\n.bubble__t--user[data-v-bf16e7f4] {\n  color: #ffffff;\n}\n.typing[data-v-bf16e7f4] {\n  display: flex;\n  align-items: center;\n  padding: %?24?%;\n}\n.typing__dot[data-v-bf16e7f4] {\n  width: %?12?%;\n  height: %?12?%;\n  border-radius: 50%;\n  background: #c6d2de;\n  margin-right: %?8?%;\n  -webkit-animation: bounce-data-v-bf16e7f4 1.2s ease-in-out infinite;\n          animation: bounce-data-v-bf16e7f4 1.2s ease-in-out infinite;\n}\n.typing__dot[data-v-bf16e7f4]:last-child {\n  margin-right: 0;\n}\n.typing__dot--2[data-v-bf16e7f4] {\n  -webkit-animation-delay: 0.18s;\n          animation-delay: 0.18s;\n}\n.typing__dot--3[data-v-bf16e7f4] {\n  -webkit-animation-delay: 0.36s;\n          animation-delay: 0.36s;\n}\n@-webkit-keyframes bounce-data-v-bf16e7f4 {\n0%, 60%, 100% {\n    -webkit-transform: translateY(0);\n            transform: translateY(0);\n    opacity: 0.45;\n}\n30% {\n    -webkit-transform: translateY(%?-10?%);\n            transform: translateY(%?-10?%);\n    opacity: 1;\n}\n}\n@keyframes bounce-data-v-bf16e7f4 {\n0%, 60%, 100% {\n    -webkit-transform: translateY(0);\n            transform: translateY(0);\n    opacity: 0.45;\n}\n30% {\n    -webkit-transform: translateY(%?-10?%);\n            transform: translateY(%?-10?%);\n    opacity: 1;\n}\n}\n.gen[data-v-bf16e7f4] {\n  background: #ffffff;\n  border-radius: %?6?% %?20?% %?20?% %?20?%;\n  box-shadow: 0 %?4?% %?24?% rgba(15, 61, 53, 0.06);\n  padding: %?24?%;\n  width: %?460.8?%;\n}\n.gen__head[data-v-bf16e7f4] {\n  display: flex;\n  align-items: center;\n  margin-bottom: %?16?%;\n}\n.gen__ring[data-v-bf16e7f4] {\n  width: %?32?%;\n  height: %?32?%;\n  border-radius: 50%;\n  border: %?2?% solid #d4f5ee;\n  border-top-color: #389a82;\n  margin-right: %?16?%;\n  -webkit-animation: spin-data-v-bf16e7f4 0.9s linear infinite;\n          animation: spin-data-v-bf16e7f4 0.9s linear infinite;\n}\n@-webkit-keyframes spin-data-v-bf16e7f4 {\n0% {\n    -webkit-transform: rotate(0deg);\n            transform: rotate(0deg);\n}\n100% {\n    -webkit-transform: rotate(360deg);\n            transform: rotate(360deg);\n}\n}\n@keyframes spin-data-v-bf16e7f4 {\n0% {\n    -webkit-transform: rotate(0deg);\n            transform: rotate(0deg);\n}\n100% {\n    -webkit-transform: rotate(360deg);\n            transform: rotate(360deg);\n}\n}\n.gen__title[data-v-bf16e7f4] {\n  font-size: %?28?%;\n  font-weight: 700;\n  color: #1a2a3c;\n}\n.gen__step[data-v-bf16e7f4] {\n  display: flex;\n  align-items: center;\n  margin-bottom: %?8?%;\n}\n.gen__step-mark[data-v-bf16e7f4] {\n  width: %?32?%;\n  font-size: %?20?%;\n  color: #c6d2de;\n  text-align: center;\n}\n.gen__step-mark--on[data-v-bf16e7f4] {\n  color: #389a82;\n}\n.gen__step-t[data-v-bf16e7f4] {\n  font-size: %?24?%;\n  color: #94a3b8;\n}\n.gen__step-t--on[data-v-bf16e7f4] {\n  color: #334155;\n  font-weight: 600;\n}\n.gen__bar[data-v-bf16e7f4] {\n  height: %?8?%;\n  border-radius: %?999?%;\n  background: #f2f7fa;\n  margin-top: %?16?%;\n  overflow: hidden;\n}\n.gen__bar-in[data-v-bf16e7f4] {\n  height: 100%;\n  border-radius: %?999?%;\n  background: linear-gradient(90deg, #7dd4bc 0%, #389a82 100%);\n  transition: width 0.6s ease;\n}\n.report[data-v-bf16e7f4] {\n  background: #ffffff;\n  border-radius: %?6?% %?20?% %?20?% %?20?%;\n  box-shadow: 0 %?12?% %?48?% rgba(125, 212, 188, 0.18);\n  padding: %?24?%;\n  width: %?518.4?%;\n}\n.report__head[data-v-bf16e7f4] {\n  display: flex;\n  align-items: center;\n  padding-bottom: %?16?%;\n}\n.report__icon[data-v-bf16e7f4] {\n  font-size: %?36?%;\n  margin-right: %?16?%;\n  color: rgba(0, 0, 0, 0.1);\n}\n.report__head-main[data-v-bf16e7f4] {\n  flex: 1;\n}\n.report__title[data-v-bf16e7f4] {\n  display: block;\n  font-size: %?32?%;\n  font-weight: 700;\n  color: #1a2a3c;\n}\n.report__sub[data-v-bf16e7f4] {\n  display: block;\n  font-size: %?20?%;\n  color: #64748b;\n  margin-top: %?8?%;\n}\n.report__row[data-v-bf16e7f4] {\n  display: flex;\n  align-items: flex-start;\n  margin-bottom: %?16?%;\n}\n.report__label[data-v-bf16e7f4] {\n  width: %?128?%;\n  font-size: %?24?%;\n  color: #94a3b8;\n  flex-shrink: 0;\n  line-height: 1.6;\n}\n.report__value[data-v-bf16e7f4] {\n  flex: 1;\n  font-size: %?24?%;\n  color: #1a2a3c;\n  font-weight: 600;\n  line-height: 1.6;\n}\n.report__risk[data-v-bf16e7f4] {\n  font-size: %?20?%;\n  font-weight: 700;\n  padding: %?8?% %?16?%;\n  border-radius: %?999?%;\n}\n.report__line[data-v-bf16e7f4] {\n  height: %?1?%;\n  background: #f2f7fa;\n  margin: %?8?% 0 %?16?%;\n}\n.report__focus-title[data-v-bf16e7f4] {\n  display: block;\n  font-size: %?24?%;\n  font-weight: 700;\n  color: #389a82;\n  margin-bottom: %?16?%;\n}\n.report__point[data-v-bf16e7f4] {\n  display: flex;\n  align-items: flex-start;\n  margin-bottom: %?16?%;\n}\n.report__point-idx[data-v-bf16e7f4] {\n  width: %?32?%;\n  height: %?32?%;\n  border-radius: 50%;\n  background: #d4f5ee;\n  color: #389a82;\n  font-size: %?20?%;\n  font-weight: 700;\n  text-align: center;\n  line-height: %?32?%;\n  flex-shrink: 0;\n  margin-right: %?16?%;\n}\n.report__point-main[data-v-bf16e7f4] {\n  flex: 1;\n}\n.report__point-t[data-v-bf16e7f4] {\n  display: block;\n  font-size: %?24?%;\n  font-weight: 600;\n  color: #1a2a3c;\n}\n.report__point-d[data-v-bf16e7f4] {\n  display: block;\n  font-size: %?20?%;\n  color: #64748b;\n  line-height: 1.6;\n  margin-top: %?8?%;\n}\n.report__ref[data-v-bf16e7f4] {\n  display: block;\n  font-size: %?20?%;\n  color: #94a3b8;\n  margin-top: %?8?%;\n}\n.plan[data-v-bf16e7f4] {\n  background: #edf5f2;\n  border-radius: %?6?% %?20?% %?20?% %?20?%;\n  padding: %?24?% %?16?% %?8?%;\n  width: %?556.8?%;\n}\n.plan__head[data-v-bf16e7f4] {\n  display: flex;\n  align-items: baseline;\n  justify-content: space-between;\n  padding: 0 %?8?% %?16?%;\n}\n.plan__title[data-v-bf16e7f4] {\n  font-size: %?28?%;\n  font-weight: 700;\n  color: #1a2a3c;\n}\n.plan__count[data-v-bf16e7f4] {\n  font-size: %?20?%;\n  color: #64748b;\n}\n.opts[data-v-bf16e7f4] {\n  padding: %?8?% 0 %?8?% %?80?%;\n}\n.opts__hint[data-v-bf16e7f4] {\n  display: block;\n  font-size: %?20?%;\n  color: #94a3b8;\n  margin-bottom: %?16?%;\n}\n.opts__item[data-v-bf16e7f4] {\n  background: #ffffff;\n  border: %?1?% solid #d4f5ee;\n  border-radius: %?999?%;\n  padding: %?16?% %?24?%;\n  margin-bottom: %?16?%;\n  box-shadow: 0 %?4?% %?24?% rgba(15, 61, 53, 0.06);\n}\n.opts__item--on[data-v-bf16e7f4] {\n  background: #7dd4bc;\n  border-color: #389a82;\n}\n.opts__t[data-v-bf16e7f4] {\n  font-size: %?28?%;\n  color: #389a82;\n  font-weight: 600;\n}\n.opts__t--on[data-v-bf16e7f4] {\n  color: #ffffff;\n}\n.cta[data-v-bf16e7f4] {\n  margin: %?16?% 0 %?8?% %?80?%;\n  background: #7dd4bc;\n  border-radius: %?999?%;\n  padding: %?24?% 0;\n  text-align: center;\n  box-shadow: 0 %?12?% %?48?% rgba(125, 212, 188, 0.18);\n}\n.cta__t[data-v-bf16e7f4] {\n  color: #ffffff;\n  font-size: %?28?%;\n  font-weight: 700;\n  letter-spacing: %?1?%;\n}\n.bar[data-v-bf16e7f4] {\n  background: #ffffff;\n  box-shadow: 0 %?16?% %?96?% rgba(15, 61, 53, 0.1);\n}\n.bar__inner[data-v-bf16e7f4] {\n  display: flex;\n  align-items: center;\n  padding: %?16?% %?24?%;\n}\n.bar__input[data-v-bf16e7f4] {\n  flex: 1;\n  height: %?64?%;\n  background: #edf5f2;\n  border-radius: %?999?%;\n  padding: 0 %?24?%;\n  font-size: %?28?%;\n  color: #1a2a3c;\n}\n.bar__input--off[data-v-bf16e7f4] {\n  background: #f2f7fa;\n  color: #94a3b8;\n}\n.bar__ph[data-v-bf16e7f4] {\n  color: #94a3b8;\n  font-size: %?24?%;\n}\n.bar__mic[data-v-bf16e7f4] {\n  width: %?64?%;\n  height: %?64?%;\n  border-radius: 50%;\n  background: #edf5f2;\n  display: flex;\n  align-items: center;\n  justify-content: center;\n  margin-left: %?16?%;\n  flex-shrink: 0;\n}\n.bar__mic-t[data-v-bf16e7f4] {\n  font-size: %?32?%;\n  color: rgba(0, 0, 0, 0.1);\n}\n.bar__send[data-v-bf16e7f4] {\n  background: #7dd4bc;\n  border-radius: %?999?%;\n  padding: %?16?% %?32?%;\n  margin-left: %?16?%;\n  flex-shrink: 0;\n}\n.bar__send--off[data-v-bf16e7f4] {\n  background: #c6d2de;\n}\n.bar__send-t[data-v-bf16e7f4] {\n  color: #ffffff;\n  font-size: %?24?%;\n  font-weight: 700;\n}\n.bar__safe[data-v-bf16e7f4] {\n  height: env(safe-area-inset-bottom);\n}", ""]);
+exports.push([module.i, "@charset \"UTF-8\";\n/* 安康健康管理 · 设计令牌\n   来源：/workspace/DESIGN.md\n   方案：rpx + SCSS 变量（1px = 2rpx，基于 750rpx 设计基准） */\n/* ---------- 品牌色 ---------- */\n/* ---------- 头像 ---------- */\n/* ---------- 语义状态色 ---------- */\n/* ---------- 金色（尊享装饰） ---------- */\n/* ---------- 背景 ---------- */\n/* 斜向两色渐变：左上(#ddf7ed) → 右下(#f3f3f3)，末端即底色；\n   配合 App.vue 中 background-attachment: fixed 铺满视口固定，不随页面滚动/变长 */\n/* ---------- 文字 ---------- */\n/* ---------- 描边 / 遮罩 ---------- */\n/* ---------- 字体 ---------- */\n/* 英文/数字优先匹配 DIN Pro（Mac 自带 DIN Alternate 作为备选），中文回退苹方/雅黑 */\n/* 移动端最小舒适字号（可读正文下限）：\n   说明/入口/数据标签等可读文字不得小于 12px(24rpx)；\n   $font-size-2xs(10px) 仅限角标、徽标、装饰性元素 */\n/* ---------- 语义排版 ---------- */\n/* ---------- 间距 ---------- */\n/* ---------- 区块标题 ---------- */\n/* 标题下间距 = 列表间距；上间距 = 下间距 × 2 */\n/* ---------- 尺寸 ---------- */\n/* ---------- 圆角（已减半，更克制干净） ---------- */\n/* ---------- 阴影 ---------- */\n/* ---------- 层级 ---------- */\n/* ---------- 动效 ---------- */\n.chat[data-v-bf16e7f4] {\n  height: 100vh;\n  display: flex;\n  flex-direction: column;\n  background: #f3f3f3;\n}\n.chat__voice[data-v-bf16e7f4] {\n  width: %?64?%;\n  height: %?64?%;\n  border-radius: 50%;\n  background: #d4f5ee;\n  display: flex;\n  align-items: center;\n  justify-content: center;\n}\n.chat__voice-icon[data-v-bf16e7f4] {\n  font-size: %?32?%;\n  color: rgba(0, 0, 0, 0.1);\n}\n.chat__head[data-v-bf16e7f4] {\n  background: #ffffff;\n  padding: %?8?% %?24?% %?24?%;\n  display: flex;\n  align-items: center;\n  box-shadow: 0 %?4?% %?24?% rgba(15, 61, 53, 0.06);\n  z-index: 20;\n}\n.chat__head-avatar[data-v-bf16e7f4] {\n  width: %?64?%;\n  height: %?64?%;\n  border-radius: 50%;\n  background: linear-gradient(140deg, #7dd4bc 0%, #389a82 100%);\n  display: flex;\n  align-items: center;\n  justify-content: center;\n}\n.chat__head-emoji[data-v-bf16e7f4] {\n  font-size: %?32?%;\n  color: #ffffff;\n}\n.chat__head-main[data-v-bf16e7f4] {\n  flex: 1;\n  padding-left: %?16?%;\n}\n.chat__head-name[data-v-bf16e7f4] {\n  display: block;\n  font-size: %?32?%;\n  font-weight: 700;\n  color: #1a2a3c;\n  letter-spacing: %?1?%;\n}\n.chat__head-state[data-v-bf16e7f4] {\n  display: flex;\n  align-items: center;\n  margin-top: %?8?%;\n}\n.chat__dot-live[data-v-bf16e7f4] {\n  width: %?12?%;\n  height: %?12?%;\n  border-radius: 50%;\n  background: #27ae60;\n  margin-right: %?8?%;\n  -webkit-animation: live-data-v-bf16e7f4 1.6s ease-in-out infinite;\n          animation: live-data-v-bf16e7f4 1.6s ease-in-out infinite;\n}\n@-webkit-keyframes live-data-v-bf16e7f4 {\n0%, 100% {\n    opacity: 1;\n    -webkit-transform: scale(1);\n            transform: scale(1);\n}\n50% {\n    opacity: 0.45;\n    -webkit-transform: scale(0.7);\n            transform: scale(0.7);\n}\n}\n@keyframes live-data-v-bf16e7f4 {\n0%, 100% {\n    opacity: 1;\n    -webkit-transform: scale(1);\n            transform: scale(1);\n}\n50% {\n    opacity: 0.45;\n    -webkit-transform: scale(0.7);\n            transform: scale(0.7);\n}\n}\n.chat__head-status[data-v-bf16e7f4] {\n  font-size: %?20?%;\n  color: #64748b;\n}\n.chat__scroll[data-v-bf16e7f4] {\n  flex: 1;\n  height: 0;\n}\n.chat__list[data-v-bf16e7f4] {\n  padding: %?24?% %?24?% %?16?%;\n}\n.chat__notice[data-v-bf16e7f4] {\n  text-align: center;\n  padding: 0 %?40?% %?24?%;\n}\n.chat__notice-t[data-v-bf16e7f4] {\n  font-size: %?20?%;\n  color: #94a3b8;\n  background: #edf5f2;\n  padding: %?8?% %?16?%;\n  border-radius: %?999?%;\n  line-height: 1.6;\n}\n.chat__anchor[data-v-bf16e7f4] {\n  height: %?8?%;\n}\n.msg[data-v-bf16e7f4] {\n  display: flex;\n  align-items: flex-start;\n  margin-bottom: %?24?%;\n}\n.msg--user[data-v-bf16e7f4] {\n  justify-content: flex-end;\n}\n.msg__avatar[data-v-bf16e7f4] {\n  width: %?64?%;\n  height: %?64?%;\n  border-radius: 50%;\n  background: linear-gradient(140deg, #7dd4bc 0%, #389a82 100%);\n  display: flex;\n  align-items: center;\n  justify-content: center;\n  flex-shrink: 0;\n  box-shadow: 0 %?4?% %?24?% rgba(15, 61, 53, 0.06);\n}\n.msg__avatar-t[data-v-bf16e7f4] {\n  font-size: %?32?%;\n  color: #ffffff;\n}\n.msg__body[data-v-bf16e7f4] {\n  max-width: 78%;\n  padding-left: %?16?%;\n}\n.msg--user .msg__body[data-v-bf16e7f4] {\n  padding-left: 0;\n}\n.bubble[data-v-bf16e7f4] {\n  padding: %?24?%;\n  border-radius: %?6?% %?20?% %?20?% %?20?%;\n}\n.bubble--ai[data-v-bf16e7f4] {\n  background: #ffffff;\n  box-shadow: 0 %?4?% %?24?% rgba(15, 61, 53, 0.06);\n}\n.bubble--user[data-v-bf16e7f4] {\n  background: #7dd4bc;\n  border-radius: %?20?% %?6?% %?20?% %?20?%;\n}\n.bubble__t[data-v-bf16e7f4] {\n  font-size: %?28?%;\n  line-height: 1.6;\n}\n.bubble__t--ai[data-v-bf16e7f4] {\n  color: #1a2a3c;\n}\n.bubble__t--user[data-v-bf16e7f4] {\n  color: #ffffff;\n}\n.typing[data-v-bf16e7f4] {\n  display: flex;\n  align-items: center;\n  padding: %?24?%;\n}\n.typing__dot[data-v-bf16e7f4] {\n  width: %?12?%;\n  height: %?12?%;\n  border-radius: 50%;\n  background: #c6d2de;\n  margin-right: %?8?%;\n  -webkit-animation: bounce-data-v-bf16e7f4 1.2s ease-in-out infinite;\n          animation: bounce-data-v-bf16e7f4 1.2s ease-in-out infinite;\n}\n.typing__dot[data-v-bf16e7f4]:last-child {\n  margin-right: 0;\n}\n.typing__dot--2[data-v-bf16e7f4] {\n  -webkit-animation-delay: 0.18s;\n          animation-delay: 0.18s;\n}\n.typing__dot--3[data-v-bf16e7f4] {\n  -webkit-animation-delay: 0.36s;\n          animation-delay: 0.36s;\n}\n@-webkit-keyframes bounce-data-v-bf16e7f4 {\n0%, 60%, 100% {\n    -webkit-transform: translateY(0);\n            transform: translateY(0);\n    opacity: 0.45;\n}\n30% {\n    -webkit-transform: translateY(%?-10?%);\n            transform: translateY(%?-10?%);\n    opacity: 1;\n}\n}\n@keyframes bounce-data-v-bf16e7f4 {\n0%, 60%, 100% {\n    -webkit-transform: translateY(0);\n            transform: translateY(0);\n    opacity: 0.45;\n}\n30% {\n    -webkit-transform: translateY(%?-10?%);\n            transform: translateY(%?-10?%);\n    opacity: 1;\n}\n}\n.gen[data-v-bf16e7f4] {\n  background: #ffffff;\n  border-radius: %?6?% %?20?% %?20?% %?20?%;\n  box-shadow: 0 %?4?% %?24?% rgba(15, 61, 53, 0.06);\n  padding: %?24?%;\n  width: %?460.8?%;\n}\n.gen__head[data-v-bf16e7f4] {\n  display: flex;\n  align-items: center;\n  margin-bottom: %?16?%;\n}\n.gen__ring[data-v-bf16e7f4] {\n  width: %?32?%;\n  height: %?32?%;\n  border-radius: 50%;\n  border: %?2?% solid #d4f5ee;\n  border-top-color: #389a82;\n  margin-right: %?16?%;\n  -webkit-animation: spin-data-v-bf16e7f4 0.9s linear infinite;\n          animation: spin-data-v-bf16e7f4 0.9s linear infinite;\n}\n@-webkit-keyframes spin-data-v-bf16e7f4 {\n0% {\n    -webkit-transform: rotate(0deg);\n            transform: rotate(0deg);\n}\n100% {\n    -webkit-transform: rotate(360deg);\n            transform: rotate(360deg);\n}\n}\n@keyframes spin-data-v-bf16e7f4 {\n0% {\n    -webkit-transform: rotate(0deg);\n            transform: rotate(0deg);\n}\n100% {\n    -webkit-transform: rotate(360deg);\n            transform: rotate(360deg);\n}\n}\n.gen__title[data-v-bf16e7f4] {\n  font-size: %?28?%;\n  font-weight: 700;\n  color: #1a2a3c;\n}\n.gen__step[data-v-bf16e7f4] {\n  display: flex;\n  align-items: center;\n  margin-bottom: %?8?%;\n}\n.gen__step-mark[data-v-bf16e7f4] {\n  width: %?32?%;\n  font-size: %?20?%;\n  color: #c6d2de;\n  text-align: center;\n}\n.gen__step-mark--on[data-v-bf16e7f4] {\n  color: #389a82;\n}\n.gen__step-t[data-v-bf16e7f4] {\n  font-size: %?24?%;\n  color: #94a3b8;\n}\n.gen__step-t--on[data-v-bf16e7f4] {\n  color: #334155;\n  font-weight: 600;\n}\n.gen__bar[data-v-bf16e7f4] {\n  height: %?8?%;\n  border-radius: %?999?%;\n  background: #f2f7fa;\n  margin-top: %?16?%;\n  overflow: hidden;\n}\n.gen__bar-in[data-v-bf16e7f4] {\n  height: 100%;\n  border-radius: %?999?%;\n  background: linear-gradient(90deg, #7dd4bc 0%, #389a82 100%);\n  transition: width 0.6s ease;\n}\n.report[data-v-bf16e7f4] {\n  background: #ffffff;\n  border-radius: %?6?% %?20?% %?20?% %?20?%;\n  box-shadow: 0 %?12?% %?48?% rgba(125, 212, 188, 0.18);\n  padding: %?24?%;\n  width: %?518.4?%;\n}\n.report__head[data-v-bf16e7f4] {\n  display: flex;\n  align-items: center;\n  padding-bottom: %?16?%;\n}\n.report__icon[data-v-bf16e7f4] {\n  font-size: %?36?%;\n  margin-right: %?16?%;\n  color: rgba(0, 0, 0, 0.1);\n}\n.report__head-main[data-v-bf16e7f4] {\n  flex: 1;\n}\n.report__title[data-v-bf16e7f4] {\n  display: block;\n  font-size: %?32?%;\n  font-weight: 700;\n  color: #1a2a3c;\n}\n.report__sub[data-v-bf16e7f4] {\n  display: block;\n  font-size: %?20?%;\n  color: #64748b;\n  margin-top: %?8?%;\n}\n.report__row[data-v-bf16e7f4] {\n  display: flex;\n  align-items: flex-start;\n  margin-bottom: %?16?%;\n}\n.report__label[data-v-bf16e7f4] {\n  width: %?128?%;\n  font-size: %?24?%;\n  color: #94a3b8;\n  flex-shrink: 0;\n  line-height: 1.6;\n}\n.report__value[data-v-bf16e7f4] {\n  flex: 1;\n  font-size: %?24?%;\n  color: #1a2a3c;\n  font-weight: 600;\n  line-height: 1.6;\n}\n.report__risk[data-v-bf16e7f4] {\n  font-size: %?20?%;\n  font-weight: 700;\n  padding: %?8?% %?16?%;\n  border-radius: %?999?%;\n}\n.report__line[data-v-bf16e7f4] {\n  height: %?1?%;\n  background: #f2f7fa;\n  margin: %?8?% 0 %?16?%;\n}\n.report__focus-title[data-v-bf16e7f4] {\n  display: block;\n  font-size: %?24?%;\n  font-weight: 700;\n  color: #389a82;\n  margin-bottom: %?16?%;\n}\n.report__point[data-v-bf16e7f4] {\n  display: flex;\n  align-items: flex-start;\n  margin-bottom: %?16?%;\n}\n.report__point-idx[data-v-bf16e7f4] {\n  width: %?32?%;\n  height: %?32?%;\n  border-radius: 50%;\n  background: #d4f5ee;\n  color: #389a82;\n  font-size: %?20?%;\n  font-weight: 700;\n  text-align: center;\n  line-height: %?32?%;\n  flex-shrink: 0;\n  margin-right: %?16?%;\n}\n.report__point-main[data-v-bf16e7f4] {\n  flex: 1;\n}\n.report__point-t[data-v-bf16e7f4] {\n  display: block;\n  font-size: %?24?%;\n  font-weight: 600;\n  color: #1a2a3c;\n}\n.report__point-d[data-v-bf16e7f4] {\n  display: block;\n  font-size: %?20?%;\n  color: #64748b;\n  line-height: 1.6;\n  margin-top: %?8?%;\n}\n.report__ref[data-v-bf16e7f4] {\n  display: block;\n  font-size: %?20?%;\n  color: #94a3b8;\n  margin-top: %?8?%;\n}\n.plan[data-v-bf16e7f4] {\n  background: #edf5f2;\n  border-radius: %?6?% %?20?% %?20?% %?20?%;\n  padding: %?24?% %?16?% %?8?%;\n  width: %?556.8?%;\n}\n.plan__head[data-v-bf16e7f4] {\n  display: flex;\n  align-items: baseline;\n  justify-content: space-between;\n  padding: 0 %?8?% %?16?%;\n}\n.plan__title[data-v-bf16e7f4] {\n  font-size: %?28?%;\n  font-weight: 700;\n  color: #1a2a3c;\n}\n.plan__count[data-v-bf16e7f4] {\n  font-size: %?20?%;\n  color: #64748b;\n}\n.opts[data-v-bf16e7f4] {\n  padding: %?8?% 0 %?8?% %?80?%;\n}\n.opts__hint[data-v-bf16e7f4] {\n  display: block;\n  font-size: %?20?%;\n  color: #94a3b8;\n  margin-bottom: %?16?%;\n}\n.opts__item[data-v-bf16e7f4] {\n  background: #ffffff;\n  border: %?1?% solid #d4f5ee;\n  border-radius: %?999?%;\n  padding: %?16?% %?24?%;\n  margin-bottom: %?16?%;\n  box-shadow: 0 %?4?% %?24?% rgba(15, 61, 53, 0.06);\n}\n.opts__item--on[data-v-bf16e7f4] {\n  background: #7dd4bc;\n  border-color: #389a82;\n}\n.opts__t[data-v-bf16e7f4] {\n  font-size: %?28?%;\n  color: #389a82;\n  font-weight: 600;\n}\n.opts__t--on[data-v-bf16e7f4] {\n  color: #ffffff;\n}\n.cta[data-v-bf16e7f4] {\n  margin: %?16?% 0 %?8?% %?80?%;\n  background: #7dd4bc;\n  border-radius: %?999?%;\n  padding: %?24?% 0;\n  text-align: center;\n  box-shadow: 0 %?12?% %?48?% rgba(125, 212, 188, 0.18);\n}\n.cta__t[data-v-bf16e7f4] {\n  color: #ffffff;\n  font-size: %?28?%;\n  font-weight: 700;\n  letter-spacing: %?1?%;\n}\n.bar[data-v-bf16e7f4] {\n  background: #ffffff;\n  box-shadow: 0 %?16?% %?96?% rgba(15, 61, 53, 0.1);\n}\n.bar__inner[data-v-bf16e7f4] {\n  display: flex;\n  align-items: center;\n  padding: %?16?% %?24?%;\n}\n.bar__input[data-v-bf16e7f4] {\n  flex: 1;\n  height: %?64?%;\n  background: #edf5f2;\n  border-radius: %?999?%;\n  padding: 0 %?24?%;\n  font-size: %?28?%;\n  color: #1a2a3c;\n}\n.bar__input--off[data-v-bf16e7f4] {\n  background: #f2f7fa;\n  color: #94a3b8;\n}\n.bar__ph[data-v-bf16e7f4] {\n  color: #94a3b8;\n  font-size: %?24?%;\n}\n.bar__mic[data-v-bf16e7f4] {\n  width: %?64?%;\n  height: %?64?%;\n  border-radius: 50%;\n  background: #edf5f2;\n  display: flex;\n  align-items: center;\n  justify-content: center;\n  margin-left: %?16?%;\n  flex-shrink: 0;\n}\n.bar__mic-t[data-v-bf16e7f4] {\n  font-size: %?32?%;\n  color: rgba(0, 0, 0, 0.1);\n}\n.bar__send[data-v-bf16e7f4] {\n  background: #7dd4bc;\n  border-radius: %?999?%;\n  padding: %?16?% %?32?%;\n  margin-left: %?16?%;\n  flex-shrink: 0;\n}\n.bar__send--off[data-v-bf16e7f4] {\n  background: #c6d2de;\n}\n.bar__send-t[data-v-bf16e7f4] {\n  color: #ffffff;\n  font-size: %?24?%;\n  font-weight: 700;\n}\n.bar__safe[data-v-bf16e7f4] {\n  height: env(safe-area-inset-bottom);\n}\n/* 服务包激活引导卡 */\n.activate[data-v-bf16e7f4] {\n  margin: %?32?% %?32?% %?16?%;\n  padding: %?32?%;\n  background: #ffffff;\n  border-radius: %?20?%;\n  box-shadow: 0 %?12?% %?48?% rgba(125, 212, 188, 0.18);\n  border: %?1?% solid rgba(15, 61, 53, 0.06);\n}\n.activate--lite[data-v-bf16e7f4] {\n  margin-top: %?16?%;\n  padding: %?24?%;\n  box-shadow: none;\n  background: #d4f5ee;\n  border-color: transparent;\n  display: flex;\n  align-items: center;\n  gap: %?24?%;\n}\n.activate--lite .activate__t[data-v-bf16e7f4] {\n  flex: 1;\n  margin: 0;\n  font-size: %?24?%;\n}\n.activate__head[data-v-bf16e7f4] {\n  display: flex;\n  align-items: center;\n  justify-content: space-between;\n  margin-bottom: %?16?%;\n}\n.activate__badge[data-v-bf16e7f4] {\n  font-size: %?20?%;\n  font-weight: 600;\n  color: #389a82;\n  background: #d4f5ee;\n  padding: %?8?% %?16?%;\n  border-radius: %?999?%;\n}\n.activate__status[data-v-bf16e7f4] {\n  font-size: %?20?%;\n  color: #334155;\n}\n.activate__t[data-v-bf16e7f4] {\n  display: block;\n  font-size: %?32?%;\n  font-weight: 700;\n  color: #1a2a3c;\n  margin-bottom: %?16?%;\n}\n.activate__d[data-v-bf16e7f4] {\n  display: block;\n  font-size: %?24?%;\n  color: #64748b;\n  line-height: 1.6;\n  margin-bottom: %?32?%;\n}\n.activate__row[data-v-bf16e7f4] {\n  display: flex;\n  gap: %?16?%;\n}\n.activate__btn[data-v-bf16e7f4] {\n  flex: 1;\n  padding: %?24?% 0;\n  border-radius: %?999?%;\n  background: #7dd4bc;\n  text-align: center;\n  box-shadow: 0 %?4?% %?24?% rgba(15, 61, 53, 0.06);\n}\n.activate__btn--sm[data-v-bf16e7f4] {\n  flex: 0 0 auto;\n  padding: %?16?% %?32?%;\n  margin-left: auto;\n}\n.activate__btn--ghost[data-v-bf16e7f4] {\n  background: transparent;\n  border: %?1?% solid #c6d2de;\n  box-shadow: none;\n}\n.activate__btn-t[data-v-bf16e7f4] {\n  color: #ffffff;\n  font-size: %?28?%;\n  font-weight: 700;\n}\n.activate__btn-t--ghost[data-v-bf16e7f4] {\n  color: #334155;\n}", ""]);
 // Exports
 module.exports = exports;
 
@@ -321,6 +321,32 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
@@ -338,6 +364,7 @@ __webpack_require__.r(__webpack_exports__);
       genStep: 0,
       genStages: ['分析问卷数据', '进行危险分层', '匹配干预方案', '生成健康时间线'],
       assessDone: false,
+      activationSkipped: false,
       draft: '',
       tick: 0,
       scrollInto: '',
@@ -359,6 +386,7 @@ __webpack_require__.r(__webpack_exports__);
       return this.questions[this.step] || null;
     },
     freeMode: function freeMode() {
+      // 欢迎 / 询问中都不可自由输入；激活跳过/做完都可
       return this.phase === 'done';
     },
     canSend: function canSend() {
@@ -393,15 +421,35 @@ __webpack_require__.r(__webpack_exports__);
       this.answers = Object.assign({}, history.answers || {});
       this.phase = 'done';
       this.assessDone = !!history.done;
+      this.activationSkipped = !!history.activationSkipped;
       this.scrollBottom();
       return;
     }
-    this.phase = 'asking';
-    this.typing = true;
-    this.delay(800, function () {
-      _this.typing = false;
-      _this.pushQuestion(0);
-    });
+
+    // 首次进入：根据 wecomAdded/chatStarted 决定进入的初始态
+    // 1) chatStarted=true 但无 history → 直接开始问（理论上不会发生，但兜底）
+    // 2) wecomAdded=true 且 chatStarted=false → 欢迎语 + 激活询问卡
+    // 3) 尚未加企微（老链路兜底）→ 直接开始问（兼容原来从列表点进来但没走企微的情况）
+    if (r && r.wecomAdded && !r.chatStarted) {
+      this.phase = 'greeting';
+      this.typing = true;
+      this.delay(900, function () {
+        _this.typing = false;
+        var pkgName = r && r.name || '您刚购买的健康管理服务包';
+        _this.push({
+          role: 'ai',
+          kind: 'text',
+          text: '您好，我是您的专属健康管理师李静 👋。欢迎来到安康健康管理！我在服务后台已经看到您刚刚购买了「' + pkgName + '」，咱们正式开始之前，想先跟您确认一下是否现在就激活服务包、为您做首次健康评估？'
+        });
+      });
+    } else {
+      this.phase = 'asking';
+      this.typing = true;
+      this.delay(800, function () {
+        _this.typing = false;
+        _this.pushQuestion(0);
+      });
+    }
   },
   onUnload: function onUnload() {
     this.timers.forEach(function (t) {
@@ -438,7 +486,8 @@ __webpack_require__.r(__webpack_exports__);
         data: {
           messages: this.messages,
           answers: this.answers,
-          done: this.assessDone
+          done: this.assessDone,
+          activationSkipped: this.activationSkipped
         }
       });
     },
@@ -447,6 +496,42 @@ __webpack_require__.r(__webpack_exports__);
       uni.showToast({
         title: this.voiceOn ? '语音播报已开启' : '语音播报已关闭',
         icon: 'none'
+      });
+    },
+    // 用户在欢迎态点击"立即激活"：AI 响应一句确认 → 开始问卷
+    confirmActivate: function confirmActivate() {
+      var _this3 = this;
+      if (this.phase !== 'greeting' && !(this.right && !this.right.chatStarted)) return;
+      this.phase = 'asking';
+      this.activationSkipped = false;
+      this.save();
+      this.typing = true;
+      this.delay(600, function () {
+        _this3.typing = false;
+        _this3.push({
+          role: 'ai',
+          kind: 'text',
+          text: '好的，为您立即激活服务包 🔓。接下来我会问您几个问题，来初步了解当前身体与生活方式的情况，方便后面生成更适合您的个性化健康方案——我们现在开始吧～'
+        });
+        _this3.delay(900, function () {
+          _this3.pushQuestion(0);
+        });
+      });
+    },
+    // 稍后再说：AI 提示可随时开始 → 进入自由模式；底部会有二次引导卡
+    skipActivation: function skipActivation() {
+      var _this4 = this;
+      this.phase = 'done';
+      this.activationSkipped = true;
+      this.save();
+      this.typing = true;
+      this.delay(600, function () {
+        _this4.typing = false;
+        _this4.push({
+          role: 'ai',
+          kind: 'text',
+          text: '没问题，已经为您暂存服务包 🔖。您可以先随便逛逛，任何时候想开始评估了直接告诉我，或点击下方「立即激活服务包」就可以继续～'
+        });
       });
     },
     pushQuestion: function pushQuestion(i) {
@@ -460,7 +545,7 @@ __webpack_require__.r(__webpack_exports__);
       this.awaiting = true;
     },
     chooseOption: function chooseOption(oi) {
-      var _this3 = this;
+      var _this5 = this;
       if (!this.awaiting) return;
       var q = this.currentQuestion;
       if (!q) return;
@@ -477,20 +562,20 @@ __webpack_require__.r(__webpack_exports__);
       if (next < this.questions.length) {
         this.typing = true;
         this.delay(800, function () {
-          _this3.typing = false;
-          _this3.pushQuestion(next);
+          _this5.typing = false;
+          _this5.pushQuestion(next);
         });
         return;
       }
       this.typing = true;
       this.delay(800, function () {
-        _this3.typing = false;
-        _this3.push({
+        _this5.typing = false;
+        _this5.push({
           role: 'ai',
           kind: 'text',
           text: '感谢您的配合，5 个问题都已完成。我正在结合权威指南为您做危险分层与方案匹配，请稍等片刻。'
         });
-        _this3.startGenerating();
+        _this5.startGenerating();
       });
     },
     startGenerating: function startGenerating() {
@@ -499,18 +584,18 @@ __webpack_require__.r(__webpack_exports__);
       this.runGenStage();
     },
     runGenStage: function runGenStage() {
-      var _this4 = this;
+      var _this6 = this;
       this.delay(900, function () {
-        if (_this4.genStep < _this4.genStages.length - 1) {
-          _this4.genStep = _this4.genStep + 1;
-          _this4.runGenStage();
+        if (_this6.genStep < _this6.genStages.length - 1) {
+          _this6.genStep = _this6.genStep + 1;
+          _this6.runGenStage();
           return;
         }
-        _this4.finishGenerating();
+        _this6.finishGenerating();
       });
     },
     finishGenerating: function finishGenerating() {
-      var _this5 = this;
+      var _this7 = this;
       this.phase = 'done';
       var report = this.buildReport();
       this.push({
@@ -524,24 +609,24 @@ __webpack_require__.r(__webpack_exports__);
         report: report
       });
       this.delay(700, function () {
-        _this5.push({
+        _this7.push({
           role: 'ai',
           kind: 'text',
           text: '这是为您安排的第一天日程，按时间点执行即可，完成后我会陪您复盘。'
         });
-        _this5.push({
+        _this7.push({
           role: 'ai',
           kind: 'timeline',
-          items: _this5.firstDayItems()
+          items: _this7.firstDayItems()
         });
-        _this5.assessDone = true;
-        if (_this5.rightId) {
-          _this5.$store.dispatch('finishAssessment', {
-            rightId: _this5.rightId,
-            answers: _this5.answers
+        _this7.assessDone = true;
+        if (_this7.rightId) {
+          _this7.$store.dispatch('finishAssessment', {
+            rightId: _this7.rightId,
+            answers: _this7.answers
           });
         }
-        _this5.save();
+        _this7.save();
       });
     },
     firstDayItems: function firstDayItems() {
@@ -677,7 +762,7 @@ __webpack_require__.r(__webpack_exports__);
       };
     },
     send: function send() {
-      var _this6 = this;
+      var _this8 = this;
       if (!this.canSend) return;
       var text = this.draft.trim();
       this.draft = '';
@@ -688,11 +773,11 @@ __webpack_require__.r(__webpack_exports__);
       });
       this.typing = true;
       this.delay(800, function () {
-        _this6.typing = false;
-        _this6.push({
+        _this8.typing = false;
+        _this8.push({
           role: 'ai',
           kind: 'text',
-          text: _this6.replyOf(text)
+          text: _this8.replyOf(text)
         });
       });
     },
@@ -1255,6 +1340,130 @@ var render = function () {
                             ],
                             2
                           ),
+                        ],
+                        1
+                      ),
+                    ],
+                    1
+                  )
+                : _vm._e(),
+              _vm.phase === "greeting"
+                ? _c(
+                    "v-uni-view",
+                    { staticClass: "activate" },
+                    [
+                      _c(
+                        "v-uni-view",
+                        { staticClass: "activate__head" },
+                        [
+                          _c("v-uni-text", { staticClass: "activate__badge" }, [
+                            _vm._v(
+                              _vm._s(
+                                _vm.right ? _vm.right.name : "健康管理服务包"
+                              )
+                            ),
+                          ]),
+                          _c(
+                            "v-uni-text",
+                            { staticClass: "activate__status" },
+                            [_vm._v("已购买 · 待激活")]
+                          ),
+                        ],
+                        1
+                      ),
+                      _c("v-uni-text", { staticClass: "activate__t" }, [
+                        _vm._v("您的服务包尚未激活，是否现在开始？"),
+                      ]),
+                      _c("v-uni-text", { staticClass: "activate__d" }, [
+                        _vm._v(
+                          "激活后将进入首次健康问询（约 2 分钟，共 5 个问题），完成即生成您的个性化健康方案。"
+                        ),
+                      ]),
+                      _c(
+                        "v-uni-view",
+                        { staticClass: "activate__row" },
+                        [
+                          _c(
+                            "v-uni-view",
+                            {
+                              staticClass: "activate__btn activate__btn--ghost",
+                              on: {
+                                click: function ($event) {
+                                  arguments[0] = $event =
+                                    _vm.$handleEvent($event)
+                                  _vm.skipActivation.apply(void 0, arguments)
+                                },
+                              },
+                            },
+                            [
+                              _c(
+                                "v-uni-text",
+                                {
+                                  staticClass:
+                                    "activate__btn-t activate__btn-t--ghost",
+                                },
+                                [_vm._v("稍后再说")]
+                              ),
+                            ],
+                            1
+                          ),
+                          _c(
+                            "v-uni-view",
+                            {
+                              staticClass: "activate__btn",
+                              on: {
+                                click: function ($event) {
+                                  arguments[0] = $event =
+                                    _vm.$handleEvent($event)
+                                  _vm.confirmActivate.apply(void 0, arguments)
+                                },
+                              },
+                            },
+                            [
+                              _c(
+                                "v-uni-text",
+                                { staticClass: "activate__btn-t" },
+                                [_vm._v("立即激活")]
+                              ),
+                            ],
+                            1
+                          ),
+                        ],
+                        1
+                      ),
+                    ],
+                    1
+                  )
+                : _vm._e(),
+              _vm.phase === "done" &&
+              _vm.right &&
+              _vm.right.wecomAdded &&
+              !_vm.right.chatStarted &&
+              !_vm.activationSkipped
+                ? _c(
+                    "v-uni-view",
+                    { staticClass: "activate activate--lite" },
+                    [
+                      _c("v-uni-text", { staticClass: "activate__t" }, [
+                        _vm._v(
+                          "您的「" + _vm._s(_vm.right.name) + "」尚未激活"
+                        ),
+                      ]),
+                      _c(
+                        "v-uni-view",
+                        {
+                          staticClass: "activate__btn activate__btn--sm",
+                          on: {
+                            click: function ($event) {
+                              arguments[0] = $event = _vm.$handleEvent($event)
+                              _vm.confirmActivate.apply(void 0, arguments)
+                            },
+                          },
+                        },
+                        [
+                          _c("v-uni-text", { staticClass: "activate__btn-t" }, [
+                            _vm._v("立即激活服务包"),
+                          ]),
                         ],
                         1
                       ),

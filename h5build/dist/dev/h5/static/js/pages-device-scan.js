@@ -912,10 +912,11 @@ function bandApi(path) {
 
 // 从后端拉取手环最新状态（心率 hr / 收缩压 sbp / 舒张压 dbp / 步数 steps / 电量 battery / 时间戳 ts）
 // 后端不可达或尚无上报数据时 resolve(null)，由页面显示 "--"，不做模拟兜底
+// URL 附加时间戳 + 后端 no-store，双保险绕过浏览器 HTTP 缓存，保证每次轮询都是最新数据
 function fetchBandLatest(deviceid) {
   return new Promise(function (resolve) {
     uni.request({
-      url: bandApi('/api/devices/' + deviceid),
+      url: bandApi('/api/devices/' + deviceid) + '?_t=' + Date.now(),
       method: 'GET',
       timeout: 5000,
       success: function success(res) {
@@ -936,11 +937,11 @@ function fetchBandLatest(deviceid) {
 }
 
 // 拉取当前公网上报地址（隧道重启后 lhr.life 域名会变化，后端返回最新一条）
-// 后端不可达或未配置隧道时 resolve(null)，页面显示占位符
+// 后端不可达或未配置隧道时 resolve(null)，页面显示占位符；同样加时间戳防缓存
 function fetchBandAddress() {
   return new Promise(function (resolve) {
     uni.request({
-      url: bandApi('/api/address'),
+      url: bandApi('/api/address') + '?_t=' + Date.now(),
       method: 'GET',
       timeout: 5000,
       success: function success(res) {

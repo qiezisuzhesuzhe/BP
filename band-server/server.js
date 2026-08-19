@@ -359,6 +359,13 @@ app.get('/health/sleep', (req, res) => {
 })
 
 /* ---------------- REST API（给 H5 前端） ---------------- */
+// API 响应禁止缓存：H5 每 1 分钟轮询拉取最新数据，若被浏览器内存缓存命中
+// 将一直返回旧数据（整页刷新才更新），此处强制 no-store 保证每次都发新请求
+app.use('/api', (req, res, next) => {
+  res.set('Cache-Control', 'no-store')
+  next()
+})
+
 app.get('/api/devices', (req, res) => {
   const list = Object.keys(db.devices).map(id => db.devices[id])
   res.json({ code: 0, data: list })

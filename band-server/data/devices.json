@@ -3182,7 +3182,7 @@
       "name": "智能手环",
       "model": "BP100CE",
       "firstSeen": 1787136812838,
-      "lastSeen": 1787140830416,
+      "lastSeen": 1787141244666,
       "version": "91.0.0.59",
       "netType": "LTE",
       "wearing": "1",
@@ -3191,17 +3191,17 @@
         "steps": 131,
         "distance": 96,
         "calorie": 9,
-        "battery": 99,
+        "battery": 95,
         "charging": false,
-        "ts": 1787169600,
-        "updatedAt": 1787140830416,
-        "sbp": 139,
-        "dbp": 75,
-        "hr": 75,
+        "ts": 1787170020,
+        "updatedAt": 1787141244666,
+        "sbp": 135,
+        "dbp": 89,
+        "hr": 71,
         "sleep": {
           "deep": 0,
-          "light": 0,
-          "wake": 5,
+          "light": 1,
+          "wake": 4,
           "total": 5
         },
         "spo2": 99,
@@ -3398,6 +3398,85 @@
             "total": 5
           },
           "ts": 1787169600
+        },
+        {
+          "at": 1787140989472,
+          "steps": 131,
+          "distance": 96,
+          "calorie": 9,
+          "battery": 99,
+          "charging": false,
+          "ts": 1787169787
+        },
+        {
+          "at": 1787141004697,
+          "hr": 73,
+          "ts": 1787169780,
+          "sleep": {
+            "deep": 0,
+            "light": 0,
+            "wake": 5,
+            "total": 5
+          }
+        },
+        {
+          "at": 1787141051852,
+          "steps": 131,
+          "distance": 96,
+          "calorie": 9,
+          "battery": 98,
+          "charging": false,
+          "ts": 1787169849
+        },
+        {
+          "at": 1787141066358,
+          "hr": 74,
+          "ts": 1787169840
+        },
+        {
+          "at": 1787141170895,
+          "steps": 131,
+          "distance": 96,
+          "calorie": 9,
+          "battery": 95,
+          "charging": false,
+          "ts": 1787169967
+        },
+        {
+          "at": 1787141181501,
+          "steps": 131,
+          "distance": 96,
+          "calorie": 9,
+          "battery": 95,
+          "charging": false,
+          "ts": 1787169979
+        },
+        {
+          "at": 1787141196172,
+          "hr": 73,
+          "sbp": 135,
+          "dbp": 89,
+          "ts": 1787169960
+        },
+        {
+          "at": 1787141230085,
+          "steps": 131,
+          "distance": 96,
+          "calorie": 9,
+          "battery": 95,
+          "charging": false,
+          "ts": 1787170028
+        },
+        {
+          "at": 1787141244666,
+          "hr": 71,
+          "sleep": {
+            "deep": 0,
+            "light": 1,
+            "wake": 4,
+            "total": 5
+          },
+          "ts": 1787170020
         }
       ]
     }

@@ -678,7 +678,7 @@ export default {
 }
 
 .vital__icon {
-  font-size: $font-size-sm;
+  font-size: $font-size-md;
   margin-right: $space-2;
 }
 
@@ -699,7 +699,7 @@ export default {
 }
 
 .vital__name {
-  font-size: $font-size-2xs;
+  font-size: $font-size-sm;
   font-weight: $font-weight-semibold;
   color: $text-secondary;
   white-space: nowrap;

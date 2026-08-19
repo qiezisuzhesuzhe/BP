@@ -864,7 +864,7 @@ render._withStripped = true
 /*!****************************!*\
   !*** ./src/common/band.js ***!
   \****************************/
-/*! exports provided: BAND_SERVER, bandApi, fetchBandLatest, bindBandDevice, simulateLatest, extractDeviceId, bpLevel */
+/*! exports provided: BAND_SERVER, bandApi, fetchBandLatest, bindBandDevice, extractDeviceId, bpLevel */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -873,7 +873,6 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "bandApi", function() { return bandApi; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "fetchBandLatest", function() { return fetchBandLatest; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "bindBandDevice", function() { return bindBandDevice; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "simulateLatest", function() { return simulateLatest; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "extractDeviceId", function() { return extractDeviceId; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "bpLevel", function() { return bpLevel; });
 /* harmony import */ var core_js_modules_es_object_to_string_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! core-js/modules/es.object.to-string.js */ "07d7");
@@ -898,7 +897,8 @@ __webpack_require__.r(__webpack_exports__);
  *  - /pb/upload 等 6 个路径接收手环 4G 直传数据（埃微自定义二进制 + protobuf）
  *  - /api/devices 供 H5 查询最新心率/血压/步数
  *
- * 本模块：后端地址配置 + 拉取/绑定封装；后端不可达时降级为本地模拟，保证原型可演示。
+ * 本模块：后端地址配置 + 拉取/绑定封装。只展示后端真实上报的数据，
+ * 未收到数据时返回 null，由页面显示占位符（--）。
  */
 
 var BAND_SERVER = 'http://localhost:8091';
@@ -907,6 +907,7 @@ function bandApi(path) {
 }
 
 // 从后端拉取手环最新状态（心率 hr / 收缩压 sbp / 舒张压 dbp / 步数 steps / 电量 battery / 时间戳 ts）
+// 后端不可达或尚无上报数据时 resolve(null)，由页面显示 "--"，不做模拟兜底
 function fetchBandLatest(deviceid) {
   return new Promise(function (resolve) {
     uni.request({
@@ -921,10 +922,10 @@ function fetchBandLatest(deviceid) {
             return;
           }
         }
-        resolve(simulateLatest());
+        resolve(null);
       },
       fail: function fail() {
-        resolve(simulateLatest());
+        resolve(null);
       }
     });
   });
@@ -953,25 +954,6 @@ function bindBandDevice(deviceid, name) {
       }
     });
   });
-}
-
-// 降级模拟：后端未启动时生成本地演示数据
-var simSeq = 0;
-function simulateLatest() {
-  simSeq++;
-  var hr = 66 + Math.floor(Math.random() * 18);
-  var sbp = 116 + Math.floor(Math.random() * 18);
-  var dbp = 74 + Math.floor(Math.random() * 14);
-  return {
-    steps: simSeq * 38 + Math.floor(Math.random() * 60),
-    hr: hr,
-    sbp: sbp,
-    dbp: dbp,
-    battery: 7,
-    ts: Math.floor(Date.now() / 1000),
-    updatedAt: Date.now(),
-    _sim: true
-  };
 }
 
 // 从二维码文本中宽容提取设备号（IMEI/deviceid），兼容多种厂商二维码格式

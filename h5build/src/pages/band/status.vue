@@ -27,7 +27,6 @@
             <text class="fa-solid fa-heart-pulse hr__label-icon"></text>
             <text class="hr__label-t">实时心率</text>
           </view>
-          <text v-if="latest._sim" class="hr__sim">模拟数据</text>
         </view>
         <view class="hr__value">
           <text class="hr__num">{{ latest.hr != null ? latest.hr : '--' }}</text>
@@ -67,7 +66,7 @@
       </view>
       <view class="steps">
         <view class="steps__main">
-          <text class="steps__num">{{ fmt(steps) }}</text>
+          <text class="steps__num">{{ steps != null ? fmt(steps) : '--' }}</text>
           <text class="steps__unit">步</text>
         </view>
         <view class="steps__bar">
@@ -84,8 +83,8 @@
     <!-- 底部状态条 -->
     <view class="foot">
       <view class="foot__left">
-        <view class="foot__dot" :class="{ 'foot__dot--ok': !latest._sim }"></view>
-        <text class="foot__t">{{ latest._sim ? '后端未连接，展示本地模拟数据' : '已连接接收服务' }}</text>
+        <view class="foot__dot" :class="{ 'foot__dot--ok': online }"></view>
+        <text class="foot__t">{{ online ? '已连接接收服务' : '等待手环数据上报…' }}</text>
       </view>
       <view class="foot__right">
         <text class="foot__sync">上次同步 {{ syncText }}</text>
@@ -126,9 +125,10 @@ export default {
       return { label: lv.label, color: colorMap[lv.key], bg: bgMap[lv.key] }
     },
     steps() {
-      return this.latest.steps || 0
+      return this.latest.steps != null ? this.latest.steps : null
     },
     stepsPct() {
+      if (this.steps == null) return 0
       return Math.min(100, Math.round((this.steps / 10000) * 100))
     },
     measuredAt() {
@@ -177,18 +177,19 @@ export default {
       const latest = await fetchBandLatest(this.deviceid)
       this.latest = latest || {}
       this.lastSyncAt = Date.now()
-      // 后端有数据（非模拟）视为在线
-      this.online = !this.latest._sim
+      // 只有后端真实上报过数据才视为在线
+      const l = this.latest
+      this.online = !!(l && (l.hr != null || l.sbp != null || l.dbp != null || l.steps != null))
       // 回写本地 store，保持设备列表一致
       if (this.id) {
         this.$store.commit('UPDATE_DEVICE_DATA', {
           id: this.id,
           data: {
-            sys: this.latest.sbp,
-            dia: this.latest.dbp,
-            heartRate: this.latest.hr,
-            steps: this.latest.steps,
-            battery: this.latest.battery
+            sys: l.sbp,
+            dia: l.dbp,
+            heartRate: l.hr,
+            steps: l.steps,
+            battery: l.battery
           },
           lastSync: this.syncText
         })
@@ -312,14 +313,6 @@ export default {
   color: rgba(255, 255, 255, 0.92);
   font-size: $font-size-xs;
   font-weight: $font-weight-semibold;
-}
-
-.hr__sim {
-  font-size: $font-size-2xs;
-  color: rgba(255, 255, 255, 0.75);
-  background: rgba(0, 0, 0, 0.12);
-  padding: $space-1 $space-2;
-  border-radius: $radius-full;
 }
 
 .hr__value {

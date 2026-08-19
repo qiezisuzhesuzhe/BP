@@ -5,7 +5,8 @@
  *  - /pb/upload 等 6 个路径接收手环 4G 直传数据（埃微自定义二进制 + protobuf）
  *  - /api/devices 供 H5 查询最新心率/血压/步数
  *
- * 本模块：后端地址配置 + 拉取/绑定封装；后端不可达时降级为本地模拟，保证原型可演示。
+ * 本模块：后端地址配置 + 拉取/绑定封装。只展示后端真实上报的数据，
+ * 未收到数据时返回 null，由页面显示占位符（--）。
  */
 
 export const BAND_SERVER = 'http://localhost:8091'
@@ -15,6 +16,7 @@ export function bandApi(path) {
 }
 
 // 从后端拉取手环最新状态（心率 hr / 收缩压 sbp / 舒张压 dbp / 步数 steps / 电量 battery / 时间戳 ts）
+// 后端不可达或尚无上报数据时 resolve(null)，由页面显示 "--"，不做模拟兜底
 export function fetchBandLatest(deviceid) {
   return new Promise((resolve) => {
     uni.request({
@@ -29,10 +31,10 @@ export function fetchBandLatest(deviceid) {
             return
           }
         }
-        resolve(simulateLatest())
+        resolve(null)
       },
       fail() {
-        resolve(simulateLatest())
+        resolve(null)
       }
     })
   })
@@ -58,25 +60,6 @@ export function bindBandDevice(deviceid, name) {
       }
     })
   })
-}
-
-// 降级模拟：后端未启动时生成本地演示数据
-let simSeq = 0
-export function simulateLatest() {
-  simSeq++
-  const hr = 66 + Math.floor(Math.random() * 18)
-  const sbp = 116 + Math.floor(Math.random() * 18)
-  const dbp = 74 + Math.floor(Math.random() * 14)
-  return {
-    steps: simSeq * 38 + Math.floor(Math.random() * 60),
-    hr: hr,
-    sbp: sbp,
-    dbp: dbp,
-    battery: 7,
-    ts: Math.floor(Date.now() / 1000),
-    updatedAt: Date.now(),
-    _sim: true
-  }
 }
 
 // 从二维码文本中宽容提取设备号（IMEI/deviceid），兼容多种厂商二维码格式

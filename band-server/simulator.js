@@ -72,8 +72,10 @@ async function reportOnce(stepBase) {
         bp_data: { sbp, dbp },
         // 睡眠：最近 30 分钟睡眠状态（0 清醒 / 1 浅睡 / 2 深睡）
         sleep_data: { sleep_data: [1, 1, 2, 2, 2, 2, 1, 1, 1, 2, 2, 2, 2, 1, 1, 0, 1, 2, 2, 2, 1, 1, 1, 2, 2, 1, 1, 1, 0, 1], shut_down: false, charge: false },
-        // 体温/皮肤温度：type=1 可用；evi_body=体温(×10)，esti_arm 高16位=体温、低16位=皮肤温度(×10)
-        temperature_data: { type: 1, evi_body: 375, esti_arm: (375 << 16) | 328 }
+        // 体温/皮肤温度：evi_body=体温(×100，3740=37.40℃)，esti_arm 高16位=体温、低16位=皮肤温度(×100，3250=32.50℃)
+        temperature_data: { type: 1, evi_body: 3740, esti_arm: (3740 << 16) | 3250 },
+        // 压力值：hrv_data.fatigue=疲劳度，压力值 = 100 - fatigue（fatigue=30 → 压力70）
+        hrv_data: { SDNN: 45, RMSSD: 30, PNN50: 12, MEAN: 60, fatigue: 30 }
       }
     }
   })

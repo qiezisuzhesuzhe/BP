@@ -153,12 +153,17 @@ function parsePayload(opt, payload) {
         o.spo2Min = h.bxoy_data.min_oxy >>> 0
       }
       // 体温/皮肤温度：HisHealthTemp.type=1 可用（0=算法计算中，暂不可用）
-      // evi_body=体温，esti_arm 高位两字节=体温、低位两字节=皮肤温度；温度单位均为 0.1℃（如 375=37.5℃）
+      // evi_body=体温（单位 0.01℃，如 3343=33.43℃）；esti_arm 高16位=体温冗余、低16位=皮肤温度，低16位为 0 表示无皮肤温度数据
       if (h.temperature_data) {
         const t = h.temperature_data
         o.tempOk = t.type === 1
-        if (t.evi_body != null) o.bodyTemp = (t.evi_body >>> 0) / 10
-        if (t.esti_arm != null) o.skinTemp = ((t.esti_arm >>> 0) & 0xffff) / 10
+        if (t.evi_body != null && (t.evi_body >>> 0)) o.bodyTemp = (t.evi_body >>> 0) / 100
+        const skin = t.esti_arm != null ? ((t.esti_arm >>> 0) & 0xffff) : 0
+        if (skin) o.skinTemp = skin / 100
+      }
+      // 压力值：HisHealthHrv.fatigue=疲劳度，压力值 = 100 - fatigue
+      if (h.hrv_data && h.hrv_data.fatigue != null) {
+        o.stress = Math.max(0, Math.min(100, Math.round(100 - h.hrv_data.fatigue)))
       }
       return { type: 'health', data: o }
     }
@@ -183,6 +188,19 @@ function parsePayload(opt, payload) {
       }
       if (his.spo2.time_stamp && his.spo2.time_stamp.date_time) o.ts = his.spo2.time_stamp.date_time.seconds >>> 0
       return { type: 'spo2', data: o }
+    }
+    // 体温（HisDataType=TEMPERATURE_DATA=8，HisDataTemperature → SensorTemp.evi_body/esti_arm）
+    if (his.temp) {
+      const s = his.temp.temperature
+      const o = {}
+      if (his.temp.time_stamp && his.temp.time_stamp.date_time) o.ts = his.temp.time_stamp.date_time.seconds >>> 0
+      if (s) {
+        o.tempOk = true
+        if (s.evi_body != null && (s.evi_body >>> 0)) o.bodyTemp = (s.evi_body >>> 0) / 100
+        const skin = s.esti_arm != null ? ((s.esti_arm >>> 0) & 0xffff) : 0
+        if (skin) o.skinTemp = skin / 100
+      }
+      return { type: 'health', data: o }
     }
     return null
   }
@@ -238,6 +256,7 @@ function mergeSamples(deviceid, packets) {
       if (data.bodyTemp !== undefined) snap.bodyTemp = data.bodyTemp
       if (data.skinTemp !== undefined) snap.skinTemp = data.skinTemp
       if (data.tempOk !== undefined) snap.tempOk = data.tempOk
+      if (data.stress !== undefined) snap.stress = data.stress
       if (data.ts) snap.ts = data.ts
     } else if (type === 'ecg') {
       if (data.ecgN !== undefined) snap.ecgN = data.ecgN

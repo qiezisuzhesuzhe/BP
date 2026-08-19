@@ -5,18 +5,18 @@
       "name": "智能手环",
       "model": "",
       "firstSeen": 1787134034521,
-      "lastSeen": 1787141855766,
+      "lastSeen": 1787142581796,
       "latest": {
-        "steps": 140,
-        "distance": 980,
-        "calorie": 1,
-        "battery": 7,
+        "steps": 96,
+        "distance": 672,
+        "calorie": 0,
+        "battery": 6,
         "charging": false,
-        "updatedAt": 1787141855766,
-        "ts": 1787141855,
+        "updatedAt": 1787142581796,
+        "ts": 1787142581,
         "hr": 77,
-        "sbp": 120,
-        "dbp": 81,
+        "sbp": 121,
+        "dbp": 85,
         "sleep": {
           "deep": 13,
           "light": 15,
@@ -191,9 +191,10 @@
           -13
         ],
         "ecgTs": 1787138589,
-        "bodyTemp": 37.5,
-        "skinTemp": 32.8,
-        "tempOk": true
+        "bodyTemp": 37.4,
+        "skinTemp": 32.5,
+        "tempOk": true,
+        "stress": 70
       },
       "history": [
         {
@@ -3194,10 +3195,29 @@
             "light": 15,
             "wake": 2,
             "total": 30
+          }
+        },
+        {
+          "at": 1787142581796,
+          "steps": 96,
+          "distance": 672,
+          "calorie": 0,
+          "battery": 6,
+          "charging": false,
+          "ts": 1787142581,
+          "hr": 77,
+          "sbp": 121,
+          "dbp": 85,
+          "sleep": {
+            "deep": 13,
+            "light": 15,
+            "wake": 2,
+            "total": 30
           },
-          "bodyTemp": 37.5,
-          "skinTemp": 32.8,
-          "tempOk": true
+          "bodyTemp": 37.4,
+          "skinTemp": 32.5,
+          "tempOk": true,
+          "stress": 70
         }
       ]
     },
@@ -3206,22 +3226,22 @@
       "name": "智能手环",
       "model": "BP100CE",
       "firstSeen": 1787136812838,
-      "lastSeen": 1787141724964,
+      "lastSeen": 1787142772942,
       "version": "91.0.0.59",
       "netType": "LTE",
       "wearing": "1",
       "lastDeviceInfo": 1787140482904,
       "latest": {
-        "steps": 17,
-        "distance": 109,
-        "calorie": 10,
-        "battery": 95,
+        "steps": 546,
+        "distance": 392,
+        "calorie": 30,
+        "battery": 94,
         "charging": false,
-        "ts": 1787170500,
-        "updatedAt": 1787141724964,
+        "ts": 1787171571,
+        "updatedAt": 1787142772942,
         "sbp": 135,
         "dbp": 89,
-        "hr": 75,
+        "hr": 95,
         "sleep": {
           "deep": 0,
           "light": 0,
@@ -3525,6 +3545,132 @@
           "spo2": 97,
           "spo2Max": 97,
           "spo2Min": 97
+        },
+        {
+          "at": 1787142189288,
+          "steps": 148,
+          "distance": 109,
+          "calorie": 10,
+          "battery": 95,
+          "charging": false,
+          "ts": 1787170987
+        },
+        {
+          "at": 1787142204162,
+          "sleep": {
+            "deep": 0,
+            "light": 0,
+            "wake": 5,
+            "total": 5
+          },
+          "ts": 1787170980,
+          "hr": 70,
+          "spo2": 97,
+          "spo2Max": 97,
+          "spo2Min": 97
+        },
+        {
+          "at": 1787142249135,
+          "steps": 148,
+          "distance": 109,
+          "calorie": 10,
+          "battery": 95,
+          "charging": false,
+          "ts": 1787171046
+        },
+        {
+          "at": 1787142265303,
+          "ts": 1787171040
+        },
+        {
+          "at": 1787142364852,
+          "steps": 269,
+          "distance": 194,
+          "calorie": 18,
+          "battery": 95,
+          "charging": false,
+          "ts": 1787171162
+        },
+        {
+          "at": 1787142384873,
+          "steps": 76,
+          "sleep": {
+            "deep": 0,
+            "light": 2,
+            "wake": 3,
+            "total": 5
+          },
+          "ts": 1787171160
+        },
+        {
+          "at": 1787142446322,
+          "steps": 321,
+          "distance": 231,
+          "calorie": 21,
+          "battery": 95,
+          "charging": false,
+          "ts": 1787171239
+        },
+        {
+          "at": 1787142460976,
+          "steps": 52,
+          "sleep": {
+            "deep": 0,
+            "light": 0,
+            "wake": 5,
+            "total": 5
+          },
+          "ts": 1787171220
+        },
+        {
+          "at": 1787142697739,
+          "steps": 414,
+          "distance": 297,
+          "calorie": 24,
+          "battery": 95,
+          "charging": false,
+          "ts": 1787171495
+        },
+        {
+          "at": 1787142717870,
+          "steps": 1,
+          "sleep": {
+            "deep": 0,
+            "light": 0,
+            "wake": 5,
+            "total": 5
+          },
+          "ts": 1787171460,
+          "hr": 95
+        },
+        {
+          "at": 1787142738577,
+          "steps": 485,
+          "distance": 348,
+          "calorie": 30,
+          "battery": 95,
+          "charging": false,
+          "ts": 1787171535
+        },
+        {
+          "at": 1787142754283,
+          "steps": 93,
+          "sleep": {
+            "deep": 0,
+            "light": 0,
+            "wake": 5,
+            "total": 5
+          },
+          "ts": 1787171520
+        },
+        {
+          "at": 1787142772942,
+          "steps": 546,
+          "distance": 392,
+          "calorie": 30,
+          "battery": 94,
+          "charging": false,
+          "ts": 1787171571
         }
       ]
     }

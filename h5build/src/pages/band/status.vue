@@ -78,6 +78,34 @@
       </view>
     </view>
 
+    <!-- 压力 -->
+    <view class="wrap">
+      <view class="stress">
+        <view class="stress__head">
+          <view class="stress__title">
+            <text class="fa-solid fa-gauge-high stress__icon"></text>
+            <text class="stress__name">压力</text>
+          </view>
+          <view class="stress__tag" :style="{ background: stressColor.bg, color: stressColor.color }">
+            <text class="stress__tag-dot" :style="{ background: stressColor.color }"></text>
+            <text class="stress__tag-t">{{ stressLabel }}</text>
+          </view>
+        </view>
+        <view class="stress__value">
+          <text class="stress__num">{{ stressText }}</text>
+          <text class="stress__unit">压力指数</text>
+        </view>
+        <view class="stress__bar">
+          <view class="stress__bar-in" :style="{ width: stressPct + '%', background: stressColor.color }"></view>
+        </view>
+        <view class="stress__scale">
+          <text class="stress__scale-t">放松</text>
+          <text class="stress__scale-t">适中</text>
+          <text class="stress__scale-t">偏高</text>
+        </view>
+      </view>
+    </view>
+
     <!-- 血压 -->
     <view class="wrap">
       <view class="sec-head">
@@ -312,6 +340,28 @@ export default {
     skinTempText() {
       if (this.latest.skinTemp == null || this.latest.tempOk === false) return '--'
       return this.latest.skinTemp.toFixed(1)
+    },
+    /* ---------- 压力（HisHealthHrv.fatigue → 压力值 = 100 - fatigue） ---------- */
+    stressText() {
+      return this.latest.stress != null ? this.latest.stress : '--'
+    },
+    stressLabel() {
+      const s = this.latest.stress
+      if (s == null) return '--'
+      if (s < 50) return '放松'
+      if (s < 80) return '适中'
+      return '偏高'
+    },
+    stressPct() {
+      if (this.latest.stress == null) return 0
+      return Math.max(0, Math.min(100, this.latest.stress))
+    },
+    stressColor() {
+      const s = this.latest.stress
+      if (s == null) return { bg: '#f2f7fa', color: '#94a3b8' }
+      if (s < 50) return { bg: '#ddf7ed', color: '#27ae60' }
+      if (s < 80) return { bg: '#fdf4ed', color: '#f2994a' }
+      return { bg: '#fdeeee', color: '#eb5757' }
     },
     /* ---------- 心电图 ---------- */
     ecgPoints() {
@@ -750,6 +800,99 @@ export default {
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+}
+
+/* 压力卡（全宽，带等级标签与进度条） */
+.stress {
+  margin-top: $space-8;
+  background: $bg-surface;
+  border-radius: $radius-card-child;
+  box-shadow: $shadow-sm;
+  padding: $space-4;
+}
+
+.stress__head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.stress__title {
+  display: flex;
+  align-items: center;
+}
+
+.stress__icon {
+  font-size: $font-size-md;
+  color: #8b5cf6;
+  margin-right: $space-2;
+}
+
+.stress__name {
+  font-size: $font-size-sm;
+  font-weight: $font-weight-semibold;
+  color: $text-secondary;
+}
+
+.stress__tag {
+  display: flex;
+  align-items: center;
+  padding: $space-1 $space-3;
+  border-radius: $radius-full;
+  font-size: $font-size-2xs;
+  font-weight: $font-weight-semibold;
+}
+
+.stress__tag-dot {
+  width: $size-badge-sm;
+  height: $size-badge-sm;
+  border-radius: 50%;
+  margin-right: $space-1;
+}
+
+.stress__value {
+  display: flex;
+  align-items: baseline;
+  margin-top: $space-3;
+}
+
+.stress__num {
+  font-size: $font-size-2xl;
+  font-weight: $font-weight-heavy;
+  font-family: $font-family-en;
+  line-height: 1;
+  color: $text-primary;
+}
+
+.stress__unit {
+  margin-left: $space-2;
+  font-size: $font-size-2xs;
+  color: $text-muted;
+}
+
+.stress__bar {
+  margin-top: $space-3;
+  height: $space-2;
+  border-radius: $radius-full;
+  background: $bg-section;
+  overflow: hidden;
+}
+
+.stress__bar-in {
+  height: 100%;
+  border-radius: $radius-full;
+  transition: width 0.6s ease;
+}
+
+.stress__scale {
+  margin-top: $space-1;
+  display: flex;
+  justify-content: space-between;
+}
+
+.stress__scale-t {
+  font-size: $font-size-2xs;
+  color: $text-hint;
 }
 
 /* 血压卡 */

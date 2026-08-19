@@ -88,9 +88,9 @@
       </view>
       <view class="foot__right">
         <text class="foot__sync">上次同步 {{ syncText }}</text>
-        <view class="foot__btn" @tap="load">
-          <text class="fa-solid fa-rotate foot__btn-icon"></text>
-          <text class="foot__btn-t">刷新</text>
+        <view class="foot__btn" :class="{ 'foot__btn--busy': refreshing }" @tap="doRefresh">
+          <text class="fa-solid fa-rotate foot__btn-icon" :class="{ 'foot__btn-icon--spin': refreshing }"></text>
+          <text class="foot__btn-t">{{ refreshing ? '刷新中' : '刷新' }}</text>
         </view>
       </view>
     </view>
@@ -111,6 +111,7 @@ export default {
       latest: {},
       lastSyncAt: 0,
       timer: null,
+      refreshing: false,
       online: true
     }
   },
@@ -149,10 +150,10 @@ export default {
   },
   onLoad(options) {
     this.id = (options && options.id) || ''
-    const dev = this.$store.getters.deviceById(this.id)
-    this.deviceid = (dev && dev.deviceid) || ''
+    this.ensureDevice()
   },
   onShow() {
+    this.ensureDevice()
     this.load()
     this.timer = setInterval(() => this.load(), POLL_MS)
   },
@@ -169,8 +170,31 @@ export default {
         this.timer = null
       }
     },
+    // 从 store 设备记录取 deviceid（扫码绑定跳转/页面重进时兜底）
+    ensureDevice() {
+      if (this.deviceid) return
+      const dev = this.$store.getters.deviceById(this.id)
+      if (dev && dev.deviceid) this.deviceid = dev.deviceid
+    },
     fmt(n) {
       return String(n == null ? 0 : n).replace(/\B(?=(\d{3})+(?!\d))/g, ',')
+    },
+    // 手动刷新：loading 反馈 + 结果提示
+    async doRefresh() {
+      if (this.refreshing) return
+      this.refreshing = true
+      await this.load()
+      this.refreshing = false
+      if (!this.deviceid) {
+        uni.showToast({ title: '未绑定设备号', icon: 'none' })
+        return
+      }
+      const l = this.latest
+      const hasData = !!(l && (l.hr != null || l.sbp != null || l.dbp != null || l.steps != null))
+      uni.showToast({
+        title: hasData ? '已刷新，数据已更新' : '暂无新数据，等待手环上报',
+        icon: 'none'
+      })
     },
     async load() {
       if (!this.deviceid) return
@@ -497,10 +521,27 @@ export default {
   background: $brand-primary-active;
 }
 
+.foot__btn--busy {
+  opacity: 0.7;
+}
+
 .foot__btn-icon {
   color: $text-inverse;
   font-size: $font-size-2xs;
   margin-right: $space-1;
+}
+
+.foot__btn-icon--spin {
+  animation: foot-spin 0.8s linear infinite;
+}
+
+@keyframes foot-spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
 }
 
 .foot__btn-t {

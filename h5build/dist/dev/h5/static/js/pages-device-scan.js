@@ -864,7 +864,7 @@ render._withStripped = true
 /*!****************************!*\
   !*** ./src/common/band.js ***!
   \****************************/
-/*! exports provided: BAND_SERVER, bandApi, fetchBandLatest, fetchBandAddress, bindBandDevice, extractDeviceId, bpLevel */
+/*! exports provided: BAND_SERVER, bandApi, fetchBandLatest, fetchBandAddress, sendBandMessage, bindBandDevice, extractDeviceId, bpLevel */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -873,6 +873,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "bandApi", function() { return bandApi; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "fetchBandLatest", function() { return fetchBandLatest; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "fetchBandAddress", function() { return fetchBandAddress; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "sendBandMessage", function() { return sendBandMessage; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "bindBandDevice", function() { return bindBandDevice; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "extractDeviceId", function() { return extractDeviceId; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "bpLevel", function() { return bpLevel; });
@@ -951,6 +952,33 @@ function fetchBandAddress() {
       },
       fail: function fail() {
         resolve(null);
+      }
+    });
+  });
+}
+
+// 发送消息到手环（后端转发 entservice 指令下发，见 server.js /api/band/message）
+// title ≤15 字节，description ≤240 字节；成功 resolve(null)，失败 resolve(错误信息)
+function sendBandMessage(deviceid, title, description) {
+  return new Promise(function (resolve) {
+    uni.request({
+      url: bandApi('/api/band/message'),
+      method: 'POST',
+      data: {
+        device_id: deviceid,
+        title: title,
+        description: description
+      },
+      timeout: 15000,
+      success: function success(res) {
+        if (res.statusCode === 200 && res.data && res.data.code === 0) {
+          resolve(null);
+        } else {
+          resolve(res.data && res.data.message || '发送失败(' + (res.statusCode || '') + ')');
+        }
+      },
+      fail: function fail() {
+        resolve('无法连接消息服务');
       }
     });
   });

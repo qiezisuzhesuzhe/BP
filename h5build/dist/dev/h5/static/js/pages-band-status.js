@@ -107,9 +107,40 @@ var render = function () {
     "v-uni-view",
     { staticClass: "hm-page" },
     [
-      _c("hm-navbar", {
-        attrs: { title: "手环状态", "bg-color": "transparent" },
-      }),
+      _c(
+        "hm-navbar",
+        { attrs: { title: "手环状态", "bg-color": "transparent" } },
+        [
+          _c(
+            "v-uni-view",
+            { attrs: { slot: "right" }, slot: "right" },
+            [
+              _c(
+                "v-uni-view",
+                {
+                  staticClass: "nav-refresh",
+                  class: { "nav-refresh--busy": _vm.refreshing },
+                  on: {
+                    click: function ($event) {
+                      arguments[0] = $event = _vm.$handleEvent($event)
+                      _vm.doRefresh.apply(void 0, arguments)
+                    },
+                  },
+                },
+                [
+                  _c("v-uni-text", {
+                    staticClass: "fa-solid fa-rotate nav-refresh__icon",
+                    class: { "nav-refresh__icon--spin": _vm.refreshing },
+                  }),
+                ],
+                1
+              ),
+            ],
+            1
+          ),
+        ],
+        1
+      ),
       _c(
         "v-uni-view",
         { staticClass: "wrap wrap--first" },
@@ -120,10 +151,24 @@ var render = function () {
             [
               _c(
                 "v-uni-view",
-                { staticClass: "head__icon" },
+                {
+                  staticClass: "head__icon",
+                  on: {
+                    click: function ($event) {
+                      arguments[0] = $event = _vm.$handleEvent($event)
+                      _vm.toggleAddr.apply(void 0, arguments)
+                    },
+                  },
+                },
                 [
                   _c("v-uni-text", {
                     staticClass: "fa-solid fa-heart-circle-check head__icon-t",
+                  }),
+                  _c("v-uni-text", {
+                    staticClass: "head__icon-eye",
+                    class: _vm.addrVisible
+                      ? "fa-solid fa-eye"
+                      : "fa-solid fa-eye-slash",
                   }),
                 ],
                 1
@@ -367,6 +412,63 @@ var render = function () {
         ],
         1
       ),
+      _vm.addrVisible
+        ? _c(
+            "v-uni-view",
+            { staticClass: "wrap" },
+            [
+              _c(
+                "v-uni-view",
+                { staticClass: "sec-head" },
+                [
+                  _c("v-uni-text", { staticClass: "sec-title" }, [
+                    _vm._v("上报地址"),
+                  ]),
+                  _c("v-uni-text", { staticClass: "sec-sub" }, [
+                    _vm._v("手环端需配置该地址"),
+                  ]),
+                ],
+                1
+              ),
+              _c(
+                "v-uni-view",
+                { staticClass: "addr" },
+                [
+                  _c(
+                    "v-uni-view",
+                    { staticClass: "addr__row" },
+                    [
+                      _c("v-uni-text", {
+                        staticClass: "fa-solid fa-cloud-arrow-up addr__icon",
+                      }),
+                      _c(
+                        "v-uni-text",
+                        {
+                          staticClass: "addr__url",
+                          class: { "addr__url--off": !_vm.address },
+                        },
+                        [_vm._v(_vm._s(_vm.address || "未获取到地址"))]
+                      ),
+                      _vm.addressChanged
+                        ? _c("v-uni-text", { staticClass: "addr__tag" }, [
+                            _vm._v("已变化"),
+                          ])
+                        : _vm._e(),
+                    ],
+                    1
+                  ),
+                  _c("v-uni-text", { staticClass: "addr__tip" }, [
+                    _vm._v(
+                      "进入页面/每次刷新自动核对，隧道重启导致地址变化会标记「已变化」"
+                    ),
+                  ]),
+                ],
+                1
+              ),
+            ],
+            1
+          )
+        : _vm._e(),
       _c(
         "v-uni-view",
         { staticClass: "wrap" },
@@ -376,46 +478,80 @@ var render = function () {
             { staticClass: "sec-head" },
             [
               _c("v-uni-text", { staticClass: "sec-title" }, [
-                _vm._v("上报地址"),
+                _vm._v("发送消息"),
               ]),
               _c("v-uni-text", { staticClass: "sec-sub" }, [
-                _vm._v("手环端需配置该地址"),
+                _vm._v("推送到手环屏幕"),
               ]),
             ],
             1
           ),
           _c(
             "v-uni-view",
-            { staticClass: "addr" },
+            { staticClass: "msg" },
             [
+              _c("v-uni-input", {
+                staticClass: "msg__input",
+                attrs: {
+                  maxlength: "5",
+                  placeholder: "标题（选填，≤15字节）",
+                  "placeholder-class": "msg__ph",
+                },
+                model: {
+                  value: _vm.msgTitle,
+                  callback: function ($$v) {
+                    _vm.msgTitle = $$v
+                  },
+                  expression: "msgTitle",
+                },
+              }),
+              _c("v-uni-textarea", {
+                staticClass: "msg__area",
+                attrs: {
+                  maxlength: "80",
+                  placeholder: "消息内容（≤240字节），发送后在手环上显示",
+                  "placeholder-class": "msg__ph",
+                },
+                model: {
+                  value: _vm.msgText,
+                  callback: function ($$v) {
+                    _vm.msgText = $$v
+                  },
+                  expression: "msgText",
+                },
+              }),
               _c(
                 "v-uni-view",
-                { staticClass: "addr__row" },
+                { staticClass: "msg__bar" },
                 [
-                  _c("v-uni-text", {
-                    staticClass: "fa-solid fa-cloud-arrow-up addr__icon",
-                  }),
+                  _c("v-uni-text", { staticClass: "msg__len" }, [
+                    _vm._v(_vm._s(_vm.msgBytes) + "/240 字节"),
+                  ]),
                   _c(
-                    "v-uni-text",
+                    "v-uni-view",
                     {
-                      staticClass: "addr__url",
-                      class: { "addr__url--off": !_vm.address },
+                      staticClass: "msg__btn",
+                      class: { "msg__btn--busy": _vm.msgSending },
+                      on: {
+                        click: function ($event) {
+                          arguments[0] = $event = _vm.$handleEvent($event)
+                          _vm.sendMsg.apply(void 0, arguments)
+                        },
+                      },
                     },
-                    [_vm._v(_vm._s(_vm.address || "未获取到地址"))]
+                    [
+                      _c("v-uni-text", {
+                        staticClass: "fa-solid fa-paper-plane msg__btn-icon",
+                      }),
+                      _c("v-uni-text", { staticClass: "msg__btn-t" }, [
+                        _vm._v(_vm._s(_vm.msgSending ? "发送中…" : "发送")),
+                      ]),
+                    ],
+                    1
                   ),
-                  _vm.addressChanged
-                    ? _c("v-uni-text", { staticClass: "addr__tag" }, [
-                        _vm._v("已变化"),
-                      ])
-                    : _vm._e(),
                 ],
                 1
               ),
-              _c("v-uni-text", { staticClass: "addr__tip" }, [
-                _vm._v(
-                  "进入页面/每次刷新自动核对，隧道重启导致地址变化会标记「已变化」"
-                ),
-              ]),
             ],
             1
           ),
@@ -449,29 +585,6 @@ var render = function () {
               _c("v-uni-text", { staticClass: "foot__sync" }, [
                 _vm._v("上次同步 " + _vm._s(_vm.syncText)),
               ]),
-              _c(
-                "v-uni-view",
-                {
-                  staticClass: "foot__btn",
-                  class: { "foot__btn--busy": _vm.refreshing },
-                  on: {
-                    click: function ($event) {
-                      arguments[0] = $event = _vm.$handleEvent($event)
-                      _vm.doRefresh.apply(void 0, arguments)
-                    },
-                  },
-                },
-                [
-                  _c("v-uni-text", {
-                    staticClass: "fa-solid fa-rotate foot__btn-icon",
-                    class: { "foot__btn-icon--spin": _vm.refreshing },
-                  }),
-                  _c("v-uni-text", { staticClass: "foot__btn-t" }, [
-                    _vm._v(_vm._s(_vm.refreshing ? "刷新中" : "刷新")),
-                  ]),
-                ],
-                1
-              ),
             ],
             1
           ),
@@ -575,7 +688,7 @@ __webpack_require__.r(__webpack_exports__);
 /*!****************************!*\
   !*** ./src/common/band.js ***!
   \****************************/
-/*! exports provided: BAND_SERVER, bandApi, fetchBandLatest, fetchBandAddress, bindBandDevice, extractDeviceId, bpLevel */
+/*! exports provided: BAND_SERVER, bandApi, fetchBandLatest, fetchBandAddress, sendBandMessage, bindBandDevice, extractDeviceId, bpLevel */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -584,6 +697,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "bandApi", function() { return bandApi; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "fetchBandLatest", function() { return fetchBandLatest; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "fetchBandAddress", function() { return fetchBandAddress; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "sendBandMessage", function() { return sendBandMessage; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "bindBandDevice", function() { return bindBandDevice; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "extractDeviceId", function() { return extractDeviceId; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "bpLevel", function() { return bpLevel; });
@@ -662,6 +776,33 @@ function fetchBandAddress() {
       },
       fail: function fail() {
         resolve(null);
+      }
+    });
+  });
+}
+
+// 发送消息到手环（后端转发 entservice 指令下发，见 server.js /api/band/message）
+// title ≤15 字节，description ≤240 字节；成功 resolve(null)，失败 resolve(错误信息)
+function sendBandMessage(deviceid, title, description) {
+  return new Promise(function (resolve) {
+    uni.request({
+      url: bandApi('/api/band/message'),
+      method: 'POST',
+      data: {
+        device_id: deviceid,
+        title: title,
+        description: description
+      },
+      timeout: 15000,
+      success: function success(res) {
+        if (res.statusCode === 200 && res.data && res.data.code === 0) {
+          resolve(null);
+        } else {
+          resolve(res.data && res.data.message || '发送失败(' + (res.statusCode || '') + ')');
+        }
+      },
+      fail: function fail() {
+        resolve('无法连接消息服务');
       }
     });
   });
@@ -752,7 +893,7 @@ function bpLevel(sbp, dbp) {
 var ___CSS_LOADER_API_IMPORT___ = __webpack_require__(/*! ../../../node_modules/css-loader/dist/runtime/api.js */ "JPst");
 exports = ___CSS_LOADER_API_IMPORT___(false);
 // Module
-exports.push([module.i, "@charset \"UTF-8\";\n/* 安康健康管理 · 设计令牌\n   来源：/workspace/DESIGN.md\n   方案：rpx + SCSS 变量（1px = 2rpx，基于 750rpx 设计基准） */\n/* ---------- 品牌色 ---------- */\n/* ---------- 头像 ---------- */\n/* ---------- 语义状态色 ---------- */\n/* ---------- 金色（尊享装饰） ---------- */\n/* ---------- 背景 ---------- */\n/* 斜向两色渐变：左上(#ddf7ed) → 右下(#f3f3f3)，末端即底色；\n   配合 App.vue 中 background-attachment: fixed 铺满视口固定，不随页面滚动/变长 */\n/* ---------- 文字 ---------- */\n/* ---------- 描边 / 遮罩 ---------- */\n/* ---------- 字体 ---------- */\n/* 英文/数字优先匹配 DIN Pro（Mac 自带 DIN Alternate 作为备选），中文回退苹方/雅黑 */\n/* 移动端最小舒适字号（可读正文下限）：\n   说明/入口/数据标签等可读文字不得小于 12px(24rpx)；\n   $font-size-2xs(10px) 仅限角标、徽标、装饰性元素 */\n/* ---------- 语义排版 ---------- */\n/* ---------- 间距 ---------- */\n/* ---------- 区块标题 ---------- */\n/* 标题下间距 = 列表间距；上间距 = 下间距 × 2 */\n/* ---------- 尺寸 ---------- */\n/* ---------- 圆角（已减半，更克制干净） ---------- */\n/* ---------- 阴影 ---------- */\n/* ---------- 层级 ---------- */\n/* ---------- 动效 ---------- */\n/* ---------- 页面容器 ---------- */\n.wrap[data-v-20cccf23] {\n  height: auto;\n  padding: %?32?% %?32?% 0;\n}\n/* 非首个容器顶部贴齐：卡片间距由自身撑开，区块标题由 sec-head 撑开 */\n.wrap[data-v-20cccf23]:not(.wrap--first) {\n  padding-top: 0;\n}\n/* ---------- 区块标题 ---------- */\n.sec-head[data-v-20cccf23] {\n  display: flex;\n  align-items: flex-end;\n  justify-content: space-between;\n  margin-top: %?64?%;\n  margin-bottom: %?32?%;\n}\n.sec-title[data-v-20cccf23] {\n  font-size: %?36?%;\n  font-weight: 800;\n  line-height: 1.1;\n  color: #1a2a3c;\n  letter-spacing: %?1?%;\n}\n.sec-sub[data-v-20cccf23] {\n  font-size: %?24?%;\n  color: #64748b;\n  margin-top: %?16?%;\n}\n.head[data-v-20cccf23] {\n  display: flex;\n  align-items: center;\n  background: #ffffff;\n  border-radius: %?20?%;\n  box-shadow: 0 %?4?% %?24?% rgba(15, 61, 53, 0.06);\n  padding: %?32?%;\n}\n.head__icon[data-v-20cccf23] {\n  width: %?88?%;\n  height: %?88?%;\n  border-radius: %?20?%;\n  background: rgba(212, 245, 238, 0.72);\n  display: flex;\n  align-items: center;\n  justify-content: center;\n  flex-shrink: 0;\n}\n.head__icon-t[data-v-20cccf23] {\n  font-size: %?44?%;\n  color: #389a82;\n}\n.head__main[data-v-20cccf23] {\n  flex: 1;\n  padding: 0 %?24?%;\n  overflow: hidden;\n}\n.head__name[data-v-20cccf23] {\n  display: block;\n  font-size: %?32?%;\n  font-weight: 800;\n  color: #1a2a3c;\n  line-height: 1.1;\n}\n.head__sn[data-v-20cccf23] {\n  display: block;\n  font-size: %?20?%;\n  color: #64748b;\n  margin-top: %?8?%;\n  white-space: nowrap;\n  overflow: hidden;\n  text-overflow: ellipsis;\n}\n.head__status[data-v-20cccf23] {\n  display: flex;\n  align-items: center;\n  flex-shrink: 0;\n  padding: %?8?% %?16?%;\n  border-radius: %?999?%;\n  background: #27ae60;\n}\n.head__status--off[data-v-20cccf23] {\n  background: #f2f7fa;\n}\n.head__dot[data-v-20cccf23] {\n  width: %?12?%;\n  height: %?12?%;\n  border-radius: 50%;\n  background: #ffffff;\n  margin-right: %?8?%;\n}\n.head__status--off .head__dot[data-v-20cccf23] {\n  background: #94a3b8;\n}\n.head__status-t[data-v-20cccf23] {\n  font-size: %?20?%;\n  color: #ffffff;\n  font-weight: 600;\n}\n.head__status--off .head__status-t[data-v-20cccf23] {\n  color: #64748b;\n}\n/* 心率卡 */\n.hr[data-v-20cccf23] {\n  margin-top: %?32?%;\n  background: linear-gradient(140deg, #4ab89e 0%, #84e8c2 100%);\n  border-radius: %?20?%;\n  padding: %?32?%;\n  box-shadow: 0 %?12?% %?48?% rgba(125, 212, 188, 0.18);\n}\n.hr__top[data-v-20cccf23] {\n  display: flex;\n  align-items: center;\n  justify-content: space-between;\n}\n.hr__label[data-v-20cccf23] {\n  display: flex;\n  align-items: center;\n}\n.hr__label-icon[data-v-20cccf23] {\n  color: rgba(255, 255, 255, 0.9);\n  font-size: %?28?%;\n  margin-right: %?16?%;\n}\n.hr__label-t[data-v-20cccf23] {\n  color: rgba(255, 255, 255, 0.92);\n  font-size: %?24?%;\n  font-weight: 600;\n}\n.hr__value[data-v-20cccf23] {\n  display: flex;\n  align-items: baseline;\n  margin-top: %?24?%;\n}\n.hr__num[data-v-20cccf23] {\n  font-size: %?72?%;\n  font-weight: 800;\n  color: #ffffff;\n  font-family: \"DIN Pro\", \"DIN Alternate\", \"Helvetica Neue\", Arial, sans-serif;\n  line-height: 1;\n}\n.hr__unit[data-v-20cccf23] {\n  margin-left: %?16?%;\n  font-size: %?28?%;\n  color: rgba(255, 255, 255, 0.85);\n}\n.hr__tip[data-v-20cccf23] {\n  display: block;\n  margin-top: %?16?%;\n  font-size: %?20?%;\n  color: rgba(255, 255, 255, 0.7);\n}\n/* 血压卡 */\n.bp[data-v-20cccf23] {\n  display: flex;\n  align-items: center;\n  background: #ffffff;\n  border-radius: %?20?%;\n  box-shadow: 0 %?4?% %?24?% rgba(15, 61, 53, 0.06);\n  padding: %?32?% 0;\n}\n.bp__col[data-v-20cccf23] {\n  flex: 1;\n  display: flex;\n  flex-direction: column;\n  align-items: center;\n}\n.bp__num[data-v-20cccf23] {\n  font-size: %?56?%;\n  font-weight: 800;\n  color: #1a2a3c;\n  font-family: \"DIN Pro\", \"DIN Alternate\", \"Helvetica Neue\", Arial, sans-serif;\n  line-height: 1;\n}\n.bp__t[data-v-20cccf23] {\n  margin-top: %?16?%;\n  font-size: %?20?%;\n  color: #64748b;\n}\n.bp__divider[data-v-20cccf23] {\n  width: %?1?%;\n  height: %?48?%;\n  background: #f2f7fa;\n}\n.bp-tag[data-v-20cccf23] {\n  display: flex;\n  align-items: center;\n  padding: %?8?% %?24?%;\n  border-radius: %?999?%;\n  font-size: %?20?%;\n  font-weight: 600;\n}\n.bp-tag__dot[data-v-20cccf23] {\n  width: %?12?%;\n  height: %?12?%;\n  border-radius: 50%;\n  margin-right: %?8?%;\n}\n/* 步数卡 */\n.steps[data-v-20cccf23] {\n  background: #ffffff;\n  border-radius: %?20?%;\n  box-shadow: 0 %?4?% %?24?% rgba(15, 61, 53, 0.06);\n  padding: %?32?%;\n}\n.steps__main[data-v-20cccf23] {\n  display: flex;\n  align-items: baseline;\n}\n.steps__num[data-v-20cccf23] {\n  font-size: %?56?%;\n  font-weight: 800;\n  color: #1a2a3c;\n  font-family: \"DIN Pro\", \"DIN Alternate\", \"Helvetica Neue\", Arial, sans-serif;\n  line-height: 1;\n}\n.steps__unit[data-v-20cccf23] {\n  margin-left: %?16?%;\n  font-size: %?24?%;\n  color: #64748b;\n}\n.steps__bar[data-v-20cccf23] {\n  margin-top: %?24?%;\n  height: %?16?%;\n  border-radius: %?999?%;\n  background: #f2f7fa;\n  overflow: hidden;\n}\n.steps__bar-in[data-v-20cccf23] {\n  height: 100%;\n  border-radius: %?999?%;\n  background: linear-gradient(90deg, #7dd4bc, #4ab89e);\n  transition: width 0.6s ease;\n}\n.steps__meta[data-v-20cccf23] {\n  margin-top: %?16?%;\n  display: flex;\n  justify-content: space-between;\n}\n.steps__meta-item[data-v-20cccf23] {\n  font-size: %?20?%;\n  color: #64748b;\n}\n/* 上报地址卡 */\n.addr[data-v-20cccf23] {\n  background: #ffffff;\n  border-radius: %?20?%;\n  box-shadow: 0 %?4?% %?24?% rgba(15, 61, 53, 0.06);\n  padding: %?32?%;\n}\n.addr__row[data-v-20cccf23] {\n  display: flex;\n  align-items: center;\n}\n.addr__icon[data-v-20cccf23] {\n  font-size: %?28?%;\n  color: #389a82;\n  margin-right: %?16?%;\n  flex-shrink: 0;\n}\n.addr__url[data-v-20cccf23] {\n  flex: 1;\n  font-size: %?28?%;\n  font-family: \"DIN Pro\", \"DIN Alternate\", \"Helvetica Neue\", Arial, sans-serif;\n  font-weight: 600;\n  color: #1a2a3c;\n  overflow: hidden;\n  white-space: nowrap;\n  text-overflow: ellipsis;\n}\n.addr__url--off[data-v-20cccf23] {\n  color: #64748b;\n}\n.addr__tag[data-v-20cccf23] {\n  flex-shrink: 0;\n  margin-left: %?16?%;\n  padding: %?8?% %?16?%;\n  border-radius: %?999?%;\n  font-size: %?20?%;\n  font-weight: 600;\n  color: #f2994a;\n  background: #fdf4ed;\n}\n.addr__tip[data-v-20cccf23] {\n  display: block;\n  margin-top: %?16?%;\n  font-size: %?20?%;\n  color: #64748b;\n}\n/* 底部状态 */\n.foot[data-v-20cccf23] {\n  display: flex;\n  align-items: center;\n  justify-content: space-between;\n  padding: %?32?% %?32?% 0;\n}\n.foot__left[data-v-20cccf23] {\n  display: flex;\n  align-items: center;\n}\n.foot__dot[data-v-20cccf23] {\n  width: %?12?%;\n  height: %?12?%;\n  border-radius: 50%;\n  background: #c6d2de;\n  margin-right: %?16?%;\n}\n.foot__dot--ok[data-v-20cccf23] {\n  background: #27ae60;\n}\n.foot__t[data-v-20cccf23] {\n  font-size: %?20?%;\n  color: #64748b;\n}\n.foot__sync[data-v-20cccf23] {\n  font-size: %?20?%;\n  color: #94a3b8;\n}\n.foot__right[data-v-20cccf23] {\n  display: flex;\n  align-items: center;\n}\n.foot__btn[data-v-20cccf23] {\n  display: flex;\n  align-items: center;\n  margin-left: %?24?%;\n  padding: %?8?% %?24?%;\n  border-radius: %?999?%;\n  background: #389a82;\n}\n.foot__btn--busy[data-v-20cccf23] {\n  opacity: 0.7;\n}\n.foot__btn-icon[data-v-20cccf23] {\n  color: #ffffff;\n  font-size: %?20?%;\n  margin-right: %?8?%;\n}\n.foot__btn-icon--spin[data-v-20cccf23] {\n  -webkit-animation: foot-spin-data-v-20cccf23 0.8s linear infinite;\n          animation: foot-spin-data-v-20cccf23 0.8s linear infinite;\n}\n@-webkit-keyframes foot-spin-data-v-20cccf23 {\nfrom {\n    -webkit-transform: rotate(0deg);\n            transform: rotate(0deg);\n}\nto {\n    -webkit-transform: rotate(360deg);\n            transform: rotate(360deg);\n}\n}\n@keyframes foot-spin-data-v-20cccf23 {\nfrom {\n    -webkit-transform: rotate(0deg);\n            transform: rotate(0deg);\n}\nto {\n    -webkit-transform: rotate(360deg);\n            transform: rotate(360deg);\n}\n}\n.foot__btn-t[data-v-20cccf23] {\n  color: #ffffff;\n  font-size: %?20?%;\n  font-weight: 600;\n}", ""]);
+exports.push([module.i, "@charset \"UTF-8\";\n/* 安康健康管理 · 设计令牌\n   来源：/workspace/DESIGN.md\n   方案：rpx + SCSS 变量（1px = 2rpx，基于 750rpx 设计基准） */\n/* ---------- 品牌色 ---------- */\n/* ---------- 头像 ---------- */\n/* ---------- 语义状态色 ---------- */\n/* ---------- 金色（尊享装饰） ---------- */\n/* ---------- 背景 ---------- */\n/* 斜向两色渐变：左上(#ddf7ed) → 右下(#f3f3f3)，末端即底色；\n   配合 App.vue 中 background-attachment: fixed 铺满视口固定，不随页面滚动/变长 */\n/* ---------- 文字 ---------- */\n/* ---------- 描边 / 遮罩 ---------- */\n/* ---------- 字体 ---------- */\n/* 英文/数字优先匹配 DIN Pro（Mac 自带 DIN Alternate 作为备选），中文回退苹方/雅黑 */\n/* 移动端最小舒适字号（可读正文下限）：\n   说明/入口/数据标签等可读文字不得小于 12px(24rpx)；\n   $font-size-2xs(10px) 仅限角标、徽标、装饰性元素 */\n/* ---------- 语义排版 ---------- */\n/* ---------- 间距 ---------- */\n/* ---------- 区块标题 ---------- */\n/* 标题下间距 = 列表间距；上间距 = 下间距 × 2 */\n/* ---------- 尺寸 ---------- */\n/* ---------- 圆角（已减半，更克制干净） ---------- */\n/* ---------- 阴影 ---------- */\n/* ---------- 层级 ---------- */\n/* ---------- 动效 ---------- */\n/* ---------- 页面容器 ---------- */\n.wrap[data-v-20cccf23] {\n  height: auto;\n  padding: %?32?% %?32?% 0;\n}\n/* 非首个容器顶部贴齐：卡片间距由自身撑开，区块标题由 sec-head 撑开 */\n.wrap[data-v-20cccf23]:not(.wrap--first) {\n  padding-top: 0;\n}\n/* ---------- 区块标题 ---------- */\n.sec-head[data-v-20cccf23] {\n  display: flex;\n  align-items: flex-end;\n  justify-content: space-between;\n  margin-top: %?64?%;\n  margin-bottom: %?32?%;\n}\n.sec-title[data-v-20cccf23] {\n  font-size: %?36?%;\n  font-weight: 800;\n  line-height: 1.1;\n  color: #1a2a3c;\n  letter-spacing: %?1?%;\n}\n.sec-sub[data-v-20cccf23] {\n  font-size: %?24?%;\n  color: #64748b;\n  margin-top: %?16?%;\n}\n.head[data-v-20cccf23] {\n  display: flex;\n  align-items: center;\n  background: #ffffff;\n  border-radius: %?20?%;\n  box-shadow: 0 %?4?% %?24?% rgba(15, 61, 53, 0.06);\n  padding: %?32?%;\n}\n.head__icon[data-v-20cccf23] {\n  position: relative;\n  width: %?88?%;\n  height: %?88?%;\n  border-radius: %?20?%;\n  background: rgba(212, 245, 238, 0.72);\n  display: flex;\n  align-items: center;\n  justify-content: center;\n  flex-shrink: 0;\n}\n/* 图标右下角小徽标：眼睛=地址区块可见，闭眼=隐藏 */\n.head__icon-eye[data-v-20cccf23] {\n  position: absolute;\n  right: %?-6?%;\n  bottom: %?-6?%;\n  width: %?34?%;\n  height: %?34?%;\n  border-radius: %?999?%;\n  background: #389a82;\n  color: #ffffff;\n  font-size: %?16?%;\n  display: flex;\n  align-items: center;\n  justify-content: center;\n  border: %?4?% solid #ffffff;\n  box-sizing: border-box;\n}\n.head__icon-t[data-v-20cccf23] {\n  font-size: %?44?%;\n  color: #389a82;\n}\n.head__main[data-v-20cccf23] {\n  flex: 1;\n  padding: 0 %?24?%;\n  overflow: hidden;\n}\n.head__name[data-v-20cccf23] {\n  display: block;\n  font-size: %?32?%;\n  font-weight: 800;\n  color: #1a2a3c;\n  line-height: 1.1;\n}\n.head__sn[data-v-20cccf23] {\n  display: block;\n  font-size: %?20?%;\n  color: #64748b;\n  margin-top: %?8?%;\n  white-space: nowrap;\n  overflow: hidden;\n  text-overflow: ellipsis;\n}\n.head__status[data-v-20cccf23] {\n  display: flex;\n  align-items: center;\n  flex-shrink: 0;\n  padding: %?8?% %?16?%;\n  border-radius: %?999?%;\n  background: #27ae60;\n}\n.head__status--off[data-v-20cccf23] {\n  background: #f2f7fa;\n}\n.head__dot[data-v-20cccf23] {\n  width: %?12?%;\n  height: %?12?%;\n  border-radius: 50%;\n  background: #ffffff;\n  margin-right: %?8?%;\n}\n.head__status--off .head__dot[data-v-20cccf23] {\n  background: #94a3b8;\n}\n.head__status-t[data-v-20cccf23] {\n  font-size: %?20?%;\n  color: #ffffff;\n  font-weight: 600;\n}\n.head__status--off .head__status-t[data-v-20cccf23] {\n  color: #64748b;\n}\n/* 心率卡 */\n.hr[data-v-20cccf23] {\n  margin-top: %?32?%;\n  background: linear-gradient(140deg, #4ab89e 0%, #84e8c2 100%);\n  border-radius: %?20?%;\n  padding: %?32?%;\n  box-shadow: 0 %?12?% %?48?% rgba(125, 212, 188, 0.18);\n}\n.hr__top[data-v-20cccf23] {\n  display: flex;\n  align-items: center;\n  justify-content: space-between;\n}\n.hr__label[data-v-20cccf23] {\n  display: flex;\n  align-items: center;\n}\n.hr__label-icon[data-v-20cccf23] {\n  color: rgba(255, 255, 255, 0.9);\n  font-size: %?28?%;\n  margin-right: %?16?%;\n}\n.hr__label-t[data-v-20cccf23] {\n  color: rgba(255, 255, 255, 0.92);\n  font-size: %?24?%;\n  font-weight: 600;\n}\n.hr__value[data-v-20cccf23] {\n  display: flex;\n  align-items: baseline;\n  margin-top: %?24?%;\n}\n.hr__num[data-v-20cccf23] {\n  font-size: %?72?%;\n  font-weight: 800;\n  color: #ffffff;\n  font-family: \"DIN Pro\", \"DIN Alternate\", \"Helvetica Neue\", Arial, sans-serif;\n  line-height: 1;\n}\n.hr__unit[data-v-20cccf23] {\n  margin-left: %?16?%;\n  font-size: %?28?%;\n  color: rgba(255, 255, 255, 0.85);\n}\n.hr__tip[data-v-20cccf23] {\n  display: block;\n  margin-top: %?16?%;\n  font-size: %?20?%;\n  color: rgba(255, 255, 255, 0.7);\n}\n/* 血压卡 */\n.bp[data-v-20cccf23] {\n  display: flex;\n  align-items: center;\n  background: #ffffff;\n  border-radius: %?20?%;\n  box-shadow: 0 %?4?% %?24?% rgba(15, 61, 53, 0.06);\n  padding: %?32?% 0;\n}\n.bp__col[data-v-20cccf23] {\n  flex: 1;\n  display: flex;\n  flex-direction: column;\n  align-items: center;\n}\n.bp__num[data-v-20cccf23] {\n  font-size: %?56?%;\n  font-weight: 800;\n  color: #1a2a3c;\n  font-family: \"DIN Pro\", \"DIN Alternate\", \"Helvetica Neue\", Arial, sans-serif;\n  line-height: 1;\n}\n.bp__t[data-v-20cccf23] {\n  margin-top: %?16?%;\n  font-size: %?20?%;\n  color: #64748b;\n}\n.bp__divider[data-v-20cccf23] {\n  width: %?1?%;\n  height: %?48?%;\n  background: #f2f7fa;\n}\n.bp-tag[data-v-20cccf23] {\n  display: flex;\n  align-items: center;\n  padding: %?8?% %?24?%;\n  border-radius: %?999?%;\n  font-size: %?20?%;\n  font-weight: 600;\n}\n.bp-tag__dot[data-v-20cccf23] {\n  width: %?12?%;\n  height: %?12?%;\n  border-radius: 50%;\n  margin-right: %?8?%;\n}\n/* 步数卡 */\n.steps[data-v-20cccf23] {\n  background: #ffffff;\n  border-radius: %?20?%;\n  box-shadow: 0 %?4?% %?24?% rgba(15, 61, 53, 0.06);\n  padding: %?32?%;\n}\n.steps__main[data-v-20cccf23] {\n  display: flex;\n  align-items: baseline;\n}\n.steps__num[data-v-20cccf23] {\n  font-size: %?56?%;\n  font-weight: 800;\n  color: #1a2a3c;\n  font-family: \"DIN Pro\", \"DIN Alternate\", \"Helvetica Neue\", Arial, sans-serif;\n  line-height: 1;\n}\n.steps__unit[data-v-20cccf23] {\n  margin-left: %?16?%;\n  font-size: %?24?%;\n  color: #64748b;\n}\n.steps__bar[data-v-20cccf23] {\n  margin-top: %?24?%;\n  height: %?16?%;\n  border-radius: %?999?%;\n  background: #f2f7fa;\n  overflow: hidden;\n}\n.steps__bar-in[data-v-20cccf23] {\n  height: 100%;\n  border-radius: %?999?%;\n  background: linear-gradient(90deg, #7dd4bc, #4ab89e);\n  transition: width 0.6s ease;\n}\n.steps__meta[data-v-20cccf23] {\n  margin-top: %?16?%;\n  display: flex;\n  justify-content: space-between;\n}\n.steps__meta-item[data-v-20cccf23] {\n  font-size: %?20?%;\n  color: #64748b;\n}\n/* 上报地址卡 */\n.addr[data-v-20cccf23] {\n  background: #ffffff;\n  border-radius: %?20?%;\n  box-shadow: 0 %?4?% %?24?% rgba(15, 61, 53, 0.06);\n  padding: %?32?%;\n}\n.addr__row[data-v-20cccf23] {\n  display: flex;\n  align-items: center;\n}\n.addr__icon[data-v-20cccf23] {\n  font-size: %?28?%;\n  color: #389a82;\n  margin-right: %?16?%;\n  flex-shrink: 0;\n}\n.addr__url[data-v-20cccf23] {\n  flex: 1;\n  font-size: %?28?%;\n  font-family: \"DIN Pro\", \"DIN Alternate\", \"Helvetica Neue\", Arial, sans-serif;\n  font-weight: 600;\n  color: #1a2a3c;\n  overflow: hidden;\n  white-space: nowrap;\n  text-overflow: ellipsis;\n}\n.addr__url--off[data-v-20cccf23] {\n  color: #64748b;\n}\n.addr__tag[data-v-20cccf23] {\n  flex-shrink: 0;\n  margin-left: %?16?%;\n  padding: %?8?% %?16?%;\n  border-radius: %?999?%;\n  font-size: %?20?%;\n  font-weight: 600;\n  color: #f2994a;\n  background: #fdf4ed;\n}\n.addr__tip[data-v-20cccf23] {\n  display: block;\n  margin-top: %?16?%;\n  font-size: %?20?%;\n  color: #64748b;\n}\n/* 底部状态 */\n.foot[data-v-20cccf23] {\n  display: flex;\n  align-items: center;\n  justify-content: space-between;\n  padding: %?32?% %?32?% 0;\n}\n.foot__left[data-v-20cccf23] {\n  display: flex;\n  align-items: center;\n}\n.foot__dot[data-v-20cccf23] {\n  width: %?12?%;\n  height: %?12?%;\n  border-radius: 50%;\n  background: #c6d2de;\n  margin-right: %?16?%;\n}\n.foot__dot--ok[data-v-20cccf23] {\n  background: #27ae60;\n}\n.foot__t[data-v-20cccf23] {\n  font-size: %?20?%;\n  color: #64748b;\n}\n.foot__sync[data-v-20cccf23] {\n  font-size: %?20?%;\n  color: #94a3b8;\n}\n.foot__right[data-v-20cccf23] {\n  display: flex;\n  align-items: center;\n}\n/* 顶部右上角刷新按钮 */\n.nav-refresh[data-v-20cccf23] {\n  width: %?60?%;\n  height: %?60?%;\n  border-radius: %?999?%;\n  background: #389a82;\n  box-shadow: 0 %?4?% %?24?% rgba(15, 61, 53, 0.06);\n  display: flex;\n  align-items: center;\n  justify-content: center;\n}\n.nav-refresh--busy[data-v-20cccf23] {\n  opacity: 0.7;\n}\n.nav-refresh__icon[data-v-20cccf23] {\n  color: #ffffff;\n  font-size: %?24?%;\n}\n.nav-refresh__icon--spin[data-v-20cccf23] {\n  -webkit-animation: spin-data-v-20cccf23 0.8s linear infinite;\n          animation: spin-data-v-20cccf23 0.8s linear infinite;\n}\n@-webkit-keyframes spin-data-v-20cccf23 {\nfrom {\n    -webkit-transform: rotate(0deg);\n            transform: rotate(0deg);\n}\nto {\n    -webkit-transform: rotate(360deg);\n            transform: rotate(360deg);\n}\n}\n@keyframes spin-data-v-20cccf23 {\nfrom {\n    -webkit-transform: rotate(0deg);\n            transform: rotate(0deg);\n}\nto {\n    -webkit-transform: rotate(360deg);\n            transform: rotate(360deg);\n}\n}\n/* 发送消息卡 */\n.msg[data-v-20cccf23] {\n  background: #ffffff;\n  border-radius: %?20?%;\n  box-shadow: 0 %?4?% %?24?% rgba(15, 61, 53, 0.06);\n  padding: %?32?%;\n}\n.msg__input[data-v-20cccf23] {\n  height: %?88?%;\n  background: #f2f7fa;\n  border-radius: %?20?%;\n  padding: 0 %?24?%;\n  font-size: %?28?%;\n  color: #1a2a3c;\n}\n.msg__area[data-v-20cccf23] {\n  margin-top: %?24?%;\n  width: 100%;\n  height: %?180?%;\n  background: #f2f7fa;\n  border-radius: %?20?%;\n  padding: %?24?%;\n  font-size: %?28?%;\n  color: #1a2a3c;\n  box-sizing: border-box;\n  line-height: 1.6;\n}\n.msg__ph[data-v-20cccf23] {\n  color: #c6d2de;\n  font-size: %?24?%;\n}\n.msg__bar[data-v-20cccf23] {\n  margin-top: %?24?%;\n  display: flex;\n  align-items: center;\n  justify-content: space-between;\n}\n.msg__len[data-v-20cccf23] {\n  font-size: %?20?%;\n  color: #64748b;\n}\n.msg__btn[data-v-20cccf23] {\n  display: flex;\n  align-items: center;\n  background: #389a82;\n  border-radius: %?999?%;\n  padding: %?16?% %?40?%;\n}\n.msg__btn--busy[data-v-20cccf23] {\n  opacity: 0.7;\n}\n.msg__btn-icon[data-v-20cccf23] {\n  color: #ffffff;\n  font-size: %?20?%;\n  margin-right: %?8?%;\n}\n.msg__btn-t[data-v-20cccf23] {\n  color: #ffffff;\n  font-size: %?24?%;\n  font-weight: 600;\n}", ""]);
 // Exports
 module.exports = exports;
 
@@ -788,11 +929,48 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var core_js_modules_es_regexp_exec_js__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_regexp_exec_js__WEBPACK_IMPORTED_MODULE_2__);
 /* harmony import */ var core_js_modules_es_string_replace_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! core-js/modules/es.string.replace.js */ "UxlC");
 /* harmony import */ var core_js_modules_es_string_replace_js__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_string_replace_js__WEBPACK_IMPORTED_MODULE_3__);
-/* harmony import */ var _common_band_js__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! @/common/band.js */ "YNKN");
+/* harmony import */ var core_js_modules_es_string_trim_js__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! core-js/modules/es.string.trim.js */ "SYor");
+/* harmony import */ var core_js_modules_es_string_trim_js__WEBPACK_IMPORTED_MODULE_4___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_string_trim_js__WEBPACK_IMPORTED_MODULE_4__);
+/* harmony import */ var _common_band_js__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! @/common/band.js */ "YNKN");
 
 
 
 
+
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 //
 //
 //
@@ -924,7 +1102,11 @@ var POLL_MS = 60 * 1000; // 每 1 分钟刷新
       refreshing: false,
       online: true,
       address: '',
-      addressChanged: false
+      addressChanged: false,
+      addrVisible: true,
+      msgTitle: '',
+      msgText: '',
+      msgSending: false
     };
   },
   computed: {
@@ -932,7 +1114,7 @@ var POLL_MS = 60 * 1000; // 每 1 分钟刷新
       return this.$store.getters.deviceById(this.id) || null;
     },
     bp: function bp() {
-      var lv = Object(_common_band_js__WEBPACK_IMPORTED_MODULE_4__["bpLevel"])(this.latest.sbp, this.latest.dbp);
+      var lv = Object(_common_band_js__WEBPACK_IMPORTED_MODULE_5__["bpLevel"])(this.latest.sbp, this.latest.dbp);
       var bgMap = {
         normal: '#ddf7ed',
         'normal-h': '#fdf4ed',
@@ -974,6 +1156,9 @@ var POLL_MS = 60 * 1000; // 每 1 分钟刷新
     },
     onlineText: function onlineText() {
       return this.online ? '在线' : '离线';
+    },
+    msgBytes: function msgBytes() {
+      return this.byteLen(this.msgText);
     }
   },
   onLoad: function onLoad(options) {
@@ -1010,27 +1195,42 @@ var POLL_MS = 60 * 1000; // 每 1 分钟刷新
     fmt: function fmt(n) {
       return String(n == null ? 0 : n).replace(/\B(?=(\d{3})+(?!\d))/g, ',');
     },
-    // 手动刷新：loading 反馈 + 结果提示
-    doRefresh: function doRefresh() {
+    // UTF-8 字节数（手环消息标题 ≤15B、内容 ≤240B）
+    byteLen: function byteLen(s) {
+      var str = String(s || '');
+      var n = 0;
+      for (var i = 0; i < str.length; i++) {
+        var c = str.charCodeAt(i);
+        n += c > 0x7f ? c > 0x7ff ? 3 : 2 : 1;
+      }
+      return n;
+    },
+    // 点头卡图标：切换「上报地址」区块显示/隐藏
+    toggleAddr: function toggleAddr() {
+      this.addrVisible = !this.addrVisible;
+    },
+    // 发送消息到手环（entservice 指令下发）
+    sendMsg: function sendMsg() {
       var _this2 = this;
       return Object(_workspace_h5build_node_modules_babel_runtime_helpers_esm_asyncToGenerator_js__WEBPACK_IMPORTED_MODULE_1__["default"])(/*#__PURE__*/Object(_workspace_h5build_node_modules_babel_runtime_helpers_esm_regenerator_js__WEBPACK_IMPORTED_MODULE_0__["default"])().m(function _callee() {
-        var l, hasData;
+        var title, text, err;
         return Object(_workspace_h5build_node_modules_babel_runtime_helpers_esm_regenerator_js__WEBPACK_IMPORTED_MODULE_0__["default"])().w(function (_context) {
           while (1) switch (_context.n) {
             case 0:
-              if (!_this2.refreshing) {
+              title = (_this2.msgTitle || '').trim();
+              text = (_this2.msgText || '').trim();
+              if (text) {
                 _context.n = 1;
                 break;
               }
+              uni.showToast({
+                title: '请输入消息内容',
+                icon: 'none'
+              });
               return _context.a(2);
             case 1:
-              _this2.refreshing = true;
-              _context.n = 2;
-              return _this2.load();
-            case 2:
-              _this2.refreshing = false;
               if (_this2.deviceid) {
-                _context.n = 3;
+                _context.n = 2;
                 break;
               }
               uni.showToast({
@@ -1038,60 +1238,126 @@ var POLL_MS = 60 * 1000; // 每 1 分钟刷新
                 icon: 'none'
               });
               return _context.a(2);
+            case 2:
+              if (!(_this2.byteLen(title) > 15)) {
+                _context.n = 3;
+                break;
+              }
+              uni.showToast({
+                title: '标题不能超过15字节',
+                icon: 'none'
+              });
+              return _context.a(2);
             case 3:
-              l = _this2.latest;
+              if (!(_this2.byteLen(text) > 240)) {
+                _context.n = 4;
+                break;
+              }
+              uni.showToast({
+                title: '内容不能超过240字节',
+                icon: 'none'
+              });
+              return _context.a(2);
+            case 4:
+              _this2.msgSending = true;
+              _context.n = 5;
+              return Object(_common_band_js__WEBPACK_IMPORTED_MODULE_5__["sendBandMessage"])(_this2.deviceid, title, text);
+            case 5:
+              err = _context.v;
+              _this2.msgSending = false;
+              uni.showToast({
+                title: err ? err : '消息已发送到手环',
+                icon: 'none'
+              });
+              if (!err) _this2.msgText = '';
+            case 6:
+              return _context.a(2);
+          }
+        }, _callee);
+      }))();
+    },
+    // 手动刷新：loading 反馈 + 结果提示
+    doRefresh: function doRefresh() {
+      var _this3 = this;
+      return Object(_workspace_h5build_node_modules_babel_runtime_helpers_esm_asyncToGenerator_js__WEBPACK_IMPORTED_MODULE_1__["default"])(/*#__PURE__*/Object(_workspace_h5build_node_modules_babel_runtime_helpers_esm_regenerator_js__WEBPACK_IMPORTED_MODULE_0__["default"])().m(function _callee2() {
+        var l, hasData;
+        return Object(_workspace_h5build_node_modules_babel_runtime_helpers_esm_regenerator_js__WEBPACK_IMPORTED_MODULE_0__["default"])().w(function (_context2) {
+          while (1) switch (_context2.n) {
+            case 0:
+              if (!_this3.refreshing) {
+                _context2.n = 1;
+                break;
+              }
+              return _context2.a(2);
+            case 1:
+              _this3.refreshing = true;
+              _context2.n = 2;
+              return _this3.load();
+            case 2:
+              _this3.refreshing = false;
+              if (_this3.deviceid) {
+                _context2.n = 3;
+                break;
+              }
+              uni.showToast({
+                title: '未绑定设备号',
+                icon: 'none'
+              });
+              return _context2.a(2);
+            case 3:
+              l = _this3.latest;
               hasData = !!(l && (l.hr != null || l.sbp != null || l.dbp != null || l.steps != null));
               uni.showToast({
                 title: hasData ? '已刷新，数据已更新' : '暂无新数据，等待手环上报',
                 icon: 'none'
               });
             case 4:
-              return _context.a(2);
+              return _context2.a(2);
           }
-        }, _callee);
+        }, _callee2);
       }))();
     },
     // 每次刷新都核对当前上报地址；与上次不同则标记"已变化"
     refreshAddress: function refreshAddress() {
-      var _this3 = this;
-      Object(_common_band_js__WEBPACK_IMPORTED_MODULE_4__["fetchBandAddress"])().then(function (info) {
+      var _this4 = this;
+      Object(_common_band_js__WEBPACK_IMPORTED_MODULE_5__["fetchBandAddress"])().then(function (info) {
         if (!info || !info.public) {
-          _this3.address = '';
+          _this4.address = '';
           return;
         }
         var prev = uni.getStorageSync('ankang_band_address');
-        _this3.address = info.public;
-        _this3.addressChanged = !!(prev && prev !== info.public);
+        _this4.address = info.public;
+        _this4.addressChanged = !!(prev && prev !== info.public);
         uni.setStorageSync('ankang_band_address', info.public);
       });
     },
     load: function load() {
-      var _this4 = this;
-      return Object(_workspace_h5build_node_modules_babel_runtime_helpers_esm_asyncToGenerator_js__WEBPACK_IMPORTED_MODULE_1__["default"])(/*#__PURE__*/Object(_workspace_h5build_node_modules_babel_runtime_helpers_esm_regenerator_js__WEBPACK_IMPORTED_MODULE_0__["default"])().m(function _callee2() {
+      var _this5 = this;
+      return Object(_workspace_h5build_node_modules_babel_runtime_helpers_esm_asyncToGenerator_js__WEBPACK_IMPORTED_MODULE_1__["default"])(/*#__PURE__*/Object(_workspace_h5build_node_modules_babel_runtime_helpers_esm_regenerator_js__WEBPACK_IMPORTED_MODULE_0__["default"])().m(function _callee3() {
         var latest, l;
-        return Object(_workspace_h5build_node_modules_babel_runtime_helpers_esm_regenerator_js__WEBPACK_IMPORTED_MODULE_0__["default"])().w(function (_context2) {
-          while (1) switch (_context2.n) {
+        return Object(_workspace_h5build_node_modules_babel_runtime_helpers_esm_regenerator_js__WEBPACK_IMPORTED_MODULE_0__["default"])().w(function (_context3) {
+          while (1) switch (_context3.n) {
             case 0:
-              _this4.refreshAddress();
-              if (_this4.deviceid) {
-                _context2.n = 1;
+              _this5.refreshAddress();
+              if (_this5.deviceid) {
+                _context3.n = 1;
                 break;
               }
-              return _context2.a(2);
+              return _context3.a(2);
             case 1:
-              _context2.n = 2;
-              return Object(_common_band_js__WEBPACK_IMPORTED_MODULE_4__["fetchBandLatest"])(_this4.deviceid);
+              _context3.n = 2;
+              return Object(_common_band_js__WEBPACK_IMPORTED_MODULE_5__["fetchBandLatest"])(_this5.deviceid);
             case 2:
-              latest = _context2.v;
-              _this4.latest = latest || {};
-              _this4.lastSyncAt = Date.now();
+              latest = _context3.v;
+              _this5.latest = latest || {};
+              _this5.lastSyncAt = Date.now();
               // 只有后端真实上报过数据才视为在线
-              l = _this4.latest;
-              _this4.online = !!(l && (l.hr != null || l.sbp != null || l.dbp != null || l.steps != null));
+              l = _this5.latest;
+              _this5.online = !!(l && (l.hr != null || l.sbp != null || l.dbp != null || l.steps != null));
               // 回写本地 store，保持设备列表一致
-              if (_this4.id) {
-                _this4.$store.commit('UPDATE_DEVICE_DATA', {
-                  id: _this4.id,
+              if (_this5.id) {
+                _this5.$store.commit('UPDATE_DEVICE_DATA', {
+                  id: _this5.id,
                   data: {
                     sys: l.sbp,
                     dia: l.dbp,
@@ -1099,13 +1365,13 @@ var POLL_MS = 60 * 1000; // 每 1 分钟刷新
                     steps: l.steps,
                     battery: l.battery
                   },
-                  lastSync: _this4.syncText
+                  lastSync: _this5.syncText
                 });
               }
             case 3:
-              return _context2.a(2);
+              return _context3.a(2);
           }
-        }, _callee2);
+        }, _callee3);
       }))();
     }
   }

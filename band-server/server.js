@@ -23,6 +23,7 @@
  */
 const path = require('path')
 const fs = require('fs')
+const { execFile } = require('child_process')
 const express = require('express')
 const cors = require('cors')
 const protobuf = require('protobufjs')
@@ -330,6 +331,65 @@ app.get('/api/address', (req, res) => {
       checkedAt: Date.now()
     }
   })
+})
+
+/* ---------------- 给手环发送消息（entservice 指令下发） ---------------- */
+// 文档：https://api8.iwown.com/iot_platform/entservice.html 「发送设备消息」
+// POST { device_id, title(≤15字节), description(≤240字节) }，经 curl 走沙箱代理调用平台
+const ENTSERVICE_BASE = process.env.ENTSERVICE_BASE || 'https://search.iwown.com'
+
+function curlPostJson(url, obj) {
+  return new Promise((resolve, reject) => {
+    execFile(
+      'curl',
+      ['-s', '--max-time', '25', '-X', 'POST', url, '-H', 'Content-Type: application/json', '-d', JSON.stringify(obj)],
+      { maxBuffer: 2 * 1024 * 1024 },
+      (err, stdout) => {
+        if (err) return reject(err)
+        try {
+          resolve(JSON.parse(stdout))
+        } catch (e) {
+          reject(new Error('指令服务响应异常: ' + String(stdout).slice(0, 120)))
+        }
+      }
+    )
+  })
+}
+
+app.post('/api/band/message', async (req, res) => {
+  const { device_id, title, description } = req.body || {}
+  if (!device_id) return res.status(400).json({ code: 400, message: 'device_id 不能为空' })
+  if (title == null || !String(description || '').trim()) {
+    return res.status(400).json({ code: 400, message: '标题与消息内容不能为空' })
+  }
+  if (Buffer.byteLength(String(title), 'utf8') > 15) {
+    return res.status(400).json({ code: 400, message: '标题不能超过 15 字节' })
+  }
+  if (Buffer.byteLength(String(description), 'utf8') > 240) {
+    return res.status(400).json({ code: 400, message: '内容不能超过 240 字节' })
+  }
+  // 设备未激活时需附带 device_model 参数（取本服务已收到的设备型号）
+  let url = ENTSERVICE_BASE + '/entservice/cmd/message'
+  const dev = db.devices[device_id]
+  if (dev && dev.model) url += '?device_model=' + encodeURIComponent(dev.model)
+  try {
+    const r = await curlPostJson(url, {
+      device_id,
+      title: String(title),
+      description: String(description)
+    })
+    if (r.ReturnCode === 0) {
+      console.log('[band/message] 下发成功', device_id)
+      res.json({ code: 0, data: r.Data || null })
+    } else {
+      res.json({
+        code: r.ReturnCode || -1,
+        message: '下发失败，平台返回 ' + (r.ReturnCode || '') + (r.msg ? '：' + r.msg : '')
+      })
+    }
+  } catch (e) {
+    res.status(502).json({ code: 502, message: '指令服务不可达: ' + e.message })
+  }
 })
 
 /* ---------------- 模拟器：构造真实 0x0A / 0x80 二进制包上报 ---------------- */

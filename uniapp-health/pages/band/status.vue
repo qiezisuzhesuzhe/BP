@@ -1,12 +1,19 @@
 <template>
   <view class="hm-page">
-    <hm-navbar title="手环状态" bg-color="transparent"></hm-navbar>
+    <hm-navbar title="手环状态" bg-color="transparent">
+      <view slot="right">
+        <view class="nav-refresh" :class="{ 'nav-refresh--busy': refreshing }" @tap="doRefresh">
+          <text class="fa-solid fa-rotate nav-refresh__icon" :class="{ 'nav-refresh__icon--spin': refreshing }"></text>
+        </view>
+      </view>
+    </hm-navbar>
 
-    <!-- 设备头卡 -->
+    <!-- 设备头卡：点左上角手环图标可切换「上报地址」区块显示/隐藏 -->
     <view class="wrap wrap--first">
       <view class="head">
-        <view class="head__icon">
+        <view class="head__icon" @tap="toggleAddr">
           <text class="fa-solid fa-heart-circle-check head__icon-t"></text>
+          <text class="head__icon-eye" :class="addrVisible ? 'fa-solid fa-eye' : 'fa-solid fa-eye-slash'"></text>
         </view>
         <view class="head__main">
           <text class="head__name">{{ device ? device.name : '智能手环 - 血压款' }}</text>
@@ -80,8 +87,8 @@
       </view>
     </view>
 
-    <!-- 上报地址 -->
-    <view class="wrap">
+    <!-- 上报地址（点头卡图标切换显示/隐藏） -->
+    <view v-if="addrVisible" class="wrap">
       <view class="sec-head">
         <text class="sec-title">上报地址</text>
         <text class="sec-sub">手环端需配置该地址</text>
@@ -96,6 +103,37 @@
       </view>
     </view>
 
+    <!-- 发送消息 -->
+    <view class="wrap">
+      <view class="sec-head">
+        <text class="sec-title">发送消息</text>
+        <text class="sec-sub">推送到手环屏幕</text>
+      </view>
+      <view class="msg">
+        <input
+          class="msg__input"
+          v-model="msgTitle"
+          maxlength="5"
+          placeholder="标题（选填，≤15字节）"
+          placeholder-class="msg__ph"
+        />
+        <textarea
+          class="msg__area"
+          v-model="msgText"
+          maxlength="80"
+          placeholder="消息内容（≤240字节），发送后在手环上显示"
+          placeholder-class="msg__ph"
+        />
+        <view class="msg__bar">
+          <text class="msg__len">{{ msgBytes }}/240 字节</text>
+          <view class="msg__btn" :class="{ 'msg__btn--busy': msgSending }" @tap="sendMsg">
+            <text class="fa-solid fa-paper-plane msg__btn-icon"></text>
+            <text class="msg__btn-t">{{ msgSending ? '发送中…' : '发送' }}</text>
+          </view>
+        </view>
+      </view>
+    </view>
+
     <!-- 底部状态条 -->
     <view class="foot">
       <view class="foot__left">
@@ -104,10 +142,6 @@
       </view>
       <view class="foot__right">
         <text class="foot__sync">上次同步 {{ syncText }}</text>
-        <view class="foot__btn" :class="{ 'foot__btn--busy': refreshing }" @tap="doRefresh">
-          <text class="fa-solid fa-rotate foot__btn-icon" :class="{ 'foot__btn-icon--spin': refreshing }"></text>
-          <text class="foot__btn-t">{{ refreshing ? '刷新中' : '刷新' }}</text>
-        </view>
       </view>
     </view>
     <view class="hm-safe-bottom"></view>
@@ -115,7 +149,7 @@
 </template>
 
 <script>
-import { fetchBandLatest, fetchBandAddress, bpLevel } from '@/common/band.js'
+import { fetchBandLatest, fetchBandAddress, sendBandMessage, bpLevel } from '@/common/band.js'
 
 const POLL_MS = 60 * 1000 // 每 1 分钟刷新
 
@@ -130,7 +164,11 @@ export default {
       refreshing: false,
       online: true,
       address: '',
-      addressChanged: false
+      addressChanged: false,
+      addrVisible: true,
+      msgTitle: '',
+      msgText: '',
+      msgSending: false
     }
   },
   computed: {
@@ -164,6 +202,9 @@ export default {
     },
     onlineText() {
       return this.online ? '在线' : '离线'
+    },
+    msgBytes() {
+      return this.byteLen(this.msgText)
     }
   },
   onLoad(options) {
@@ -196,6 +237,46 @@ export default {
     },
     fmt(n) {
       return String(n == null ? 0 : n).replace(/\B(?=(\d{3})+(?!\d))/g, ',')
+    },
+    // UTF-8 字节数（手环消息标题 ≤15B、内容 ≤240B）
+    byteLen(s) {
+      const str = String(s || '')
+      let n = 0
+      for (let i = 0; i < str.length; i++) {
+        const c = str.charCodeAt(i)
+        n += c > 0x7f ? (c > 0x7ff ? 3 : 2) : 1
+      }
+      return n
+    },
+    // 点头卡图标：切换「上报地址」区块显示/隐藏
+    toggleAddr() {
+      this.addrVisible = !this.addrVisible
+    },
+    // 发送消息到手环（entservice 指令下发）
+    async sendMsg() {
+      const title = (this.msgTitle || '').trim()
+      const text = (this.msgText || '').trim()
+      if (!text) {
+        uni.showToast({ title: '请输入消息内容', icon: 'none' })
+        return
+      }
+      if (!this.deviceid) {
+        uni.showToast({ title: '未绑定设备号', icon: 'none' })
+        return
+      }
+      if (this.byteLen(title) > 15) {
+        uni.showToast({ title: '标题不能超过15字节', icon: 'none' })
+        return
+      }
+      if (this.byteLen(text) > 240) {
+        uni.showToast({ title: '内容不能超过240字节', icon: 'none' })
+        return
+      }
+      this.msgSending = true
+      const err = await sendBandMessage(this.deviceid, title, text)
+      this.msgSending = false
+      uni.showToast({ title: err ? err : '消息已发送到手环', icon: 'none' })
+      if (!err) this.msgText = ''
     },
     // 手动刷新：loading 反馈 + 结果提示
     async doRefresh() {
@@ -300,6 +381,7 @@ export default {
 }
 
 .head__icon {
+  position: relative;
   width: $size-icon-xl;
   height: $size-icon-xl;
   border-radius: $radius-card-child;
@@ -308,6 +390,24 @@ export default {
   align-items: center;
   justify-content: center;
   flex-shrink: 0;
+}
+
+/* 图标右下角小徽标：眼睛=地址区块可见，闭眼=隐藏 */
+.head__icon-eye {
+  position: absolute;
+  right: -6rpx;
+  bottom: -6rpx;
+  width: 34rpx;
+  height: 34rpx;
+  border-radius: $radius-full;
+  background: $brand-primary-active;
+  color: $text-inverse;
+  font-size: 16rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 4rpx solid $bg-surface;
+  box-sizing: border-box;
 }
 
 .head__icon-t {
@@ -632,30 +732,32 @@ export default {
   align-items: center;
 }
 
-.foot__btn {
-  display: flex;
-  align-items: center;
-  margin-left: $space-3;
-  padding: $space-1 $space-3;
+/* 顶部右上角刷新按钮 */
+.nav-refresh {
+  width: 60rpx;
+  height: 60rpx;
   border-radius: $radius-full;
   background: $brand-primary-active;
+  box-shadow: $shadow-sm;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
-.foot__btn--busy {
+.nav-refresh--busy {
   opacity: 0.7;
 }
 
-.foot__btn-icon {
+.nav-refresh__icon {
   color: $text-inverse;
-  font-size: $font-size-2xs;
-  margin-right: $space-1;
+  font-size: $font-size-xs;
 }
 
-.foot__btn-icon--spin {
-  animation: foot-spin 0.8s linear infinite;
+.nav-refresh__icon--spin {
+  animation: spin 0.8s linear infinite;
 }
 
-@keyframes foot-spin {
+@keyframes spin {
   from {
     transform: rotate(0deg);
   }
@@ -664,9 +766,74 @@ export default {
   }
 }
 
-.foot__btn-t {
+/* 发送消息卡 */
+.msg {
+  background: $bg-surface;
+  border-radius: $radius-card-child;
+  box-shadow: $shadow-sm;
+  padding: $space-4;
+}
+
+.msg__input {
+  height: $size-input-height;
+  background: $bg-section;
+  border-radius: $radius-card-child;
+  padding: 0 $space-3;
+  font-size: $font-size-sm;
+  color: $text-primary;
+}
+
+.msg__area {
+  margin-top: $space-3;
+  width: 100%;
+  height: 180rpx;
+  background: $bg-section;
+  border-radius: $radius-card-child;
+  padding: $space-3;
+  font-size: $font-size-sm;
+  color: $text-primary;
+  box-sizing: border-box;
+  line-height: $line-height-relaxed;
+}
+
+.msg__ph {
+  color: $text-hint;
+  font-size: $font-size-xs;
+}
+
+.msg__bar {
+  margin-top: $space-3;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.msg__len {
+  font-size: $font-size-2xs;
+  color: $text-muted;
+}
+
+.msg__btn {
+  display: flex;
+  align-items: center;
+  background: $brand-primary-active;
+  border-radius: $radius-full;
+  padding: $space-2 $space-5;
+}
+
+.msg__btn--busy {
+  opacity: 0.7;
+}
+
+.msg__btn-icon {
   color: $text-inverse;
   font-size: $font-size-2xs;
+  margin-right: $space-1;
+}
+
+.msg__btn-t {
+  color: $text-inverse;
+  font-size: $font-size-xs;
   font-weight: $font-weight-semibold;
 }
 </style>

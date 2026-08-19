@@ -64,6 +64,29 @@ export function fetchBandAddress() {
   })
 }
 
+// 发送消息到手环（后端转发 entservice 指令下发，见 server.js /api/band/message）
+// title ≤15 字节，description ≤240 字节；成功 resolve(null)，失败 resolve(错误信息)
+export function sendBandMessage(deviceid, title, description) {
+  return new Promise((resolve) => {
+    uni.request({
+      url: bandApi('/api/band/message'),
+      method: 'POST',
+      data: { device_id: deviceid, title: title, description: description },
+      timeout: 15000,
+      success(res) {
+        if (res.statusCode === 200 && res.data && res.data.code === 0) {
+          resolve(null)
+        } else {
+          resolve((res.data && res.data.message) || '发送失败(' + (res.statusCode || '') + ')')
+        }
+      },
+      fail() {
+        resolve('无法连接消息服务')
+      }
+    })
+  })
+}
+
 // 把手环设备注册到后端（绑定 deviceid 与用户）
 export function bindBandDevice(deviceid, name) {
   return new Promise((resolve) => {

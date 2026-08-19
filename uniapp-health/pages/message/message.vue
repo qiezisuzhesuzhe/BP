@@ -15,9 +15,16 @@
       </view>
     </view>
 
-    <scroll-view class="tabs" scroll-x show-scrollbar="false">
+    <scroll-view class="tabs" scroll-x show-scrollbar="false" :scroll-into-view="scrollIntoId" scroll-with-animation>
       <view class="tabs__inner">
-        <view v-for="t in tabs" :key="t.key" class="tab" :class="{ 'tab--on': tab === t.key }" @tap="tab = t.key">
+        <view
+          v-for="t in tabs"
+          :key="t.key"
+          :id="'tab-' + t.key"
+          class="tab"
+          :class="{ 'tab--on': tab === t.key }"
+          @tap="onTapTab(t.key)"
+        >
           <text class="tab__t" :class="{ 'tab__t--on': tab === t.key }">{{ t.label }}</text>
           <text v-if="countOf(t.key) > 0" class="tab__n" :class="{ 'tab__n--on': tab === t.key }">{{ countOf(t.key) }}</text>
         </view>
@@ -76,6 +83,7 @@ export default {
   data() {
     return {
       tab: 'all',
+      scrollIntoId: '',
       tabs: [
         { key: 'all', label: '全部' },
         { key: 'unread', label: '未读' },
@@ -164,6 +172,13 @@ export default {
       }
       uni.navigateTo({ url: m.link })
     },
+    onTapTab(key) {
+      this.tab = key
+      // 触发滚动到当前 tab，避免内容超宽时被遮住
+      this.$nextTick(() => {
+        this.scrollIntoId = 'tab-' + key
+      })
+    },
     onReadAll() {
       this.$store.dispatch('readAll')
       this.syncBadge()
@@ -227,10 +242,11 @@ export default {
   width: 100%;
   background: $bg-surface;
   box-shadow: $shadow-sm;
+  white-space: nowrap;
 }
 
 .tabs__inner {
-  display: flex;
+  display: inline-flex;
   align-items: center;
   padding: $space-2 $space-3;
   white-space: nowrap;
@@ -239,6 +255,7 @@ export default {
 .tab {
   display: inline-flex;
   align-items: center;
+  flex-shrink: 0;
   padding: $space-2 $space-3;
   border-radius: $radius-full;
   background: $bg-subtle;

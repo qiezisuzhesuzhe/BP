@@ -281,15 +281,16 @@ export const KNOWLEDGE = [
   { icon: 'fa-solid fa-person-running', title: '每周 3-5 次中等强度有氧运动', desc: '每次 30 分钟，快走、慢跑、太极拳、八段锦均可' }
 ]
 
-// 首页"我的权益"入口（图标统一金色，与权益卡片金色装饰呼应；quota 表示剩余次数，无则不限）
+// 首页"我的权益"入口（图标统一金色，与权益卡片金色装饰呼应）
+// quotaText 为入口下方显示的剩余次数文字；quota 为角标数字（可选）
 export const RIGHT_ENTRIES = [
-  { key: 'ai', label: 'AI自测', icon: 'fa-solid fa-face-grin-tongue', color: '#b8932e', bg: '#faf3e0' },
-  { key: 'consult', label: '免费问诊', icon: 'fa-solid fa-comments', color: '#b8932e', bg: '#faf3e0' },
-  { key: 'expert', label: '专家预约', icon: 'fa-solid fa-user-doctor', color: '#b8932e', bg: '#faf3e0', quota: 3 },
-  { key: 'video', label: '视频问诊', icon: 'fa-solid fa-video', color: '#b8932e', bg: '#faf3e0', quota: 6 },
-  { key: 'accompany', label: '陪诊', icon: 'fa-solid fa-hand-holding-heart', color: '#b8932e', bg: '#faf3e0', quota: 12 },
-  { key: 'psycho', label: '心理评估', icon: 'fa-solid fa-heart-pulse', color: '#b8932e', bg: '#faf3e0' },
-  { key: 'nurse', label: '上门换药', icon: 'fa-solid fa-house-medical', color: '#b8932e', bg: '#faf3e0' }
+  { key: 'ai', label: 'AI自测', icon: 'fa-solid fa-face-grin-tongue', color: '#b8932e', bg: '#faf3e0', quotaText: '无限制' },
+  { key: 'consult', label: '免费问诊', icon: 'fa-solid fa-comments', color: '#b8932e', bg: '#faf3e0', quotaText: '无限制' },
+  { key: 'expert', label: '专家预约', icon: 'fa-solid fa-user-doctor', color: '#b8932e', bg: '#faf3e0', quota: 3, quotaText: '剩3次' },
+  { key: 'video', label: '视频问诊', icon: 'fa-solid fa-video', color: '#b8932e', bg: '#faf3e0', quota: 12, quotaText: '剩12次' },
+  { key: 'accompany', label: '陪诊', icon: 'fa-solid fa-hand-holding-heart', color: '#b8932e', bg: '#faf3e0', quota: 3, quotaText: '剩3次' },
+  { key: 'psycho', label: '心理评估', icon: 'fa-solid fa-heart-pulse', color: '#b8932e', bg: '#faf3e0', quotaText: '无限制' },
+  { key: 'gene', label: '基因检测', icon: 'fa-solid fa-dna', color: '#b8932e', bg: '#faf3e0', quota: 1, quotaText: '剩1次' }
 ]
 
 // 健康商城商品（积分换购：price 现金价 / points 所需积分 / img 商品图）

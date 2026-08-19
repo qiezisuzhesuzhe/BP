@@ -65,9 +65,6 @@
           <view class="pkg__pic">
             <image class="pkg__pic-img" :src="pkg.heroImg" mode="aspectFill"></image>
             <view class="pkg__pic-mask"></view>
-            <view class="pkg__pic-icon" :style="{ background: pkg.accentSoft }">
-              <text class="pkg__pic-icon-t" :class="pkg.icon" :style="{ color: pkg.accent }"></text>
-            </view>
           </view>
           <view class="pkg__body">
             <text class="pkg__name">{{ pkg.name }}</text>
@@ -358,23 +355,6 @@ export default {
   position: absolute;
   inset: 0;
   background: linear-gradient(135deg, rgba(0, 0, 0, 0.08) 0%, rgba(0, 0, 0, 0.18) 100%);
-}
-
-.pkg__pic-icon {
-  position: absolute;
-  left: $space-2;
-  bottom: $space-2;
-  width: $size-icon-md;
-  height: $size-icon-md;
-  border-radius: $radius-card-child;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  box-shadow: $shadow-sm;
-}
-
-.pkg__pic-icon-t {
-  font-size: $font-size-md;
 }
 
 .pkg__body {

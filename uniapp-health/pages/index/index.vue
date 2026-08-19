@@ -61,9 +61,9 @@
           <view v-for="e in rightEntries" :key="e.key" class="rights__item">
             <view class="rights__item-icon" :style="{ background: e.bg }">
               <text class="rights__item-icon-t" :class="e.icon" :style="{ color: e.color }"></text>
-              <text v-if="activeRight && e.quota" class="rights__item-badge">{{ e.quota }}</text>
             </view>
             <text class="rights__item-t">{{ e.label }}</text>
+            <text class="rights__item-q" :class="{ 'rights__item-q--limited': e.quotaText && e.quotaText !== '无限制' }">{{ e.quotaText }}</text>
           </view>
         </view>
       </view>
@@ -81,6 +81,39 @@
         </view>
         <view class="ongoing__act" :style="{ background: activeRight.accent }">
           <text class="ongoing__act-t">{{ activeRight.chatStarted ? '继续对话' : '立即使用' }}</text>
+        </view>
+      </view>
+    </view>
+
+    <!-- 免费在线问诊入口（参考平安好医生：快速问诊 + 在线医生数） -->
+    <view class="wrap">
+      <view class="consult" @tap="goConsult">
+        <view class="consult__main">
+          <view class="consult__head">
+            <text class="consult__title">免费在线问诊</text>
+            <text class="consult__tag">免费</text>
+          </view>
+          <text class="consult__desc">三甲医生 24h 在线 · 平均 30 秒接诊</text>
+          <view class="consult__stats">
+            <view class="consult__stat">
+              <text class="consult__stat-v">{{ onlineDoctors }}</text>
+              <text class="consult__stat-l">在线医生</text>
+            </view>
+            <view class="consult__stat-line"></view>
+            <view class="consult__stat">
+              <text class="consult__stat-v">{{ todayConsulted }}</text>
+              <text class="consult__stat-l">今日接诊</text>
+            </view>
+            <view class="consult__stat-line"></view>
+            <view class="consult__stat">
+              <text class="consult__stat-v">{{ avgSeconds }}s</text>
+              <text class="consult__stat-l">平均响应</text>
+            </view>
+          </view>
+        </view>
+        <view class="consult__cta">
+          <text class="consult__cta-t">立即问诊</text>
+          <text class="fa-solid fa-angle-right consult__cta-arrow"></text>
         </view>
       </view>
     </view>
@@ -152,7 +185,10 @@
 export default {
   data() {
     return {
-      dayTabs: ['今天', '明天', '后天']
+      dayTabs: ['今天', '明天', '后天'],
+      onlineDoctors: 2386,
+      todayConsulted: 14287,
+      avgSeconds: 28
     }
   },
   computed: {
@@ -238,6 +274,9 @@ export default {
     },
     goMsg() {
       uni.switchTab({ url: '/pages/message/message' })
+    },
+    goConsult() {
+      uni.showToast({ title: '正在为您匹配在线医生（演示）', icon: 'none' })
     }
   }
 }
@@ -492,27 +531,24 @@ export default {
   font-size: $font-size-md;
 }
 
-.rights__item-badge {
-  position: absolute;
-  top: -6rpx;
-  right: -6rpx;
-  min-width: $size-badge-md;
-  height: $size-badge-md;
-  border-radius: $radius-full;
-  background: $warning;
-  color: $text-primary;
-  font-size: $font-size-2xs;
-  line-height: $size-badge-md;
-  text-align: center;
-  padding: 0 $space-1;
-  box-shadow: $shadow-sm;
-  font-family: $font-family-en;
-}
-
 .rights__item-t {
   font-size: $font-size-sm;
   color: $text-secondary;
   margin-top: $space-1;
+}
+
+/* 入口下方剩余次数文字：无限制用淡色，剩余有限次数用金色突出 */
+.rights__item-q {
+  font-size: $font-size-2xs;
+  color: $text-disabled;
+  margin-top: 2rpx;
+  font-family: $font-family-en;
+  letter-spacing: 0.5rpx;
+}
+
+.rights__item-q--limited {
+  color: $gold-deep;
+  font-weight: $font-weight-semibold;
 }
 
 .ongoing {
@@ -726,5 +762,130 @@ export default {
   font-size: $font-size-2xs;
   color: $text-disabled;
   line-height: $line-height-relaxed;
+}
+
+/* 免费在线问诊入口卡片：参考平安好医生 */
+.consult {
+  display: flex;
+  align-items: center;
+  background: linear-gradient(135deg, $brand-soft 0%, $bg-surface 100%);
+  border: 1rpx solid $label-soft-border;
+  border-radius: $radius-card;
+  box-shadow: $shadow-sm;
+  padding: $space-4 $space-4 $space-4 $space-4;
+  position: relative;
+  overflow: hidden;
+}
+
+/* 右上角浅色装饰光斑 */
+.consult::after {
+  content: '';
+  position: absolute;
+  top: -120rpx;
+  right: -80rpx;
+  width: 280rpx;
+  height: 280rpx;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(125, 212, 188, 0.22) 0%, rgba(125, 212, 188, 0) 70%);
+  pointer-events: none;
+}
+
+.consult__main {
+  flex: 1;
+  position: relative;
+  z-index: 1;
+  overflow: hidden;
+}
+
+.consult__head {
+  display: flex;
+  align-items: center;
+}
+
+.consult__title {
+  font-size: $font-size-lg;
+  font-weight: $font-weight-heavy;
+  color: $text-primary;
+  letter-spacing: 1rpx;
+}
+
+.consult__tag {
+  margin-left: $space-2;
+  padding: $space-1 $space-2;
+  border-radius: $radius-full;
+  background: $brand-primary;
+  color: $text-inverse;
+  font-size: $font-size-2xs;
+  font-weight: $font-weight-semibold;
+  letter-spacing: 1rpx;
+}
+
+.consult__desc {
+  display: block;
+  margin-top: $space-1;
+  font-size: $font-size-xs;
+  color: $text-muted;
+}
+
+.consult__stats {
+  margin-top: $space-3;
+  display: flex;
+  align-items: center;
+  background: $bg-surface;
+  border-radius: $radius-card-child;
+  padding: $space-3 $space-2;
+  box-shadow: $shadow-sm;
+}
+
+.consult__stat {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.consult__stat-v {
+  font-size: $font-size-md;
+  font-weight: $font-weight-heavy;
+  color: $brand-primary-active;
+  line-height: $line-height-tight;
+  font-family: $font-family-en;
+}
+
+.consult__stat-l {
+  font-size: $font-size-2xs;
+  color: $text-muted;
+  margin-top: $space-1;
+}
+
+.consult__stat-line {
+  width: 1rpx;
+  height: $space-5;
+  background: $border-subtle;
+}
+
+.consult__cta {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  margin-left: $space-3;
+  padding: $space-2 $space-3;
+  border-radius: $radius-full;
+  background: $brand-primary-active;
+  box-shadow: $shadow-md;
+  flex-shrink: 0;
+}
+
+.consult__cta-t {
+  font-size: $font-size-xs;
+  color: $text-inverse;
+  font-weight: $font-weight-semibold;
+}
+
+.consult__cta-arrow {
+  font-size: $font-size-sm;
+  color: $text-inverse;
+  margin-left: $space-1;
 }
 </style>

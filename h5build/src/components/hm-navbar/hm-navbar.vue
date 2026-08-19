@@ -23,12 +23,18 @@ export default {
     sticky: { type: Boolean, default: true }
   },
   data() {
-    return { statusBarHeight: 20 }
+    return { statusBarHeight: 8 }
   },
   created() {
     try {
+      // H5 下浏览器无系统状态栏，安全区取小值避免顶部过宽
+      // #ifdef H5
+      this.statusBarHeight = 8
+      // #endif
+      // #ifndef H5
       const info = uni.getSystemInfoSync()
       this.statusBarHeight = info.statusBarHeight || 20
+      // #endif
     } catch (e) {}
   },
   methods: {

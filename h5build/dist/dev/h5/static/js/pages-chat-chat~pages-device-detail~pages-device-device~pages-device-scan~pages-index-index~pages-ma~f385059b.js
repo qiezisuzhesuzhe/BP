@@ -188,13 +188,14 @@ __webpack_require__.r(__webpack_exports__);
   },
   data: function data() {
     return {
-      statusBarHeight: 20
+      statusBarHeight: 8
     };
   },
   created: function created() {
     try {
-      var info = uni.getSystemInfoSync();
-      this.statusBarHeight = info.statusBarHeight || 20;
+      // H5 下浏览器无系统状态栏，安全区取小值避免顶部过宽
+
+      this.statusBarHeight = 8;
     } catch (e) {}
   },
   methods: {

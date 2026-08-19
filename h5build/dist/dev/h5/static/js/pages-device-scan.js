@@ -864,7 +864,7 @@ render._withStripped = true
 /*!****************************!*\
   !*** ./src/common/band.js ***!
   \****************************/
-/*! exports provided: BAND_SERVER, bandApi, fetchBandLatest, bindBandDevice, extractDeviceId, bpLevel */
+/*! exports provided: BAND_SERVER, bandApi, fetchBandLatest, fetchBandAddress, bindBandDevice, extractDeviceId, bpLevel */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -872,6 +872,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "BAND_SERVER", function() { return BAND_SERVER; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "bandApi", function() { return bandApi; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "fetchBandLatest", function() { return fetchBandLatest; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "fetchBandAddress", function() { return fetchBandAddress; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "bindBandDevice", function() { return bindBandDevice; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "extractDeviceId", function() { return extractDeviceId; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "bpLevel", function() { return bpLevel; });
@@ -923,6 +924,28 @@ function fetchBandLatest(deviceid) {
           }
         }
         resolve(null);
+      },
+      fail: function fail() {
+        resolve(null);
+      }
+    });
+  });
+}
+
+// 拉取当前公网上报地址（隧道重启后 lhr.life 域名会变化，后端返回最新一条）
+// 后端不可达或未配置隧道时 resolve(null)，页面显示占位符
+function fetchBandAddress() {
+  return new Promise(function (resolve) {
+    uni.request({
+      url: bandApi('/api/address'),
+      method: 'GET',
+      timeout: 5000,
+      success: function success(res) {
+        if (res.statusCode === 200 && res.data && res.data.code === 0 && res.data.data) {
+          resolve(res.data.data);
+        } else {
+          resolve(null);
+        }
       },
       fail: function fail() {
         resolve(null);

@@ -31,6 +31,24 @@ const PORT = process.env.PORT || 8091
 const DATA_DIR = path.join(__dirname, 'data')
 const DB_FILE = path.join(DATA_DIR, 'devices.json')
 const PROTO_DIR = path.join(__dirname, 'proto')
+const TUNNEL_LOG = process.env.TUNNEL_LOG || '/tmp/band-tunnel.log'
+const TUNNEL_URL_FILE = path.join(__dirname, 'tunnel-url.txt')
+
+// 当前公网上报地址：优先取环境变量，其次解析隧道日志中最后一次分配的地址
+//（隧道重启后 lhr.life 域名会变化，取最新一条即当前可用地址）
+function currentTunnelUrl() {
+  if (process.env.TUNNEL_URL) return process.env.TUNNEL_URL
+  try {
+    const log = fs.readFileSync(TUNNEL_LOG, 'utf8')
+    const urls = log.match(/https:\/\/[\w.-]+\.lhr\.life/g)
+    if (urls && urls.length) return urls[urls.length - 1]
+  } catch (e) {}
+  try {
+    const u = fs.readFileSync(TUNNEL_URL_FILE, 'utf8').trim()
+    if (u) return u
+  } catch (e) {}
+  return ''
+}
 
 /* ---------------- 存储 ---------------- */
 function loadDB() {
@@ -299,6 +317,19 @@ app.post('/api/devices', (req, res) => {
   if (model) dev.model = model
   saveDB(db)
   res.json({ code: 0, data: dev })
+})
+
+// 当前公网上报地址（供 H5 显示；隧道重启导致地址变化时自动取最新一条）
+app.get('/api/address', (req, res) => {
+  const url = currentTunnelUrl()
+  res.json({
+    code: 0,
+    data: {
+      public: url || null,
+      local: 'http://localhost:' + PORT,
+      checkedAt: Date.now()
+    }
+  })
 })
 
 /* ---------------- 模拟器：构造真实 0x0A / 0x80 二进制包上报 ---------------- */

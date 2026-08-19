@@ -80,6 +80,22 @@
       </view>
     </view>
 
+    <!-- 上报地址 -->
+    <view class="wrap">
+      <view class="sec-head">
+        <text class="sec-title">上报地址</text>
+        <text class="sec-sub">手环端需配置该地址</text>
+      </view>
+      <view class="addr">
+        <view class="addr__row">
+          <text class="fa-solid fa-cloud-arrow-up addr__icon"></text>
+          <text class="addr__url" :class="{ 'addr__url--off': !address }">{{ address || '未获取到地址' }}</text>
+          <text v-if="addressChanged" class="addr__tag">已变化</text>
+        </view>
+        <text class="addr__tip">进入页面/每次刷新自动核对，隧道重启导致地址变化会标记「已变化」</text>
+      </view>
+    </view>
+
     <!-- 底部状态条 -->
     <view class="foot">
       <view class="foot__left">
@@ -99,7 +115,7 @@
 </template>
 
 <script>
-import { fetchBandLatest, bpLevel } from '@/common/band.js'
+import { fetchBandLatest, fetchBandAddress, bpLevel } from '@/common/band.js'
 
 const POLL_MS = 60 * 1000 // 每 1 分钟刷新
 
@@ -112,7 +128,9 @@ export default {
       lastSyncAt: 0,
       timer: null,
       refreshing: false,
-      online: true
+      online: true,
+      address: '',
+      addressChanged: false
     }
   },
   computed: {
@@ -196,7 +214,21 @@ export default {
         icon: 'none'
       })
     },
+    // 每次刷新都核对当前上报地址；与上次不同则标记"已变化"
+    refreshAddress() {
+      fetchBandAddress().then((info) => {
+        if (!info || !info.public) {
+          this.address = ''
+          return
+        }
+        const prev = uni.getStorageSync('ankang_band_address')
+        this.address = info.public
+        this.addressChanged = !!(prev && prev !== info.public)
+        uni.setStorageSync('ankang_band_address', info.public)
+      })
+    },
     async load() {
+      this.refreshAddress()
       if (!this.deviceid) return
       const latest = await fetchBandLatest(this.deviceid)
       this.latest = latest || {}
@@ -503,6 +535,59 @@ export default {
 }
 
 .steps__meta-item {
+  font-size: $font-size-2xs;
+  color: $text-muted;
+}
+
+/* 上报地址卡 */
+.addr {
+  background: $bg-surface;
+  border-radius: $radius-card-child;
+  box-shadow: $shadow-sm;
+  padding: $space-4;
+}
+
+.addr__row {
+  display: flex;
+  align-items: center;
+}
+
+.addr__icon {
+  font-size: $font-size-sm;
+  color: $brand-primary-active;
+  margin-right: $space-2;
+  flex-shrink: 0;
+}
+
+.addr__url {
+  flex: 1;
+  font-size: $font-size-sm;
+  font-family: $font-family-en;
+  font-weight: $font-weight-semibold;
+  color: $text-primary;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+.addr__url--off {
+  color: $text-muted;
+}
+
+.addr__tag {
+  flex-shrink: 0;
+  margin-left: $space-2;
+  padding: $space-1 $space-2;
+  border-radius: $radius-full;
+  font-size: $font-size-2xs;
+  font-weight: $font-weight-semibold;
+  color: #f2994a;
+  background: #fdf4ed;
+}
+
+.addr__tip {
+  display: block;
+  margin-top: $space-2;
   font-size: $font-size-2xs;
   color: $text-muted;
 }

@@ -40,6 +40,28 @@ export function fetchBandLatest(deviceid) {
   })
 }
 
+// 拉取当前公网上报地址（隧道重启后 lhr.life 域名会变化，后端返回最新一条）
+// 后端不可达或未配置隧道时 resolve(null)，页面显示占位符
+export function fetchBandAddress() {
+  return new Promise((resolve) => {
+    uni.request({
+      url: bandApi('/api/address'),
+      method: 'GET',
+      timeout: 5000,
+      success(res) {
+        if (res.statusCode === 200 && res.data && res.data.code === 0 && res.data.data) {
+          resolve(res.data.data)
+        } else {
+          resolve(null)
+        }
+      },
+      fail() {
+        resolve(null)
+      }
+    })
+  })
+}
+
 // 把手环设备注册到后端（绑定 deviceid 与用户）
 export function bindBandDevice(deviceid, name) {
   return new Promise((resolve) => {

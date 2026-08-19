@@ -369,6 +369,61 @@ var render = function () {
       ),
       _c(
         "v-uni-view",
+        { staticClass: "wrap" },
+        [
+          _c(
+            "v-uni-view",
+            { staticClass: "sec-head" },
+            [
+              _c("v-uni-text", { staticClass: "sec-title" }, [
+                _vm._v("上报地址"),
+              ]),
+              _c("v-uni-text", { staticClass: "sec-sub" }, [
+                _vm._v("手环端需配置该地址"),
+              ]),
+            ],
+            1
+          ),
+          _c(
+            "v-uni-view",
+            { staticClass: "addr" },
+            [
+              _c(
+                "v-uni-view",
+                { staticClass: "addr__row" },
+                [
+                  _c("v-uni-text", {
+                    staticClass: "fa-solid fa-cloud-arrow-up addr__icon",
+                  }),
+                  _c(
+                    "v-uni-text",
+                    {
+                      staticClass: "addr__url",
+                      class: { "addr__url--off": !_vm.address },
+                    },
+                    [_vm._v(_vm._s(_vm.address || "未获取到地址"))]
+                  ),
+                  _vm.addressChanged
+                    ? _c("v-uni-text", { staticClass: "addr__tag" }, [
+                        _vm._v("已变化"),
+                      ])
+                    : _vm._e(),
+                ],
+                1
+              ),
+              _c("v-uni-text", { staticClass: "addr__tip" }, [
+                _vm._v(
+                  "进入页面/每次刷新自动核对，隧道重启导致地址变化会标记「已变化」"
+                ),
+              ]),
+            ],
+            1
+          ),
+        ],
+        1
+      ),
+      _c(
+        "v-uni-view",
         { staticClass: "foot" },
         [
           _c(
@@ -520,7 +575,7 @@ __webpack_require__.r(__webpack_exports__);
 /*!****************************!*\
   !*** ./src/common/band.js ***!
   \****************************/
-/*! exports provided: BAND_SERVER, bandApi, fetchBandLatest, bindBandDevice, extractDeviceId, bpLevel */
+/*! exports provided: BAND_SERVER, bandApi, fetchBandLatest, fetchBandAddress, bindBandDevice, extractDeviceId, bpLevel */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -528,6 +583,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "BAND_SERVER", function() { return BAND_SERVER; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "bandApi", function() { return bandApi; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "fetchBandLatest", function() { return fetchBandLatest; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "fetchBandAddress", function() { return fetchBandAddress; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "bindBandDevice", function() { return bindBandDevice; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "extractDeviceId", function() { return extractDeviceId; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "bpLevel", function() { return bpLevel; });
@@ -579,6 +635,28 @@ function fetchBandLatest(deviceid) {
           }
         }
         resolve(null);
+      },
+      fail: function fail() {
+        resolve(null);
+      }
+    });
+  });
+}
+
+// 拉取当前公网上报地址（隧道重启后 lhr.life 域名会变化，后端返回最新一条）
+// 后端不可达或未配置隧道时 resolve(null)，页面显示占位符
+function fetchBandAddress() {
+  return new Promise(function (resolve) {
+    uni.request({
+      url: bandApi('/api/address'),
+      method: 'GET',
+      timeout: 5000,
+      success: function success(res) {
+        if (res.statusCode === 200 && res.data && res.data.code === 0 && res.data.data) {
+          resolve(res.data.data);
+        } else {
+          resolve(null);
+        }
       },
       fail: function fail() {
         resolve(null);
@@ -672,7 +750,7 @@ function bpLevel(sbp, dbp) {
 var ___CSS_LOADER_API_IMPORT___ = __webpack_require__(/*! ../../../node_modules/css-loader/dist/runtime/api.js */ "JPst");
 exports = ___CSS_LOADER_API_IMPORT___(false);
 // Module
-exports.push([module.i, "@charset \"UTF-8\";\n/* 安康健康管理 · 设计令牌\n   来源：/workspace/DESIGN.md\n   方案：rpx + SCSS 变量（1px = 2rpx，基于 750rpx 设计基准） */\n/* ---------- 品牌色 ---------- */\n/* ---------- 头像 ---------- */\n/* ---------- 语义状态色 ---------- */\n/* ---------- 金色（尊享装饰） ---------- */\n/* ---------- 背景 ---------- */\n/* 斜向两色渐变：左上(#ddf7ed) → 右下(#f3f3f3)，末端即底色；\n   配合 App.vue 中 background-attachment: fixed 铺满视口固定，不随页面滚动/变长 */\n/* ---------- 文字 ---------- */\n/* ---------- 描边 / 遮罩 ---------- */\n/* ---------- 字体 ---------- */\n/* 英文/数字优先匹配 DIN Pro（Mac 自带 DIN Alternate 作为备选），中文回退苹方/雅黑 */\n/* 移动端最小舒适字号（可读正文下限）：\n   说明/入口/数据标签等可读文字不得小于 12px(24rpx)；\n   $font-size-2xs(10px) 仅限角标、徽标、装饰性元素 */\n/* ---------- 语义排版 ---------- */\n/* ---------- 间距 ---------- */\n/* ---------- 区块标题 ---------- */\n/* 标题下间距 = 列表间距；上间距 = 下间距 × 2 */\n/* ---------- 尺寸 ---------- */\n/* ---------- 圆角（已减半，更克制干净） ---------- */\n/* ---------- 阴影 ---------- */\n/* ---------- 层级 ---------- */\n/* ---------- 动效 ---------- */\n/* ---------- 页面容器 ---------- */\n.wrap[data-v-20cccf23] {\n  height: auto;\n  padding: %?32?% %?32?% 0;\n}\n/* 非首个容器顶部贴齐：卡片间距由自身撑开，区块标题由 sec-head 撑开 */\n.wrap[data-v-20cccf23]:not(.wrap--first) {\n  padding-top: 0;\n}\n/* ---------- 区块标题 ---------- */\n.sec-head[data-v-20cccf23] {\n  display: flex;\n  align-items: flex-end;\n  justify-content: space-between;\n  margin-top: %?64?%;\n  margin-bottom: %?32?%;\n}\n.sec-title[data-v-20cccf23] {\n  font-size: %?36?%;\n  font-weight: 800;\n  line-height: 1.1;\n  color: #1a2a3c;\n  letter-spacing: %?1?%;\n}\n.sec-sub[data-v-20cccf23] {\n  font-size: %?24?%;\n  color: #64748b;\n  margin-top: %?16?%;\n}\n.head[data-v-20cccf23] {\n  display: flex;\n  align-items: center;\n  background: #ffffff;\n  border-radius: %?20?%;\n  box-shadow: 0 %?4?% %?24?% rgba(15, 61, 53, 0.06);\n  padding: %?32?%;\n}\n.head__icon[data-v-20cccf23] {\n  width: %?88?%;\n  height: %?88?%;\n  border-radius: %?20?%;\n  background: rgba(212, 245, 238, 0.72);\n  display: flex;\n  align-items: center;\n  justify-content: center;\n  flex-shrink: 0;\n}\n.head__icon-t[data-v-20cccf23] {\n  font-size: %?44?%;\n  color: #389a82;\n}\n.head__main[data-v-20cccf23] {\n  flex: 1;\n  padding: 0 %?24?%;\n  overflow: hidden;\n}\n.head__name[data-v-20cccf23] {\n  display: block;\n  font-size: %?32?%;\n  font-weight: 800;\n  color: #1a2a3c;\n  line-height: 1.1;\n}\n.head__sn[data-v-20cccf23] {\n  display: block;\n  font-size: %?20?%;\n  color: #64748b;\n  margin-top: %?8?%;\n  white-space: nowrap;\n  overflow: hidden;\n  text-overflow: ellipsis;\n}\n.head__status[data-v-20cccf23] {\n  display: flex;\n  align-items: center;\n  flex-shrink: 0;\n  padding: %?8?% %?16?%;\n  border-radius: %?999?%;\n  background: #27ae60;\n}\n.head__status--off[data-v-20cccf23] {\n  background: #f2f7fa;\n}\n.head__dot[data-v-20cccf23] {\n  width: %?12?%;\n  height: %?12?%;\n  border-radius: 50%;\n  background: #ffffff;\n  margin-right: %?8?%;\n}\n.head__status--off .head__dot[data-v-20cccf23] {\n  background: #94a3b8;\n}\n.head__status-t[data-v-20cccf23] {\n  font-size: %?20?%;\n  color: #ffffff;\n  font-weight: 600;\n}\n.head__status--off .head__status-t[data-v-20cccf23] {\n  color: #64748b;\n}\n/* 心率卡 */\n.hr[data-v-20cccf23] {\n  margin-top: %?32?%;\n  background: linear-gradient(140deg, #4ab89e 0%, #84e8c2 100%);\n  border-radius: %?20?%;\n  padding: %?32?%;\n  box-shadow: 0 %?12?% %?48?% rgba(125, 212, 188, 0.18);\n}\n.hr__top[data-v-20cccf23] {\n  display: flex;\n  align-items: center;\n  justify-content: space-between;\n}\n.hr__label[data-v-20cccf23] {\n  display: flex;\n  align-items: center;\n}\n.hr__label-icon[data-v-20cccf23] {\n  color: rgba(255, 255, 255, 0.9);\n  font-size: %?28?%;\n  margin-right: %?16?%;\n}\n.hr__label-t[data-v-20cccf23] {\n  color: rgba(255, 255, 255, 0.92);\n  font-size: %?24?%;\n  font-weight: 600;\n}\n.hr__value[data-v-20cccf23] {\n  display: flex;\n  align-items: baseline;\n  margin-top: %?24?%;\n}\n.hr__num[data-v-20cccf23] {\n  font-size: %?72?%;\n  font-weight: 800;\n  color: #ffffff;\n  font-family: \"DIN Pro\", \"DIN Alternate\", \"Helvetica Neue\", Arial, sans-serif;\n  line-height: 1;\n}\n.hr__unit[data-v-20cccf23] {\n  margin-left: %?16?%;\n  font-size: %?28?%;\n  color: rgba(255, 255, 255, 0.85);\n}\n.hr__tip[data-v-20cccf23] {\n  display: block;\n  margin-top: %?16?%;\n  font-size: %?20?%;\n  color: rgba(255, 255, 255, 0.7);\n}\n/* 血压卡 */\n.bp[data-v-20cccf23] {\n  display: flex;\n  align-items: center;\n  background: #ffffff;\n  border-radius: %?20?%;\n  box-shadow: 0 %?4?% %?24?% rgba(15, 61, 53, 0.06);\n  padding: %?32?% 0;\n}\n.bp__col[data-v-20cccf23] {\n  flex: 1;\n  display: flex;\n  flex-direction: column;\n  align-items: center;\n}\n.bp__num[data-v-20cccf23] {\n  font-size: %?56?%;\n  font-weight: 800;\n  color: #1a2a3c;\n  font-family: \"DIN Pro\", \"DIN Alternate\", \"Helvetica Neue\", Arial, sans-serif;\n  line-height: 1;\n}\n.bp__t[data-v-20cccf23] {\n  margin-top: %?16?%;\n  font-size: %?20?%;\n  color: #64748b;\n}\n.bp__divider[data-v-20cccf23] {\n  width: %?1?%;\n  height: %?48?%;\n  background: #f2f7fa;\n}\n.bp-tag[data-v-20cccf23] {\n  display: flex;\n  align-items: center;\n  padding: %?8?% %?24?%;\n  border-radius: %?999?%;\n  font-size: %?20?%;\n  font-weight: 600;\n}\n.bp-tag__dot[data-v-20cccf23] {\n  width: %?12?%;\n  height: %?12?%;\n  border-radius: 50%;\n  margin-right: %?8?%;\n}\n/* 步数卡 */\n.steps[data-v-20cccf23] {\n  background: #ffffff;\n  border-radius: %?20?%;\n  box-shadow: 0 %?4?% %?24?% rgba(15, 61, 53, 0.06);\n  padding: %?32?%;\n}\n.steps__main[data-v-20cccf23] {\n  display: flex;\n  align-items: baseline;\n}\n.steps__num[data-v-20cccf23] {\n  font-size: %?56?%;\n  font-weight: 800;\n  color: #1a2a3c;\n  font-family: \"DIN Pro\", \"DIN Alternate\", \"Helvetica Neue\", Arial, sans-serif;\n  line-height: 1;\n}\n.steps__unit[data-v-20cccf23] {\n  margin-left: %?16?%;\n  font-size: %?24?%;\n  color: #64748b;\n}\n.steps__bar[data-v-20cccf23] {\n  margin-top: %?24?%;\n  height: %?16?%;\n  border-radius: %?999?%;\n  background: #f2f7fa;\n  overflow: hidden;\n}\n.steps__bar-in[data-v-20cccf23] {\n  height: 100%;\n  border-radius: %?999?%;\n  background: linear-gradient(90deg, #7dd4bc, #4ab89e);\n  transition: width 0.6s ease;\n}\n.steps__meta[data-v-20cccf23] {\n  margin-top: %?16?%;\n  display: flex;\n  justify-content: space-between;\n}\n.steps__meta-item[data-v-20cccf23] {\n  font-size: %?20?%;\n  color: #64748b;\n}\n/* 底部状态 */\n.foot[data-v-20cccf23] {\n  display: flex;\n  align-items: center;\n  justify-content: space-between;\n  padding: %?32?% %?32?% 0;\n}\n.foot__left[data-v-20cccf23] {\n  display: flex;\n  align-items: center;\n}\n.foot__dot[data-v-20cccf23] {\n  width: %?12?%;\n  height: %?12?%;\n  border-radius: 50%;\n  background: #c6d2de;\n  margin-right: %?16?%;\n}\n.foot__dot--ok[data-v-20cccf23] {\n  background: #27ae60;\n}\n.foot__t[data-v-20cccf23] {\n  font-size: %?20?%;\n  color: #64748b;\n}\n.foot__sync[data-v-20cccf23] {\n  font-size: %?20?%;\n  color: #94a3b8;\n}\n.foot__right[data-v-20cccf23] {\n  display: flex;\n  align-items: center;\n}\n.foot__btn[data-v-20cccf23] {\n  display: flex;\n  align-items: center;\n  margin-left: %?24?%;\n  padding: %?8?% %?24?%;\n  border-radius: %?999?%;\n  background: #389a82;\n}\n.foot__btn--busy[data-v-20cccf23] {\n  opacity: 0.7;\n}\n.foot__btn-icon[data-v-20cccf23] {\n  color: #ffffff;\n  font-size: %?20?%;\n  margin-right: %?8?%;\n}\n.foot__btn-icon--spin[data-v-20cccf23] {\n  -webkit-animation: foot-spin-data-v-20cccf23 0.8s linear infinite;\n          animation: foot-spin-data-v-20cccf23 0.8s linear infinite;\n}\n@-webkit-keyframes foot-spin-data-v-20cccf23 {\nfrom {\n    -webkit-transform: rotate(0deg);\n            transform: rotate(0deg);\n}\nto {\n    -webkit-transform: rotate(360deg);\n            transform: rotate(360deg);\n}\n}\n@keyframes foot-spin-data-v-20cccf23 {\nfrom {\n    -webkit-transform: rotate(0deg);\n            transform: rotate(0deg);\n}\nto {\n    -webkit-transform: rotate(360deg);\n            transform: rotate(360deg);\n}\n}\n.foot__btn-t[data-v-20cccf23] {\n  color: #ffffff;\n  font-size: %?20?%;\n  font-weight: 600;\n}", ""]);
+exports.push([module.i, "@charset \"UTF-8\";\n/* 安康健康管理 · 设计令牌\n   来源：/workspace/DESIGN.md\n   方案：rpx + SCSS 变量（1px = 2rpx，基于 750rpx 设计基准） */\n/* ---------- 品牌色 ---------- */\n/* ---------- 头像 ---------- */\n/* ---------- 语义状态色 ---------- */\n/* ---------- 金色（尊享装饰） ---------- */\n/* ---------- 背景 ---------- */\n/* 斜向两色渐变：左上(#ddf7ed) → 右下(#f3f3f3)，末端即底色；\n   配合 App.vue 中 background-attachment: fixed 铺满视口固定，不随页面滚动/变长 */\n/* ---------- 文字 ---------- */\n/* ---------- 描边 / 遮罩 ---------- */\n/* ---------- 字体 ---------- */\n/* 英文/数字优先匹配 DIN Pro（Mac 自带 DIN Alternate 作为备选），中文回退苹方/雅黑 */\n/* 移动端最小舒适字号（可读正文下限）：\n   说明/入口/数据标签等可读文字不得小于 12px(24rpx)；\n   $font-size-2xs(10px) 仅限角标、徽标、装饰性元素 */\n/* ---------- 语义排版 ---------- */\n/* ---------- 间距 ---------- */\n/* ---------- 区块标题 ---------- */\n/* 标题下间距 = 列表间距；上间距 = 下间距 × 2 */\n/* ---------- 尺寸 ---------- */\n/* ---------- 圆角（已减半，更克制干净） ---------- */\n/* ---------- 阴影 ---------- */\n/* ---------- 层级 ---------- */\n/* ---------- 动效 ---------- */\n/* ---------- 页面容器 ---------- */\n.wrap[data-v-20cccf23] {\n  height: auto;\n  padding: %?32?% %?32?% 0;\n}\n/* 非首个容器顶部贴齐：卡片间距由自身撑开，区块标题由 sec-head 撑开 */\n.wrap[data-v-20cccf23]:not(.wrap--first) {\n  padding-top: 0;\n}\n/* ---------- 区块标题 ---------- */\n.sec-head[data-v-20cccf23] {\n  display: flex;\n  align-items: flex-end;\n  justify-content: space-between;\n  margin-top: %?64?%;\n  margin-bottom: %?32?%;\n}\n.sec-title[data-v-20cccf23] {\n  font-size: %?36?%;\n  font-weight: 800;\n  line-height: 1.1;\n  color: #1a2a3c;\n  letter-spacing: %?1?%;\n}\n.sec-sub[data-v-20cccf23] {\n  font-size: %?24?%;\n  color: #64748b;\n  margin-top: %?16?%;\n}\n.head[data-v-20cccf23] {\n  display: flex;\n  align-items: center;\n  background: #ffffff;\n  border-radius: %?20?%;\n  box-shadow: 0 %?4?% %?24?% rgba(15, 61, 53, 0.06);\n  padding: %?32?%;\n}\n.head__icon[data-v-20cccf23] {\n  width: %?88?%;\n  height: %?88?%;\n  border-radius: %?20?%;\n  background: rgba(212, 245, 238, 0.72);\n  display: flex;\n  align-items: center;\n  justify-content: center;\n  flex-shrink: 0;\n}\n.head__icon-t[data-v-20cccf23] {\n  font-size: %?44?%;\n  color: #389a82;\n}\n.head__main[data-v-20cccf23] {\n  flex: 1;\n  padding: 0 %?24?%;\n  overflow: hidden;\n}\n.head__name[data-v-20cccf23] {\n  display: block;\n  font-size: %?32?%;\n  font-weight: 800;\n  color: #1a2a3c;\n  line-height: 1.1;\n}\n.head__sn[data-v-20cccf23] {\n  display: block;\n  font-size: %?20?%;\n  color: #64748b;\n  margin-top: %?8?%;\n  white-space: nowrap;\n  overflow: hidden;\n  text-overflow: ellipsis;\n}\n.head__status[data-v-20cccf23] {\n  display: flex;\n  align-items: center;\n  flex-shrink: 0;\n  padding: %?8?% %?16?%;\n  border-radius: %?999?%;\n  background: #27ae60;\n}\n.head__status--off[data-v-20cccf23] {\n  background: #f2f7fa;\n}\n.head__dot[data-v-20cccf23] {\n  width: %?12?%;\n  height: %?12?%;\n  border-radius: 50%;\n  background: #ffffff;\n  margin-right: %?8?%;\n}\n.head__status--off .head__dot[data-v-20cccf23] {\n  background: #94a3b8;\n}\n.head__status-t[data-v-20cccf23] {\n  font-size: %?20?%;\n  color: #ffffff;\n  font-weight: 600;\n}\n.head__status--off .head__status-t[data-v-20cccf23] {\n  color: #64748b;\n}\n/* 心率卡 */\n.hr[data-v-20cccf23] {\n  margin-top: %?32?%;\n  background: linear-gradient(140deg, #4ab89e 0%, #84e8c2 100%);\n  border-radius: %?20?%;\n  padding: %?32?%;\n  box-shadow: 0 %?12?% %?48?% rgba(125, 212, 188, 0.18);\n}\n.hr__top[data-v-20cccf23] {\n  display: flex;\n  align-items: center;\n  justify-content: space-between;\n}\n.hr__label[data-v-20cccf23] {\n  display: flex;\n  align-items: center;\n}\n.hr__label-icon[data-v-20cccf23] {\n  color: rgba(255, 255, 255, 0.9);\n  font-size: %?28?%;\n  margin-right: %?16?%;\n}\n.hr__label-t[data-v-20cccf23] {\n  color: rgba(255, 255, 255, 0.92);\n  font-size: %?24?%;\n  font-weight: 600;\n}\n.hr__value[data-v-20cccf23] {\n  display: flex;\n  align-items: baseline;\n  margin-top: %?24?%;\n}\n.hr__num[data-v-20cccf23] {\n  font-size: %?72?%;\n  font-weight: 800;\n  color: #ffffff;\n  font-family: \"DIN Pro\", \"DIN Alternate\", \"Helvetica Neue\", Arial, sans-serif;\n  line-height: 1;\n}\n.hr__unit[data-v-20cccf23] {\n  margin-left: %?16?%;\n  font-size: %?28?%;\n  color: rgba(255, 255, 255, 0.85);\n}\n.hr__tip[data-v-20cccf23] {\n  display: block;\n  margin-top: %?16?%;\n  font-size: %?20?%;\n  color: rgba(255, 255, 255, 0.7);\n}\n/* 血压卡 */\n.bp[data-v-20cccf23] {\n  display: flex;\n  align-items: center;\n  background: #ffffff;\n  border-radius: %?20?%;\n  box-shadow: 0 %?4?% %?24?% rgba(15, 61, 53, 0.06);\n  padding: %?32?% 0;\n}\n.bp__col[data-v-20cccf23] {\n  flex: 1;\n  display: flex;\n  flex-direction: column;\n  align-items: center;\n}\n.bp__num[data-v-20cccf23] {\n  font-size: %?56?%;\n  font-weight: 800;\n  color: #1a2a3c;\n  font-family: \"DIN Pro\", \"DIN Alternate\", \"Helvetica Neue\", Arial, sans-serif;\n  line-height: 1;\n}\n.bp__t[data-v-20cccf23] {\n  margin-top: %?16?%;\n  font-size: %?20?%;\n  color: #64748b;\n}\n.bp__divider[data-v-20cccf23] {\n  width: %?1?%;\n  height: %?48?%;\n  background: #f2f7fa;\n}\n.bp-tag[data-v-20cccf23] {\n  display: flex;\n  align-items: center;\n  padding: %?8?% %?24?%;\n  border-radius: %?999?%;\n  font-size: %?20?%;\n  font-weight: 600;\n}\n.bp-tag__dot[data-v-20cccf23] {\n  width: %?12?%;\n  height: %?12?%;\n  border-radius: 50%;\n  margin-right: %?8?%;\n}\n/* 步数卡 */\n.steps[data-v-20cccf23] {\n  background: #ffffff;\n  border-radius: %?20?%;\n  box-shadow: 0 %?4?% %?24?% rgba(15, 61, 53, 0.06);\n  padding: %?32?%;\n}\n.steps__main[data-v-20cccf23] {\n  display: flex;\n  align-items: baseline;\n}\n.steps__num[data-v-20cccf23] {\n  font-size: %?56?%;\n  font-weight: 800;\n  color: #1a2a3c;\n  font-family: \"DIN Pro\", \"DIN Alternate\", \"Helvetica Neue\", Arial, sans-serif;\n  line-height: 1;\n}\n.steps__unit[data-v-20cccf23] {\n  margin-left: %?16?%;\n  font-size: %?24?%;\n  color: #64748b;\n}\n.steps__bar[data-v-20cccf23] {\n  margin-top: %?24?%;\n  height: %?16?%;\n  border-radius: %?999?%;\n  background: #f2f7fa;\n  overflow: hidden;\n}\n.steps__bar-in[data-v-20cccf23] {\n  height: 100%;\n  border-radius: %?999?%;\n  background: linear-gradient(90deg, #7dd4bc, #4ab89e);\n  transition: width 0.6s ease;\n}\n.steps__meta[data-v-20cccf23] {\n  margin-top: %?16?%;\n  display: flex;\n  justify-content: space-between;\n}\n.steps__meta-item[data-v-20cccf23] {\n  font-size: %?20?%;\n  color: #64748b;\n}\n/* 上报地址卡 */\n.addr[data-v-20cccf23] {\n  background: #ffffff;\n  border-radius: %?20?%;\n  box-shadow: 0 %?4?% %?24?% rgba(15, 61, 53, 0.06);\n  padding: %?32?%;\n}\n.addr__row[data-v-20cccf23] {\n  display: flex;\n  align-items: center;\n}\n.addr__icon[data-v-20cccf23] {\n  font-size: %?28?%;\n  color: #389a82;\n  margin-right: %?16?%;\n  flex-shrink: 0;\n}\n.addr__url[data-v-20cccf23] {\n  flex: 1;\n  font-size: %?28?%;\n  font-family: \"DIN Pro\", \"DIN Alternate\", \"Helvetica Neue\", Arial, sans-serif;\n  font-weight: 600;\n  color: #1a2a3c;\n  overflow: hidden;\n  white-space: nowrap;\n  text-overflow: ellipsis;\n}\n.addr__url--off[data-v-20cccf23] {\n  color: #64748b;\n}\n.addr__tag[data-v-20cccf23] {\n  flex-shrink: 0;\n  margin-left: %?16?%;\n  padding: %?8?% %?16?%;\n  border-radius: %?999?%;\n  font-size: %?20?%;\n  font-weight: 600;\n  color: #f2994a;\n  background: #fdf4ed;\n}\n.addr__tip[data-v-20cccf23] {\n  display: block;\n  margin-top: %?16?%;\n  font-size: %?20?%;\n  color: #64748b;\n}\n/* 底部状态 */\n.foot[data-v-20cccf23] {\n  display: flex;\n  align-items: center;\n  justify-content: space-between;\n  padding: %?32?% %?32?% 0;\n}\n.foot__left[data-v-20cccf23] {\n  display: flex;\n  align-items: center;\n}\n.foot__dot[data-v-20cccf23] {\n  width: %?12?%;\n  height: %?12?%;\n  border-radius: 50%;\n  background: #c6d2de;\n  margin-right: %?16?%;\n}\n.foot__dot--ok[data-v-20cccf23] {\n  background: #27ae60;\n}\n.foot__t[data-v-20cccf23] {\n  font-size: %?20?%;\n  color: #64748b;\n}\n.foot__sync[data-v-20cccf23] {\n  font-size: %?20?%;\n  color: #94a3b8;\n}\n.foot__right[data-v-20cccf23] {\n  display: flex;\n  align-items: center;\n}\n.foot__btn[data-v-20cccf23] {\n  display: flex;\n  align-items: center;\n  margin-left: %?24?%;\n  padding: %?8?% %?24?%;\n  border-radius: %?999?%;\n  background: #389a82;\n}\n.foot__btn--busy[data-v-20cccf23] {\n  opacity: 0.7;\n}\n.foot__btn-icon[data-v-20cccf23] {\n  color: #ffffff;\n  font-size: %?20?%;\n  margin-right: %?8?%;\n}\n.foot__btn-icon--spin[data-v-20cccf23] {\n  -webkit-animation: foot-spin-data-v-20cccf23 0.8s linear infinite;\n          animation: foot-spin-data-v-20cccf23 0.8s linear infinite;\n}\n@-webkit-keyframes foot-spin-data-v-20cccf23 {\nfrom {\n    -webkit-transform: rotate(0deg);\n            transform: rotate(0deg);\n}\nto {\n    -webkit-transform: rotate(360deg);\n            transform: rotate(360deg);\n}\n}\n@keyframes foot-spin-data-v-20cccf23 {\nfrom {\n    -webkit-transform: rotate(0deg);\n            transform: rotate(0deg);\n}\nto {\n    -webkit-transform: rotate(360deg);\n            transform: rotate(360deg);\n}\n}\n.foot__btn-t[data-v-20cccf23] {\n  color: #ffffff;\n  font-size: %?20?%;\n  font-weight: 600;\n}", ""]);
 // Exports
 module.exports = exports;
 
@@ -813,6 +891,22 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 
 var POLL_MS = 60 * 1000; // 每 1 分钟刷新
@@ -826,7 +920,9 @@ var POLL_MS = 60 * 1000; // 每 1 分钟刷新
       lastSyncAt: 0,
       timer: null,
       refreshing: false,
-      online: true
+      online: true,
+      address: '',
+      addressChanged: false
     };
   },
   computed: {
@@ -953,32 +1049,47 @@ var POLL_MS = 60 * 1000; // 每 1 分钟刷新
         }, _callee);
       }))();
     },
-    load: function load() {
+    // 每次刷新都核对当前上报地址；与上次不同则标记"已变化"
+    refreshAddress: function refreshAddress() {
       var _this3 = this;
+      Object(_common_band_js__WEBPACK_IMPORTED_MODULE_4__["fetchBandAddress"])().then(function (info) {
+        if (!info || !info.public) {
+          _this3.address = '';
+          return;
+        }
+        var prev = uni.getStorageSync('ankang_band_address');
+        _this3.address = info.public;
+        _this3.addressChanged = !!(prev && prev !== info.public);
+        uni.setStorageSync('ankang_band_address', info.public);
+      });
+    },
+    load: function load() {
+      var _this4 = this;
       return Object(_workspace_h5build_node_modules_babel_runtime_helpers_esm_asyncToGenerator_js__WEBPACK_IMPORTED_MODULE_1__["default"])(/*#__PURE__*/Object(_workspace_h5build_node_modules_babel_runtime_helpers_esm_regenerator_js__WEBPACK_IMPORTED_MODULE_0__["default"])().m(function _callee2() {
         var latest, l;
         return Object(_workspace_h5build_node_modules_babel_runtime_helpers_esm_regenerator_js__WEBPACK_IMPORTED_MODULE_0__["default"])().w(function (_context2) {
           while (1) switch (_context2.n) {
             case 0:
-              if (_this3.deviceid) {
+              _this4.refreshAddress();
+              if (_this4.deviceid) {
                 _context2.n = 1;
                 break;
               }
               return _context2.a(2);
             case 1:
               _context2.n = 2;
-              return Object(_common_band_js__WEBPACK_IMPORTED_MODULE_4__["fetchBandLatest"])(_this3.deviceid);
+              return Object(_common_band_js__WEBPACK_IMPORTED_MODULE_4__["fetchBandLatest"])(_this4.deviceid);
             case 2:
               latest = _context2.v;
-              _this3.latest = latest || {};
-              _this3.lastSyncAt = Date.now();
+              _this4.latest = latest || {};
+              _this4.lastSyncAt = Date.now();
               // 只有后端真实上报过数据才视为在线
-              l = _this3.latest;
-              _this3.online = !!(l && (l.hr != null || l.sbp != null || l.dbp != null || l.steps != null));
+              l = _this4.latest;
+              _this4.online = !!(l && (l.hr != null || l.sbp != null || l.dbp != null || l.steps != null));
               // 回写本地 store，保持设备列表一致
-              if (_this3.id) {
-                _this3.$store.commit('UPDATE_DEVICE_DATA', {
-                  id: _this3.id,
+              if (_this4.id) {
+                _this4.$store.commit('UPDATE_DEVICE_DATA', {
+                  id: _this4.id,
                   data: {
                     sys: l.sbp,
                     dia: l.dbp,
@@ -986,7 +1097,7 @@ var POLL_MS = 60 * 1000; // 每 1 分钟刷新
                     steps: l.steps,
                     battery: l.battery
                   },
-                  lastSync: _this3.syncText
+                  lastSync: _this4.syncText
                 });
               }
             case 3:

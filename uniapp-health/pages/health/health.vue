@@ -588,6 +588,11 @@ export default {
   padding: $space-4 $space-4 0;
 }
 
+/* 首个容器（快捷入口）保留顶部间距，其余区块顶部贴齐 */
+.wrap:not(.wrap--first) {
+  padding-top: 0;
+}
+
 .sec-head {
   display: flex;
   align-items: flex-end;

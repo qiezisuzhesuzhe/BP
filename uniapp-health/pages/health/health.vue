@@ -681,7 +681,7 @@ export default {
   border-radius: 50%;
   background: $bg-surface;
   display: flex;
-  align-items: baseline;
+  align-items: center;
   justify-content: center;
 }
 

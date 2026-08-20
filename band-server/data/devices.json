@@ -3232,7 +3232,7 @@
       "name": "智能手环 - 血压款",
       "model": "BP100CE",
       "firstSeen": 1787198341420,
-      "lastSeen": 1787207245061,
+      "lastSeen": 1787207947193,
       "latest": {
         "ecgTs": 1787167501,
         "ecgN": 60,
@@ -3298,35 +3298,35 @@
           14760,
           15026
         ],
-        "steps": 1618,
-        "distance": 1245,
-        "calorie": 115,
-        "battery": 80,
+        "steps": 1712,
+        "distance": 11984,
+        "calorie": 7,
+        "battery": 7,
         "charging": false,
-        "ts": 1787236020,
-        "hr": 90,
-        "sbp": 135,
-        "dbp": 89,
+        "ts": 1787207947,
+        "hr": 78,
+        "sbp": 127,
+        "dbp": 80,
         "bodyTemp": 33.06,
         "skinTemp": 35.2,
         "tempOk": true,
-        "updatedAt": 1787207245062,
+        "updatedAt": 1787207947193,
         "sleep": {
-          "deep": 0,
-          "light": 0,
-          "wake": 5,
+          "deep": 1,
+          "light": 2,
+          "wake": 2,
           "total": 5
         },
-        "spo2": 96,
-        "spo2Max": 96,
-        "spo2Min": 96,
-        "stepsTs": 1787236026,
-        "bpTs": 1787236020,
-        "spo2Ts": 1787235960,
-        "tempTs": 1787235960,
-        "sleepTs": 1787235840,
+        "spo2": 98,
+        "spo2Max": 100,
+        "spo2Min": 95,
+        "stepsTs": 1787207947,
+        "bpTs": 1787207947,
+        "spo2Ts": 1787207947,
+        "tempTs": 1787207160,
+        "sleepTs": 1787207520,
         "stress": 41,
-        "stressTs": 1787227320
+        "stressTs": 1787198520
       },
       "history": [
         {
@@ -3496,13 +3496,13 @@
           "calorie": 115,
           "battery": 80,
           "charging": false,
-          "ts": 1787235370,
+          "ts": 1787206570,
           "stepsTs": 1787235370
         },
         {
           "at": 1787206597016,
           "hr": 82,
-          "ts": 1787235360,
+          "ts": 1787206560,
           "bpTs": 1787235360,
           "sleep": {
             "deep": 1,
@@ -3532,7 +3532,7 @@
           "calorie": 115,
           "battery": 80,
           "charging": false,
-          "ts": 1787235427,
+          "ts": 1787206627,
           "stepsTs": 1787235427
         },
         {
@@ -3546,7 +3546,7 @@
           },
           "bodyTemp": 33.31,
           "tempOk": true,
-          "ts": 1787235420,
+          "ts": 1787206620,
           "bpTs": 1787235420,
           "tempTs": 1787235420,
           "sleepTs": 1787235420
@@ -3558,7 +3558,7 @@
           "calorie": 115,
           "battery": 80,
           "charging": false,
-          "ts": 1787235547,
+          "ts": 1787206747,
           "stepsTs": 1787235547
         },
         {
@@ -3569,7 +3569,7 @@
             "wake": 4,
             "total": 5
           },
-          "ts": 1787235540,
+          "ts": 1787206740,
           "sleepTs": 1787235480,
           "spo2": 97,
           "spo2Max": 97,
@@ -3583,7 +3583,7 @@
           "calorie": 115,
           "battery": 80,
           "charging": false,
-          "ts": 1787235968,
+          "ts": 1787207168,
           "stepsTs": 1787235968
         },
         {
@@ -3595,7 +3595,7 @@
             "wake": 5,
             "total": 5
           },
-          "ts": 1787235960,
+          "ts": 1787207160,
           "bpTs": 1787235960,
           "sleepTs": 1787235840,
           "spo2": 96,
@@ -3613,14 +3613,80 @@
           "calorie": 115,
           "battery": 80,
           "charging": false,
-          "ts": 1787236026,
+          "ts": 1787207226,
           "stepsTs": 1787236026
         },
         {
           "at": 1787207245062,
           "hr": 90,
-          "ts": 1787236020,
+          "ts": 1787207220,
           "bpTs": 1787236020
+        },
+        {
+          "at": 1787207470437,
+          "steps": 1618,
+          "distance": 1245,
+          "calorie": 115,
+          "battery": 80,
+          "charging": false,
+          "ts": 1787207467,
+          "stepsTs": 1787236267
+        },
+        {
+          "at": 1787207518943,
+          "sleep": {
+            "deep": 1,
+            "light": 0,
+            "wake": 4,
+            "total": 5
+          },
+          "ts": 1787207460,
+          "sleepTs": 1787236200,
+          "hr": 84,
+          "bpTs": 1787236260
+        },
+        {
+          "at": 1787207531318,
+          "steps": 1618,
+          "distance": 1245,
+          "calorie": 115,
+          "battery": 80,
+          "charging": false,
+          "ts": 1787207528,
+          "stepsTs": 1787236328
+        },
+        {
+          "at": 1787207546929,
+          "sleep": {
+            "deep": 1,
+            "light": 2,
+            "wake": 2,
+            "total": 5
+          },
+          "spo2": 97,
+          "spo2Max": 97,
+          "spo2Min": 97,
+          "ts": 1787207520,
+          "spo2Ts": 1787236320,
+          "sleepTs": 1787236320
+        },
+        {
+          "at": 1787207947193,
+          "steps": 1712,
+          "distance": 11984,
+          "calorie": 7,
+          "battery": 7,
+          "charging": false,
+          "ts": 1787207947,
+          "stepsTs": 1787207947,
+          "hr": 78,
+          "sbp": 127,
+          "dbp": 80,
+          "spo2": 98,
+          "spo2Max": 100,
+          "spo2Min": 95,
+          "bpTs": 1787207947,
+          "spo2Ts": 1787207947
         }
       ],
       "version": "91.0.0.59",

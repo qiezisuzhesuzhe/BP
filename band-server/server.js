@@ -243,14 +243,14 @@ function mergeSamples(deviceid, packets) {
   for (const p of packets) {
     if (!p.parsed) continue
     const { type, data } = p.parsed
-    const pktTs = data.ts >>> 0 || nowSec
+    const pktTs = Math.floor(Date.now() / 1000)  // 用服务器收到时间，不用手环 ts（手环 ts 可能是本地时区 epoch）
     if (type === 'realtime') {
       if (data.steps !== undefined) snap.steps = data.steps
       if (data.distance !== undefined) snap.distance = data.distance
       if (data.calorie !== undefined) snap.calorie = data.calorie
       if (data.battery !== undefined) snap.battery = data.battery
       if (data.charging !== undefined) snap.charging = data.charging
-      if (data.ts) snap.ts = data.ts
+      snap.ts = pktTs
       snap.stepsTs = pktTs
     } else if (type === 'health') {
       if (data.hr !== undefined) snap.hr = data.hr
@@ -265,7 +265,7 @@ function mergeSamples(deviceid, packets) {
       if (data.skinTemp !== undefined) snap.skinTemp = data.skinTemp
       if (data.tempOk !== undefined) snap.tempOk = data.tempOk
       if (data.stress !== undefined) snap.stress = data.stress
-      if (data.ts) snap.ts = data.ts
+      snap.ts = pktTs
       // 为每项独立可测量指标打独立时间戳；hr 跟随 bp 一次测量
       if (data.sbp !== undefined || data.dbp !== undefined || data.hr !== undefined) {
         snap.bpTs = pktTs
@@ -279,13 +279,13 @@ function mergeSamples(deviceid, packets) {
       if (data.ecgN !== undefined) snap.ecgN = data.ecgN
       if (data.ecgSamples) snap.ecgSamples = data.ecgSamples
       if (data.ecgTs) snap.ecgTs = data.ecgTs
-      if (!snap.ecgTs && data.ts) snap.ecgTs = data.ts
+      if (!snap.ecgTs) snap.ecgTs = pktTs
     } else if (type === 'spo2') {
       if (data.spo2 !== undefined) snap.spo2 = data.spo2
       if (data.spo2Max !== undefined) snap.spo2Max = data.spo2Max
       if (data.spo2Min !== undefined) snap.spo2Min = data.spo2Min
       if (data.spo2N !== undefined) snap.spo2N = data.spo2N
-      if (data.ts) snap.ts = data.ts
+      snap.ts = pktTs
       snap.spo2Ts = pktTs
     }
   }

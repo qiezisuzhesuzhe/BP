@@ -79,7 +79,7 @@
             <text class="vital__num">{{ skinTempText }}</text>
             <text class="vital__unit">°C</text>
           </view>
-          <text class="vital__sub">{{ tempOk ? '体表温度' : '算法计算中' }}</text>
+          <text class="vital__sub">{{ tempOk ? skinTempSubText : '算法计算中' }}</text>
         </view>
       </view>
     </view>
@@ -277,7 +277,8 @@ export default {
       // SSE 相关
       sseOpen: false,
       _sub: null,
-      _dedup: {} // { kind: ts }
+      _dedup: {}, // { kind: ts }
+      _wdTimer: null // 兜底看门狗：30s 无事件则 load 一次
     }
   },
   computed: {
@@ -331,8 +332,14 @@ export default {
       return this.latest.bodyTemp.toFixed(1)
     },
     skinTempText() {
-      if (this.latest.skinTemp == null || this.latest.tempOk === false) return '--'
-      return this.latest.skinTemp.toFixed(1)
+      if (this.latest.tempOk === false) return '--'
+      if (this.latest.skinTemp != null) return this.latest.skinTemp.toFixed(1)
+      // 设备未单独上报皮肤温度时，降级展示当前体温值，避免用户测量后仍显示占位
+      if (this.latest.bodyTemp != null) return this.latest.bodyTemp.toFixed(1)
+      return '--'
+    },
+    skinTempSubText() {
+      return this.latest.skinTemp != null ? '体表温度' : '未单独上报 · 以体温显示'
     },
     /* ---------- 压力（HisHealthHrv.fatigue → 压力值 = 100 - fatigue） ---------- */
     stressText() {
@@ -429,6 +436,9 @@ export default {
         kinds: ['pb','alarm','sos','status','deviceinfo','calllog','device_unbind'],
         onOpen: () => {
           this.sseOpen = true
+          // 连接建立后立即拉一次最新数据（即使设备刚上报、事件刚错过也能补齐）
+          this.load()
+          this._armWatchdog()
         },
         onClose: () => {
           this.sseOpen = false
@@ -439,14 +449,30 @@ export default {
         onEvent: (evt) => this.handleSse(evt)
       })
     },
+    // 兜底看门狗：30s 内没有任何 SSE 事件则主动 load 一次，
+    // 保证设备上报但事件漏推/断线重连期间，页面数据也能保持最新
+    _armWatchdog() {
+      if (this._wdTimer) clearTimeout(this._wdTimer)
+      this._wdTimer = setTimeout(() => {
+        this._wdTimer = null
+        this.load()
+        if (this.sseOpen) this._armWatchdog() // 页面仍在前台则继续兜底
+      }, 30000)
+    },
     stopSse() {
       if (this._sub) {
         try { this._sub.close() } catch (e) {}
         this._sub = null
       }
+      if (this._wdTimer) {
+        clearTimeout(this._wdTimer)
+        this._wdTimer = null
+      }
       this.sseOpen = false
     },
     handleSse(evt) {
+      // 收到任意事件都重置兜底看门狗计时
+      this._armWatchdog()
       const kind = evt.kind || (evt.payload && evt.payload.kind) || 'message'
       const p = (evt && evt.payload) || {}
       // device_unbind：如果是自己被解绑 → 立刻提示并回设备列表

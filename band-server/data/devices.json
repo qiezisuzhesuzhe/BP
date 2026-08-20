@@ -3256,22 +3256,22 @@
       "name": "智能手环 - 血压款",
       "model": "BP100CE",
       "firstSeen": 1787136812838,
-      "lastSeen": 1787190495720,
+      "lastSeen": 1787191742745,
       "version": "91.0.0.59",
       "netType": "LTE",
       "wearing": "1",
       "lastDeviceInfo": 1787140482904,
       "latest": {
-        "steps": 3099,
-        "distance": 2168,
-        "calorie": 202,
-        "battery": 93,
+        "steps": 3263,
+        "distance": 22841,
+        "calorie": 13,
+        "battery": 7,
         "charging": false,
-        "ts": 1787178240,
-        "updatedAt": 1787149466192,
-        "sbp": 135,
-        "dbp": 89,
-        "hr": 109,
+        "ts": 1787191742,
+        "updatedAt": 1787191742745,
+        "sbp": 130,
+        "dbp": 78,
+        "hr": 83,
         "sleep": {
           "deep": 0,
           "light": 0,
@@ -3803,6 +3803,30 @@
           "at": 1787149466192,
           "hr": 109,
           "ts": 1787178240
+        },
+        {
+          "at": 1787191603899,
+          "steps": 3210,
+          "distance": 22470,
+          "calorie": 13,
+          "battery": 8,
+          "charging": false,
+          "ts": 1787191603,
+          "hr": 72,
+          "sbp": 118,
+          "dbp": 78
+        },
+        {
+          "at": 1787191742745,
+          "steps": 3263,
+          "distance": 22841,
+          "calorie": 13,
+          "battery": 7,
+          "charging": false,
+          "ts": 1787191742,
+          "hr": 83,
+          "sbp": 130,
+          "dbp": 78
         }
       ]
     }

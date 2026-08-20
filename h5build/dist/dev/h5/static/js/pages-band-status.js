@@ -405,7 +405,9 @@ var render = function () {
                     1
                   ),
                   _c("v-uni-text", { staticClass: "vital__sub" }, [
-                    _vm._v(_vm._s(_vm.tempOk ? "体表温度" : "算法计算中")),
+                    _vm._v(
+                      _vm._s(_vm.tempOk ? _vm.skinTempSubText : "算法计算中")
+                    ),
                   ]),
                 ],
                 1
@@ -1402,7 +1404,9 @@ var DEDUP_MS = 3000;
       // SSE 相关
       sseOpen: false,
       _sub: null,
-      _dedup: {} // { kind: ts }
+      _dedup: {},
+      // { kind: ts }
+      _wdTimer: null // 兜底看门狗：30s 无事件则 load 一次
     };
   },
   computed: {
@@ -1470,8 +1474,14 @@ var DEDUP_MS = 3000;
       return this.latest.bodyTemp.toFixed(1);
     },
     skinTempText: function skinTempText() {
-      if (this.latest.skinTemp == null || this.latest.tempOk === false) return '--';
-      return this.latest.skinTemp.toFixed(1);
+      if (this.latest.tempOk === false) return '--';
+      if (this.latest.skinTemp != null) return this.latest.skinTemp.toFixed(1);
+      // 设备未单独上报皮肤温度时，降级展示当前体温值，避免用户测量后仍显示占位
+      if (this.latest.bodyTemp != null) return this.latest.bodyTemp.toFixed(1);
+      return '--';
+    },
+    skinTempSubText: function skinTempSubText() {
+      return this.latest.skinTemp != null ? '体表温度' : '未单独上报 · 以体温显示';
     },
     /* ---------- 压力（HisHealthHrv.fatigue → 压力值 = 100 - fatigue） ---------- */stressText: function stressText() {
       return this.latest.stress != null ? this.latest.stress : '--';
@@ -1596,6 +1606,9 @@ var DEDUP_MS = 3000;
         kinds: ['pb', 'alarm', 'sos', 'status', 'deviceinfo', 'calllog', 'device_unbind'],
         onOpen: function onOpen() {
           _this.sseOpen = true;
+          // 连接建立后立即拉一次最新数据（即使设备刚上报、事件刚错过也能补齐）
+          _this.load();
+          _this._armWatchdog();
         },
         onClose: function onClose() {
           _this.sseOpen = false;
@@ -1608,6 +1621,17 @@ var DEDUP_MS = 3000;
         }
       });
     },
+    // 兜底看门狗：30s 内没有任何 SSE 事件则主动 load 一次，
+    // 保证设备上报但事件漏推/断线重连期间，页面数据也能保持最新
+    _armWatchdog: function _armWatchdog() {
+      var _this2 = this;
+      if (this._wdTimer) clearTimeout(this._wdTimer);
+      this._wdTimer = setTimeout(function () {
+        _this2._wdTimer = null;
+        _this2.load();
+        if (_this2.sseOpen) _this2._armWatchdog(); // 页面仍在前台则继续兜底
+      }, 30000);
+    },
     stopSse: function stopSse() {
       if (this._sub) {
         try {
@@ -1615,9 +1639,15 @@ var DEDUP_MS = 3000;
         } catch (e) {}
         this._sub = null;
       }
+      if (this._wdTimer) {
+        clearTimeout(this._wdTimer);
+        this._wdTimer = null;
+      }
       this.sseOpen = false;
     },
     handleSse: function handleSse(evt) {
+      // 收到任意事件都重置兜底看门狗计时
+      this._armWatchdog();
       var kind = evt.kind || evt.payload && evt.payload.kind || 'message';
       var p = evt && evt.payload || {};
       // device_unbind：如果是自己被解绑 → 立刻提示并回设备列表
@@ -1703,16 +1733,16 @@ var DEDUP_MS = 3000;
       });
     },
     lightLoad: function lightLoad() {
-      var _this2 = this;
+      var _this3 = this;
       if (!this.deviceid) return;
       Object(_common_band_js__WEBPACK_IMPORTED_MODULE_9__["fetchBandLatest"])(this.deviceid).then(function (latest) {
-        if (latest) _this2.latest = latest;
-        _this2.lastSyncAt = Date.now();
-        var l = _this2.latest;
-        _this2.online = !!(l && (l.hr != null || l.sbp != null || l.dbp != null || l.steps != null));
-        if (_this2.id) {
-          _this2.$store.commit('UPDATE_DEVICE_DATA', {
-            id: _this2.id,
+        if (latest) _this3.latest = latest;
+        _this3.lastSyncAt = Date.now();
+        var l = _this3.latest;
+        _this3.online = !!(l && (l.hr != null || l.sbp != null || l.dbp != null || l.steps != null));
+        if (_this3.id) {
+          _this3.$store.commit('UPDATE_DEVICE_DATA', {
+            id: _this3.id,
             data: {
               sys: l.sbp,
               dia: l.dbp,
@@ -1720,7 +1750,7 @@ var DEDUP_MS = 3000;
               steps: l.steps,
               battery: l.battery
             },
-            lastSync: _this2.syncText
+            lastSync: _this3.syncText
           });
         }
       });
@@ -1764,7 +1794,7 @@ var DEDUP_MS = 3000;
       this.doSend('安康提醒', p);
     },
     doSend: function doSend(title, text) {
-      var _this3 = this;
+      var _this4 = this;
       return Object(_workspace_h5build_node_modules_babel_runtime_helpers_esm_asyncToGenerator_js__WEBPACK_IMPORTED_MODULE_1__["default"])(/*#__PURE__*/Object(_workspace_h5build_node_modules_babel_runtime_helpers_esm_regenerator_js__WEBPACK_IMPORTED_MODULE_0__["default"])().m(function _callee() {
         var err;
         return Object(_workspace_h5build_node_modules_babel_runtime_helpers_esm_regenerator_js__WEBPACK_IMPORTED_MODULE_0__["default"])().w(function (_context) {
@@ -1780,7 +1810,7 @@ var DEDUP_MS = 3000;
               });
               return _context.a(2);
             case 1:
-              if (_this3.deviceid) {
+              if (_this4.deviceid) {
                 _context.n = 2;
                 break;
               }
@@ -1790,7 +1820,7 @@ var DEDUP_MS = 3000;
               });
               return _context.a(2);
             case 2:
-              if (!(_this3.byteLen(title) > 15)) {
+              if (!(_this4.byteLen(title) > 15)) {
                 _context.n = 3;
                 break;
               }
@@ -1800,7 +1830,7 @@ var DEDUP_MS = 3000;
               });
               return _context.a(2);
             case 3:
-              if (!(_this3.byteLen(text) > 240)) {
+              if (!(_this4.byteLen(text) > 240)) {
                 _context.n = 4;
                 break;
               }
@@ -1810,19 +1840,19 @@ var DEDUP_MS = 3000;
               });
               return _context.a(2);
             case 4:
-              _this3.msgSending = true;
+              _this4.msgSending = true;
               _context.n = 5;
-              return Object(_common_band_js__WEBPACK_IMPORTED_MODULE_9__["sendBandMessage"])(_this3.deviceid, title, text);
+              return Object(_common_band_js__WEBPACK_IMPORTED_MODULE_9__["sendBandMessage"])(_this4.deviceid, title, text);
             case 5:
               err = _context.v;
-              _this3.msgSending = false;
+              _this4.msgSending = false;
               uni.showToast({
                 title: err ? err : '消息已发送到手环',
                 icon: 'none'
               });
               if (!err) {
-                _this3.msgTitle = '';
-                _this3.msgText = '';
+                _this4.msgTitle = '';
+                _this4.msgText = '';
               }
             case 6:
               return _context.a(2);
@@ -1832,7 +1862,7 @@ var DEDUP_MS = 3000;
     },
     // 解绑设备：二次确认 → 删后端记录 + 删本地 store → 回设备列表 Tab
     onUnbind: function onUnbind() {
-      var _this4 = this;
+      var _this5 = this;
       if (!this.id || !this.device) return;
       var name = this.device.name || '手环';
       uni.showModal({
@@ -1853,14 +1883,14 @@ var DEDUP_MS = 3000;
                   return _context2.a(2);
                 case 1:
                   _context2.n = 2;
-                  return Object(_common_band_js__WEBPACK_IMPORTED_MODULE_9__["unbindBandDevice"])(_this4.deviceid);
+                  return Object(_common_band_js__WEBPACK_IMPORTED_MODULE_9__["unbindBandDevice"])(_this5.deviceid);
                 case 2:
-                  _this4.$store.dispatch('removeDevice', _this4.id);
+                  _this5.$store.dispatch('removeDevice', _this5.id);
                   uni.showToast({
                     title: '已解绑',
                     icon: 'success'
                   });
-                  _this4.stopSse();
+                  _this5.stopSse();
                   setTimeout(function () {
                     // 设备列表是 tabBar 页：switchTab 跳回
                     uni.switchTab({
@@ -1884,24 +1914,24 @@ var DEDUP_MS = 3000;
     },
     // 手动刷新：loading 反馈 + 结果提示
     doRefresh: function doRefresh() {
-      var _this5 = this;
+      var _this6 = this;
       return Object(_workspace_h5build_node_modules_babel_runtime_helpers_esm_asyncToGenerator_js__WEBPACK_IMPORTED_MODULE_1__["default"])(/*#__PURE__*/Object(_workspace_h5build_node_modules_babel_runtime_helpers_esm_regenerator_js__WEBPACK_IMPORTED_MODULE_0__["default"])().m(function _callee3() {
         var l, hasData;
         return Object(_workspace_h5build_node_modules_babel_runtime_helpers_esm_regenerator_js__WEBPACK_IMPORTED_MODULE_0__["default"])().w(function (_context3) {
           while (1) switch (_context3.n) {
             case 0:
-              if (!_this5.refreshing) {
+              if (!_this6.refreshing) {
                 _context3.n = 1;
                 break;
               }
               return _context3.a(2);
             case 1:
-              _this5.refreshing = true;
+              _this6.refreshing = true;
               _context3.n = 2;
-              return _this5.load();
+              return _this6.load();
             case 2:
-              _this5.refreshing = false;
-              if (_this5.deviceid) {
+              _this6.refreshing = false;
+              if (_this6.deviceid) {
                 _context3.n = 3;
                 break;
               }
@@ -1911,7 +1941,7 @@ var DEDUP_MS = 3000;
               });
               return _context3.a(2);
             case 3:
-              l = _this5.latest;
+              l = _this6.latest;
               hasData = !!(l && (l.hr != null || l.sbp != null || l.dbp != null || l.steps != null));
               uni.showToast({
                 title: hasData ? '已刷新，数据已更新' : '暂无新数据，等待手环上报',
@@ -1924,31 +1954,31 @@ var DEDUP_MS = 3000;
       }))();
     },
     load: function load() {
-      var _this6 = this;
+      var _this7 = this;
       return Object(_workspace_h5build_node_modules_babel_runtime_helpers_esm_asyncToGenerator_js__WEBPACK_IMPORTED_MODULE_1__["default"])(/*#__PURE__*/Object(_workspace_h5build_node_modules_babel_runtime_helpers_esm_regenerator_js__WEBPACK_IMPORTED_MODULE_0__["default"])().m(function _callee4() {
         var latest, l;
         return Object(_workspace_h5build_node_modules_babel_runtime_helpers_esm_regenerator_js__WEBPACK_IMPORTED_MODULE_0__["default"])().w(function (_context4) {
           while (1) switch (_context4.n) {
             case 0:
-              if (_this6.deviceid) {
+              if (_this7.deviceid) {
                 _context4.n = 1;
                 break;
               }
               return _context4.a(2);
             case 1:
               _context4.n = 2;
-              return Object(_common_band_js__WEBPACK_IMPORTED_MODULE_9__["fetchBandLatest"])(_this6.deviceid);
+              return Object(_common_band_js__WEBPACK_IMPORTED_MODULE_9__["fetchBandLatest"])(_this7.deviceid);
             case 2:
               latest = _context4.v;
-              _this6.latest = latest || {};
-              _this6.lastSyncAt = Date.now();
+              _this7.latest = latest || {};
+              _this7.lastSyncAt = Date.now();
               // 只有后端真实上报过数据才视为在线
-              l = _this6.latest;
-              _this6.online = !!(l && (l.hr != null || l.sbp != null || l.dbp != null || l.steps != null));
+              l = _this7.latest;
+              _this7.online = !!(l && (l.hr != null || l.sbp != null || l.dbp != null || l.steps != null));
               // 回写本地 store，保持设备列表一致
-              if (_this6.id) {
-                _this6.$store.commit('UPDATE_DEVICE_DATA', {
-                  id: _this6.id,
+              if (_this7.id) {
+                _this7.$store.commit('UPDATE_DEVICE_DATA', {
+                  id: _this7.id,
                   data: {
                     sys: l.sbp,
                     dia: l.dbp,
@@ -1956,7 +1986,7 @@ var DEDUP_MS = 3000;
                     steps: l.steps,
                     battery: l.battery
                   },
-                  lastSync: _this6.syncText
+                  lastSync: _this7.syncText
                 });
               }
             case 3:

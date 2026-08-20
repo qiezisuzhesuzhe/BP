@@ -302,25 +302,11 @@ function mergeSamples(deviceid, packets) {
       if (data.spo2 !== undefined) snap.spo2 = data.spo2
       if (data.spo2Max !== undefined) snap.spo2Max = data.spo2Max
       if (data.spo2Min !== undefined) snap.spo2Min = data.spo2Min
-      // 体温：只有本批次没有独立 temp 包，且历史上也没有"有效独立体温"时，
-      //   才允许 health 包写入体温。独立 temp 包的体温精度最高，
-      //   health 里的 temperature_data 常是低估值/皮肤温/算法中间值（常见 32-34°C），
-      //   若允许它覆盖之前独立 temp 包的正常值（36.x°C），就会出现"体温经常变得很低"。
-      // 判定"历史上是否有有效独立体温"：
-      //   latest.tempTs 存在 且 latest.tempOk !== false 且 bodyTemp 在正常体温区间（>=35°C）
-      const latestT = dev.latest || {}
-      const hasGoodTempInHistory = !!(
-        latestT.tempTs != null &&
-        latestT.tempOk !== false &&
-        latestT.bodyTemp != null &&
-        latestT.bodyTemp >= 35
-      )
-      if (!hasTempPacketInThisBatch && !hasGoodTempInHistory) {
-        if (data.bodyTemp !== undefined) snap.bodyTemp = data.bodyTemp
-        if (data.skinTemp !== undefined) snap.skinTemp = data.skinTemp
-        if (data.tempOk !== undefined) snap.tempOk = data.tempOk
-        if (data.bodyTemp !== undefined || data.skinTemp !== undefined) snap.tempTs = pktTs
-      }
+      // ⚠️ health 包内的 temperature_data 彻底禁写：
+      //   用户明确要求"体温和皮肤温度只要真实测量的数据"。
+      //   health.temperature_data 是每分钟健康包附带的算法中间值/皮肤温/未收敛值（常见32-34°C），
+      //   不是用户主动触发的体温测量结果。真实体温数据仅来自独立 temp 包
+      //   （HisDataType=TEMPERATURE_DATA=8，下方 type==='temp' 分支）。
       if (data.stress !== undefined) snap.stress = data.stress
       snap.ts = pktTs
       // 为每项独立可测量指标打独立时间戳；hr 跟随 bp 一次测量
@@ -329,6 +315,7 @@ function mergeSamples(deviceid, packets) {
         snap.bpTs = pktTs
       }
       if (data.spo2 !== undefined) snap.spo2Ts = pktTs
+      // 体温时间戳（bodyTemp/skinTemp/tempTs）完全不由 health 包写 → 下方 type==='temp' 独立分支
       if (data.stress !== undefined) snap.stressTs = pktTs
       if (data.sleep !== undefined) snap.sleepTs = pktTs
       if (data.steps !== undefined) snap.stepsTs = pktTs

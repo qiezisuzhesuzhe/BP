@@ -843,7 +843,16 @@ app.get('/api/health', (req, res) => res.json({ code: 0, msg: 'band-server runni
 // H5 构建产物与后端接口同端口托管：前端用相对路径即可请求到本服务，
 // 无论是本地预览、内网穿透公网地址还是手机访问都能正常工作
 const H5_DIR = process.env.H5_DIR || '/workspace/h5build/dist/dev/h5'
-app.use(express.static(H5_DIR))
+// 开发期间禁用静态资源缓存，避免修改后浏览器仍用旧文件
+app.use(express.static(H5_DIR, {
+  etag: false,
+  lastModified: false,
+  setHeaders: (res) => {
+    res.setHeader('Cache-Control', 'no-store, no-cache, must-revalidate')
+    res.setHeader('Pragma', 'no-cache')
+    res.setHeader('Expires', '0')
+  }
+}))
 
 /* ---------------- 启动 ---------------- */
 async function main() {

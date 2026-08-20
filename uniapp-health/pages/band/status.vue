@@ -1804,7 +1804,7 @@ export default {
 
 /* ---------- 强制刷新卡 ---------- */
 .wrap--refresh {
-  padding-top: $space-4;
+  padding-top: 0;
 }
 
 .refresh-btn {

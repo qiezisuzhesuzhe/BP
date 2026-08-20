@@ -243,26 +243,6 @@
       </view>
     </view>
 
-    <!-- 强制刷新：与自动刷新 / SSE 并行的显式兜底入口 -->
-    <view class="wrap wrap--refresh">
-      <view
-        class="refresh-btn"
-        :class="{ 'refresh-btn--busy': forceRefreshing, 'refresh-btn--offline': !deviceid }"
-        @tap="onForceRefresh"
-      >
-        <text
-          class="fa-solid refresh-btn__icon"
-          :class="forceRefreshing ? 'fa-spinner fa-spin' : 'fa-rotate'"
-        ></text>
-        <text class="refresh-btn__t">
-          {{ !deviceid ? '未绑定设备' : (forceRefreshing ? '强制刷新中…' : '强制刷新最新数据') }}
-        </text>
-      </view>
-      <view class="refresh-hint">
-        <text class="refresh-hint__t">点击按钮会立即从服务器拉取最新快照，并重置实时数据通道</text>
-      </view>
-    </view>
-
     <!-- 底部状态条 -->
     <view class="foot">
       <view class="foot__left">
@@ -306,8 +286,6 @@ export default {
       latest: {},
       lastSyncAt: 0,
       refreshing: false,
-      // 页面底部显式"强制刷新"按钮状态
-      forceRefreshing: false,
       online: true,
       msgTitle: '',
       msgText: '',
@@ -881,70 +859,6 @@ export default {
       const l = this.latest
       const hasData = !!(l && (l.hr != null || l.sbp != null || l.dbp != null || l.steps != null))
       return hasData ? '已刷新，数据已更新' : '暂无新数据，手环尚未上报'
-    },
-    // 页面底部显式"强制刷新"按钮：
-    //   - 未绑定设备时给出引导提示（点击按钮后 toast 说明原因 + 去绑定页入口）
-    //   - 已绑定：先停 SSE（强制断线），再绕过任何浏览器层 HTTP 缓存强行拉一次最新快照，
-    //     然后重新建立 SSE 通道 + 重置看门狗。
-    async onForceRefresh() {
-      if (this.forceRefreshing) return
-      // 没 deviceid：明确引导，不要静默"刷新了啥"
-      if (!this.deviceid) {
-        uni.showModal({
-          title: '未找到对应设备',
-          content: '当前页面没绑定到任何手环。请完成绑定后再回来查看数据。',
-          confirmText: '去绑定',
-          cancelText: '知道了',
-          success: (res) => {
-            if (res && res.confirm) {
-              uni.navigateTo({
-                url: '/pages/device/device',
-                fail: () => uni.switchTab({
-                  url: '/pages/device/device',
-                  fail: () => uni.navigateBack()
-                })
-              })
-            }
-          }
-        })
-        return
-      }
-      this.forceRefreshing = true
-      // 1) 切断现有 SSE：保证后续 SSE 事件不是旧连接推送的
-      try { this.stopSse() } catch (e) {}
-      // 2) 再跑一次 ensureDevice（幂等，有 deviceid 只启 SSE）
-      //    放在前面，以便 store/后端 有新记录时能再次匹配
-      try { await this.ensureDevice() } catch (e) {}
-      // 3) 强制 load：加显式 _fresh 参数绕 CDN/代理/uni.request 层缓存
-      try {
-        // 写个一次性 marker，保证 request 发出去时 query 变化，绕过任何浏览器层 HTTP 缓存
-        const marker = '_fresh=' + Date.now() + '_' + Math.floor(Math.random() * 1e6)
-        await this.load({ extraQuery: marker })
-      } catch (e) {}
-      // 4) 重建 SSE（如果 ensureDevice 里没成功启动的话）
-      if (this.deviceid && !this._sub) {
-        try { this.startSse() } catch (e) {}
-      }
-      this.forceRefreshing = false
-      // 判定：网络层面失败？ → 区分 HTTP 状态码；否则：有无数据 分别 toast
-      const info = getLastBandError()
-      const isFreshNetFail = info && (Date.now() - (info.at || 0) < 5000)
-      if (isFreshNetFail) {
-        const tag = (info.http ? ('HTTP ' + info.http) : (info.bus ? ('业务码 ' + info.bus) : '连接失败'))
-        uni.showToast({
-          title: '获取失败：' + tag + '，请稍后重试',
-          icon: 'none',
-          duration: 2200
-        })
-      } else {
-        const l = this.latest
-        const hasData = !!(l && (l.hr != null || l.sbp != null || l.dbp != null || l.steps != null))
-        uni.showToast({
-          title: hasData ? '刷新完成，已获取最新' : '暂无最新数据，手环尚未上报',
-          icon: 'none',
-          duration: 1800
-        })
-      }
     },
     async load(opts) {
       if (!this.deviceid) return { ok: false, fail: true, noDevice: true }
@@ -1800,60 +1714,5 @@ export default {
   color: $text-inverse;
   font-size: $font-size-xs;
   font-weight: $font-weight-semibold;
-}
-
-/* ---------- 强制刷新卡 ---------- */
-.wrap--refresh {
-  padding-top: 0;
-}
-
-.refresh-btn {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: $space-2;
-  height: 96rpx;
-  border-radius: $radius-card-child;
-  background: linear-gradient(135deg, $brand-primary-active 0%, #4f8dff 100%);
-  box-shadow: 0 10rpx 30rpx rgba(63, 116, 255, 0.22), $shadow-sm;
-  color: $text-inverse;
-  transition: transform 0.08s ease, opacity 0.15s ease, box-shadow 0.15s ease;
-}
-
-.refresh-btn:active {
-  transform: scale(0.98);
-  opacity: 0.92;
-  box-shadow: 0 6rpx 20rpx rgba(63, 116, 255, 0.2);
-}
-
-.refresh-btn--busy {
-  opacity: 0.78;
-}
-
-.refresh-btn--offline {
-  background: linear-gradient(135deg, #cbd5e1 0%, #94a3b8 100%);
-  box-shadow: $shadow-sm;
-}
-
-.refresh-btn__icon {
-  font-size: 28rpx;
-  line-height: 1;
-}
-
-.refresh-btn__t {
-  font-size: $font-size-md;
-  font-weight: $font-weight-semibold;
-  letter-spacing: 1rpx;
-}
-
-.refresh-hint {
-  margin-top: $space-3;
-  text-align: center;
-}
-
-.refresh-hint__t {
-  font-size: $font-size-2xs;
-  color: $text-hint;
-  line-height: 1.6;
 }
 </style>

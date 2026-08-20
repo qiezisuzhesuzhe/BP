@@ -494,13 +494,14 @@ app.get('/api/events/stream', (req, res) => {
   const id = 's_' + Date.now() + '_' + Math.random().toString(36).slice(2, 8)
   SSE_CLIENTS.set(id, { res, filter: { deviceid: deviceid || null, kinds } })
 
-  // 心跳保活：每 15s 发一行注释，防止浏览器/中间件因长时间无数据超时断开 SSE
+  // 心跳保活：每 5s 发一行注释，防止浏览器/中间件因长时间无数据超时断开 SSE
+  // 注：沙盒预览代理层空闲超时约 18s，故取 5s 留足余量，避免在心跳间隔内被中间层切断
   const hb = setInterval(() => {
     try {
       if (!SSE_CLIENTS.has(id)) { clearInterval(hb); return }
       res.write(': ping ' + Date.now() + '\n\n')
     } catch (e) { clearInterval(hb) }
-  }, 15000)
+  }, 5000)
   // 立即先发一次，确保连接建立后马上有字节流出
   try { res.write(': ping init\n\n') } catch (e) {}
 

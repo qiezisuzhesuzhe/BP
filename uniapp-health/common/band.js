@@ -60,12 +60,42 @@ export function bandApi(path) {
   return base + path
 }
 
+// 最近一次请求错误（调试用）：页面底部 SSE 状态卡 / 强制刷新 toast 可直接展示
+export let lastBandError = null
+export function getLastBandError() { return lastBandError }
+function _setLastError(info) {
+  try { lastBandError = info || null } catch (e) { lastBandError = info && JSON.parse(JSON.stringify(info)) || null }
+}
+// 统一日志 + 错误上报：生产环境 console.error + 保存 lastBandError；
+// 不要 uni.showToast，因为底层封装被轮询/定时器调用时会疯狂弹 toast。
+function _logReq(tag, url, resOrErr, extra) {
+  try {
+    const isErr = (resOrErr && resOrErr.__fail) || (resOrErr && typeof resOrErr.statusCode === 'number' && (resOrErr.statusCode < 200 || resOrErr.statusCode >= 300))
+    const code = resOrErr && typeof resOrErr.statusCode === 'number' ? resOrErr.statusCode : (resOrErr && resOrErr.__fail ? 'FAIL' : '?')
+    const busCode = resOrErr && resOrErr.data && typeof resOrErr.data.code !== 'undefined' ? resOrErr.data.code : null
+    if (isErr || (resOrErr && busCode != null && busCode !== 0)) {
+      const msg = '[band][' + tag + '] 失败 HTTP=' + code + ' 业务=' + busCode + '  URL=' + url + (extra ? '  EXTRA=' + JSON.stringify(extra) : '')
+      if (typeof console !== 'undefined' && console.error) console.error(msg, resOrErr || '')
+      _setLastError({ at: Date.now(), tag, url, http: code, bus: busCode, extra: extra || null })
+    } else {
+      if (typeof console !== 'undefined' && console.debug) {
+        // 成功只打 debug，不污染 error channel
+        console.debug('[band][' + tag + '] OK HTTP=' + code + ' 业务=' + busCode + '  ' + url, extra || '')
+      }
+    }
+  } catch (e) { /* ignore */ }
+}
+
 // 从后端拉取手环完整设备记录（{ deviceid, latest, model, name, bindAt, ... }）
 // 失败 resolve(null)。注意：这个接口与 fetchBandLatest 走同一个路由，但返回完整 record 而不是只取 latest。
 // extraQuery：可选，字符串形式 "k=v&k2=v2"，在末尾拼到 URL，用于强刷绕过任何代理/CDN 层缓存
 export function fetchBandRecord(deviceid, extraQuery) {
   return new Promise((resolve) => {
-    if (!deviceid) { resolve(null); return }
+    if (!deviceid) {
+      if (typeof console !== 'undefined' && console.warn) console.warn('[band][fetchBandRecord] deviceid 为空，直接返回 null')
+      resolve(null)
+      return
+    }
     let url = bandApi('/api/devices/' + deviceid) + '?_t=' + Date.now()
     if (extraQuery && typeof extraQuery === 'string') {
       url += (url.indexOf('?') >= 0 ? '&' : '?') + extraQuery
@@ -76,12 +106,17 @@ export function fetchBandRecord(deviceid, extraQuery) {
       timeout: 5000,
       success(res) {
         if (res.statusCode === 200 && res.data && res.data.code === 0 && res.data.data) {
+          _logReq('GET /api/devices/:id', url, res, { found: true, latestKeys: Object.keys((res.data.data && res.data.data.latest) || {}) })
           resolve(res.data.data)
         } else {
+          _logReq('GET /api/devices/:id', url, res, { hint: '结构不符合 code=0 或 data 不存在' })
           resolve(null)
         }
       },
-      fail() { resolve(null) }
+      fail(err) {
+        _logReq('GET /api/devices/:id', url, Object.assign({ __fail: true }, err || {}), { hint: 'uni.request fail：网络失败/超时/CORS' })
+        resolve(null)
+      }
     })
   })
 }
@@ -89,18 +124,24 @@ export function fetchBandRecord(deviceid, extraQuery) {
 // 拉取后端所有设备列表（[{ deviceid, latest, model, name, ... }]），失败返回 []
 export function listBandDevices() {
   return new Promise((resolve) => {
+    const url = bandApi('/api/devices?_t=') + Date.now()
     uni.request({
-      url: bandApi('/api/devices?_t=') + Date.now(),
+      url: url,
       method: 'GET',
       timeout: 5000,
       success(res) {
         if (res.statusCode === 200 && res.data && res.data.code === 0 && Array.isArray(res.data.data)) {
+          _logReq('GET /api/devices', url, res, { count: res.data.data.length })
           resolve(res.data.data)
         } else {
+          _logReq('GET /api/devices', url, res, { hint: '结构不符合 code=0 或 data 非数组' })
           resolve([])
         }
       },
-      fail() { resolve([]) }
+      fail(err) {
+        _logReq('GET /api/devices', url, Object.assign({ __fail: true }, err || {}), { hint: 'uni.request fail：网络失败/超时/CORS' })
+        resolve([])
+      }
     })
   })
 }
@@ -126,6 +167,10 @@ export function fetchBandLatest(deviceid, extraQuery) {
       ) {
         resolve(latest)
       } else {
+        // latest 空是正常情况（手环还没上报 hr/sbp），不写 lastBandError（那是"请求层面错误"专用通道）
+        if (typeof console !== 'undefined' && console.debug) {
+          console.debug('[band][fetchBandLatest] deviceid=' + deviceid + ' 后端 latest 为空（手环尚未上报心率/血压等），返回 null 让页面显示 --')
+        }
         resolve(null)
       }
     })
@@ -136,18 +181,22 @@ export function fetchBandLatest(deviceid, extraQuery) {
 // 后端不可达或未配置隧道时 resolve(null)，页面显示占位符；同样加时间戳防缓存
 export function fetchBandAddress() {
   return new Promise((resolve) => {
+    const url = bandApi('/api/address') + '?_t=' + Date.now()
     uni.request({
-      url: bandApi('/api/address') + '?_t=' + Date.now(),
+      url: url,
       method: 'GET',
       timeout: 5000,
       success(res) {
         if (res.statusCode === 200 && res.data && res.data.code === 0 && res.data.data) {
+          _logReq('GET /api/address', url, res, { public: (res.data.data.public || '').slice(0, 60) })
           resolve(res.data.data)
         } else {
+          _logReq('GET /api/address', url, res, { hint: '结构不符合 code=0' })
           resolve(null)
         }
       },
-      fail() {
+      fail(err) {
+        _logReq('GET /api/address', url, Object.assign({ __fail: true }, err || {}), { hint: 'uni.request fail' })
         resolve(null)
       }
     })
@@ -158,19 +207,23 @@ export function fetchBandAddress() {
 // title ≤15 字节，description ≤240 字节；成功 resolve(null)，失败 resolve(错误信息)
 export function sendBandMessage(deviceid, title, description) {
   return new Promise((resolve) => {
+    const url = bandApi('/api/band/message')
     uni.request({
-      url: bandApi('/api/band/message'),
+      url: url,
       method: 'POST',
       data: { device_id: deviceid, title: title, description: description },
       timeout: 15000,
       success(res) {
         if (res.statusCode === 200 && res.data && res.data.code === 0) {
+          _logReq('POST /api/band/message', url, res)
           resolve(null)
         } else {
+          _logReq('POST /api/band/message', url, res)
           resolve((res.data && res.data.message) || '发送失败(' + (res.statusCode || '') + ')')
         }
       },
-      fail() {
+      fail(err) {
+        _logReq('POST /api/band/message', url, Object.assign({ __fail: true }, err || {}))
         resolve('无法连接消息服务')
       }
     })
@@ -180,19 +233,23 @@ export function sendBandMessage(deviceid, title, description) {
 // 把手环设备注册到后端（绑定 deviceid 与用户）
 export function bindBandDevice(deviceid, name) {
   return new Promise((resolve) => {
+    const url = bandApi('/api/devices')
     uni.request({
-      url: bandApi('/api/devices'),
+      url: url,
       method: 'POST',
       data: { deviceid: deviceid, name: name },
       timeout: 5000,
       success(res) {
         if (res.statusCode === 200 && res.data && res.data.code === 0) {
+          _logReq('POST /api/devices', url, res)
           resolve(res.data.data)
         } else {
+          _logReq('POST /api/devices', url, res)
           resolve(null)
         }
       },
-      fail() {
+      fail(err) {
+        _logReq('POST /api/devices', url, Object.assign({ __fail: true }, err || {}))
         resolve(null)
       }
     })
@@ -206,18 +263,22 @@ export function unbindBandDevice(deviceid) {
       resolve(null)
       return
     }
+    const url = bandApi('/api/devices/' + encodeURIComponent(deviceid))
     uni.request({
-      url: bandApi('/api/devices/' + encodeURIComponent(deviceid)),
+      url: url,
       method: 'DELETE',
       timeout: 5000,
       success(res) {
         if (res.statusCode === 200 && res.data && res.data.code === 0) {
+          _logReq('DELETE /api/devices/:id', url, res)
           resolve(true)
         } else {
+          _logReq('DELETE /api/devices/:id', url, res)
           resolve(false)
         }
       },
-      fail() {
+      fail(err) {
+        _logReq('DELETE /api/devices/:id', url, Object.assign({ __fail: true }, err || {}))
         resolve(false)
       }
     })
@@ -236,18 +297,22 @@ export function fetchBandLatestBatch(deviceids) {
     const out = {}
     let remain = ids.length
     ids.forEach((id) => {
+      const url = bandApi('/api/devices/' + id) + '?_t=' + Date.now()
       uni.request({
-        url: bandApi('/api/devices/' + id) + '?_t=' + Date.now(),
+        url: url,
         method: 'GET',
         timeout: 5000,
         success(res) {
           if (res.statusCode === 200 && res.data && res.data.code === 0 && res.data.data && res.data.data.latest) {
+            _logReq('GET /api/devices/:id (batch)', url, res, { latestKeys: Object.keys(res.data.data.latest || {}) })
             out[id] = res.data.data.latest
           } else {
+            _logReq('GET /api/devices/:id (batch)', url, res, { hint: '结构不符合或 latest 不存在' })
             out[id] = null
           }
         },
-        fail() {
+        fail(err) {
+          _logReq('GET /api/devices/:id (batch)', url, Object.assign({ __fail: true }, err || {}))
           out[id] = null
         },
         complete() {

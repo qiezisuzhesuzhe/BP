@@ -265,10 +265,18 @@
     <!-- 底部状态条 -->
     <view class="foot">
       <view class="foot__left">
-        <view class="foot__dot" :class="{ 'foot__dot--ok': sseOpen }"></view>
-        <text class="foot__t">
-          {{ !deviceid ? '等待设备绑定…' : (sseOpen ? '已连接实时通道，手环上报将自动刷新' : (online ? '连接通道建立中…' : '等待手环数据上报…')) }}
-        </text>
+        <view class="foot__dot" :class="{
+          'foot__dot--ok': sseOpen && !netFailTag,
+          'foot__dot--warn': !sseOpen && deviceid && !netFailTag,
+          'foot__dot--err': !!netFailTag || !!sseLastErrMsgForView
+        }"></view>
+        <view class="foot__col">
+          <text class="foot__t">
+            {{ sseFootText }}
+          </text>
+          <text class="foot__err" v-if="sseLastErrMsgForView">SSE：{{ sseLastErrMsgForView }}</text>
+          <text class="foot__err" v-if="netFailTag">接口：{{ netFailTag }}</text>
+        </view>
       </view>
       <view class="foot__right">
         <text class="foot__sync">上次同步 {{ syncText }}</text>
@@ -279,7 +287,7 @@
 </template>
 
 <script>
-import { fetchBandLatest, fetchBandRecord, listBandDevices, sendBandMessage, bpLevel, unbindBandDevice, subscribeEvents } from '@/common/band.js'
+import { fetchBandLatest, fetchBandRecord, listBandDevices, sendBandMessage, bpLevel, unbindBandDevice, subscribeEvents, getLastBandError } from '@/common/band.js'
 
 // SSE 事件：同设备同 kind 的事件 3 秒内去重，避免短时间重复 toast/flash
 const DEDUP_MS = 3000
@@ -301,6 +309,7 @@ export default {
       presets: ['记得测量血压', '记得按时吃药', '该起身活动了', '注意安全早点回家', '记得喝水', '不舒服请按 SOS'],
       // SSE 相关
       sseOpen: false,
+      sseLastErrMsg: null, // 最近一次 SSE onerror 错误摘要：在底部 SSE 状态条展示（SSE 不通时用户能看到原因）
       _sub: null,
       _dedup: {}, // { kind: ts }
       _wdTimer: null // 兜底看门狗：30s 无事件则 load 一次
@@ -346,6 +355,34 @@ export default {
       const s = Math.max(0, Math.round((Date.now() - this.lastSyncAt) / 1000))
       if (s < 60) return s + ' 秒前'
       return Math.round(s / 60) + ' 分钟前'
+    },
+    // 最近一次 SSE onerror 错误摘要（视图用，截断前 80 字，避免一条超长错误把底部撑满）
+    sseLastErrMsgForView() {
+      const s = this.sseLastErrMsg
+      if (!s) return ''
+      return s.length > 80 ? s.slice(0, 80) + '…' : s
+    },
+    // 最近一次接口请求失败摘要（视图用）
+    netFailTag() {
+      const info = getLastBandError()
+      if (!info) return ''
+      // 只展示 60 秒内的错误，避免把 10 分钟前偶发失败一直挂在页面上
+      const age = Date.now() - (info.at || 0)
+      if (age > 60000) return ''
+      const tag = info.http ? ('HTTP ' + info.http) : (info.bus ? ('业务码 ' + info.bus) : '连接失败')
+      const url = info.url ? String(info.url).replace(/\?_t=[^&]*/g, '').slice(0, 60) : ''
+      return tag + (url ? '  请求 ' + url : '')
+    },
+    // 底部状态条主文案：区分 未绑定 / 网络/接口失败 / SSE 已连接 / SSE 连接中 / 等待数据上报
+    sseFootText() {
+      if (!this.deviceid) return '等待设备绑定…'
+      const net = this.netFailTag
+      if (net) return '接口连接失败，无法获取数据（点击"强制刷新"重试）'
+      const sse = this.sseLastErrMsgForView
+      if (this.sseOpen) return '已连接实时通道，手环上报将自动刷新'
+      if (sse) return '实时通道异常，正在自动重试…'
+      if (this.online) return '连接通道建立中…'
+      return '等待手环数据上报…'
     },
     onlineText() {
       return this.online ? '在线' : '离线'
@@ -468,11 +505,13 @@ export default {
     startSse() {
       this.stopSse()
       if (!this.deviceid) return
+      this.sseLastErrMsg = null
       this._sub = subscribeEvents({
         deviceid: this.deviceid,
         kinds: ['pb','alarm','sos','status','deviceinfo','calllog','device_unbind'],
         onOpen: () => {
           this.sseOpen = true
+          this.sseLastErrMsg = null
           // 连接建立后立即拉一次最新数据（即使设备刚上报、事件刚错过也能补齐）
           this.load()
           this._armWatchdog()
@@ -480,8 +519,13 @@ export default {
         onClose: () => {
           this.sseOpen = false
         },
-        onError: () => {
-          // 不打断用户：EventSource/长轮询都会自恢复
+        onError: (err) => {
+          // 不再静默：把错误信息记到 sseLastErrMsg 上，供底部状态条显示；避免频繁刷屏，只更新 data 不弹 toast
+          const msg = (err && typeof err === 'string') ? err : (err && err.message) ? err.message : '实时通道发生异常'
+          this.sseLastErrMsg = msg
+          if (typeof console !== 'undefined' && console.warn) {
+            console.warn('[status.vue][sse] onerror:', msg)
+          }
         },
         onEvent: (evt) => this.handleSse(evt)
       })
@@ -742,18 +786,24 @@ export default {
     async doRefresh() {
       if (this.refreshing) return
       this.refreshing = true
-      await this.load()
+      const r = await this.load()
       this.refreshing = false
       if (!this.deviceid) {
         uni.showToast({ title: '未绑定设备号', icon: 'none' })
         return
       }
+      uni.showToast({ title: this._refreshResultTitle(r), icon: 'none', duration: 1600 })
+    },
+    // 把 load/refresh 的结果 → 用户可见 toast 文案（区分：网络失败 / 有更新 / 手环未上报）
+    _refreshResultTitle(r) {
+      if (r && r.fail) {
+        const code = r.http || r.bus || ''
+        const tag = r.http ? ('HTTP ' + r.http) : (r.bus ? ('业务码 ' + r.bus) : '连接失败')
+        return '获取失败：' + tag + '，请稍后重试'
+      }
       const l = this.latest
       const hasData = !!(l && (l.hr != null || l.sbp != null || l.dbp != null || l.steps != null))
-      uni.showToast({
-        title: hasData ? '已刷新，数据已更新' : '暂无新数据，等待手环上报',
-        icon: 'none'
-      })
+      return hasData ? '已刷新，数据已更新' : '暂无新数据，手环尚未上报'
     },
     // 页面底部显式"强制刷新"按钮：
     //   - 未绑定设备时给出引导提示（点击按钮后 toast 说明原因 + 去绑定页入口）
@@ -799,21 +849,46 @@ export default {
         try { this.startSse() } catch (e) {}
       }
       this.forceRefreshing = false
-      const l = this.latest
-      const hasData = !!(l && (l.hr != null || l.sbp != null || l.dbp != null || l.steps != null))
-      uni.showToast({
-        title: hasData ? '刷新完成，已获取最新' : '暂无最新数据，手环尚未上报',
-        icon: 'none',
-        duration: 1800
-      })
+      // 判定：网络层面失败？ → 区分 HTTP 状态码；否则：有无数据 分别 toast
+      const info = getLastBandError()
+      const isFreshNetFail = info && (Date.now() - (info.at || 0) < 5000)
+      if (isFreshNetFail) {
+        const tag = (info.http ? ('HTTP ' + info.http) : (info.bus ? ('业务码 ' + info.bus) : '连接失败'))
+        uni.showToast({
+          title: '获取失败：' + tag + '，请稍后重试',
+          icon: 'none',
+          duration: 2200
+        })
+      } else {
+        const l = this.latest
+        const hasData = !!(l && (l.hr != null || l.sbp != null || l.dbp != null || l.steps != null))
+        uni.showToast({
+          title: hasData ? '刷新完成，已获取最新' : '暂无最新数据，手环尚未上报',
+          icon: 'none',
+          duration: 1800
+        })
+      }
     },
     async load(opts) {
-      if (!this.deviceid) return
+      if (!this.deviceid) return { ok: false, fail: true, noDevice: true }
       const eq = (opts && opts.extraQuery) ? opts.extraQuery : null
       const latest = await fetchBandLatest(this.deviceid, eq)
+      // fetchBandLatest 返回 null 有两种可能：
+      //   a) 网络请求失败 / HTTP 非 200 / 业务 code≠0 → 走 info fail 分支
+      //   b) 请求 200 且 code=0，但 latest 为空（手环没上报 hr/sbp/steps 等）→ 正常，用 {} 覆盖显示 --
+      // 这里明确区分两种情况
+      const info = getLastBandError()
+      const isNetFail = info && (Date.now() - (info.at || 0) < 1500) &&
+        (info.http || info.bus || (info.extra && info.extra.hint && info.extra.hint.indexOf('uni.request fail') >= 0))
+      if (isNetFail) {
+        // 请求失败时不要用 {} 覆盖已有 latest（避免把上次成功拿到的数据也清掉了，用户更懵）
+        // 但我们要告诉调用方"这次请求失败了"，由上层 toast
+        return { ok: false, fail: true, http: info.http || null, bus: info.bus || null }
+      }
       // 没有数据时用 {} 覆盖，保证缺失的血压/心率显示 --，不残留上一次 SSE 合并的数据
       this.latest = latest || {}
       this._applyLatestAndSync(latest || {})
+      return { ok: true, fail: false }
     }
   }
 }
@@ -1417,15 +1492,45 @@ export default {
   border-radius: 50%;
   background: $text-hint;
   margin-right: $space-2;
+  flex-shrink: 0;
 }
 
 .foot__dot--ok {
   background: $success;
 }
+.foot__dot--warn {
+  background: $warning;
+}
+.foot__dot--err {
+  background: $danger;
+  animation: foot-dot-blink 1.2s infinite alternate;
+}
+@keyframes foot-dot-blink {
+  from { opacity: 0.35 }
+  to { opacity: 1 }
+}
+
+.foot__col {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  line-height: 1.5;
+}
 
 .foot__t {
   font-size: $font-size-2xs;
   color: $text-muted;
+}
+
+.foot__err {
+  display: block;
+  margin-top: 4rpx;
+  font-size: $font-size-2xs;
+  color: $danger;
+  max-width: 88vw;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .foot__sync {

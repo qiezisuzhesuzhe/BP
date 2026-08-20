@@ -3232,7 +3232,7 @@
       "name": "智能手环 - 血压款",
       "model": "BP100CE",
       "firstSeen": 1787198341420,
-      "lastSeen": 1787198341420,
+      "lastSeen": 1787199378723,
       "latest": {
         "ecgTs": 1787167501,
         "ecgN": 60,
@@ -3297,8 +3297,38 @@
           13559,
           14760,
           15026
-        ]
-      }
+        ],
+        "steps": 2134,
+        "distance": 156,
+        "calorie": 12,
+        "battery": 7,
+        "charging": false,
+        "ts": 1787199378,
+        "hr": 76,
+        "sbp": 118,
+        "dbp": 76,
+        "bodyTemp": 36.5,
+        "skinTemp": 35.2,
+        "tempOk": true,
+        "updatedAt": 1787199378723
+      },
+      "history": [
+        {
+          "at": 1787199378723,
+          "steps": 2134,
+          "distance": 156,
+          "calorie": 12,
+          "battery": 7,
+          "charging": false,
+          "ts": 1787199378,
+          "hr": 76,
+          "sbp": 118,
+          "dbp": 76,
+          "bodyTemp": 36.5,
+          "skinTemp": 35.2,
+          "tempOk": true
+        }
+      ]
     }
   }
 }

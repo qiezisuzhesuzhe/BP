@@ -2215,17 +2215,23 @@ var DEDUP_MS = 3000;
               });
               return _context2.a(2);
             case 9:
-              // 4b) 用户 store 里没绑定过任何设备，但后端只有 1 台设备 → 自动选中
+              // 4b) 用户 store 里没绑定过任何设备 → 从后端列表选最近活跃的真实设备
               boundCount = (_this5.$store.state.devices || []).length;
-              if (!(boundCount === 0 && list.length === 1 && list[0].deviceid)) {
+              if (!(boundCount === 0 && list.length >= 1)) {
                 _context2.n = 10;
                 break;
               }
-              _this5.deviceid = list[0].deviceid;
-              _this5._applyLatestAndSync(list[0].latest || {});
+              var real = list.filter(function(d) { return d.deviceid && d.deviceid !== 'TEST' && d.lastSeen; }).sort(function(a, b) { return (b.lastSeen || 0) - (a.lastSeen || 0); });
+              if (!(real.length >= 1)) {
+                _context2.n = 10;
+                break;
+              }
+              var pick = real[0];
+              _this5.deviceid = pick.deviceid;
+              _this5._applyLatestAndSync(pick.latest || {});
               if (!_this5._sub) _this5.startSse();
               uni.showToast({
-                title: '已绑定后端设备 ' + _this5.deviceid,
+                title: '已绑定设备 ' + _this5.deviceid,
                 icon: 'none',
                 duration: 1800
               });

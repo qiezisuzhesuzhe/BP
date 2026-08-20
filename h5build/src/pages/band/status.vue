@@ -729,14 +729,21 @@ export default {
               return
             }
           }
-          // 4b) 用户 store 里没绑定过任何设备，但后端只有 1 台设备 → 自动选中
+          // 4b) 用户 store 里没绑定过任何设备 → 从后端列表选最近活跃的真实设备
           const boundCount = (this.$store.state.devices || []).length
-          if (boundCount === 0 && list.length === 1 && list[0].deviceid) {
-            this.deviceid = list[0].deviceid
-            this._applyLatestAndSync(list[0].latest || {})
-            if (!this._sub) this.startSse()
-            uni.showToast({ title: '已绑定后端设备 ' + this.deviceid, icon: 'none', duration: 1800 })
-            return
+          if (boundCount === 0 && list.length >= 1) {
+            // 过滤掉 TEST 等无效设备，按 lastSeen 降序
+            const real = list
+              .filter(d => d.deviceid && d.deviceid !== 'TEST' && d.lastSeen)
+              .sort((a, b) => (b.lastSeen || 0) - (a.lastSeen || 0))
+            if (real.length >= 1) {
+              const pick = real[0]
+              this.deviceid = pick.deviceid
+              this._applyLatestAndSync(pick.latest || {})
+              if (!this._sub) this.startSse()
+              uni.showToast({ title: '已绑定设备 ' + this.deviceid, icon: 'none', duration: 1800 })
+              return
+            }
           }
         }
       } catch (e) { /* ignore */ }

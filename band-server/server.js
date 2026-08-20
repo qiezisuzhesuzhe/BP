@@ -244,7 +244,12 @@ function mergeSamples(deviceid, packets) {
     if (!p.parsed) continue
     const { type, data } = p.parsed
     // 测量时间：优先用手环上报的 ts（真实测量时刻），无 ts 时回退到服务器收到时间
-    const pktTs = (data.ts >>> 0) || Math.floor(Date.now() / 1000)
+    // 注意：部分手环把"本地时间(北京)当成 UTC epoch"上报，导致 ts 比真实 UTC 快 8 小时（=未来时间）。
+    //       修正：若 ts 在未来（> 服务器当前时间），说明是本地时区 epoch，减去 8 小时还原为 UTC。
+    const _nowSec = Math.floor(Date.now() / 1000)
+    let pktTs = (data.ts >>> 0) || _nowSec
+    if (pktTs > _nowSec + 60) pktTs -= 8 * 3600  // 未来时间 → 本地时区 epoch 修正
+    if (pktTs > _nowSec) pktTs = _nowSec           // 兜底：不超过当前时间
     if (type === 'realtime') {
       if (data.steps !== undefined) snap.steps = data.steps
       if (data.distance !== undefined) snap.distance = data.distance

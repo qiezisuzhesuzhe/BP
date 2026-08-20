@@ -366,6 +366,25 @@ app.use(express.json({ limit: '1mb' }))
 app.post('/pb/upload', (req, res) => {
   const r = parseUploadBody(req.body)
   if (r.error) return res.status(200).send(Buffer.from([0x02]))
+  // 诊断：把每个 packet 解析出的 type 和 核心字段 落到 /tmp/pb_diag.log，排查"用户测了血压但页面不显示"
+  try {
+    const fs = require('fs')
+    const diags = []
+    for (const p of r.packets) {
+      if (!p || !p.parsed) continue
+      const { type, data } = p.parsed
+      const info = { opt: '0x'+p.opt.toString(16), type }
+      if (data.sbp != null || data.dbp != null) info.bp = [data.sbp, data.dbp]
+      if (data.hr != null) info.hr = data.hr
+      if (data.spo2 != null) info.spo2 = data.spo2
+      if (data.bodyTemp != null) info.bodyTemp = data.bodyTemp
+      if (data.steps != null) info.steps = data.steps
+      if (data.ecgN != null) info.ecgN = data.ecgN
+      if (data.ts != null) info.pkt_ts = data.ts
+      diags.push(info)
+    }
+    fs.appendFileSync('/tmp/pb_diag.log', JSON.stringify({ t: Date.now(), deviceid: r.deviceid, pkts: diags })+'\n')
+  } catch(e) {}
   const dev = mergeSamples(r.deviceid, r.packets)
   const opts = r.packets.map(p => 'opt=0x' + p.opt.toString(16)).join(',')
   console.log('[pb/upload]', r.deviceid, opts)
@@ -869,6 +888,25 @@ app.post('/api/simulate', (req, res) => {
     frameTemp
   ])
   const r = parseUploadBody(body)
+  // 模拟接口诊断：与 /pb/upload 保持同样的诊断日志，方便对比
+  try {
+    const fs = require('fs')
+    const diags = []
+    for (const p of r.packets) {
+      if (!p || !p.parsed) continue
+      const { type, data } = p.parsed
+      const info = { via: '/api/simulate', opt: '0x'+p.opt.toString(16), type }
+      if (data.sbp != null || data.dbp != null) info.bp = [data.sbp, data.dbp]
+      if (data.hr != null) info.hr = data.hr
+      if (data.spo2 != null) info.spo2 = data.spo2
+      if (data.bodyTemp != null) info.bodyTemp = data.bodyTemp
+      if (data.steps != null) info.steps = data.steps
+      if (data.ecgN != null) info.ecgN = data.ecgN
+      if (data.ts != null) info.pkt_ts = data.ts
+      diags.push(info)
+    }
+    fs.appendFileSync('/tmp/pb_diag.log', JSON.stringify({ t: Date.now(), deviceid: r.deviceid, pkts: diags })+'\n')
+  } catch(e) {}
   const dev2 = mergeSamples(r.deviceid, r.packets)
   // 如果 payload 里有 mergeSamples 无法产出的衍生字段（如睡眠），直接手动写回 snapshot
   if (payload.sleepMin != null && dev2 && dev2.latest) {

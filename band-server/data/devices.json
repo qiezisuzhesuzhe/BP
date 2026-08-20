@@ -3232,7 +3232,7 @@
       "name": "智能手环 - 血压款",
       "model": "BP100CE",
       "firstSeen": 1787198341420,
-      "lastSeen": 1787201407114,
+      "lastSeen": 1787206646549,
       "latest": {
         "ecgTs": 1787167501,
         "ecgN": 60,
@@ -3298,32 +3298,35 @@
           14760,
           15026
         ],
-        "steps": 2856,
-        "distance": 19992,
-        "calorie": 11,
-        "battery": 7,
+        "steps": 1618,
+        "distance": 1245,
+        "calorie": 115,
+        "battery": 80,
         "charging": false,
-        "ts": 1787201407,
-        "hr": 70,
-        "sbp": 127,
-        "dbp": 76,
-        "bodyTemp": 36.6,
+        "ts": 1787235420,
+        "hr": 85,
+        "sbp": 135,
+        "dbp": 89,
+        "bodyTemp": 33.31,
         "skinTemp": 35.2,
         "tempOk": true,
-        "updatedAt": 1787201407114,
+        "updatedAt": 1787206646549,
         "sleep": {
-          "deep": 0,
+          "deep": 1,
           "light": 0,
-          "wake": 0,
-          "total": 0
+          "wake": 4,
+          "total": 5
         },
         "spo2": 98,
-        "spo2Max": 100,
-        "spo2Min": 95,
-        "stepsTs": 1787201407,
-        "bpTs": 1787201407,
-        "spo2Ts": 1787201407,
-        "tempTs": 1787201099
+        "spo2Max": 98,
+        "spo2Min": 98,
+        "stepsTs": 1787235427,
+        "bpTs": 1787235420,
+        "spo2Ts": 1787228340,
+        "tempTs": 1787235420,
+        "sleepTs": 1787235420,
+        "stress": 41,
+        "stressTs": 1787227320
       },
       "history": [
         {
@@ -3485,8 +3488,74 @@
           "spo2Min": 95,
           "bpTs": 1787201407,
           "spo2Ts": 1787201407
+        },
+        {
+          "at": 1787206572794,
+          "steps": 1618,
+          "distance": 1245,
+          "calorie": 115,
+          "battery": 80,
+          "charging": false,
+          "ts": 1787235370,
+          "stepsTs": 1787235370
+        },
+        {
+          "at": 1787206597016,
+          "hr": 82,
+          "ts": 1787235360,
+          "bpTs": 1787235360,
+          "sleep": {
+            "deep": 1,
+            "light": 1,
+            "wake": 3,
+            "total": 5
+          },
+          "sleepTs": 1787235360,
+          "steps": 30,
+          "stepsTs": 1787234100,
+          "spo2": 98,
+          "spo2Max": 98,
+          "spo2Min": 98,
+          "bodyTemp": 1998.26,
+          "tempOk": true,
+          "stress": 41,
+          "spo2Ts": 1787228340,
+          "tempTs": 1787227260,
+          "stressTs": 1787227320,
+          "sbp": 135,
+          "dbp": 89
+        },
+        {
+          "at": 1787206630089,
+          "steps": 1618,
+          "distance": 1245,
+          "calorie": 115,
+          "battery": 80,
+          "charging": false,
+          "ts": 1787235427,
+          "stepsTs": 1787235427
+        },
+        {
+          "at": 1787206646549,
+          "hr": 85,
+          "sleep": {
+            "deep": 1,
+            "light": 0,
+            "wake": 4,
+            "total": 5
+          },
+          "bodyTemp": 33.31,
+          "tempOk": true,
+          "ts": 1787235420,
+          "bpTs": 1787235420,
+          "tempTs": 1787235420,
+          "sleepTs": 1787235420
         }
-      ]
+      ],
+      "version": "91.0.0.59",
+      "netType": "LTE",
+      "wearing": "1",
+      "lastDeviceInfo": 1787206566234
     },
     "TEST": {
       "deviceid": "TEST",

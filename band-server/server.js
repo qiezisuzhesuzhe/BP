@@ -251,9 +251,10 @@ function mergeSamples(deviceid, packets) {
     if (pktTs > _nowSec + 60) pktTs -= 8 * 3600  // 未来时间 → 本地时区 epoch 修正
     if (pktTs > _nowSec) pktTs = _nowSec           // 兜底：不超过当前时间
     if (type === 'realtime') {
-      if (data.steps !== undefined) snap.steps = data.steps
-      if (data.distance !== undefined) snap.distance = data.distance
-      if (data.calorie !== undefined) snap.calorie = data.calorie
+      // steps 是当日累计步数，只会单调递增；若新值 < 旧值，说明手环重置或上报的是增量，取较大值
+      if (data.steps !== undefined) snap.steps = Math.max(snap.steps || 0, data.steps)
+      if (data.distance !== undefined) snap.distance = Math.max(snap.distance || 0, data.distance)
+      if (data.calorie !== undefined) snap.calorie = Math.max(snap.calorie || 0, data.calorie)
       if (data.battery !== undefined) snap.battery = data.battery
       if (data.charging !== undefined) snap.charging = data.charging
       snap.ts = pktTs
@@ -262,7 +263,8 @@ function mergeSamples(deviceid, packets) {
       if (data.hr !== undefined) snap.hr = data.hr
       if (data.sbp !== undefined) snap.sbp = data.sbp
       if (data.dbp !== undefined) snap.dbp = data.dbp
-      if (data.steps !== undefined) snap.steps = data.steps
+      // 注意：health 包的 pedo_data.step 经常是重置值/单次增量（如 79、30），
+      //       不是当日累计步数。steps 只由 realtime(OM0Report) 更新，health 包不动 steps。
       if (data.sleep !== undefined) snap.sleep = data.sleep
       if (data.spo2 !== undefined) snap.spo2 = data.spo2
       if (data.spo2Max !== undefined) snap.spo2Max = data.spo2Max

@@ -981,6 +981,61 @@ var render = function () {
       ),
       _c(
         "v-uni-view",
+        { staticClass: "wrap wrap--refresh" },
+        [
+          _c(
+            "v-uni-view",
+            {
+              staticClass: "refresh-btn",
+              class: {
+                "refresh-btn--busy": _vm.forceRefreshing,
+                "refresh-btn--offline": !_vm.deviceid,
+              },
+              on: {
+                click: function ($event) {
+                  arguments[0] = $event = _vm.$handleEvent($event)
+                  _vm.onForceRefresh.apply(void 0, arguments)
+                },
+              },
+            },
+            [
+              _c("v-uni-text", {
+                staticClass: "fa-solid refresh-btn__icon",
+                class: _vm.forceRefreshing ? "fa-spinner fa-spin" : "fa-rotate",
+              }),
+              _c("v-uni-text", { staticClass: "refresh-btn__t" }, [
+                _vm._v(
+                  " " +
+                    _vm._s(
+                      !_vm.deviceid
+                        ? "未绑定设备"
+                        : _vm.forceRefreshing
+                        ? "强制刷新中…"
+                        : "强制刷新最新数据"
+                    ) +
+                    " "
+                ),
+              ]),
+            ],
+            1
+          ),
+          _c(
+            "v-uni-view",
+            { staticClass: "refresh-hint" },
+            [
+              _c("v-uni-text", { staticClass: "refresh-hint__t" }, [
+                _vm._v(
+                  "点击按钮会立即从服务器拉取最新快照，并重置实时数据通道"
+                ),
+              ]),
+            ],
+            1
+          ),
+        ],
+        1
+      ),
+      _c(
+        "v-uni-view",
         { staticClass: "foot" },
         [
           _c(
@@ -995,7 +1050,9 @@ var render = function () {
                 _vm._v(
                   " " +
                     _vm._s(
-                      _vm.sseOpen
+                      !_vm.deviceid
+                        ? "等待设备绑定…"
+                        : _vm.sseOpen
                         ? "已连接实时通道，手环上报将自动刷新"
                         : _vm.online
                         ? "连接通道建立中…"
@@ -1124,7 +1181,7 @@ __webpack_require__.r(__webpack_exports__);
 var ___CSS_LOADER_API_IMPORT___ = __webpack_require__(/*! ../../../node_modules/css-loader/dist/runtime/api.js */ "JPst");
 exports = ___CSS_LOADER_API_IMPORT___(false);
 // Module
-exports.push([module.i, "@charset \"UTF-8\";\n/* 安康健康管理 · 设计令牌\n   来源：/workspace/DESIGN.md\n   方案：rpx + SCSS 变量（1px = 2rpx，基于 750rpx 设计基准） */\n/* ---------- 品牌色 ---------- */\n/* ---------- 头像 ---------- */\n/* ---------- 语义状态色 ---------- */\n/* ---------- 金色（尊享装饰） ---------- */\n/* ---------- 背景 ---------- */\n/* 斜向两色渐变：左上(#ddf7ed) → 右下(#f3f3f3)，末端即底色；\n   配合 App.vue 中 background-attachment: fixed 铺满视口固定，不随页面滚动/变长 */\n/* ---------- 文字 ---------- */\n/* ---------- 描边 / 遮罩 ---------- */\n/* ---------- 字体 ---------- */\n/* 英文/数字优先匹配 DIN Pro（Mac 自带 DIN Alternate 作为备选），中文回退苹方/雅黑 */\n/* 移动端最小舒适字号（可读正文下限）：\n   说明/入口/数据标签等可读文字不得小于 12px(24rpx)；\n   $font-size-2xs(10px) 仅限角标、徽标、装饰性元素 */\n/* ---------- 语义排版 ---------- */\n/* ---------- 间距 ---------- */\n/* ---------- 区块标题 ---------- */\n/* 标题下间距 = 列表间距；上间距 = 下间距 × 2 */\n/* ---------- 尺寸 ---------- */\n/* ---------- 圆角（已减半，更克制干净） ---------- */\n/* ---------- 阴影 ---------- */\n/* ---------- 层级 ---------- */\n/* ---------- 动效 ---------- */\n/* ---------- 页面容器 ---------- */\n.wrap[data-v-20cccf23] {\n  height: auto;\n  padding: %?32?% %?32?% 0;\n}\n/* 非首个容器顶部贴齐：卡片间距由自身撑开，区块标题由 sec-head 撑开 */\n.wrap[data-v-20cccf23]:not(.wrap--first) {\n  padding-top: 0;\n}\n/* ---------- 区块标题 ---------- */\n.sec-head[data-v-20cccf23] {\n  display: flex;\n  align-items: flex-end;\n  justify-content: space-between;\n  margin-top: %?64?%;\n  margin-bottom: %?32?%;\n}\n.sec-head__right[data-v-20cccf23] {\n  display: flex;\n  align-items: center;\n  gap: %?16?%;\n  flex-shrink: 0;\n}\n.sec-title[data-v-20cccf23] {\n  font-size: %?36?%;\n  font-weight: 800;\n  line-height: 1.1;\n  color: #1a2a3c;\n  letter-spacing: %?1?%;\n}\n.sec-sub[data-v-20cccf23] {\n  font-size: %?24?%;\n  color: #64748b;\n  margin-top: %?16?%;\n}\n.head[data-v-20cccf23] {\n  display: flex;\n  align-items: center;\n  background: #ffffff;\n  border-radius: %?20?%;\n  box-shadow: 0 %?4?% %?24?% rgba(15, 61, 53, 0.06);\n  padding: %?32?%;\n}\n.head__main[data-v-20cccf23] {\n  flex: 1;\n  padding: 0 %?24?%;\n  overflow: hidden;\n}\n.head__name[data-v-20cccf23] {\n  display: block;\n  font-size: %?32?%;\n  font-weight: 800;\n  color: #1a2a3c;\n  line-height: 1.1;\n}\n.head__sn[data-v-20cccf23] {\n  display: flex;\n  align-items: center;\n  min-width: 0;\n  margin-top: %?8?%;\n}\n/* 设备型号·编号：超出自动省略，不换行 */\n.head__sn-t[data-v-20cccf23] {\n  flex: 0 1 auto;\n  min-width: 0;\n  font-size: %?20?%;\n  color: #64748b;\n  white-space: nowrap;\n  overflow: hidden;\n  text-overflow: ellipsis;\n}\n/* SSE 连接状态徽标（手机信号图标） */\n.head__sse[data-v-20cccf23] {\n  display: inline-flex;\n  align-items: center;\n  gap: %?8?%;\n  flex-shrink: 0;\n  margin-left: %?16?%;\n  padding: %?8?% %?16?%;\n  border-radius: %?999?%;\n  background: #f2f7fa;\n  color: #c6d2de;\n  font-size: %?20?%;\n  line-height: 1;\n}\n.head__sse .fa-solid[data-v-20cccf23] {\n  font-size: %?20?%;\n}\n.head__sse--on[data-v-20cccf23] {\n  background: rgba(56, 154, 130, 0.15);\n  color: #2b7e6a;\n  font-weight: 600;\n}\n.head__status[data-v-20cccf23] {\n  display: flex;\n  align-items: center;\n  flex-shrink: 0;\n  padding: %?8?% %?16?%;\n  border-radius: %?999?%;\n  background: #27ae60;\n}\n.head__status--off[data-v-20cccf23] {\n  background: #f2f7fa;\n}\n.head__dot[data-v-20cccf23] {\n  width: %?12?%;\n  height: %?12?%;\n  border-radius: 50%;\n  background: #ffffff;\n  margin-right: %?8?%;\n}\n.head__status--off .head__dot[data-v-20cccf23] {\n  background: #94a3b8;\n}\n.head__status-t[data-v-20cccf23] {\n  font-size: %?20?%;\n  color: #ffffff;\n  font-weight: 600;\n}\n.head__status--off .head__status-t[data-v-20cccf23] {\n  color: #64748b;\n}\n/* 实时指标 2×2 并排卡（心率/血氧/体温/皮肤温度） */\n/* 首行与设备头卡拉开距离，与下方区块标题间距($space-8)呼应 */\n.vital[data-v-20cccf23] {\n  display: flex;\n  margin-top: %?64?%;\n}\n.vital__card[data-v-20cccf23] {\n  flex: 1;\n  min-width: 0;\n  background: #ffffff;\n  border-radius: %?20?%;\n  box-shadow: 0 %?4?% %?24?% rgba(15, 61, 53, 0.06);\n  padding: %?32?%;\n}\n.vital__card + .vital__card[data-v-20cccf23] {\n  margin-left: %?24?%;\n}\n.vital[data-v-20cccf23]:not(:first-child) {\n  margin-top: %?24?%;\n}\n/* 心率卡：浅绿渐变弱强调，其余指标白卡 */\n.vital__card--hr[data-v-20cccf23] {\n  background: linear-gradient(145deg, #e8f8f0 0%, #ffffff 75%);\n}\n.vital__head[data-v-20cccf23] {\n  display: flex;\n  align-items: center;\n}\n.vital__icon[data-v-20cccf23] {\n  font-size: %?32?%;\n  margin-right: %?16?%;\n}\n.vital__icon--hr[data-v-20cccf23] {\n  color: #84e8c2;\n}\n.vital__icon--spo2[data-v-20cccf23] {\n  color: #0ba5c3;\n}\n.vital__icon--temp[data-v-20cccf23] {\n  color: #f2994a;\n}\n.vital__icon--skin[data-v-20cccf23] {\n  color: #4a90d9;\n}\n.vital__name[data-v-20cccf23] {\n  font-size: %?28?%;\n  font-weight: 600;\n  color: #334155;\n  white-space: nowrap;\n  overflow: hidden;\n  text-overflow: ellipsis;\n}\n.vital__value[data-v-20cccf23] {\n  display: flex;\n  align-items: baseline;\n  margin-top: %?24?%;\n}\n.vital__num[data-v-20cccf23] {\n  font-size: %?56?%;\n  font-weight: 800;\n  font-family: \"DIN Pro\", \"DIN Alternate\", \"Helvetica Neue\", Arial, sans-serif;\n  line-height: 1;\n}\n.vital__card--hr .vital__num[data-v-20cccf23] {\n  color: #84e8c2;\n}\n.vital__card--spo2 .vital__num[data-v-20cccf23] {\n  color: #0ba5c3;\n}\n.vital__card--temp .vital__num[data-v-20cccf23] {\n  color: #f2994a;\n}\n.vital__card--skin .vital__num[data-v-20cccf23] {\n  color: #4a90d9;\n}\n.vital__unit[data-v-20cccf23] {\n  margin-left: %?8?%;\n  font-size: %?20?%;\n  color: #64748b;\n}\n.vital__sub[data-v-20cccf23] {\n  display: block;\n  margin-top: %?16?%;\n  font-size: %?20?%;\n  color: #c6d2de;\n  white-space: nowrap;\n  overflow: hidden;\n  text-overflow: ellipsis;\n}\n/* 压力卡（全宽，带等级标签与进度条） */\n.stress[data-v-20cccf23] {\n  margin-top: %?64?%;\n  background: #ffffff;\n  border-radius: %?20?%;\n  box-shadow: 0 %?4?% %?24?% rgba(15, 61, 53, 0.06);\n  padding: %?32?%;\n}\n.stress__head[data-v-20cccf23] {\n  display: flex;\n  align-items: center;\n  justify-content: space-between;\n}\n.stress__title[data-v-20cccf23] {\n  display: flex;\n  align-items: center;\n}\n.stress__icon[data-v-20cccf23] {\n  font-size: %?32?%;\n  color: #8b5cf6;\n  margin-right: %?16?%;\n}\n.stress__name[data-v-20cccf23] {\n  font-size: %?28?%;\n  font-weight: 600;\n  color: #334155;\n}\n.stress__tag[data-v-20cccf23] {\n  display: flex;\n  align-items: center;\n  padding: %?8?% %?24?%;\n  border-radius: %?999?%;\n  font-size: %?20?%;\n  font-weight: 600;\n}\n.stress__tag-dot[data-v-20cccf23] {\n  width: %?12?%;\n  height: %?12?%;\n  border-radius: 50%;\n  margin-right: %?8?%;\n}\n.stress__value[data-v-20cccf23] {\n  display: flex;\n  align-items: baseline;\n  margin-top: %?24?%;\n}\n.stress__num[data-v-20cccf23] {\n  font-size: %?56?%;\n  font-weight: 800;\n  font-family: \"DIN Pro\", \"DIN Alternate\", \"Helvetica Neue\", Arial, sans-serif;\n  line-height: 1;\n  color: #1a2a3c;\n}\n.stress__unit[data-v-20cccf23] {\n  margin-left: %?16?%;\n  font-size: %?20?%;\n  color: #64748b;\n}\n.stress__bar[data-v-20cccf23] {\n  margin-top: %?24?%;\n  height: %?16?%;\n  border-radius: %?999?%;\n  background: #f2f7fa;\n  overflow: hidden;\n}\n.stress__bar-in[data-v-20cccf23] {\n  height: 100%;\n  border-radius: %?999?%;\n  transition: width 0.6s ease;\n}\n.stress__scale[data-v-20cccf23] {\n  margin-top: %?8?%;\n  display: flex;\n  justify-content: space-between;\n}\n.stress__scale-t[data-v-20cccf23] {\n  font-size: %?20?%;\n  color: #c6d2de;\n}\n/* 血压卡 */\n.bp[data-v-20cccf23] {\n  display: flex;\n  align-items: center;\n  background: #ffffff;\n  border-radius: %?20?%;\n  box-shadow: 0 %?4?% %?24?% rgba(15, 61, 53, 0.06);\n  padding: %?32?% 0;\n}\n.bp__col[data-v-20cccf23] {\n  flex: 1;\n  display: flex;\n  flex-direction: column;\n  align-items: center;\n}\n.bp__num[data-v-20cccf23] {\n  font-size: %?56?%;\n  font-weight: 800;\n  color: #1a2a3c;\n  font-family: \"DIN Pro\", \"DIN Alternate\", \"Helvetica Neue\", Arial, sans-serif;\n  line-height: 1;\n}\n.bp__t[data-v-20cccf23] {\n  margin-top: %?16?%;\n  font-size: %?20?%;\n  color: #64748b;\n}\n.bp__divider[data-v-20cccf23] {\n  width: %?1?%;\n  height: %?48?%;\n  background: #f2f7fa;\n}\n.bp-tag[data-v-20cccf23] {\n  display: flex;\n  align-items: center;\n  padding: %?8?% %?24?%;\n  border-radius: %?999?%;\n  font-size: %?20?%;\n  font-weight: 600;\n}\n.bp-tag__dot[data-v-20cccf23] {\n  width: %?12?%;\n  height: %?12?%;\n  border-radius: 50%;\n  margin-right: %?8?%;\n}\n/* 步数卡 */\n.steps[data-v-20cccf23] {\n  background: #ffffff;\n  border-radius: %?20?%;\n  box-shadow: 0 %?4?% %?24?% rgba(15, 61, 53, 0.06);\n  padding: %?32?%;\n}\n.steps__main[data-v-20cccf23] {\n  display: flex;\n  align-items: baseline;\n}\n.steps__num[data-v-20cccf23] {\n  font-size: %?56?%;\n  font-weight: 800;\n  color: #1a2a3c;\n  font-family: \"DIN Pro\", \"DIN Alternate\", \"Helvetica Neue\", Arial, sans-serif;\n  line-height: 1;\n}\n.steps__unit[data-v-20cccf23] {\n  margin-left: %?16?%;\n  font-size: %?24?%;\n  color: #64748b;\n}\n.steps__bar[data-v-20cccf23] {\n  margin-top: %?24?%;\n  height: %?16?%;\n  border-radius: %?999?%;\n  background: #f2f7fa;\n  overflow: hidden;\n}\n.steps__bar-in[data-v-20cccf23] {\n  height: 100%;\n  border-radius: %?999?%;\n  background: linear-gradient(90deg, #7dd4bc, #4ab89e);\n  transition: width 0.6s ease;\n}\n.steps__meta[data-v-20cccf23] {\n  margin-top: %?16?%;\n  display: flex;\n  justify-content: space-between;\n}\n.steps__meta-item[data-v-20cccf23] {\n  font-size: %?20?%;\n  color: #64748b;\n}\n/* 心电图卡（深色底，波形为唯一视觉重心） */\n.ecg[data-v-20cccf23] {\n  position: relative;\n  background: linear-gradient(155deg, #0c2b2e 0%, #113f40 100%);\n  border-radius: %?20?%;\n  padding: %?32?%;\n  box-shadow: 0 %?12?% %?48?% rgba(125, 212, 188, 0.18);\n  overflow: hidden;\n}\n.ecg[data-v-20cccf23]::before {\n  content: \"\";\n  position: absolute;\n  inset: 0;\n  background-image: linear-gradient(rgba(255, 255, 255, 0.045) %?1?%, transparent %?1?%), linear-gradient(90deg, rgba(255, 255, 255, 0.045) %?1?%, transparent %?1?%);\n  background-size: %?48?% %?48?%;\n  pointer-events: none;\n}\n.ecg__svg[data-v-20cccf23] {\n  position: relative;\n  display: block;\n  width: 100%;\n  height: %?220?%;\n}\n.ecg__line[data-v-20cccf23] {\n  stroke: #6ff0c3;\n  stroke-width: 2;\n  stroke-linejoin: round;\n  stroke-linecap: round;\n  -webkit-filter: drop-shadow(0 0 %?6?% rgba(111, 240, 195, 0.65));\n          filter: drop-shadow(0 0 %?6?% rgba(111, 240, 195, 0.65));\n}\n.ecg__empty[data-v-20cccf23] {\n  position: relative;\n  height: %?220?%;\n  display: flex;\n  align-items: center;\n  justify-content: center;\n}\n.ecg__empty-t[data-v-20cccf23] {\n  color: rgba(255, 255, 255, 0.45);\n  font-size: %?24?%;\n  letter-spacing: %?2?%;\n}\n.ecg__meta[data-v-20cccf23] {\n  position: relative;\n  display: block;\n  margin-top: %?16?%;\n  font-size: %?20?%;\n  color: rgba(255, 255, 255, 0.6);\n}\n/* 睡眠卡 */\n.sleep[data-v-20cccf23] {\n  background: #ffffff;\n  border-radius: %?20?%;\n  box-shadow: 0 %?4?% %?24?% rgba(15, 61, 53, 0.06);\n  padding: %?32?%;\n}\n.sleep__stats[data-v-20cccf23] {\n  display: flex;\n}\n.sleep__stat[data-v-20cccf23] {\n  flex: 1;\n  display: flex;\n  flex-direction: column;\n  align-items: center;\n}\n.sleep__stat-num[data-v-20cccf23] {\n  font-size: %?36?%;\n  font-weight: 800;\n  font-family: \"DIN Pro\", \"DIN Alternate\", \"Helvetica Neue\", Arial, sans-serif;\n  line-height: 1.1;\n}\n.sleep__stat-num--deep[data-v-20cccf23] {\n  color: #1e6f5c;\n}\n.sleep__stat-num--light[data-v-20cccf23] {\n  color: #3eb98f;\n}\n.sleep__stat-num--wake[data-v-20cccf23] {\n  color: #94a3b8;\n}\n.sleep__stat-t[data-v-20cccf23] {\n  margin-top: %?8?%;\n  font-size: %?20?%;\n  color: #64748b;\n}\n.sleep__strip[data-v-20cccf23] {\n  margin-top: %?24?%;\n  height: %?24?%;\n  border-radius: %?999?%;\n  overflow: hidden;\n  display: flex;\n}\n.sleep__strip-seg[data-v-20cccf23] {\n  height: 100%;\n  transition: width 0.6s ease;\n}\n.sleep__strip-seg--deep[data-v-20cccf23] {\n  background: #1e6f5c;\n}\n.sleep__strip-seg--light[data-v-20cccf23] {\n  background: #7dd4bc;\n}\n.sleep__strip-seg--wake[data-v-20cccf23] {\n  background: #c8d5df;\n}\n.sleep__strip--empty[data-v-20cccf23] {\n  background: #f2f7fa;\n}\n/* 底部状态 */\n.foot[data-v-20cccf23] {\n  display: flex;\n  align-items: center;\n  justify-content: space-between;\n  padding: %?32?% %?32?% 0;\n}\n.foot__left[data-v-20cccf23] {\n  display: flex;\n  align-items: center;\n}\n.foot__dot[data-v-20cccf23] {\n  width: %?12?%;\n  height: %?12?%;\n  border-radius: 50%;\n  background: #c6d2de;\n  margin-right: %?16?%;\n}\n.foot__dot--ok[data-v-20cccf23] {\n  background: #27ae60;\n}\n.foot__t[data-v-20cccf23] {\n  font-size: %?20?%;\n  color: #64748b;\n}\n.foot__sync[data-v-20cccf23] {\n  font-size: %?20?%;\n  color: #94a3b8;\n}\n.foot__right[data-v-20cccf23] {\n  display: flex;\n  align-items: center;\n}\n/* 顶部右上角功能区：解绑按钮 + 刷新 */\n.nav-actions[data-v-20cccf23] {\n  display: flex;\n  align-items: center;\n  gap: %?16?%;\n}\n.nav-sub-btn[data-v-20cccf23] {\n  height: %?60?%;\n  padding: 0 %?24?%;\n  border-radius: %?999?%;\n  background: rgba(255, 255, 255, 0.7);\n  border: %?1?% solid rgba(148, 163, 184, 0.35);\n  display: inline-flex;\n  align-items: center;\n  gap: %?8?%;\n  flex-shrink: 0;\n  white-space: nowrap;\n  -webkit-backdrop-filter: blur(6px);\n          backdrop-filter: blur(6px);\n  transition: opacity 0.15s ease, -webkit-transform 0.1s ease;\n  transition: opacity 0.15s ease, transform 0.1s ease;\n  transition: opacity 0.15s ease, transform 0.1s ease, -webkit-transform 0.1s ease;\n}\n.nav-sub-btn[data-v-20cccf23]:active {\n  -webkit-transform: scale(0.97);\n          transform: scale(0.97);\n  opacity: 0.8;\n}\n.nav-sub-btn__icon[data-v-20cccf23] {\n  font-size: %?24?%;\n  color: #64748b;\n}\n.nav-sub-btn__t[data-v-20cccf23] {\n  font-size: %?24?%;\n  font-weight: 600;\n  color: #475569;\n}\n/* 顶部右上角刷新按钮 */\n.nav-refresh[data-v-20cccf23] {\n  width: %?60?%;\n  height: %?60?%;\n  border-radius: %?999?%;\n  background: #389a82;\n  box-shadow: 0 %?4?% %?24?% rgba(15, 61, 53, 0.06);\n  display: flex;\n  align-items: center;\n  justify-content: center;\n}\n.nav-refresh--busy[data-v-20cccf23] {\n  opacity: 0.7;\n}\n.nav-refresh__icon[data-v-20cccf23] {\n  color: #ffffff;\n  font-size: %?24?%;\n}\n.nav-refresh__icon--spin[data-v-20cccf23] {\n  -webkit-animation: spin-data-v-20cccf23 0.8s linear infinite;\n          animation: spin-data-v-20cccf23 0.8s linear infinite;\n}\n@-webkit-keyframes spin-data-v-20cccf23 {\nfrom {\n    -webkit-transform: rotate(0deg);\n            transform: rotate(0deg);\n}\nto {\n    -webkit-transform: rotate(360deg);\n            transform: rotate(360deg);\n}\n}\n@keyframes spin-data-v-20cccf23 {\nfrom {\n    -webkit-transform: rotate(0deg);\n            transform: rotate(0deg);\n}\nto {\n    -webkit-transform: rotate(360deg);\n            transform: rotate(360deg);\n}\n}\n/* 发送消息卡 */\n.msg[data-v-20cccf23] {\n  background: #ffffff;\n  border-radius: %?20?%;\n  box-shadow: 0 %?4?% %?24?% rgba(15, 61, 53, 0.06);\n  padding: %?32?%;\n}\n.msg__input[data-v-20cccf23] {\n  height: %?88?%;\n  background: #f2f7fa;\n  border-radius: %?20?%;\n  padding: 0 %?24?%;\n  font-size: %?28?%;\n  color: #1a2a3c;\n}\n.msg__area[data-v-20cccf23] {\n  margin-top: %?24?%;\n  width: 100%;\n  height: %?180?%;\n  background: #f2f7fa;\n  border-radius: %?20?%;\n  padding: %?24?%;\n  font-size: %?28?%;\n  color: #1a2a3c;\n  box-sizing: border-box;\n  line-height: 1.6;\n}\n.msg__ph[data-v-20cccf23] {\n  color: #c6d2de;\n  font-size: %?24?%;\n}\n/* 快捷提醒语 */\n.msg__presets[data-v-20cccf23] {\n  margin-top: %?24?%;\n  display: flex;\n  flex-wrap: wrap;\n}\n.msg__chip[data-v-20cccf23] {\n  margin: 0 %?16?% %?16?% 0;\n  padding: %?8?% %?24?%;\n  border-radius: %?999?%;\n  background: #f2f7fa;\n  border: %?1?% solid rgba(15, 61, 53, 0.06);\n}\n.msg__chip-t[data-v-20cccf23] {\n  font-size: %?20?%;\n  color: #334155;\n}\n.msg__bar[data-v-20cccf23] {\n  margin-top: %?24?%;\n  display: flex;\n  align-items: center;\n  justify-content: space-between;\n}\n.msg__len[data-v-20cccf23] {\n  font-size: %?20?%;\n  color: #64748b;\n}\n.msg__btn[data-v-20cccf23] {\n  display: flex;\n  align-items: center;\n  background: #389a82;\n  border-radius: %?999?%;\n  padding: %?16?% %?40?%;\n}\n.msg__btn--busy[data-v-20cccf23] {\n  opacity: 0.7;\n}\n.msg__btn-icon[data-v-20cccf23] {\n  color: #ffffff;\n  font-size: %?20?%;\n  margin-right: %?8?%;\n}\n.msg__btn-t[data-v-20cccf23] {\n  color: #ffffff;\n  font-size: %?24?%;\n  font-weight: 600;\n}", ""]);
+exports.push([module.i, "@charset \"UTF-8\";\n/* 安康健康管理 · 设计令牌\n   来源：/workspace/DESIGN.md\n   方案：rpx + SCSS 变量（1px = 2rpx，基于 750rpx 设计基准） */\n/* ---------- 品牌色 ---------- */\n/* ---------- 头像 ---------- */\n/* ---------- 语义状态色 ---------- */\n/* ---------- 金色（尊享装饰） ---------- */\n/* ---------- 背景 ---------- */\n/* 斜向两色渐变：左上(#ddf7ed) → 右下(#f3f3f3)，末端即底色；\n   配合 App.vue 中 background-attachment: fixed 铺满视口固定，不随页面滚动/变长 */\n/* ---------- 文字 ---------- */\n/* ---------- 描边 / 遮罩 ---------- */\n/* ---------- 字体 ---------- */\n/* 英文/数字优先匹配 DIN Pro（Mac 自带 DIN Alternate 作为备选），中文回退苹方/雅黑 */\n/* 移动端最小舒适字号（可读正文下限）：\n   说明/入口/数据标签等可读文字不得小于 12px(24rpx)；\n   $font-size-2xs(10px) 仅限角标、徽标、装饰性元素 */\n/* ---------- 语义排版 ---------- */\n/* ---------- 间距 ---------- */\n/* ---------- 区块标题 ---------- */\n/* 标题下间距 = 列表间距；上间距 = 下间距 × 2 */\n/* ---------- 尺寸 ---------- */\n/* ---------- 圆角（已减半，更克制干净） ---------- */\n/* ---------- 阴影 ---------- */\n/* ---------- 层级 ---------- */\n/* ---------- 动效 ---------- */\n/* ---------- 页面容器 ---------- */\n.wrap[data-v-20cccf23] {\n  height: auto;\n  padding: %?32?% %?32?% 0;\n}\n/* 非首个容器顶部贴齐：卡片间距由自身撑开，区块标题由 sec-head 撑开 */\n.wrap[data-v-20cccf23]:not(.wrap--first) {\n  padding-top: 0;\n}\n/* ---------- 区块标题 ---------- */\n.sec-head[data-v-20cccf23] {\n  display: flex;\n  align-items: flex-end;\n  justify-content: space-between;\n  margin-top: %?64?%;\n  margin-bottom: %?32?%;\n}\n.sec-head__right[data-v-20cccf23] {\n  display: flex;\n  align-items: center;\n  gap: %?16?%;\n  flex-shrink: 0;\n}\n.sec-title[data-v-20cccf23] {\n  font-size: %?36?%;\n  font-weight: 800;\n  line-height: 1.1;\n  color: #1a2a3c;\n  letter-spacing: %?1?%;\n}\n.sec-sub[data-v-20cccf23] {\n  font-size: %?24?%;\n  color: #64748b;\n  margin-top: %?16?%;\n}\n.head[data-v-20cccf23] {\n  display: flex;\n  align-items: center;\n  background: #ffffff;\n  border-radius: %?20?%;\n  box-shadow: 0 %?4?% %?24?% rgba(15, 61, 53, 0.06);\n  padding: %?32?%;\n}\n.head__main[data-v-20cccf23] {\n  flex: 1;\n  padding: 0 %?24?%;\n  overflow: hidden;\n}\n.head__name[data-v-20cccf23] {\n  display: block;\n  font-size: %?32?%;\n  font-weight: 800;\n  color: #1a2a3c;\n  line-height: 1.1;\n}\n.head__sn[data-v-20cccf23] {\n  display: flex;\n  align-items: center;\n  min-width: 0;\n  margin-top: %?8?%;\n}\n/* 设备型号·编号：超出自动省略，不换行 */\n.head__sn-t[data-v-20cccf23] {\n  flex: 0 1 auto;\n  min-width: 0;\n  font-size: %?20?%;\n  color: #64748b;\n  white-space: nowrap;\n  overflow: hidden;\n  text-overflow: ellipsis;\n}\n/* SSE 连接状态徽标（手机信号图标） */\n.head__sse[data-v-20cccf23] {\n  display: inline-flex;\n  align-items: center;\n  gap: %?8?%;\n  flex-shrink: 0;\n  margin-left: %?16?%;\n  padding: %?8?% %?16?%;\n  border-radius: %?999?%;\n  background: #f2f7fa;\n  color: #c6d2de;\n  font-size: %?20?%;\n  line-height: 1;\n}\n.head__sse .fa-solid[data-v-20cccf23] {\n  font-size: %?20?%;\n}\n.head__sse--on[data-v-20cccf23] {\n  background: rgba(56, 154, 130, 0.15);\n  color: #2b7e6a;\n  font-weight: 600;\n}\n.head__status[data-v-20cccf23] {\n  display: flex;\n  align-items: center;\n  flex-shrink: 0;\n  padding: %?8?% %?16?%;\n  border-radius: %?999?%;\n  background: #27ae60;\n}\n.head__status--off[data-v-20cccf23] {\n  background: #f2f7fa;\n}\n.head__dot[data-v-20cccf23] {\n  width: %?12?%;\n  height: %?12?%;\n  border-radius: 50%;\n  background: #ffffff;\n  margin-right: %?8?%;\n}\n.head__status--off .head__dot[data-v-20cccf23] {\n  background: #94a3b8;\n}\n.head__status-t[data-v-20cccf23] {\n  font-size: %?20?%;\n  color: #ffffff;\n  font-weight: 600;\n}\n.head__status--off .head__status-t[data-v-20cccf23] {\n  color: #64748b;\n}\n/* 实时指标 2×2 并排卡（心率/血氧/体温/皮肤温度） */\n/* 首行与设备头卡拉开距离，与下方区块标题间距($space-8)呼应 */\n.vital[data-v-20cccf23] {\n  display: flex;\n  margin-top: %?64?%;\n}\n.vital__card[data-v-20cccf23] {\n  flex: 1;\n  min-width: 0;\n  background: #ffffff;\n  border-radius: %?20?%;\n  box-shadow: 0 %?4?% %?24?% rgba(15, 61, 53, 0.06);\n  padding: %?32?%;\n}\n.vital__card + .vital__card[data-v-20cccf23] {\n  margin-left: %?24?%;\n}\n.vital[data-v-20cccf23]:not(:first-child) {\n  margin-top: %?24?%;\n}\n/* 心率卡：浅绿渐变弱强调，其余指标白卡 */\n.vital__card--hr[data-v-20cccf23] {\n  background: linear-gradient(145deg, #e8f8f0 0%, #ffffff 75%);\n}\n.vital__head[data-v-20cccf23] {\n  display: flex;\n  align-items: center;\n}\n.vital__icon[data-v-20cccf23] {\n  font-size: %?32?%;\n  margin-right: %?16?%;\n}\n.vital__icon--hr[data-v-20cccf23] {\n  color: #84e8c2;\n}\n.vital__icon--spo2[data-v-20cccf23] {\n  color: #0ba5c3;\n}\n.vital__icon--temp[data-v-20cccf23] {\n  color: #f2994a;\n}\n.vital__icon--skin[data-v-20cccf23] {\n  color: #4a90d9;\n}\n.vital__name[data-v-20cccf23] {\n  font-size: %?28?%;\n  font-weight: 600;\n  color: #334155;\n  white-space: nowrap;\n  overflow: hidden;\n  text-overflow: ellipsis;\n}\n.vital__value[data-v-20cccf23] {\n  display: flex;\n  align-items: baseline;\n  margin-top: %?24?%;\n}\n.vital__num[data-v-20cccf23] {\n  font-size: %?56?%;\n  font-weight: 800;\n  font-family: \"DIN Pro\", \"DIN Alternate\", \"Helvetica Neue\", Arial, sans-serif;\n  line-height: 1;\n}\n.vital__card--hr .vital__num[data-v-20cccf23] {\n  color: #84e8c2;\n}\n.vital__card--spo2 .vital__num[data-v-20cccf23] {\n  color: #0ba5c3;\n}\n.vital__card--temp .vital__num[data-v-20cccf23] {\n  color: #f2994a;\n}\n.vital__card--skin .vital__num[data-v-20cccf23] {\n  color: #4a90d9;\n}\n.vital__unit[data-v-20cccf23] {\n  margin-left: %?8?%;\n  font-size: %?20?%;\n  color: #64748b;\n}\n.vital__sub[data-v-20cccf23] {\n  display: block;\n  margin-top: %?16?%;\n  font-size: %?20?%;\n  color: #c6d2de;\n  white-space: nowrap;\n  overflow: hidden;\n  text-overflow: ellipsis;\n}\n/* 压力卡（全宽，带等级标签与进度条） */\n.stress[data-v-20cccf23] {\n  margin-top: %?64?%;\n  background: #ffffff;\n  border-radius: %?20?%;\n  box-shadow: 0 %?4?% %?24?% rgba(15, 61, 53, 0.06);\n  padding: %?32?%;\n}\n.stress__head[data-v-20cccf23] {\n  display: flex;\n  align-items: center;\n  justify-content: space-between;\n}\n.stress__title[data-v-20cccf23] {\n  display: flex;\n  align-items: center;\n}\n.stress__icon[data-v-20cccf23] {\n  font-size: %?32?%;\n  color: #8b5cf6;\n  margin-right: %?16?%;\n}\n.stress__name[data-v-20cccf23] {\n  font-size: %?28?%;\n  font-weight: 600;\n  color: #334155;\n}\n.stress__tag[data-v-20cccf23] {\n  display: flex;\n  align-items: center;\n  padding: %?8?% %?24?%;\n  border-radius: %?999?%;\n  font-size: %?20?%;\n  font-weight: 600;\n}\n.stress__tag-dot[data-v-20cccf23] {\n  width: %?12?%;\n  height: %?12?%;\n  border-radius: 50%;\n  margin-right: %?8?%;\n}\n.stress__value[data-v-20cccf23] {\n  display: flex;\n  align-items: baseline;\n  margin-top: %?24?%;\n}\n.stress__num[data-v-20cccf23] {\n  font-size: %?56?%;\n  font-weight: 800;\n  font-family: \"DIN Pro\", \"DIN Alternate\", \"Helvetica Neue\", Arial, sans-serif;\n  line-height: 1;\n  color: #1a2a3c;\n}\n.stress__unit[data-v-20cccf23] {\n  margin-left: %?16?%;\n  font-size: %?20?%;\n  color: #64748b;\n}\n.stress__bar[data-v-20cccf23] {\n  margin-top: %?24?%;\n  height: %?16?%;\n  border-radius: %?999?%;\n  background: #f2f7fa;\n  overflow: hidden;\n}\n.stress__bar-in[data-v-20cccf23] {\n  height: 100%;\n  border-radius: %?999?%;\n  transition: width 0.6s ease;\n}\n.stress__scale[data-v-20cccf23] {\n  margin-top: %?8?%;\n  display: flex;\n  justify-content: space-between;\n}\n.stress__scale-t[data-v-20cccf23] {\n  font-size: %?20?%;\n  color: #c6d2de;\n}\n/* 血压卡 */\n.bp[data-v-20cccf23] {\n  display: flex;\n  align-items: center;\n  background: #ffffff;\n  border-radius: %?20?%;\n  box-shadow: 0 %?4?% %?24?% rgba(15, 61, 53, 0.06);\n  padding: %?32?% 0;\n}\n.bp__col[data-v-20cccf23] {\n  flex: 1;\n  display: flex;\n  flex-direction: column;\n  align-items: center;\n}\n.bp__num[data-v-20cccf23] {\n  font-size: %?56?%;\n  font-weight: 800;\n  color: #1a2a3c;\n  font-family: \"DIN Pro\", \"DIN Alternate\", \"Helvetica Neue\", Arial, sans-serif;\n  line-height: 1;\n}\n.bp__t[data-v-20cccf23] {\n  margin-top: %?16?%;\n  font-size: %?20?%;\n  color: #64748b;\n}\n.bp__divider[data-v-20cccf23] {\n  width: %?1?%;\n  height: %?48?%;\n  background: #f2f7fa;\n}\n.bp-tag[data-v-20cccf23] {\n  display: flex;\n  align-items: center;\n  padding: %?8?% %?24?%;\n  border-radius: %?999?%;\n  font-size: %?20?%;\n  font-weight: 600;\n}\n.bp-tag__dot[data-v-20cccf23] {\n  width: %?12?%;\n  height: %?12?%;\n  border-radius: 50%;\n  margin-right: %?8?%;\n}\n/* 步数卡 */\n.steps[data-v-20cccf23] {\n  background: #ffffff;\n  border-radius: %?20?%;\n  box-shadow: 0 %?4?% %?24?% rgba(15, 61, 53, 0.06);\n  padding: %?32?%;\n}\n.steps__main[data-v-20cccf23] {\n  display: flex;\n  align-items: baseline;\n}\n.steps__num[data-v-20cccf23] {\n  font-size: %?56?%;\n  font-weight: 800;\n  color: #1a2a3c;\n  font-family: \"DIN Pro\", \"DIN Alternate\", \"Helvetica Neue\", Arial, sans-serif;\n  line-height: 1;\n}\n.steps__unit[data-v-20cccf23] {\n  margin-left: %?16?%;\n  font-size: %?24?%;\n  color: #64748b;\n}\n.steps__bar[data-v-20cccf23] {\n  margin-top: %?24?%;\n  height: %?16?%;\n  border-radius: %?999?%;\n  background: #f2f7fa;\n  overflow: hidden;\n}\n.steps__bar-in[data-v-20cccf23] {\n  height: 100%;\n  border-radius: %?999?%;\n  background: linear-gradient(90deg, #7dd4bc, #4ab89e);\n  transition: width 0.6s ease;\n}\n.steps__meta[data-v-20cccf23] {\n  margin-top: %?16?%;\n  display: flex;\n  justify-content: space-between;\n}\n.steps__meta-item[data-v-20cccf23] {\n  font-size: %?20?%;\n  color: #64748b;\n}\n/* 心电图卡（深色底，波形为唯一视觉重心） */\n.ecg[data-v-20cccf23] {\n  position: relative;\n  background: linear-gradient(155deg, #0c2b2e 0%, #113f40 100%);\n  border-radius: %?20?%;\n  padding: %?32?%;\n  box-shadow: 0 %?12?% %?48?% rgba(125, 212, 188, 0.18);\n  overflow: hidden;\n}\n.ecg[data-v-20cccf23]::before {\n  content: \"\";\n  position: absolute;\n  inset: 0;\n  background-image: linear-gradient(rgba(255, 255, 255, 0.045) %?1?%, transparent %?1?%), linear-gradient(90deg, rgba(255, 255, 255, 0.045) %?1?%, transparent %?1?%);\n  background-size: %?48?% %?48?%;\n  pointer-events: none;\n}\n.ecg__svg[data-v-20cccf23] {\n  position: relative;\n  display: block;\n  width: 100%;\n  height: %?220?%;\n}\n.ecg__line[data-v-20cccf23] {\n  stroke: #6ff0c3;\n  stroke-width: 2;\n  stroke-linejoin: round;\n  stroke-linecap: round;\n  -webkit-filter: drop-shadow(0 0 %?6?% rgba(111, 240, 195, 0.65));\n          filter: drop-shadow(0 0 %?6?% rgba(111, 240, 195, 0.65));\n}\n.ecg__empty[data-v-20cccf23] {\n  position: relative;\n  height: %?220?%;\n  display: flex;\n  align-items: center;\n  justify-content: center;\n}\n.ecg__empty-t[data-v-20cccf23] {\n  color: rgba(255, 255, 255, 0.45);\n  font-size: %?24?%;\n  letter-spacing: %?2?%;\n}\n.ecg__meta[data-v-20cccf23] {\n  position: relative;\n  display: block;\n  margin-top: %?16?%;\n  font-size: %?20?%;\n  color: rgba(255, 255, 255, 0.6);\n}\n/* 睡眠卡 */\n.sleep[data-v-20cccf23] {\n  background: #ffffff;\n  border-radius: %?20?%;\n  box-shadow: 0 %?4?% %?24?% rgba(15, 61, 53, 0.06);\n  padding: %?32?%;\n}\n.sleep__stats[data-v-20cccf23] {\n  display: flex;\n}\n.sleep__stat[data-v-20cccf23] {\n  flex: 1;\n  display: flex;\n  flex-direction: column;\n  align-items: center;\n}\n.sleep__stat-num[data-v-20cccf23] {\n  font-size: %?36?%;\n  font-weight: 800;\n  font-family: \"DIN Pro\", \"DIN Alternate\", \"Helvetica Neue\", Arial, sans-serif;\n  line-height: 1.1;\n}\n.sleep__stat-num--deep[data-v-20cccf23] {\n  color: #1e6f5c;\n}\n.sleep__stat-num--light[data-v-20cccf23] {\n  color: #3eb98f;\n}\n.sleep__stat-num--wake[data-v-20cccf23] {\n  color: #94a3b8;\n}\n.sleep__stat-t[data-v-20cccf23] {\n  margin-top: %?8?%;\n  font-size: %?20?%;\n  color: #64748b;\n}\n.sleep__strip[data-v-20cccf23] {\n  margin-top: %?24?%;\n  height: %?24?%;\n  border-radius: %?999?%;\n  overflow: hidden;\n  display: flex;\n}\n.sleep__strip-seg[data-v-20cccf23] {\n  height: 100%;\n  transition: width 0.6s ease;\n}\n.sleep__strip-seg--deep[data-v-20cccf23] {\n  background: #1e6f5c;\n}\n.sleep__strip-seg--light[data-v-20cccf23] {\n  background: #7dd4bc;\n}\n.sleep__strip-seg--wake[data-v-20cccf23] {\n  background: #c8d5df;\n}\n.sleep__strip--empty[data-v-20cccf23] {\n  background: #f2f7fa;\n}\n/* 底部状态 */\n.foot[data-v-20cccf23] {\n  display: flex;\n  align-items: center;\n  justify-content: space-between;\n  padding: %?32?% %?32?% 0;\n}\n.foot__left[data-v-20cccf23] {\n  display: flex;\n  align-items: center;\n}\n.foot__dot[data-v-20cccf23] {\n  width: %?12?%;\n  height: %?12?%;\n  border-radius: 50%;\n  background: #c6d2de;\n  margin-right: %?16?%;\n}\n.foot__dot--ok[data-v-20cccf23] {\n  background: #27ae60;\n}\n.foot__t[data-v-20cccf23] {\n  font-size: %?20?%;\n  color: #64748b;\n}\n.foot__sync[data-v-20cccf23] {\n  font-size: %?20?%;\n  color: #94a3b8;\n}\n.foot__right[data-v-20cccf23] {\n  display: flex;\n  align-items: center;\n}\n/* 顶部右上角功能区：解绑按钮 + 刷新 */\n.nav-actions[data-v-20cccf23] {\n  display: flex;\n  align-items: center;\n  gap: %?16?%;\n}\n.nav-sub-btn[data-v-20cccf23] {\n  height: %?60?%;\n  padding: 0 %?24?%;\n  border-radius: %?999?%;\n  background: rgba(255, 255, 255, 0.7);\n  border: %?1?% solid rgba(148, 163, 184, 0.35);\n  display: inline-flex;\n  align-items: center;\n  gap: %?8?%;\n  flex-shrink: 0;\n  white-space: nowrap;\n  -webkit-backdrop-filter: blur(6px);\n          backdrop-filter: blur(6px);\n  transition: opacity 0.15s ease, -webkit-transform 0.1s ease;\n  transition: opacity 0.15s ease, transform 0.1s ease;\n  transition: opacity 0.15s ease, transform 0.1s ease, -webkit-transform 0.1s ease;\n}\n.nav-sub-btn[data-v-20cccf23]:active {\n  -webkit-transform: scale(0.97);\n          transform: scale(0.97);\n  opacity: 0.8;\n}\n.nav-sub-btn__icon[data-v-20cccf23] {\n  font-size: %?24?%;\n  color: #64748b;\n}\n.nav-sub-btn__t[data-v-20cccf23] {\n  font-size: %?24?%;\n  font-weight: 600;\n  color: #475569;\n}\n/* 顶部右上角刷新按钮 */\n.nav-refresh[data-v-20cccf23] {\n  width: %?60?%;\n  height: %?60?%;\n  border-radius: %?999?%;\n  background: #389a82;\n  box-shadow: 0 %?4?% %?24?% rgba(15, 61, 53, 0.06);\n  display: flex;\n  align-items: center;\n  justify-content: center;\n}\n.nav-refresh--busy[data-v-20cccf23] {\n  opacity: 0.7;\n}\n.nav-refresh__icon[data-v-20cccf23] {\n  color: #ffffff;\n  font-size: %?24?%;\n}\n.nav-refresh__icon--spin[data-v-20cccf23] {\n  -webkit-animation: spin-data-v-20cccf23 0.8s linear infinite;\n          animation: spin-data-v-20cccf23 0.8s linear infinite;\n}\n@-webkit-keyframes spin-data-v-20cccf23 {\nfrom {\n    -webkit-transform: rotate(0deg);\n            transform: rotate(0deg);\n}\nto {\n    -webkit-transform: rotate(360deg);\n            transform: rotate(360deg);\n}\n}\n@keyframes spin-data-v-20cccf23 {\nfrom {\n    -webkit-transform: rotate(0deg);\n            transform: rotate(0deg);\n}\nto {\n    -webkit-transform: rotate(360deg);\n            transform: rotate(360deg);\n}\n}\n/* 发送消息卡 */\n.msg[data-v-20cccf23] {\n  background: #ffffff;\n  border-radius: %?20?%;\n  box-shadow: 0 %?4?% %?24?% rgba(15, 61, 53, 0.06);\n  padding: %?32?%;\n}\n.msg__input[data-v-20cccf23] {\n  height: %?88?%;\n  background: #f2f7fa;\n  border-radius: %?20?%;\n  padding: 0 %?24?%;\n  font-size: %?28?%;\n  color: #1a2a3c;\n}\n.msg__area[data-v-20cccf23] {\n  margin-top: %?24?%;\n  width: 100%;\n  height: %?180?%;\n  background: #f2f7fa;\n  border-radius: %?20?%;\n  padding: %?24?%;\n  font-size: %?28?%;\n  color: #1a2a3c;\n  box-sizing: border-box;\n  line-height: 1.6;\n}\n.msg__ph[data-v-20cccf23] {\n  color: #c6d2de;\n  font-size: %?24?%;\n}\n/* 快捷提醒语 */\n.msg__presets[data-v-20cccf23] {\n  margin-top: %?24?%;\n  display: flex;\n  flex-wrap: wrap;\n}\n.msg__chip[data-v-20cccf23] {\n  margin: 0 %?16?% %?16?% 0;\n  padding: %?8?% %?24?%;\n  border-radius: %?999?%;\n  background: #f2f7fa;\n  border: %?1?% solid rgba(15, 61, 53, 0.06);\n}\n.msg__chip-t[data-v-20cccf23] {\n  font-size: %?20?%;\n  color: #334155;\n}\n.msg__bar[data-v-20cccf23] {\n  margin-top: %?24?%;\n  display: flex;\n  align-items: center;\n  justify-content: space-between;\n}\n.msg__len[data-v-20cccf23] {\n  font-size: %?20?%;\n  color: #64748b;\n}\n.msg__btn[data-v-20cccf23] {\n  display: flex;\n  align-items: center;\n  background: #389a82;\n  border-radius: %?999?%;\n  padding: %?16?% %?40?%;\n}\n.msg__btn--busy[data-v-20cccf23] {\n  opacity: 0.7;\n}\n.msg__btn-icon[data-v-20cccf23] {\n  color: #ffffff;\n  font-size: %?20?%;\n  margin-right: %?8?%;\n}\n.msg__btn-t[data-v-20cccf23] {\n  color: #ffffff;\n  font-size: %?24?%;\n  font-weight: 600;\n}\n/* ---------- 强制刷新卡 ---------- */\n.wrap--refresh[data-v-20cccf23] {\n  padding-top: %?32?%;\n}\n.refresh-btn[data-v-20cccf23] {\n  display: flex;\n  align-items: center;\n  justify-content: center;\n  gap: %?16?%;\n  height: %?96?%;\n  border-radius: %?20?%;\n  background: linear-gradient(135deg, #389a82 0%, #4f8dff 100%);\n  box-shadow: 0 %?10?% %?30?% rgba(63, 116, 255, 0.22), 0 %?4?% %?24?% rgba(15, 61, 53, 0.06);\n  color: #ffffff;\n  transition: opacity 0.15s ease, box-shadow 0.15s ease, -webkit-transform 0.08s ease;\n  transition: transform 0.08s ease, opacity 0.15s ease, box-shadow 0.15s ease;\n  transition: transform 0.08s ease, opacity 0.15s ease, box-shadow 0.15s ease, -webkit-transform 0.08s ease;\n}\n.refresh-btn[data-v-20cccf23]:active {\n  -webkit-transform: scale(0.98);\n          transform: scale(0.98);\n  opacity: 0.92;\n  box-shadow: 0 %?6?% %?20?% rgba(63, 116, 255, 0.2);\n}\n.refresh-btn--busy[data-v-20cccf23] {\n  opacity: 0.78;\n}\n.refresh-btn--offline[data-v-20cccf23] {\n  background: linear-gradient(135deg, #cbd5e1 0%, #94a3b8 100%);\n  box-shadow: 0 %?4?% %?24?% rgba(15, 61, 53, 0.06);\n}\n.refresh-btn__icon[data-v-20cccf23] {\n  font-size: %?28?%;\n  line-height: 1;\n}\n.refresh-btn__t[data-v-20cccf23] {\n  font-size: %?32?%;\n  font-weight: 600;\n  letter-spacing: %?1?%;\n}\n.refresh-hint[data-v-20cccf23] {\n  margin-top: %?24?%;\n  text-align: center;\n}\n.refresh-hint__t[data-v-20cccf23] {\n  font-size: %?20?%;\n  color: #c6d2de;\n  line-height: 1.6;\n}", ""]);
 // Exports
 module.exports = exports;
 
@@ -1158,25 +1215,17 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _workspace_h5build_node_modules_babel_runtime_helpers_esm_asyncToGenerator_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./node_modules/@babel/runtime/helpers/esm/asyncToGenerator.js */ "HaE+");
 /* harmony import */ var _workspace_h5build_node_modules_babel_runtime_helpers_esm_typeof_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./node_modules/@babel/runtime/helpers/esm/typeof.js */ "U8pU");
 /* harmony import */ var _workspace_h5build_node_modules_babel_runtime_helpers_esm_createForOfIteratorHelper_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./node_modules/@babel/runtime/helpers/esm/createForOfIteratorHelper.js */ "uFwe");
-/* harmony import */ var core_js_modules_es_array_find_js__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! core-js/modules/es.array.find.js */ "fbCW");
-/* harmony import */ var core_js_modules_es_array_find_js__WEBPACK_IMPORTED_MODULE_4___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_array_find_js__WEBPACK_IMPORTED_MODULE_4__);
-/* harmony import */ var core_js_modules_es_array_push_js__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! core-js/modules/es.array.push.js */ "FNk8");
-/* harmony import */ var core_js_modules_es_array_push_js__WEBPACK_IMPORTED_MODULE_5___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_array_push_js__WEBPACK_IMPORTED_MODULE_5__);
-/* harmony import */ var core_js_modules_es_iterator_constructor_js__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! core-js/modules/es.iterator.constructor.js */ "6fVz");
-/* harmony import */ var core_js_modules_es_iterator_constructor_js__WEBPACK_IMPORTED_MODULE_6___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_iterator_constructor_js__WEBPACK_IMPORTED_MODULE_6__);
-/* harmony import */ var core_js_modules_es_iterator_find_js__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! core-js/modules/es.iterator.find.js */ "9mV7");
-/* harmony import */ var core_js_modules_es_iterator_find_js__WEBPACK_IMPORTED_MODULE_7___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_iterator_find_js__WEBPACK_IMPORTED_MODULE_7__);
-/* harmony import */ var core_js_modules_es_object_keys_js__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! core-js/modules/es.object.keys.js */ "tkto");
-/* harmony import */ var core_js_modules_es_object_keys_js__WEBPACK_IMPORTED_MODULE_8___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_object_keys_js__WEBPACK_IMPORTED_MODULE_8__);
-/* harmony import */ var core_js_modules_es_object_to_string_js__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! core-js/modules/es.object.to-string.js */ "07d7");
-/* harmony import */ var core_js_modules_es_object_to_string_js__WEBPACK_IMPORTED_MODULE_9___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_object_to_string_js__WEBPACK_IMPORTED_MODULE_9__);
-/* harmony import */ var core_js_modules_es_regexp_exec_js__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! core-js/modules/es.regexp.exec.js */ "rB9j");
-/* harmony import */ var core_js_modules_es_regexp_exec_js__WEBPACK_IMPORTED_MODULE_10___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_regexp_exec_js__WEBPACK_IMPORTED_MODULE_10__);
-/* harmony import */ var core_js_modules_es_string_replace_js__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! core-js/modules/es.string.replace.js */ "UxlC");
-/* harmony import */ var core_js_modules_es_string_replace_js__WEBPACK_IMPORTED_MODULE_11___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_string_replace_js__WEBPACK_IMPORTED_MODULE_11__);
-/* harmony import */ var core_js_modules_es_string_trim_js__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! core-js/modules/es.string.trim.js */ "SYor");
-/* harmony import */ var core_js_modules_es_string_trim_js__WEBPACK_IMPORTED_MODULE_12___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_string_trim_js__WEBPACK_IMPORTED_MODULE_12__);
-/* harmony import */ var _common_band_js__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(/*! @/common/band.js */ "YNKN");
+/* harmony import */ var core_js_modules_es_array_push_js__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! core-js/modules/es.array.push.js */ "FNk8");
+/* harmony import */ var core_js_modules_es_array_push_js__WEBPACK_IMPORTED_MODULE_4___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_array_push_js__WEBPACK_IMPORTED_MODULE_4__);
+/* harmony import */ var core_js_modules_es_object_keys_js__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! core-js/modules/es.object.keys.js */ "tkto");
+/* harmony import */ var core_js_modules_es_object_keys_js__WEBPACK_IMPORTED_MODULE_5___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_object_keys_js__WEBPACK_IMPORTED_MODULE_5__);
+/* harmony import */ var core_js_modules_es_regexp_exec_js__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! core-js/modules/es.regexp.exec.js */ "rB9j");
+/* harmony import */ var core_js_modules_es_regexp_exec_js__WEBPACK_IMPORTED_MODULE_6___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_regexp_exec_js__WEBPACK_IMPORTED_MODULE_6__);
+/* harmony import */ var core_js_modules_es_string_replace_js__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! core-js/modules/es.string.replace.js */ "UxlC");
+/* harmony import */ var core_js_modules_es_string_replace_js__WEBPACK_IMPORTED_MODULE_7___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_string_replace_js__WEBPACK_IMPORTED_MODULE_7__);
+/* harmony import */ var core_js_modules_es_string_trim_js__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! core-js/modules/es.string.trim.js */ "SYor");
+/* harmony import */ var core_js_modules_es_string_trim_js__WEBPACK_IMPORTED_MODULE_8___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_string_trim_js__WEBPACK_IMPORTED_MODULE_8__);
+/* harmony import */ var _common_band_js__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! @/common/band.js */ "YNKN");
 
 
 
@@ -1186,10 +1235,26 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
-
-
-
-
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 //
 //
 //
@@ -1463,6 +1528,8 @@ var DEDUP_MS = 3000;
       latest: {},
       lastSyncAt: 0,
       refreshing: false,
+      // 页面底部显式"强制刷新"按钮状态
+      forceRefreshing: false,
       online: true,
       msgTitle: '',
       msgText: '',
@@ -1481,7 +1548,7 @@ var DEDUP_MS = 3000;
       return this.$store.getters.deviceById(this.id) || null;
     },
     bp: function bp() {
-      var lv = Object(_common_band_js__WEBPACK_IMPORTED_MODULE_13__["bpLevel"])(this.latest.sbp, this.latest.dbp);
+      var lv = Object(_common_band_js__WEBPACK_IMPORTED_MODULE_9__["bpLevel"])(this.latest.sbp, this.latest.dbp);
       var bgMap = {
         normal: '#ddf7ed',
         'normal-h': '#fdf4ed',
@@ -1515,12 +1582,14 @@ var DEDUP_MS = 3000;
       };
       return p(d.getHours()) + ':' + p(d.getMinutes()) + ':' + p(d.getSeconds());
     },
-    // 血压测量时间：优先用后端写入的独立时间戳 bpTs（若将来加），否则回退到快照整体 ts
+    // 血压测量时间：必须同时拿到收缩压和舒张压才显示测量时间；
+    // 只要任一缺失，或者 latest 没有独立时间戳，就显示 --。
+    // （sbp/dbv 都齐备的情况下，优先 bpTs，否则回退 latest.ts）
     bpTimeText: function bpTimeText() {
       var l = this.latest || {};
+      if (l.sbp == null || l.dbp == null) return '最近测量 --';
       var ts = l.bpTs != null ? l.bpTs : l.ts;
       if (!ts) return '最近测量 --';
-      if (l.sbp == null || l.dbp == null) return '最近测量 --';
       var d = new Date(ts * 1000);
       var p = function p(n) {
         return n < 10 ? '0' + n : n;
@@ -1680,7 +1749,7 @@ var DEDUP_MS = 3000;
       var _this = this;
       this.stopSse();
       if (!this.deviceid) return;
-      this._sub = Object(_common_band_js__WEBPACK_IMPORTED_MODULE_13__["subscribeEvents"])({
+      this._sub = Object(_common_band_js__WEBPACK_IMPORTED_MODULE_9__["subscribeEvents"])({
         deviceid: this.deviceid,
         kinds: ['pb', 'alarm', 'sos', 'status', 'deviceinfo', 'calllog', 'device_unbind'],
         onOpen: function onOpen() {
@@ -1814,38 +1883,25 @@ var DEDUP_MS = 3000;
     lightLoad: function lightLoad() {
       var _this3 = this;
       if (!this.deviceid) return;
-      Object(_common_band_js__WEBPACK_IMPORTED_MODULE_13__["fetchBandLatest"])(this.deviceid).then(function (latest) {
-        if (latest) _this3.latest = latest;
-        _this3.lastSyncAt = Date.now();
-        var l = _this3.latest;
-        _this3.online = !!(l && (l.hr != null || l.sbp != null || l.dbp != null || l.steps != null));
-        if (_this3.id) {
-          _this3.$store.commit('UPDATE_DEVICE_DATA', {
-            id: _this3.id,
-            data: {
-              sys: l.sbp,
-              dia: l.dbp,
-              heartRate: l.hr,
-              steps: l.steps,
-              battery: l.battery
-            },
-            lastSync: _this3.syncText
-          });
-        }
+      Object(_common_band_js__WEBPACK_IMPORTED_MODULE_9__["fetchBandLatest"])(this.deviceid).then(function (latest) {
+        _this3._applyLatestAndSync(latest || {});
       });
     },
-    // 取 deviceid 的兜底链路：
+    // 取 deviceid 的匹配链路：
     //  1. 有就直接 return（快路径）
     //  2. store 里能通过 this.id 查到 → 用它（原始设计：虚拟 id 映射到 deviceid）
     //  3. 否则把 this.id 直接当作 deviceid 查后端：
     //     - 若后端 /api/devices/:id 能查到，说明 this.id 本身就是 deviceid（后端真实键名），直接用
-    //     - 还查不到：再拉 /api/devices 列表取第一个有 latest 数据的设备兜底
-    //  4. 最终仍找不到：toast "设备不存在，请先绑定"
-    //  注意：只要成功拿到了 deviceid，就启动 SSE，确保页面进入后 SSE 必定建立，避免"数据永远不自动更新"。
+    //  4. 都失败：toast "找不到该设备"，保持 latest 全空，页面显示 --。
+    //
+    //  ⚠️  这里特意移除了之前的 "Fallback B：挑列表里第一个有数据的设备兜底"——那种策略会在用户
+    //     自己的设备尚未绑定时，静默把别人/测试设备的模拟数据塞到页面上，造成"这不是我数据"的
+    //     混淆投诉。找不到就是找不到，一律显示 --，不要任何跨设备兜底。
+    //  注意：只要成功拿到了 deviceid，就启动 SSE，确保页面进入后 SSE 必定建立。
     ensureDevice: function ensureDevice() {
       var _this4 = this;
       return Object(_workspace_h5build_node_modules_babel_runtime_helpers_esm_asyncToGenerator_js__WEBPACK_IMPORTED_MODULE_1__["default"])(/*#__PURE__*/Object(_workspace_h5build_node_modules_babel_runtime_helpers_esm_regenerator_js__WEBPACK_IMPORTED_MODULE_0__["default"])().m(function _callee() {
-        var dev, rec, list, pick, _t, _t2;
+        var dev, rec, _t;
         return Object(_workspace_h5build_node_modules_babel_runtime_helpers_esm_regenerator_js__WEBPACK_IMPORTED_MODULE_0__["default"])().w(function (_context) {
           while (1) switch (_context.p = _context.n) {
             case 0:
@@ -1871,7 +1927,7 @@ var DEDUP_MS = 3000;
               }
               _context.p = 3;
               _context.n = 4;
-              return Object(_common_band_js__WEBPACK_IMPORTED_MODULE_13__["fetchBandRecord"])(_this4.id);
+              return Object(_common_band_js__WEBPACK_IMPORTED_MODULE_9__["fetchBandRecord"])(_this4.id);
             case 4:
               rec = _context.v;
               if (!(rec && rec.deviceid)) {
@@ -1889,45 +1945,20 @@ var DEDUP_MS = 3000;
               _context.p = 6;
               _t = _context.v;
             case 7:
-              _context.p = 7;
-              _context.n = 8;
-              return Object(_common_band_js__WEBPACK_IMPORTED_MODULE_13__["listBandDevices"])();
-            case 8:
-              list = _context.v;
-              if (!(list && list.length > 0)) {
-                _context.n = 9;
-                break;
-              }
-              pick = list.find(function (r) {
-                return r && r.latest && (r.latest.hr != null || r.latest.sbp != null || r.latest.steps != null);
-              });
-              if (!pick) pick = list[0];
-              if (!(pick && pick.deviceid)) {
-                _context.n = 9;
-                break;
-              }
-              _this4.deviceid = pick.deviceid;
-              if (!_this4.id) _this4.id = pick.deviceid;
-              _this4._applyLatestAndSync(pick.latest || {});
-              if (!_this4._sub) _this4.startSse();
-              return _context.a(2);
-            case 9:
-              _context.n = 11;
-              break;
-            case 10:
-              _context.p = 10;
-              _t2 = _context.v;
-            case 11:
-              // 彻底找不到
+              // 找不到就明确告知，任何情况下都不乱兜底别人的设备数据
               uni.showToast({
-                title: '设备不存在，请先绑定手环',
+                title: '找不到该设备，请先完成绑定',
                 icon: 'none',
                 duration: 2500
               });
-            case 12:
+              // 主动清空展示，避免保留上一次进入其它设备时的残留数据
+              _this4.latest = {};
+              _this4.lastSyncAt = 0;
+              _this4.online = false;
+            case 8:
               return _context.a(2);
           }
-        }, _callee, null, [[7, 10], [3, 6]]);
+        }, _callee, null, [[3, 6]]);
       }))();
     },
     // 统一把 latest 快照 + 同步时间 + store 回写 + 在线状态 一次性设置，
@@ -2028,7 +2059,7 @@ var DEDUP_MS = 3000;
             case 4:
               _this5.msgSending = true;
               _context2.n = 5;
-              return Object(_common_band_js__WEBPACK_IMPORTED_MODULE_13__["sendBandMessage"])(_this5.deviceid, title, text);
+              return Object(_common_band_js__WEBPACK_IMPORTED_MODULE_9__["sendBandMessage"])(_this5.deviceid, title, text);
             case 5:
               err = _context2.v;
               _this5.msgSending = false;
@@ -2069,7 +2100,7 @@ var DEDUP_MS = 3000;
                   return _context3.a(2);
                 case 1:
                   _context3.n = 2;
-                  return Object(_common_band_js__WEBPACK_IMPORTED_MODULE_13__["unbindBandDevice"])(_this6.deviceid);
+                  return Object(_common_band_js__WEBPACK_IMPORTED_MODULE_9__["unbindBandDevice"])(_this6.deviceid);
                 case 2:
                   _this6.$store.dispatch('removeDevice', _this6.id);
                   uni.showToast({
@@ -2139,46 +2170,126 @@ var DEDUP_MS = 3000;
         }, _callee4);
       }))();
     },
-    load: function load() {
+    // 页面底部显式"强制刷新"按钮：
+    //   - 未绑定设备时给出引导提示（点击按钮后 toast 说明原因 + 去绑定页入口）
+    //   - 已绑定：先停 SSE（强制断线），再绕过任何浏览器层 HTTP 缓存强行拉一次最新快照，
+    //     然后重新建立 SSE 通道 + 重置看门狗。
+    onForceRefresh: function onForceRefresh() {
       var _this8 = this;
       return Object(_workspace_h5build_node_modules_babel_runtime_helpers_esm_asyncToGenerator_js__WEBPACK_IMPORTED_MODULE_1__["default"])(/*#__PURE__*/Object(_workspace_h5build_node_modules_babel_runtime_helpers_esm_regenerator_js__WEBPACK_IMPORTED_MODULE_0__["default"])().m(function _callee5() {
-        var latest, l;
+        var marker, l, hasData, _t2, _t3;
         return Object(_workspace_h5build_node_modules_babel_runtime_helpers_esm_regenerator_js__WEBPACK_IMPORTED_MODULE_0__["default"])().w(function (_context5) {
-          while (1) switch (_context5.n) {
+          while (1) switch (_context5.p = _context5.n) {
             case 0:
-              if (_this8.deviceid) {
+              if (!_this8.forceRefreshing) {
                 _context5.n = 1;
                 break;
               }
               return _context5.a(2);
             case 1:
-              _context5.n = 2;
-              return Object(_common_band_js__WEBPACK_IMPORTED_MODULE_13__["fetchBandLatest"])(_this8.deviceid);
-            case 2:
-              latest = _context5.v;
-              _this8.latest = latest || {};
-              _this8.lastSyncAt = Date.now();
-              // 只有后端真实上报过数据才视为在线
-              l = _this8.latest;
-              _this8.online = !!(l && (l.hr != null || l.sbp != null || l.dbp != null || l.steps != null));
-              // 回写本地 store，保持设备列表一致
-              if (_this8.id) {
-                _this8.$store.commit('UPDATE_DEVICE_DATA', {
-                  id: _this8.id,
-                  data: {
-                    sys: l.sbp,
-                    dia: l.dbp,
-                    heartRate: l.hr,
-                    steps: l.steps,
-                    battery: l.battery
-                  },
-                  lastSync: _this8.syncText
-                });
+              if (_this8.deviceid) {
+                _context5.n = 2;
+                break;
               }
-            case 3:
+              uni.showModal({
+                title: '未找到对应设备',
+                content: '当前页面没绑定到任何手环。请完成绑定后再回来查看数据。',
+                confirmText: '去绑定',
+                cancelText: '知道了',
+                success: function success(res) {
+                  if (res && res.confirm) {
+                    uni.navigateTo({
+                      url: '/pages/device/device',
+                      fail: function fail() {
+                        return uni.switchTab({
+                          url: '/pages/device/device',
+                          fail: function fail() {
+                            return uni.navigateBack();
+                          }
+                        });
+                      }
+                    });
+                  }
+                }
+              });
+              return _context5.a(2);
+            case 2:
+              _this8.forceRefreshing = true;
+              // 1) 切断现有 SSE：保证后续 SSE 事件不是旧连接推送的
+              try {
+                _this8.stopSse();
+              } catch (e) {}
+              // 2) 再跑一次 ensureDevice（幂等，有 deviceid 只启 SSE）
+              //    放在前面，以便 store/后端 有新记录时能再次匹配
+              _context5.p = 3;
+              _context5.n = 4;
+              return _this8.ensureDevice();
+            case 4:
+              _context5.n = 6;
+              break;
+            case 5:
+              _context5.p = 5;
+              _t2 = _context5.v;
+            case 6:
+              _context5.p = 6;
+              // 写个一次性 marker，保证 request 发出去时 query 变化，绕过任何浏览器层 HTTP 缓存
+              marker = '_fresh=' + Date.now() + '_' + Math.floor(Math.random() * 1e6);
+              _context5.n = 7;
+              return _this8.load({
+                extraQuery: marker
+              });
+            case 7:
+              _context5.n = 9;
+              break;
+            case 8:
+              _context5.p = 8;
+              _t3 = _context5.v;
+            case 9:
+              // 4) 重建 SSE（如果 ensureDevice 里没成功启动的话）
+              if (_this8.deviceid && !_this8._sub) {
+                try {
+                  _this8.startSse();
+                } catch (e) {}
+              }
+              _this8.forceRefreshing = false;
+              l = _this8.latest;
+              hasData = !!(l && (l.hr != null || l.sbp != null || l.dbp != null || l.steps != null));
+              uni.showToast({
+                title: hasData ? '刷新完成，已获取最新' : '暂无最新数据，手环尚未上报',
+                icon: 'none',
+                duration: 1800
+              });
+            case 10:
               return _context5.a(2);
           }
-        }, _callee5);
+        }, _callee5, null, [[6, 8], [3, 5]]);
+      }))();
+    },
+    load: function load(opts) {
+      var _this9 = this;
+      return Object(_workspace_h5build_node_modules_babel_runtime_helpers_esm_asyncToGenerator_js__WEBPACK_IMPORTED_MODULE_1__["default"])(/*#__PURE__*/Object(_workspace_h5build_node_modules_babel_runtime_helpers_esm_regenerator_js__WEBPACK_IMPORTED_MODULE_0__["default"])().m(function _callee6() {
+        var eq, latest;
+        return Object(_workspace_h5build_node_modules_babel_runtime_helpers_esm_regenerator_js__WEBPACK_IMPORTED_MODULE_0__["default"])().w(function (_context6) {
+          while (1) switch (_context6.n) {
+            case 0:
+              if (_this9.deviceid) {
+                _context6.n = 1;
+                break;
+              }
+              return _context6.a(2);
+            case 1:
+              eq = opts && opts.extraQuery ? opts.extraQuery : null;
+              _context6.n = 2;
+              return Object(_common_band_js__WEBPACK_IMPORTED_MODULE_9__["fetchBandLatest"])(_this9.deviceid, eq);
+            case 2:
+              latest = _context6.v;
+              // 没有数据时用 {} 覆盖，保证缺失的血压/心率显示 --，不残留上一次 SSE 合并的数据
+              _this9.latest = latest || {};
+              _this9._applyLatestAndSync(latest || {});
+            case 3:
+              return _context6.a(2);
+          }
+        }, _callee6);
       }))();
     }
   }

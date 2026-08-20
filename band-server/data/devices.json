@@ -7,26 +7,7 @@
       "firstSeen": 1787134034521,
       "lastSeen": 1787190332739,
       "latest": {
-        "steps": 257,
-        "distance": 1799,
-        "calorie": 1,
-        "battery": 7,
-        "charging": false,
-        "updatedAt": 1787190332711,
-        "ts": 1787190332,
-        "hr": 80,
-        "sbp": 127,
-        "dbp": 86,
-        "sleep": {
-          "deep": 13,
-          "light": 15,
-          "wake": 2,
-          "total": 30
-        },
-        "spo2": 98,
-        "spo2Max": 99,
-        "spo2Min": 96,
-        "spo2N": 20,
+        "ecgTs": 1787138589,
         "ecgN": 480,
         "ecgSamples": [
           0,
@@ -189,12 +170,7 @@
           -28,
           -23,
           -13
-        ],
-        "ecgTs": 1787138589,
-        "bodyTemp": 37.4,
-        "skinTemp": 32.5,
-        "tempOk": true,
-        "stress": 70
+        ]
       },
       "history": [
         {
@@ -3262,25 +3238,7 @@
       "wearing": "1",
       "lastDeviceInfo": 1787140482904,
       "latest": {
-        "steps": 3281,
-        "distance": 231,
-        "calorie": 15,
-        "battery": 74,
-        "charging": false,
-        "ts": 1787195726,
-        "updatedAt": 1787195726878,
-        "sbp": 121,
-        "dbp": 80,
-        "hr": 78,
-        "sleep": {
-          "deep": 108,
-          "light": 302,
-          "wake": 22,
-          "total": 432
-        },
-        "spo2": 97,
-        "spo2Max": 97,
-        "spo2Min": 97,
+        "ecgTs": 1787167501,
         "ecgN": 60,
         "ecgSamples": [
           13570,
@@ -3343,12 +3301,7 @@
           13559,
           14760,
           15026
-        ],
-        "ecgTs": 1787167501,
-        "bodyTemp": 36.3,
-        "tempOk": true,
-        "stress": 62,
-        "skinTemp": 35.1
+        ]
       },
       "history": [
         {

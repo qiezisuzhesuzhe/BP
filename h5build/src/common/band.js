@@ -62,11 +62,16 @@ export function bandApi(path) {
 
 // 从后端拉取手环完整设备记录（{ deviceid, latest, model, name, bindAt, ... }）
 // 失败 resolve(null)。注意：这个接口与 fetchBandLatest 走同一个路由，但返回完整 record 而不是只取 latest。
-export function fetchBandRecord(deviceid) {
+// extraQuery：可选，字符串形式 "k=v&k2=v2"，在末尾拼到 URL，用于强刷绕过任何代理/CDN 层缓存
+export function fetchBandRecord(deviceid, extraQuery) {
   return new Promise((resolve) => {
     if (!deviceid) { resolve(null); return }
+    let url = bandApi('/api/devices/' + deviceid) + '?_t=' + Date.now()
+    if (extraQuery && typeof extraQuery === 'string') {
+      url += (url.indexOf('?') >= 0 ? '&' : '?') + extraQuery
+    }
     uni.request({
-      url: bandApi('/api/devices/' + deviceid) + '?_t=' + Date.now(),
+      url: url,
       method: 'GET',
       timeout: 5000,
       success(res) {
@@ -102,10 +107,10 @@ export function listBandDevices() {
 
 // 从后端拉取手环最新状态（心率 hr / 收缩压 sbp / 舒张压 dbp / 步数 steps / 电量 battery / 时间戳 ts）
 // 后端不可达或尚无上报数据时 resolve(null)，由页面显示 "--"，不做模拟兜底
-// URL 附加时间戳 + 后端 no-store，双保险绕过浏览器 HTTP 缓存，保证每次轮询都是最新数据
-export function fetchBandLatest(deviceid) {
+// URL 附加时间戳 + 后端 no-store + 可选 extraQuery，多重保险绕过缓存
+export function fetchBandLatest(deviceid, extraQuery) {
   return new Promise((resolve) => {
-    fetchBandRecord(deviceid).then((rec) => {
+    fetchBandRecord(deviceid, extraQuery).then((rec) => {
       const latest = rec && rec.latest
       if (
         latest &&

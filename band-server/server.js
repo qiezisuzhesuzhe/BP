@@ -243,7 +243,8 @@ function mergeSamples(deviceid, packets) {
   for (const p of packets) {
     if (!p.parsed) continue
     const { type, data } = p.parsed
-    const pktTs = Math.floor(Date.now() / 1000)  // 用服务器收到时间，不用手环 ts（手环 ts 可能是本地时区 epoch）
+    // 测量时间：优先用手环上报的 ts（真实测量时刻），无 ts 时回退到服务器收到时间
+    const pktTs = (data.ts >>> 0) || Math.floor(Date.now() / 1000)
     if (type === 'realtime') {
       if (data.steps !== undefined) snap.steps = data.steps
       if (data.distance !== undefined) snap.distance = data.distance

@@ -3232,7 +3232,7 @@
       "name": "智能手环 - 血压款",
       "model": "BP100CE",
       "firstSeen": 1787198341420,
-      "lastSeen": 1787206646549,
+      "lastSeen": 1787206766074,
       "latest": {
         "ecgTs": 1787167501,
         "ecgN": 60,
@@ -3303,28 +3303,28 @@
         "calorie": 115,
         "battery": 80,
         "charging": false,
-        "ts": 1787235420,
+        "ts": 1787235540,
         "hr": 85,
         "sbp": 135,
         "dbp": 89,
         "bodyTemp": 33.31,
         "skinTemp": 35.2,
         "tempOk": true,
-        "updatedAt": 1787206646549,
+        "updatedAt": 1787206766074,
         "sleep": {
           "deep": 1,
           "light": 0,
           "wake": 4,
           "total": 5
         },
-        "spo2": 98,
-        "spo2Max": 98,
-        "spo2Min": 98,
-        "stepsTs": 1787235427,
+        "spo2": 97,
+        "spo2Max": 97,
+        "spo2Min": 97,
+        "stepsTs": 1787235547,
         "bpTs": 1787235420,
-        "spo2Ts": 1787228340,
+        "spo2Ts": 1787235540,
         "tempTs": 1787235420,
-        "sleepTs": 1787235420,
+        "sleepTs": 1787235480,
         "stress": 41,
         "stressTs": 1787227320
       },
@@ -3550,6 +3550,31 @@
           "bpTs": 1787235420,
           "tempTs": 1787235420,
           "sleepTs": 1787235420
+        },
+        {
+          "at": 1787206749457,
+          "steps": 1618,
+          "distance": 1245,
+          "calorie": 115,
+          "battery": 80,
+          "charging": false,
+          "ts": 1787235547,
+          "stepsTs": 1787235547
+        },
+        {
+          "at": 1787206766074,
+          "sleep": {
+            "deep": 1,
+            "light": 0,
+            "wake": 4,
+            "total": 5
+          },
+          "ts": 1787235540,
+          "sleepTs": 1787235480,
+          "spo2": 97,
+          "spo2Max": 97,
+          "spo2Min": 97,
+          "spo2Ts": 1787235540
         }
       ],
       "version": "91.0.0.59",

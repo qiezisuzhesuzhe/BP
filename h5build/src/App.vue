@@ -1,7 +1,33 @@
 <script>
+import { getBandServer, setBandServer } from '@/common/band.js'
+
 export default {
-  onLaunch() {},
-  onShow() {}
+  onLaunch() {
+    // #ifndef H5
+    // APP / 小程序启动阶段：检查后端基址是否已经配置，保证真机打包后能立刻知道"数据链路是否打通"
+    try {
+      const base = getBandServer()
+      if (!base) {
+        // 开发期没有配置公网域名时：给出明确 toast 提示 + 临时设置（便于调试）
+        // 正式发布前：务必把 common/band.js 的 BAND_SERVER_DEFAULT_APP 设置为 HTTPS 公网域名。
+        uni.showToast({
+          title: '请在设置页配置后端地址（BAND_SERVER）',
+          icon: 'none',
+          duration: 3500
+        })
+      }
+      // APP 端需要把 CDN 图标库本地化时，可在此把静态资源路径改写为 plus.io.convertLocalFileSystemURL 的目标路径
+    } catch (e) {
+      // ignore
+    }
+    // #endif
+  },
+  onShow() {},
+  // 暴露给"设置页/开发者调试页"配置后端地址用
+  methods: {
+    setBandServer,
+    getBandServer
+  }
 }
 </script>
 

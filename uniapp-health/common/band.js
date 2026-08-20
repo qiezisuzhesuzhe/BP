@@ -9,12 +9,55 @@
  * 未收到数据时返回 null，由页面显示占位符（--）。
  */
 
-// 后端接收服务：H5 页面由 band-server(8091) 同源托管，API 使用相对路径，
-// 这样无论从本地预览、内网穿透公网地址还是手机访问，都能正确请求到本服务
-export const BAND_SERVER = ''
+// 后端接收服务（band-server）的基址。
+//   · H5：页面由 band-server 同源托管，留空串即可走相对路径（/api/*），天然适配本地预览/公网穿透/CDN 回源等各种部署形式。
+//   · App / 小程序：uni.request 没有"同源"概念，必须配置为绝对 URL。
+//     部署时把下面的常量改成 band-server 的公网域名（推荐 HTTPS，否则 Android 9+ 与 iOS 都要额外开明文白名单）。
+//     也可以通过 uni.setStorageSync('band_server', 'https://your-domain.com') 在运行时覆盖，方便切换环境。
+export const BAND_SERVER_DEFAULT_APP = '' // 例：'https://api.ankang-health.example.com'
+
+function readBandServerFromPlatform() {
+  // #ifdef H5
+  return '' // H5 永远同源相对路径
+  // #endif
+  // #ifndef H5
+  try {
+    const stored = uni.getStorageSync && uni.getStorageSync('band_server')
+    if (stored && typeof stored === 'string' && stored.length > 0) return stored.replace(/\/$/, '')
+  } catch (e) { /* ignore */ }
+  return BAND_SERVER_DEFAULT_APP ? BAND_SERVER_DEFAULT_APP.replace(/\/$/, '') : ''
+  // #endif
+}
+// APP 打包后首次进入应用，如果没配置 band_server，会报错；此处提供 setter 供"设置页面"动态切换。
+export function setBandServer(url) {
+  const u = (url || '').replace(/\/$/, '')
+  try {
+    if (u) uni.setStorageSync && uni.setStorageSync('band_server', u)
+    else uni.removeStorageSync && uni.removeStorageSync('band_server')
+  } catch (e) { /* ignore */ }
+  _bandServerCache = u
+}
+let _bandServerCache = null
+export function getBandServer() {
+  if (_bandServerCache != null) return _bandServerCache
+  _bandServerCache = readBandServerFromPlatform()
+  return _bandServerCache
+}
+export const BAND_SERVER = '' // 保留旧符号但不推荐使用；所有调用统一走 bandApi()
 
 export function bandApi(path) {
-  return BAND_SERVER + path
+  const base = getBandServer()
+  // 只有非 H5 且未配置 base 时，直接提前给出可读错误（避免后续 uni.request 报空 URL 的模糊错误）
+  // #ifndef H5
+  if (!base) {
+    // 开发阶段给一个默认占位，保证不会静默失败；同时在控制台输出提示
+    if (typeof console !== 'undefined' && console.warn) {
+      console.warn('[band] APP/小程序 端未配置 BAND_SERVER，接口请求可能失败。请调用 setBandServer("https://your-domain.com") 或在 common/band.js 设置 BAND_SERVER_DEFAULT_APP。')
+    }
+    return path
+  }
+  // #endif
+  return base + path
 }
 
 // 从后端拉取手环最新状态（心率 hr / 收缩压 sbp / 舒张压 dbp / 步数 steps / 电量 battery / 时间戳 ts）
@@ -285,12 +328,57 @@ export function subscribeEvents({ deviceid, kinds, onOpen, onClose, onEvent, onE
     if (closed) return
     clearTimeout(lpTimer)
     let done = false
-    const req = uni.request({
+
+    // 平台条件编译：APP 端和其它端的 request 参数差异很大，
+    // 用 let 声明 + ifdef 分支赋值，保证任何打包平台在同一作用域内都只"可见"一次赋值。
+    // uni-app CLI 在编译阶段会完全剥离不属于目标平台的条件编译块，因此只剩下一个分支。
+    let reqOpts = null
+    // #ifdef APP-PLUS
+    // App 端：uni.request 默认 enableChunked=false 会把 60s 分块响应缓存到收尾才返回；
+    // 必须显式 enableChunked=true，才能拿到实时分片事件。
+    // enableCache=false 避免被本地 HTTP 缓存吞掉流式响应。sslVerify=false 便于自签证书/HTTP 公网穿透调试。
+    reqOpts = {
       url: buildUrl(),
       method: 'GET',
-      // 允许长连接：超时 60s，服务端保持
-      timeout: 60000,
-      header: { Accept: 'text/event-stream' },
+      timeout: 70000,
+      enableChunked: true,
+      enableCache: false,
+      sslVerify: false,
+      header: { Accept: 'text/event-stream', 'Cache-Control': 'no-store' }
+    }
+    // #endif
+    // #ifdef H5
+    if (!reqOpts) {
+      reqOpts = {
+        url: buildUrl(),
+        method: 'GET',
+        // H5 端长轮询：超时 60s，服务端保持
+        timeout: 60000,
+        header: { Accept: 'text/event-stream' }
+      }
+    }
+    // #endif
+    // #ifdef MP
+    // 小程序端无 EventSource，走长轮询。默认 timeout=60000 即可。
+    if (!reqOpts) {
+      reqOpts = {
+        url: buildUrl(),
+        method: 'GET',
+        timeout: 60000,
+        header: { Accept: 'text/event-stream' }
+      }
+    }
+    // #endif
+    // 兜底：若平台都没命中（极端情况），按 H5 参数处理
+    if (!reqOpts) {
+      reqOpts = {
+        url: buildUrl(),
+        method: 'GET',
+        timeout: 60000,
+        header: { Accept: 'text/event-stream' }
+      }
+    }
+    const req = uni.request(Object.assign({}, reqOpts, {
       success(res) {
         if (done) return
         done = true
@@ -324,14 +412,19 @@ export function subscribeEvents({ deviceid, kinds, onOpen, onClose, onEvent, onE
         fireError(err && err.errMsg ? err.errMsg : 'long poll error')
         scheduleReconnect()
       }
-    })
-    // 防阻塞：最多 55 秒强制认为请求结束
+    }))
+    // 防阻塞：APP-PLUS 端用 65s 兜底（timeout=70s），其它端用 55s 兜底（timeout=60s）
+    // 使用 let + ifdef 分支赋值，避免作用域重复声明问题
+    let guardMs = 55000
+    // #ifdef APP-PLUS
+    guardMs = 65000
+    // #endif
     setTimeout(() => {
       if (done) return
       done = true
       try { req && req.abort && req.abort() } catch (e) {}
       lpTimer = setTimeout(longPollOnce, 300)
-    }, 55000)
+    }, guardMs)
   }
 
   start()

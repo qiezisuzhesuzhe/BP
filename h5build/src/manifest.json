@@ -15,16 +15,56 @@
       "autoclose": true,
       "delay": 0
     },
-    "modules": {},
+    "modules": {
+      "Barcode": {},
+      "Camera": {}
+    },
     "distribute": {
       "android": {
         "permissions": [
           "<uses-permission android:name=\"android.permission.INTERNET\"/>",
           "<uses-permission android:name=\"android.permission.RECORD_AUDIO\"/>",
-          "<uses-permission android:name=\"android.permission.VIBRATE\"/>"
-        ]
+          "<uses-permission android:name=\"android.permission.VIBRATE\"/>",
+          "<uses-permission android:name=\"android.permission.CAMERA\"/>",
+          "<uses-permission android:name=\"android.permission.FLASHLIGHT\"/>",
+          "<uses-permission android:name=\"android.permission.READ_PHONE_STATE\"/>",
+          "<uses-permission android:name=\"android.permission.ACCESS_NETWORK_STATE\"/>",
+          "<uses-permission android:name=\"android.permission.ACCESS_WIFI_STATE\"/>",
+          "<uses-permission android:name=\"android.permission.WRITE_EXTERNAL_STORAGE\"/>",
+          "<uses-permission android:name=\"android.permission.READ_EXTERNAL_STORAGE\"/>",
+          "<uses-feature android:name=\"android.hardware.camera\" android:required=\"false\"/>",
+          "<uses-feature android:name=\"android.hardware.camera.autofocus\" android:required=\"false\"/>"
+        ],
+        "minSdkVersion": 21,
+        "targetSdkVersion": 31,
+        "abiFilters": ["armeabi-v7a", "arm64-v8a", "x86"],
+        "usesCleartextTraffic": true,
+        "packagingOptions": {
+          "doNotStrip": [
+            "*/armeabi-v7a/liblocalscan.so",
+            "*/arm64-v8a/liblocalscan.so"
+          ]
+        }
       },
-      "ios": {},
+      "ios": {
+        "dSYMs": false,
+        "idfa": false,
+        "plist": {
+          "NSAppTransportSecurity": {
+            "NSAllowsArbitraryLoads": true,
+            "NSAllowsArbitraryLoadsInWebContent": true
+          },
+          "NSCameraUsageDescription": "需要使用相机扫描手环机身二维码，完成设备绑定",
+          "NSPhotoLibraryUsageDescription": "需要访问相册选择包含二维码的图片，完成设备绑定",
+          "NSMicrophoneUsageDescription": "需要使用麦克风进行健康咨询的语音交互",
+          "NSPhotoLibraryAddUsageDescription": "需要向相册保存健康报告等图片",
+          "UIRequiredDeviceCapabilities": ["armv7"],
+          "UIBackgroundModes": ["fetch", "remote-notification"]
+        },
+        "capabilities": {
+          "entitlements": {}
+        }
+      },
       "sdkConfigs": {}
     }
   },

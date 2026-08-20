@@ -132,7 +132,8 @@ export default {
       })
     },
     async startCamera() {
-      // 非 H5 或浏览器不支持摄像头时降级为模拟
+      // #ifdef H5
+      // H5 走纯浏览器 getUserMedia + jsQR DOM 注入实现
       if (typeof document === 'undefined' || !navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
         this.camState = 'fail'
         return
@@ -175,6 +176,43 @@ export default {
         this.camState = 'fail'
         this.teardownVideo()
       }
+      // #endif
+
+      // #ifndef H5
+      // APP / 小程序端：用系统原生扫码能力 uni.scanCode（兼容 iOS/Android 相机权限与性能）
+      try {
+        const res = await new Promise((resolve, reject) => {
+          uni.scanCode({
+            scanType: ['qrCode'],
+            autoDecodeCharset: true,
+            onlyFromCamera: false, // 允许相册选图，减少用户扫不上时切换成本
+            success: (r) => resolve(r),
+            fail: (err) => reject(err)
+          })
+        })
+        this.camState = 'on'
+        // uni.scanCode 扫码成功后直接解析内容
+        if (res && (res.result || res.charSet)) {
+          const ok = this.handleCode(res.result || '')
+          if (!ok) {
+            // 扫码内容无法识别为设备码，给出提示
+            uni.showModal({
+              title: '无法识别二维码',
+              content: '请确认二维码为安康手环机身二维码，或选择"手动输入设备号"。',
+              showCancel: false
+            })
+          }
+        }
+      } catch (e) {
+        // 用户取消扫码（常见）不 toast，仅标记 fail 让 UI 提供模拟识别/手动入口
+        const msg = (e && (e.errMsg || e.errmsg || String(e))) || ''
+        if (msg && /cancel|abort|deny|permission/i.test(msg)) {
+          this.camState = 'fail'
+        } else {
+          this.camState = 'fail'
+        }
+      }
+      // #endif
     },
     // 定时截帧交给 jsQR 识别
     startScanLoop() {
@@ -204,12 +242,15 @@ export default {
       }
     },
     teardownVideo() {
+      // #ifdef H5
       this.stopScanLoop()
       if (this.videoEl && this.videoEl.parentNode) this.videoEl.parentNode.removeChild(this.videoEl)
       this.videoEl = null
       this.canvasEl = null
+      // #endif
     },
     stopCamera() {
+      // #ifdef H5
       this.stopScanLoop()
       if (this.stream) {
         this.stream.getTracks().forEach((t) => t.stop())
@@ -221,6 +262,11 @@ export default {
         this.videoEl = null
       }
       this.canvasEl = null
+      // #endif
+      // 非 H5 没有需要释放的对象，仅 reset 视觉状态即可
+      // #ifndef H5
+      // uni.scanCode 是系统控件，会在调用时自动申请/释放资源，无需手动回收
+      // #endif
     },
     // 解析设备机身二维码：
     // 1) 安康自定义格式 ankang://device?type=xxx&sn=xxx[&deviceid=xxx]

@@ -35,18 +35,21 @@ const PROTO_DIR = path.join(__dirname, 'proto')
 const TUNNEL_LOG = process.env.TUNNEL_LOG || '/tmp/band-tunnel.log'
 const TUNNEL_URL_FILE = path.join(__dirname, 'tunnel-url.txt')
 
-// 当前公网上报地址：优先取环境变量，其次解析隧道日志中最后一次分配的地址
-//（隧道重启后公网域名会变化，取最新一条即当前可用地址；支持 localhost.run / serveo）
+// 当前公网上报地址：优先取环境变量，其次取 tunnel-url.txt（守护脚本维护的固定子域名），
+// 最后才回退解析隧道日志。
+// ⚠️ 顺序很关键：隧道重连过程中若 key 未生效会短暂拿到随机子域名并写进日志，
+//   此时若优先读日志，/api/address 会把随机地址返给前端，用户照着改手环配置就白改了。
+//   tunnel-url.txt 由 tunnel.sh 每次断开后写回固定域名，因此更可信。
 function currentTunnelUrl() {
   if (process.env.TUNNEL_URL) return process.env.TUNNEL_URL
+  try {
+    const u = fs.readFileSync(TUNNEL_URL_FILE, 'utf8').trim()
+    if (u) return u
+  } catch (e) {}
   try {
     const log = fs.readFileSync(TUNNEL_LOG, 'utf8')
     const urls = log.match(/https:\/\/[\w.-]+\.(?:lhr\.life|serveousercontent\.com)/g)
     if (urls && urls.length) return urls[urls.length - 1]
-  } catch (e) {}
-  try {
-    const u = fs.readFileSync(TUNNEL_URL_FILE, 'utf8').trim()
-    if (u) return u
   } catch (e) {}
   return ''
 }

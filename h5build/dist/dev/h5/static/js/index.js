@@ -1169,7 +1169,7 @@ __webpack_require__.r(__webpack_exports__);
 /*!****************************!*\
   !*** ./src/common/band.js ***!
   \****************************/
-/*! exports provided: BAND_SERVER_DEFAULT_APP, setBandServer, getBandServer, BAND_SERVER, bandApi, fetchBandRecord, listBandDevices, fetchBandLatest, fetchBandAddress, sendBandMessage, bindBandDevice, unbindBandDevice, fetchBandLatestBatch, subscribeEvents, extractDeviceId, bpLevel */
+/*! exports provided: BAND_SERVER_DEFAULT_APP, setBandServer, getBandServer, BAND_SERVER, bandApi, lastBandError, getLastBandError, fetchBandRecord, listBandDevices, fetchBandLatest, fetchBandAddress, sendBandMessage, bindBandDevice, unbindBandDevice, fetchBandLatestBatch, subscribeEvents, extractDeviceId, bpLevel */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -1179,6 +1179,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "getBandServer", function() { return getBandServer; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "BAND_SERVER", function() { return BAND_SERVER; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "bandApi", function() { return bandApi; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "lastBandError", function() { return lastBandError; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "getLastBandError", function() { return getLastBandError; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "fetchBandRecord", function() { return fetchBandRecord; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "listBandDevices", function() { return listBandDevices; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "fetchBandLatest", function() { return fetchBandLatest; });
@@ -1198,32 +1200,38 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var core_js_modules_es_array_push_js__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_array_push_js__WEBPACK_IMPORTED_MODULE_2__);
 /* harmony import */ var core_js_modules_es_array_slice_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! core-js/modules/es.array.slice.js */ "+2oP");
 /* harmony import */ var core_js_modules_es_array_slice_js__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_array_slice_js__WEBPACK_IMPORTED_MODULE_3__);
-/* harmony import */ var core_js_modules_es_iterator_constructor_js__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! core-js/modules/es.iterator.constructor.js */ "6fVz");
-/* harmony import */ var core_js_modules_es_iterator_constructor_js__WEBPACK_IMPORTED_MODULE_4___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_iterator_constructor_js__WEBPACK_IMPORTED_MODULE_4__);
-/* harmony import */ var core_js_modules_es_iterator_filter_js__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! core-js/modules/es.iterator.filter.js */ "kQ2C");
-/* harmony import */ var core_js_modules_es_iterator_filter_js__WEBPACK_IMPORTED_MODULE_5___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_iterator_filter_js__WEBPACK_IMPORTED_MODULE_5__);
-/* harmony import */ var core_js_modules_es_iterator_for_each_js__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! core-js/modules/es.iterator.for-each.js */ "fVRX");
-/* harmony import */ var core_js_modules_es_iterator_for_each_js__WEBPACK_IMPORTED_MODULE_6___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_iterator_for_each_js__WEBPACK_IMPORTED_MODULE_6__);
-/* harmony import */ var core_js_modules_es_json_parse_js__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! core-js/modules/es.json.parse.js */ "EjbG");
-/* harmony import */ var core_js_modules_es_json_parse_js__WEBPACK_IMPORTED_MODULE_7___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_json_parse_js__WEBPACK_IMPORTED_MODULE_7__);
-/* harmony import */ var core_js_modules_es_number_constructor_js__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! core-js/modules/es.number.constructor.js */ "qePV");
-/* harmony import */ var core_js_modules_es_number_constructor_js__WEBPACK_IMPORTED_MODULE_8___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_number_constructor_js__WEBPACK_IMPORTED_MODULE_8__);
-/* harmony import */ var core_js_modules_es_object_keys_js__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! core-js/modules/es.object.keys.js */ "tkto");
-/* harmony import */ var core_js_modules_es_object_keys_js__WEBPACK_IMPORTED_MODULE_9___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_object_keys_js__WEBPACK_IMPORTED_MODULE_9__);
-/* harmony import */ var core_js_modules_es_object_to_string_js__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! core-js/modules/es.object.to-string.js */ "07d7");
-/* harmony import */ var core_js_modules_es_object_to_string_js__WEBPACK_IMPORTED_MODULE_10___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_object_to_string_js__WEBPACK_IMPORTED_MODULE_10__);
-/* harmony import */ var core_js_modules_es_regexp_exec_js__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! core-js/modules/es.regexp.exec.js */ "rB9j");
-/* harmony import */ var core_js_modules_es_regexp_exec_js__WEBPACK_IMPORTED_MODULE_11___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_regexp_exec_js__WEBPACK_IMPORTED_MODULE_11__);
-/* harmony import */ var core_js_modules_es_string_match_js__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! core-js/modules/es.string.match.js */ "Rm1S");
-/* harmony import */ var core_js_modules_es_string_match_js__WEBPACK_IMPORTED_MODULE_12___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_string_match_js__WEBPACK_IMPORTED_MODULE_12__);
-/* harmony import */ var core_js_modules_es_string_replace_js__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(/*! core-js/modules/es.string.replace.js */ "UxlC");
-/* harmony import */ var core_js_modules_es_string_replace_js__WEBPACK_IMPORTED_MODULE_13___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_string_replace_js__WEBPACK_IMPORTED_MODULE_13__);
-/* harmony import */ var core_js_modules_es_string_split_js__WEBPACK_IMPORTED_MODULE_14__ = __webpack_require__(/*! core-js/modules/es.string.split.js */ "EnZy");
-/* harmony import */ var core_js_modules_es_string_split_js__WEBPACK_IMPORTED_MODULE_14___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_string_split_js__WEBPACK_IMPORTED_MODULE_14__);
-/* harmony import */ var core_js_modules_es_string_trim_js__WEBPACK_IMPORTED_MODULE_15__ = __webpack_require__(/*! core-js/modules/es.string.trim.js */ "SYor");
-/* harmony import */ var core_js_modules_es_string_trim_js__WEBPACK_IMPORTED_MODULE_15___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_string_trim_js__WEBPACK_IMPORTED_MODULE_15__);
-/* harmony import */ var core_js_modules_web_dom_collections_for_each_js__WEBPACK_IMPORTED_MODULE_16__ = __webpack_require__(/*! core-js/modules/web.dom-collections.for-each.js */ "FZtP");
-/* harmony import */ var core_js_modules_web_dom_collections_for_each_js__WEBPACK_IMPORTED_MODULE_16___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_web_dom_collections_for_each_js__WEBPACK_IMPORTED_MODULE_16__);
+/* harmony import */ var core_js_modules_es_date_to_json_js__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! core-js/modules/es.date.to-json.js */ "9LPj");
+/* harmony import */ var core_js_modules_es_date_to_json_js__WEBPACK_IMPORTED_MODULE_4___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_date_to_json_js__WEBPACK_IMPORTED_MODULE_4__);
+/* harmony import */ var core_js_modules_es_iterator_constructor_js__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! core-js/modules/es.iterator.constructor.js */ "6fVz");
+/* harmony import */ var core_js_modules_es_iterator_constructor_js__WEBPACK_IMPORTED_MODULE_5___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_iterator_constructor_js__WEBPACK_IMPORTED_MODULE_5__);
+/* harmony import */ var core_js_modules_es_iterator_filter_js__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! core-js/modules/es.iterator.filter.js */ "kQ2C");
+/* harmony import */ var core_js_modules_es_iterator_filter_js__WEBPACK_IMPORTED_MODULE_6___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_iterator_filter_js__WEBPACK_IMPORTED_MODULE_6__);
+/* harmony import */ var core_js_modules_es_iterator_for_each_js__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! core-js/modules/es.iterator.for-each.js */ "fVRX");
+/* harmony import */ var core_js_modules_es_iterator_for_each_js__WEBPACK_IMPORTED_MODULE_7___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_iterator_for_each_js__WEBPACK_IMPORTED_MODULE_7__);
+/* harmony import */ var core_js_modules_es_json_parse_js__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! core-js/modules/es.json.parse.js */ "EjbG");
+/* harmony import */ var core_js_modules_es_json_parse_js__WEBPACK_IMPORTED_MODULE_8___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_json_parse_js__WEBPACK_IMPORTED_MODULE_8__);
+/* harmony import */ var core_js_modules_es_json_stringify_js__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! core-js/modules/es.json.stringify.js */ "6cQw");
+/* harmony import */ var core_js_modules_es_json_stringify_js__WEBPACK_IMPORTED_MODULE_9___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_json_stringify_js__WEBPACK_IMPORTED_MODULE_9__);
+/* harmony import */ var core_js_modules_es_number_constructor_js__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! core-js/modules/es.number.constructor.js */ "qePV");
+/* harmony import */ var core_js_modules_es_number_constructor_js__WEBPACK_IMPORTED_MODULE_10___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_number_constructor_js__WEBPACK_IMPORTED_MODULE_10__);
+/* harmony import */ var core_js_modules_es_object_keys_js__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! core-js/modules/es.object.keys.js */ "tkto");
+/* harmony import */ var core_js_modules_es_object_keys_js__WEBPACK_IMPORTED_MODULE_11___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_object_keys_js__WEBPACK_IMPORTED_MODULE_11__);
+/* harmony import */ var core_js_modules_es_object_to_string_js__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! core-js/modules/es.object.to-string.js */ "07d7");
+/* harmony import */ var core_js_modules_es_object_to_string_js__WEBPACK_IMPORTED_MODULE_12___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_object_to_string_js__WEBPACK_IMPORTED_MODULE_12__);
+/* harmony import */ var core_js_modules_es_regexp_exec_js__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(/*! core-js/modules/es.regexp.exec.js */ "rB9j");
+/* harmony import */ var core_js_modules_es_regexp_exec_js__WEBPACK_IMPORTED_MODULE_13___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_regexp_exec_js__WEBPACK_IMPORTED_MODULE_13__);
+/* harmony import */ var core_js_modules_es_string_match_js__WEBPACK_IMPORTED_MODULE_14__ = __webpack_require__(/*! core-js/modules/es.string.match.js */ "Rm1S");
+/* harmony import */ var core_js_modules_es_string_match_js__WEBPACK_IMPORTED_MODULE_14___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_string_match_js__WEBPACK_IMPORTED_MODULE_14__);
+/* harmony import */ var core_js_modules_es_string_replace_js__WEBPACK_IMPORTED_MODULE_15__ = __webpack_require__(/*! core-js/modules/es.string.replace.js */ "UxlC");
+/* harmony import */ var core_js_modules_es_string_replace_js__WEBPACK_IMPORTED_MODULE_15___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_string_replace_js__WEBPACK_IMPORTED_MODULE_15__);
+/* harmony import */ var core_js_modules_es_string_split_js__WEBPACK_IMPORTED_MODULE_16__ = __webpack_require__(/*! core-js/modules/es.string.split.js */ "EnZy");
+/* harmony import */ var core_js_modules_es_string_split_js__WEBPACK_IMPORTED_MODULE_16___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_string_split_js__WEBPACK_IMPORTED_MODULE_16__);
+/* harmony import */ var core_js_modules_es_string_trim_js__WEBPACK_IMPORTED_MODULE_17__ = __webpack_require__(/*! core-js/modules/es.string.trim.js */ "SYor");
+/* harmony import */ var core_js_modules_es_string_trim_js__WEBPACK_IMPORTED_MODULE_17___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_string_trim_js__WEBPACK_IMPORTED_MODULE_17__);
+/* harmony import */ var core_js_modules_web_dom_collections_for_each_js__WEBPACK_IMPORTED_MODULE_18__ = __webpack_require__(/*! core-js/modules/web.dom-collections.for-each.js */ "FZtP");
+/* harmony import */ var core_js_modules_web_dom_collections_for_each_js__WEBPACK_IMPORTED_MODULE_18___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_web_dom_collections_for_each_js__WEBPACK_IMPORTED_MODULE_18__);
+
+
 
 
 
@@ -1285,12 +1293,52 @@ function bandApi(path) {
   return base + path;
 }
 
+// 最近一次请求错误（调试用）：页面底部 SSE 状态卡 / 强制刷新 toast 可直接展示
+var lastBandError = null;
+function getLastBandError() {
+  return lastBandError;
+}
+function _setLastError(info) {
+  try {
+    lastBandError = info || null;
+  } catch (e) {
+    lastBandError = info && JSON.parse(JSON.stringify(info)) || null;
+  }
+}
+// 统一日志 + 错误上报：生产环境 console.error + 保存 lastBandError；
+// 不要 uni.showToast，因为底层封装被轮询/定时器调用时会疯狂弹 toast。
+function _logReq(tag, url, resOrErr, extra) {
+  try {
+    var isErr = resOrErr && resOrErr.__fail || resOrErr && typeof resOrErr.statusCode === 'number' && (resOrErr.statusCode < 200 || resOrErr.statusCode >= 300);
+    var code = resOrErr && typeof resOrErr.statusCode === 'number' ? resOrErr.statusCode : resOrErr && resOrErr.__fail ? 'FAIL' : '?';
+    var busCode = resOrErr && resOrErr.data && typeof resOrErr.data.code !== 'undefined' ? resOrErr.data.code : null;
+    if (isErr || resOrErr && busCode != null && busCode !== 0) {
+      var msg = '[band][' + tag + '] 失败 HTTP=' + code + ' 业务=' + busCode + '  URL=' + url + (extra ? '  EXTRA=' + JSON.stringify(extra) : '');
+      if (typeof console !== 'undefined' && console.error) console.error(msg, resOrErr || '');
+      _setLastError({
+        at: Date.now(),
+        tag: tag,
+        url: url,
+        http: code,
+        bus: busCode,
+        extra: extra || null
+      });
+    } else {
+      if (typeof console !== 'undefined' && console.debug) {
+        // 成功只打 debug，不污染 error channel
+        console.debug('[band][' + tag + '] OK HTTP=' + code + ' 业务=' + busCode + '  ' + url, extra || '');
+      }
+    }
+  } catch (e) {/* ignore */}
+}
+
 // 从后端拉取手环完整设备记录（{ deviceid, latest, model, name, bindAt, ... }）
 // 失败 resolve(null)。注意：这个接口与 fetchBandLatest 走同一个路由，但返回完整 record 而不是只取 latest。
 // extraQuery：可选，字符串形式 "k=v&k2=v2"，在末尾拼到 URL，用于强刷绕过任何代理/CDN 层缓存
 function fetchBandRecord(deviceid, extraQuery) {
   return new Promise(function (resolve) {
     if (!deviceid) {
+      if (typeof console !== 'undefined' && console.warn) console.warn('[band][fetchBandRecord] deviceid 为空，直接返回 null');
       resolve(null);
       return;
     }
@@ -1304,12 +1352,24 @@ function fetchBandRecord(deviceid, extraQuery) {
       timeout: 5000,
       success: function success(res) {
         if (res.statusCode === 200 && res.data && res.data.code === 0 && res.data.data) {
+          _logReq('GET /api/devices/:id', url, res, {
+            found: true,
+            latestKeys: Object.keys(res.data.data && res.data.data.latest || {})
+          });
           resolve(res.data.data);
         } else {
+          _logReq('GET /api/devices/:id', url, res, {
+            hint: '结构不符合 code=0 或 data 不存在'
+          });
           resolve(null);
         }
       },
-      fail: function fail() {
+      fail: function fail(err) {
+        _logReq('GET /api/devices/:id', url, Object.assign({
+          __fail: true
+        }, err || {}), {
+          hint: 'uni.request fail：网络失败/超时/CORS'
+        });
         resolve(null);
       }
     });
@@ -1319,18 +1379,30 @@ function fetchBandRecord(deviceid, extraQuery) {
 // 拉取后端所有设备列表（[{ deviceid, latest, model, name, ... }]），失败返回 []
 function listBandDevices() {
   return new Promise(function (resolve) {
+    var url = bandApi('/api/devices?_t=') + Date.now();
     uni.request({
-      url: bandApi('/api/devices?_t=') + Date.now(),
+      url: url,
       method: 'GET',
       timeout: 5000,
       success: function success(res) {
         if (res.statusCode === 200 && res.data && res.data.code === 0 && Array.isArray(res.data.data)) {
+          _logReq('GET /api/devices', url, res, {
+            count: res.data.data.length
+          });
           resolve(res.data.data);
         } else {
+          _logReq('GET /api/devices', url, res, {
+            hint: '结构不符合 code=0 或 data 非数组'
+          });
           resolve([]);
         }
       },
-      fail: function fail() {
+      fail: function fail(err) {
+        _logReq('GET /api/devices', url, Object.assign({
+          __fail: true
+        }, err || {}), {
+          hint: 'uni.request fail：网络失败/超时/CORS'
+        });
         resolve([]);
       }
     });
@@ -1347,6 +1419,10 @@ function fetchBandLatest(deviceid, extraQuery) {
       if (latest && (latest.hr != null || latest.sbp != null || latest.steps != null || latest.spo2 != null || latest.ecgSamples != null || latest.sleep != null || latest.bodyTemp != null || latest.skinTemp != null || latest.stress != null)) {
         resolve(latest);
       } else {
+        // latest 空是正常情况（手环还没上报 hr/sbp），不写 lastBandError（那是"请求层面错误"专用通道）
+        if (typeof console !== 'undefined' && console.debug) {
+          console.debug('[band][fetchBandLatest] deviceid=' + deviceid + ' 后端 latest 为空（手环尚未上报心率/血压等），返回 null 让页面显示 --');
+        }
         resolve(null);
       }
     });
@@ -1357,18 +1433,30 @@ function fetchBandLatest(deviceid, extraQuery) {
 // 后端不可达或未配置隧道时 resolve(null)，页面显示占位符；同样加时间戳防缓存
 function fetchBandAddress() {
   return new Promise(function (resolve) {
+    var url = bandApi('/api/address') + '?_t=' + Date.now();
     uni.request({
-      url: bandApi('/api/address') + '?_t=' + Date.now(),
+      url: url,
       method: 'GET',
       timeout: 5000,
       success: function success(res) {
         if (res.statusCode === 200 && res.data && res.data.code === 0 && res.data.data) {
+          _logReq('GET /api/address', url, res, {
+            public: (res.data.data.public || '').slice(0, 60)
+          });
           resolve(res.data.data);
         } else {
+          _logReq('GET /api/address', url, res, {
+            hint: '结构不符合 code=0'
+          });
           resolve(null);
         }
       },
-      fail: function fail() {
+      fail: function fail(err) {
+        _logReq('GET /api/address', url, Object.assign({
+          __fail: true
+        }, err || {}), {
+          hint: 'uni.request fail'
+        });
         resolve(null);
       }
     });
@@ -1379,8 +1467,9 @@ function fetchBandAddress() {
 // title ≤15 字节，description ≤240 字节；成功 resolve(null)，失败 resolve(错误信息)
 function sendBandMessage(deviceid, title, description) {
   return new Promise(function (resolve) {
+    var url = bandApi('/api/band/message');
     uni.request({
-      url: bandApi('/api/band/message'),
+      url: url,
       method: 'POST',
       data: {
         device_id: deviceid,
@@ -1390,12 +1479,17 @@ function sendBandMessage(deviceid, title, description) {
       timeout: 15000,
       success: function success(res) {
         if (res.statusCode === 200 && res.data && res.data.code === 0) {
+          _logReq('POST /api/band/message', url, res);
           resolve(null);
         } else {
+          _logReq('POST /api/band/message', url, res);
           resolve(res.data && res.data.message || '发送失败(' + (res.statusCode || '') + ')');
         }
       },
-      fail: function fail() {
+      fail: function fail(err) {
+        _logReq('POST /api/band/message', url, Object.assign({
+          __fail: true
+        }, err || {}));
         resolve('无法连接消息服务');
       }
     });
@@ -1405,8 +1499,9 @@ function sendBandMessage(deviceid, title, description) {
 // 把手环设备注册到后端（绑定 deviceid 与用户）
 function bindBandDevice(deviceid, name) {
   return new Promise(function (resolve) {
+    var url = bandApi('/api/devices');
     uni.request({
-      url: bandApi('/api/devices'),
+      url: url,
       method: 'POST',
       data: {
         deviceid: deviceid,
@@ -1415,12 +1510,17 @@ function bindBandDevice(deviceid, name) {
       timeout: 5000,
       success: function success(res) {
         if (res.statusCode === 200 && res.data && res.data.code === 0) {
+          _logReq('POST /api/devices', url, res);
           resolve(res.data.data);
         } else {
+          _logReq('POST /api/devices', url, res);
           resolve(null);
         }
       },
-      fail: function fail() {
+      fail: function fail(err) {
+        _logReq('POST /api/devices', url, Object.assign({
+          __fail: true
+        }, err || {}));
         resolve(null);
       }
     });
@@ -1434,18 +1534,24 @@ function unbindBandDevice(deviceid) {
       resolve(null);
       return;
     }
+    var url = bandApi('/api/devices/' + encodeURIComponent(deviceid));
     uni.request({
-      url: bandApi('/api/devices/' + encodeURIComponent(deviceid)),
+      url: url,
       method: 'DELETE',
       timeout: 5000,
       success: function success(res) {
         if (res.statusCode === 200 && res.data && res.data.code === 0) {
+          _logReq('DELETE /api/devices/:id', url, res);
           resolve(true);
         } else {
+          _logReq('DELETE /api/devices/:id', url, res);
           resolve(false);
         }
       },
-      fail: function fail() {
+      fail: function fail(err) {
+        _logReq('DELETE /api/devices/:id', url, Object.assign({
+          __fail: true
+        }, err || {}));
         resolve(false);
       }
     });
@@ -1464,18 +1570,28 @@ function fetchBandLatestBatch(deviceids) {
     var out = {};
     var remain = ids.length;
     ids.forEach(function (id) {
+      var url = bandApi('/api/devices/' + id) + '?_t=' + Date.now();
       uni.request({
-        url: bandApi('/api/devices/' + id) + '?_t=' + Date.now(),
+        url: url,
         method: 'GET',
         timeout: 5000,
         success: function success(res) {
           if (res.statusCode === 200 && res.data && res.data.code === 0 && res.data.data && res.data.data.latest) {
+            _logReq('GET /api/devices/:id (batch)', url, res, {
+              latestKeys: Object.keys(res.data.data.latest || {})
+            });
             out[id] = res.data.data.latest;
           } else {
+            _logReq('GET /api/devices/:id (batch)', url, res, {
+              hint: '结构不符合或 latest 不存在'
+            });
             out[id] = null;
           }
         },
-        fail: function fail() {
+        fail: function fail(err) {
+          _logReq('GET /api/devices/:id (batch)', url, Object.assign({
+            __fail: true
+          }, err || {}));
           out[id] = null;
         },
         complete: function complete() {

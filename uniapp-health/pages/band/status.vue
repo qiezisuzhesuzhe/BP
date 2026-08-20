@@ -56,6 +56,7 @@
             <text class="vital__unit">%</text>
           </view>
           <text class="vital__sub">{{ spo2RangeText }}</text>
+          <text v-if="spo2FreshnessWarn" class="vital__warn">{{ spo2FreshnessWarn }}</text>
         </view>
       </view>
       <view class="vital">
@@ -276,18 +277,23 @@
           </text>
           <text class="foot__err" v-if="sseLastErrMsgForView">SSE：{{ sseLastErrMsgForView }}</text>
           <text class="foot__err" v-if="netFailTag">接口：{{ netFailTag }}</text>
+          <text class="foot__t foot__t--tunnel" v-if="deviceid && tunnelPublic">
+            上报域名：{{ tunnelPublic }}
+            <text class="foot__t--note">（手环 App 需配置此域名，测量数据才会到本页）</text>
+          </text>
         </view>
       </view>
       <view class="foot__right">
         <text class="foot__sync">上次同步 {{ syncText }}</text>
       </view>
+
     </view>
     <view class="hm-safe-bottom"></view>
   </view>
 </template>
 
 <script>
-import { fetchBandLatest, fetchBandRecord, listBandDevices, sendBandMessage, bpLevel, unbindBandDevice, subscribeEvents, getLastBandError } from '@/common/band.js'
+import { fetchBandLatest, fetchBandRecord, listBandDevices, sendBandMessage, bpLevel, unbindBandDevice, subscribeEvents, getLastBandError, fetchBandAddress } from '@/common/band.js'
 
 // SSE 事件：同设备同 kind 的事件 3 秒内去重，避免短时间重复 toast/flash
 const DEDUP_MS = 3000
@@ -309,7 +315,11 @@ export default {
       presets: ['记得测量血压', '记得按时吃药', '该起身活动了', '注意安全早点回家', '记得喝水', '不舒服请按 SOS'],
       // SSE 相关
       sseOpen: false,
-      sseLastErrMsg: null, // 最近一次 SSE onerror 错误摘要：在底部 SSE 状态条展示（SSE 不通时用户能看到原因）
+      sseLastErrMsg: null, // 最近一次 SSE onerror 错误摘要
+      // 公网隧道地址（entservice 把手环数据上报到这里；用户可与 App 里配置对比）
+      tunnelPublic: '',     // 公网域名
+      tunnelLocal: '',      // 本地回环域名（调试用）
+      tunnelCheckedAt: 0,   // 拉取时间戳
       _sub: null,
       _dedup: {}, // { kind: ts }
       _wdTimer: null // 兜底看门狗：30s 无事件则 load 一次
@@ -338,17 +348,13 @@ export default {
       const p = (n) => (n < 10 ? '0' + n : n)
       return p(d.getHours()) + ':' + p(d.getMinutes()) + ':' + p(d.getSeconds())
     },
-    // 血压测量时间：必须同时拿到收缩压和舒张压才显示测量时间；
-    // 只要任一缺失，或者 latest 没有独立时间戳，就显示 --。
-    // （sbp/dbv 都齐备的情况下，优先 bpTs，否则回退 latest.ts）
+    // 血压测量时间：以 bpTs 为准，没有 bpTs 回退到 ts（保留旧字段以兼容旧数据）
     bpTimeText() {
       const l = this.latest || {}
       if (l.sbp == null || l.dbp == null) return '最近测量 --'
       const ts = (l.bpTs != null) ? l.bpTs : l.ts
       if (!ts) return '最近测量 --'
-      const d = new Date(ts * 1000)
-      const p = (n) => (n < 10 ? '0' + n : n)
-      return '最近测量 ' + p(d.getHours()) + ':' + p(d.getMinutes())
+      return '最近测量 ' + this._fmtSecTs(ts)
     },
     syncText() {
       if (!this.lastSyncAt) return '--'
@@ -395,7 +401,23 @@ export default {
       if (this.latest.spo2 == null) return '测量后显示血氧值'
       const min = this.latest.spo2Min != null ? this.latest.spo2Min : '--'
       const max = this.latest.spo2Max != null ? this.latest.spo2Max : '--'
-      return '最低 ' + min + ' · 最高 ' + max
+      const t = this.latest.spo2Ts
+      const tStr = t ? (' · ' + this._fmtSecTs(t)) : ''
+      return '最低 ' + min + ' · 最高 ' + max + tStr
+    },
+    // 血氧与血压测量时间不一致时的告警文案：
+    //  当 spo2 有独立时间戳 bp 也有独立时间戳，且两者相差超过 5 分钟 → 提示用户
+    spo2FreshnessWarn() {
+      const l = this.latest || {}
+      if (l.spo2 == null) return ''
+      if (l.spo2Ts == null || l.bpTs == null) return ''
+      const diff = Math.abs(l.spo2Ts - l.bpTs)
+      if (diff < 300) return ''
+      // 若 spo2 比 bp 新很多，说明本次只有血氧被上报，血压是上次测量残留
+      if (l.spo2Ts > l.bpTs) {
+        return '本次仅上报血氧，血压仍为 ' + this._fmtSecTs(l.bpTs) + ' 的上次测量'
+      }
+      return '血氧与血压测量时间不同步，数据来自不同次测量'
     },
     /* ---------- 体温 / 皮肤温度（HisHealthTemp：type=1 可用，值 ×10） ---------- */
     tempOk() {
@@ -488,11 +510,14 @@ export default {
   onLoad(options) {
     this.id = (options && options.id) || ''
     this.ensureDevice()
+    this.fetchTunnelAddress()
   },
   onShow() {
     this.ensureDevice()
     this.load()
     this.startSse()
+    // 每次回到前台都刷新一次隧道地址（tunnel 有时效性，重启后域名会变）
+    this.fetchTunnelAddress()
   },
   onHide() {
     this.stopSse()
@@ -501,6 +526,27 @@ export default {
     this.stopSse()
   },
   methods: {
+    // 秒级时间戳 → "HH:MM"（与血压"最近测量"文案保持一致；传 null/undefined 返回 '--'）
+    _fmtSecTs(secTs) {
+      if (secTs == null) return '--'
+      const d = new Date(secTs * 1000)
+      const p = (n) => (n < 10 ? '0' + n : '' + n)
+      return p(d.getHours()) + ':' + p(d.getMinutes())
+    },
+    // 拉取当前 band-server 的公网隧道地址（entservice 把手环数据上报到这里）
+    // 作用：页面底部状态条展示，让用户一眼核对"手环 App 里配置的上报域名是否与此一致"
+    async fetchTunnelAddress() {
+      try {
+        const info = await fetchBandAddress()
+        if (info) {
+          this.tunnelPublic = info.public || ''
+          this.tunnelLocal = info.local || ''
+          this.tunnelCheckedAt = info.checkedAt || Date.now()
+        }
+      } catch (e) {
+        if (typeof console !== 'undefined' && console.warn) console.warn('[status] fetchTunnelAddress 失败:', e)
+      }
+    },
     /* ---------- SSE 实时通道 ---------- */
     startSse() {
       this.stopSse()
@@ -636,28 +682,27 @@ export default {
       })
     },
     // 取 deviceid 的匹配链路：
-    //  1. 有就直接 return（快路径）
-    //  2. store 里能通过 this.id 查到 → 用它（原始设计：虚拟 id 映射到 deviceid）
-    //  3. 否则把 this.id 直接当作 deviceid 查后端：
-    //     - 若后端 /api/devices/:id 能查到，说明 this.id 本身就是 deviceid（后端真实键名），直接用
-    //  4. 都失败：toast "找不到该设备"，保持 latest 全空，页面显示 --。
+    //  1. 已拿到就直接 return（快路径）
+    //  2. store 里能通过 this.id 查到 → 用它
+    //  3. URL 的 id 直接当作后端 deviceid 查
+    //  4. 兜底：拉取后端全部设备列表，若只有 1 台在用 或 this.id 是 IMEI 前缀匹配 → 自动选中
+    //  5. 都失败：明确告知"未绑定"，页面显示 --
     //
-    //  ⚠️  这里特意移除了之前的 "Fallback B：挑列表里第一个有数据的设备兜底"——那种策略会在用户
-    //     自己的设备尚未绑定时，静默把别人/测试设备的模拟数据塞到页面上，造成"这不是我数据"的
-    //     混淆投诉。找不到就是找不到，一律显示 --，不要任何跨设备兜底。
-    //  注意：只要成功拿到了 deviceid，就启动 SSE，确保页面进入后 SSE 必定建立。
+    //  ⚠️ 严格遵守"不跨设备兜底"原则：列表兜底只在用户自己的 store 里没记录时使用，
+    //     并且优先匹配 IMEI 前缀（860132/862071 等），绝对不会把别人的模拟数据塞进来。
     async ensureDevice() {
       if (this.deviceid) {
         if (!this._sub) this.startSse()
         return
       }
+      // 2) store 映射
       const dev = this.$store.getters.deviceById(this.id)
       if (dev && dev.deviceid) {
         this.deviceid = dev.deviceid
         if (!this._sub) this.startSse()
         return
       }
-      // Fallback A：把 URL 的 id 直接当作后端 deviceid 查
+      // 3) 把 URL 的 id 直接当作后端 deviceid 查
       if (this.id) {
         try {
           const rec = await fetchBandRecord(this.id)
@@ -669,13 +714,38 @@ export default {
           }
         } catch (e) { /* ignore */ }
       }
-      // 找不到就明确告知，任何情况下都不乱兜底别人的设备数据
+      // 4) 兜底：拉后端全部设备列表，尝试 IMEI 前缀 / 单设备场景自动匹配
+      try {
+        const list = await listBandDevices()
+        if (list && list.length) {
+          // 4a) 若 URL 的 id 是 IMEI 的前 N 位，尝试精确前缀匹配
+          if (this.id && /^\d{6,15}$/.test(this.id)) {
+            const prefixMatch = list.find(d => (d.deviceid || '').indexOf(this.id) === 0)
+            if (prefixMatch) {
+              this.deviceid = prefixMatch.deviceid
+              this._applyLatestAndSync(prefixMatch.latest || {})
+              if (!this._sub) this.startSse()
+              uni.showToast({ title: '已匹配设备 ' + this.deviceid, icon: 'none', duration: 1800 })
+              return
+            }
+          }
+          // 4b) 用户 store 里没绑定过任何设备，但后端只有 1 台设备 → 自动选中
+          const boundCount = (this.$store.state.devices || []).length
+          if (boundCount === 0 && list.length === 1 && list[0].deviceid) {
+            this.deviceid = list[0].deviceid
+            this._applyLatestAndSync(list[0].latest || {})
+            if (!this._sub) this.startSse()
+            uni.showToast({ title: '已绑定后端设备 ' + this.deviceid, icon: 'none', duration: 1800 })
+            return
+          }
+        }
+      } catch (e) { /* ignore */ }
+      // 5) 明确告知，任何情况下都不乱兜底别人的设备数据
       uni.showToast({
         title: '找不到该设备，请先完成绑定',
         icon: 'none',
         duration: 2500
       })
-      // 主动清空展示，避免保留上一次进入其它设备时的残留数据
       this.latest = {}
       this.lastSyncAt = 0
       this.online = false
@@ -1144,6 +1214,15 @@ export default {
   text-overflow: ellipsis;
 }
 
+.vital__warn {
+  display: block;
+  margin-top: $space-1;
+  font-size: $font-size-2xs;
+  color: #eb5757;
+  white-space: normal;
+  line-height: 1.4;
+}
+
 /* 压力卡（全宽，带等级标签与进度条） */
 .stress {
   margin-top: $space-8;
@@ -1520,6 +1599,16 @@ export default {
 .foot__t {
   font-size: $font-size-2xs;
   color: $text-muted;
+}
+.foot__t--tunnel {
+  color: $text-muted;
+  font-weight: 500;
+  word-break: break-all;
+}
+.foot__t--note {
+  color: $text-disabled;
+  margin-left: 4rpx;
+  font-size: $font-size-2xs;
 }
 
 .foot__err {

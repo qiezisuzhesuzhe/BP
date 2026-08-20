@@ -231,12 +231,19 @@ function parseUploadBody(raw) {
 }
 
 // 合并一次上报中的最新状态（realtime 与 health 互补）
+//
+// 关键设计：为每个"独立可测量指标"记录独立时间戳，避免用户先上报过一次 bp+spo2
+// 再单独上报 spo2 时，前端把"新 spo2 与旧 bp"混合成一次测量展示造成"数据不是我"的困惑。
+//   - bpTs / spo2Ts / tempTs / ecgTs / stressTs / sleepTs / stepsTs：各指标独立时间戳（秒）
+//   - 前端可依据这些时间戳判断数据是否属于同一次测量，决定是否清空另一个指标
 function mergeSamples(deviceid, packets) {
   const dev = touch(deviceid)
   const snap = {}
+  const nowSec = Math.floor(Date.now() / 1000)
   for (const p of packets) {
     if (!p.parsed) continue
     const { type, data } = p.parsed
+    const pktTs = data.ts >>> 0 || nowSec
     if (type === 'realtime') {
       if (data.steps !== undefined) snap.steps = data.steps
       if (data.distance !== undefined) snap.distance = data.distance
@@ -244,6 +251,7 @@ function mergeSamples(deviceid, packets) {
       if (data.battery !== undefined) snap.battery = data.battery
       if (data.charging !== undefined) snap.charging = data.charging
       if (data.ts) snap.ts = data.ts
+      snap.stepsTs = pktTs
     } else if (type === 'health') {
       if (data.hr !== undefined) snap.hr = data.hr
       if (data.sbp !== undefined) snap.sbp = data.sbp
@@ -258,16 +266,27 @@ function mergeSamples(deviceid, packets) {
       if (data.tempOk !== undefined) snap.tempOk = data.tempOk
       if (data.stress !== undefined) snap.stress = data.stress
       if (data.ts) snap.ts = data.ts
+      // 为每项独立可测量指标打独立时间戳；hr 跟随 bp 一次测量
+      if (data.sbp !== undefined || data.dbp !== undefined || data.hr !== undefined) {
+        snap.bpTs = pktTs
+      }
+      if (data.spo2 !== undefined) snap.spo2Ts = pktTs
+      if (data.bodyTemp !== undefined || data.skinTemp !== undefined) snap.tempTs = pktTs
+      if (data.stress !== undefined) snap.stressTs = pktTs
+      if (data.sleep !== undefined) snap.sleepTs = pktTs
+      if (data.steps !== undefined) snap.stepsTs = pktTs
     } else if (type === 'ecg') {
       if (data.ecgN !== undefined) snap.ecgN = data.ecgN
       if (data.ecgSamples) snap.ecgSamples = data.ecgSamples
       if (data.ecgTs) snap.ecgTs = data.ecgTs
+      if (!snap.ecgTs && data.ts) snap.ecgTs = data.ts
     } else if (type === 'spo2') {
       if (data.spo2 !== undefined) snap.spo2 = data.spo2
       if (data.spo2Max !== undefined) snap.spo2Max = data.spo2Max
       if (data.spo2Min !== undefined) snap.spo2Min = data.spo2Min
       if (data.spo2N !== undefined) snap.spo2N = data.spo2N
       if (data.ts) snap.ts = data.ts
+      snap.spo2Ts = pktTs
     }
   }
   if (Object.keys(snap).length) {
@@ -754,8 +773,16 @@ app.post('/api/simulate', (req, res) => {
       health: {
         time_stamp: { date_time: { seconds: now }, time_zone: 8 },
         pedo_data: { type: 0, state: 0, calorie: Math.round(steps * 0.04), step: steps, distance: steps * 70 },
-        hr_data: { min_bpm: hr - 8, max_bpm: hr + 6, avg_bpm: hr, spo2: spo2, hrv: hrv ?? 0 },
-        bp_data: { sbp, dbp }
+        hr_data: { min_bpm: hr - 8, max_bpm: hr + 6, avg_bpm: hr },
+        bp_data: { sbp, dbp },
+        // 血氧：HisHealthBOxy，有些机型会在 health 包一起上报
+        bxoy_data: (spo2 != null && spo2 > 0)
+          ? { min_oxy: Math.max(80, spo2 - 3), max_oxy: Math.min(100, spo2 + 2), agv_oxy: spo2 }
+          : undefined,
+        // HRV：HisHealthHrv.fatigue 用于压力值 = 100 - fatigue
+        hrv_data: (hrv != null)
+          ? { fatigue: Math.max(0, Math.min(100, 100 - hrv)) }
+          : undefined
       }
     }
   })

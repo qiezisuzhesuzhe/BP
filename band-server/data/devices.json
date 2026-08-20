@@ -4673,6 +4673,53 @@
           "spo2Ts": 1787224912
         }
       ]
+    },
+    "TUNNELTEST": {
+      "deviceid": "TUNNELTEST",
+      "name": "智能手环",
+      "model": "",
+      "firstSeen": 1787225281395,
+      "lastSeen": 1787225281395,
+      "latest": {
+        "steps": 139,
+        "distance": 973,
+        "calorie": 1,
+        "battery": 6,
+        "charging": false,
+        "ts": 1787225281,
+        "stepsTs": 1787225281,
+        "hr": 72,
+        "sbp": 133,
+        "dbp": 90,
+        "spo2": 99,
+        "spo2Max": 100,
+        "spo2Min": 96,
+        "hrTs": 1787225281,
+        "bpTs": 1787225281,
+        "spo2Ts": 1787225281,
+        "updatedAt": 1787225281395
+      },
+      "history": [
+        {
+          "at": 1787225281395,
+          "steps": 139,
+          "distance": 973,
+          "calorie": 1,
+          "battery": 6,
+          "charging": false,
+          "ts": 1787225281,
+          "stepsTs": 1787225281,
+          "hr": 72,
+          "sbp": 133,
+          "dbp": 90,
+          "spo2": 99,
+          "spo2Max": 100,
+          "spo2Min": 96,
+          "hrTs": 1787225281,
+          "bpTs": 1787225281,
+          "spo2Ts": 1787225281
+        }
+      ]
     }
   }
 }

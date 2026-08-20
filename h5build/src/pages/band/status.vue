@@ -12,22 +12,18 @@
       </view>
     </hm-navbar>
 
-    <!-- 设备头卡：点左上角手环图标可切换「上报地址」区块显示/隐藏 -->
+    <!-- 设备头卡 -->
     <view class="wrap wrap--first">
       <view class="head">
-        <view class="head__icon" @tap="toggleAddr">
-          <text class="fa-solid fa-heart-circle-check head__icon-t"></text>
-          <text class="head__icon-eye" :class="addrVisible ? 'fa-solid fa-eye' : 'fa-solid fa-eye-slash'"></text>
-        </view>
         <view class="head__main">
           <text class="head__name">{{ device ? device.name : '智能手环 - 血压款' }}</text>
-          <text class="head__sn">
-            {{ device ? device.model : '' }} · {{ deviceid || '未绑定' }}
+          <view class="head__sn">
+            <text class="head__sn-t">{{ device ? device.model : '' }} · {{ deviceid || '未绑定' }}</text>
             <text class="head__sse" :class="{ 'head__sse--on': sseOpen }">
-              <text class="fa-solid" :class="sseOpen ? 'fa-wifi' : 'fa-wifi-slash'"></text>
-              {{ sseOpen ? '实时接收' : '等待连接' }}
+              <text class="fa-solid" :class="sseOpen ? 'fa-signal' : 'fa-signal-slash'"></text>
+              <text class="head__sse-t">{{ sseOpen ? '实时接收' : '等待连接' }}</text>
             </text>
-          </text>
+          </view>
         </view>
         <view class="head__status" :class="{ 'head__status--off': !online }">
           <view class="head__dot"></view>
@@ -207,22 +203,6 @@
       </view>
     </view>
 
-    <!-- 上报地址（点头卡图标切换显示/隐藏） -->
-    <view v-if="addrVisible" class="wrap">
-      <view class="sec-head">
-        <text class="sec-title">上报地址</text>
-        <text class="sec-sub">手环端需配置该地址</text>
-      </view>
-      <view class="addr">
-        <view class="addr__row">
-          <text class="fa-solid fa-cloud-arrow-up addr__icon"></text>
-          <text class="addr__url" :class="{ 'addr__url--off': !address }">{{ address || '未获取到地址' }}</text>
-          <text v-if="addressChanged" class="addr__tag">已变化</text>
-        </view>
-        <text class="addr__tip">进入页面/每次刷新自动核对，隧道重启导致地址变化会标记「已变化」</text>
-      </view>
-    </view>
-
     <!-- 发送消息 -->
     <view class="wrap">
       <view class="sec-head">
@@ -276,7 +256,7 @@
 </template>
 
 <script>
-import { fetchBandLatest, fetchBandAddress, sendBandMessage, bpLevel, unbindBandDevice, subscribeEvents } from '@/common/band.js'
+import { fetchBandLatest, sendBandMessage, bpLevel, unbindBandDevice, subscribeEvents } from '@/common/band.js'
 
 // SSE 事件：同设备同 kind 的事件 3 秒内去重，避免短时间重复 toast/flash
 const DEDUP_MS = 3000
@@ -290,9 +270,6 @@ export default {
       lastSyncAt: 0,
       refreshing: false,
       online: true,
-      address: '',
-      addressChanged: false,
-      addrVisible: true,
       msgTitle: '',
       msgText: '',
       msgSending: false,
@@ -597,10 +574,6 @@ export default {
       }
       return n
     },
-    // 点头卡图标：切换「上报地址」区块显示/隐藏
-    toggleAddr() {
-      this.addrVisible = !this.addrVisible
-    },
     // 发送消息到手环（entservice 指令下发）
     sendMsg() {
       this.doSend((this.msgTitle || '').trim(), (this.msgText || '').trim())
@@ -679,21 +652,7 @@ export default {
         icon: 'none'
       })
     },
-    // 每次刷新都核对当前上报地址；与上次不同则标记"已变化"
-    refreshAddress() {
-      fetchBandAddress().then((info) => {
-        if (!info || !info.public) {
-          this.address = ''
-          return
-        }
-        const prev = uni.getStorageSync('ankang_band_address')
-        this.address = info.public
-        this.addressChanged = !!(prev && prev !== info.public)
-        uni.setStorageSync('ankang_band_address', info.public)
-      })
-    },
     async load() {
-      this.refreshAddress()
       if (!this.deviceid) return
       const latest = await fetchBandLatest(this.deviceid)
       this.latest = latest || {}
@@ -764,41 +723,6 @@ export default {
   padding: $space-4;
 }
 
-.head__icon {
-  position: relative;
-  width: $size-icon-xl;
-  height: $size-icon-xl;
-  border-radius: $radius-card-child;
-  background: $label-soft-bg;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-shrink: 0;
-}
-
-/* 图标右下角小徽标：眼睛=地址区块可见，闭眼=隐藏 */
-.head__icon-eye {
-  position: absolute;
-  right: -6rpx;
-  bottom: -6rpx;
-  width: 34rpx;
-  height: 34rpx;
-  border-radius: $radius-full;
-  background: $brand-primary-active;
-  color: $text-inverse;
-  font-size: 16rpx;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  border: 4rpx solid $bg-surface;
-  box-sizing: border-box;
-}
-
-.head__icon-t {
-  font-size: $font-size-xl;
-  color: $brand-primary-active;
-}
-
 .head__main {
   flex: 1;
   padding: 0 $space-3;
@@ -814,20 +738,29 @@ export default {
 }
 
 .head__sn {
-  display: block;
+  display: flex;
+  align-items: center;
+  min-width: 0;
+  margin-top: $space-1;
+}
+
+/* 设备型号·编号：超出自动省略，不换行 */
+.head__sn-t {
+  flex: 0 1 auto;
+  min-width: 0;
   font-size: $font-size-2xs;
   color: $text-muted;
-  margin-top: $space-1;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
 }
 
-/* SSE 连接状态徽标 */
+/* SSE 连接状态徽标（手机信号图标） */
 .head__sse {
   display: inline-flex;
   align-items: center;
   gap: $space-1;
+  flex-shrink: 0;
   margin-left: $space-2;
   padding: $space-1 $space-2;
   border-radius: $radius-full;
@@ -835,10 +768,8 @@ export default {
   color: $text-hint;
   font-size: $font-size-2xs;
   line-height: 1;
-  vertical-align: middle;
 }
-.head__sse .fa-wifi,
-.head__sse .fa-wifi-slash {
+.head__sse .fa-solid {
   font-size: $font-size-2xs;
 }
 .head__sse--on {
@@ -1318,59 +1249,6 @@ export default {
 
 .sleep__strip--empty {
   background: $bg-section;
-}
-
-/* 上报地址卡 */
-.addr {
-  background: $bg-surface;
-  border-radius: $radius-card-child;
-  box-shadow: $shadow-sm;
-  padding: $space-4;
-}
-
-.addr__row {
-  display: flex;
-  align-items: center;
-}
-
-.addr__icon {
-  font-size: $font-size-sm;
-  color: $brand-primary-active;
-  margin-right: $space-2;
-  flex-shrink: 0;
-}
-
-.addr__url {
-  flex: 1;
-  font-size: $font-size-sm;
-  font-family: $font-family-en;
-  font-weight: $font-weight-semibold;
-  color: $text-primary;
-  overflow: hidden;
-  white-space: nowrap;
-  text-overflow: ellipsis;
-}
-
-.addr__url--off {
-  color: $text-muted;
-}
-
-.addr__tag {
-  flex-shrink: 0;
-  margin-left: $space-2;
-  padding: $space-1 $space-2;
-  border-radius: $radius-full;
-  font-size: $font-size-2xs;
-  font-weight: $font-weight-semibold;
-  color: #f2994a;
-  background: #fdf4ed;
-}
-
-.addr__tip {
-  display: block;
-  margin-top: $space-2;
-  font-size: $font-size-2xs;
-  color: $text-muted;
 }
 
 /* 底部状态 */

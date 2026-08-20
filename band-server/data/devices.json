@@ -3326,7 +3326,8 @@
         "tempTs": 1787212860,
         "sleepTs": 1787213100,
         "stress": 42,
-        "stressTs": 1787212921
+        "stressTs": 1787212921,
+        "hrTs": 1787213100
       },
       "history": [
         {

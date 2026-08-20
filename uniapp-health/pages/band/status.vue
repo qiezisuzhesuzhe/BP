@@ -321,11 +321,10 @@ export default {
       return Math.min(100, Math.round((this.steps / 10000) * 100))
     },
     measuredAt() {
-      if (!this.latest.ts) return '--'
-      const d = new Date(this.latest.ts * 1000)
-      const p = (n) => (n < 10 ? '0' + n : n)
-      const bjH = (d.getUTCHours() + 8) % 24
-      return p(bjH) + ':' + p(d.getUTCMinutes()) + ':' + p(d.getUTCSeconds())
+      // 心率展示时间用 hrTs（心率独立时间戳），没有则回退到 ts
+      const ts = this.latest.hrTs != null ? this.latest.hrTs : this.latest.ts
+      if (!ts) return '--'
+      return this._fmtSecTs(ts)
     },
     // 血压测量时间：以 bpTs 为准，没有 bpTs 回退到 ts（保留旧字段以兼容旧数据）
     bpTimeText() {

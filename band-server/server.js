@@ -275,7 +275,8 @@ function mergeSamples(deviceid, packets) {
       if (data.stress !== undefined) snap.stress = data.stress
       snap.ts = pktTs
       // 为每项独立可测量指标打独立时间戳；hr 跟随 bp 一次测量
-      if (data.sbp !== undefined || data.dbp !== undefined || data.hr !== undefined) {
+      if (data.hr !== undefined) snap.hrTs = pktTs
+      if (data.sbp !== undefined || data.dbp !== undefined) {
         snap.bpTs = pktTs
       }
       if (data.spo2 !== undefined) snap.spo2Ts = pktTs

@@ -1671,13 +1671,9 @@ var DEDUP_MS = 3000;
       return Math.min(100, Math.round(this.steps / 10000 * 100));
     },
     measuredAt: function measuredAt() {
-      if (!this.latest.ts) return '--';
-      var d = new Date(this.latest.ts * 1000);
-      var p = function p(n) {
-        return n < 10 ? '0' + n : n;
-      };
-      var bjH = (d.getUTCHours() + 8) % 24;
-      return p(bjH) + ':' + p(d.getUTCMinutes()) + ':' + p(d.getUTCSeconds());
+      var ts = this.latest.hrTs != null ? this.latest.hrTs : this.latest.ts;
+      if (!ts) return '--';
+      return this._fmtSecTs(ts);
     },
     // 血压测量时间：以 bpTs 为准，没有 bpTs 回退到 ts（保留旧字段以兼容旧数据）
     bpTimeText: function bpTimeText() {

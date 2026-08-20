@@ -63,13 +63,15 @@ export default {
 
 .nav__left,
 .nav__right {
-  width: $size-avatar-lg;
+  min-width: $size-avatar-lg;
+  width: auto;
   display: flex;
   align-items: center;
 }
 
 .nav__right {
   justify-content: flex-end;
+  flex-shrink: 0;
 }
 
 .nav__back {

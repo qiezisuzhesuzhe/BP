@@ -1307,6 +1307,8 @@ export default {
   display: inline-flex;
   align-items: center;
   gap: $space-1;
+  flex-shrink: 0;
+  white-space: nowrap;
   backdrop-filter: blur(6px);
   transition: opacity 0.15s ease, transform 0.1s ease;
 }

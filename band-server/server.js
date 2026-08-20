@@ -543,16 +543,54 @@ app.get('/api/events/status', (_req, res) => {
   })
 })
 
+// 列表：markedUnbound 设备也继续返回（手环仍在走 pb/upload 上报数据，且前端详情页可能直接靠 id 访问），
+// 带 unbound:true 标记，前端可在列表中灰色展示或标"已解绑"提示用户重绑。
 app.get('/api/devices', (req, res) => {
-  const list = Object.keys(db.devices).map(id => db.devices[id])
+  const list = Object.keys(db.devices).map(id => {
+    const d = db.devices[id]
+    // 型号兜底：如果设备记录仍 model 为空（旧记录/解绑后重建），按 IMEI 前缀自动补齐
+    if (!d.model) {
+      const g = guessModelFromDeviceid(id)
+      if (g) {
+        d.model = g.model
+        if (!d.name || d.name === '智能手环') d.name = g.name
+      }
+    }
+    return Object.assign({}, d, d.markedUnbound ? { unbound: true } : {})
+  })
   res.json({ code: 0, data: list })
 })
 
 app.get('/api/devices/:deviceid', (req, res) => {
-  const dev = db.devices[req.params.deviceid]
+  let dev = db.devices[req.params.deviceid]
   if (!dev) return res.status(404).json({ code: 404, message: 'device not found' })
-  res.json({ code: 0, data: dev })
+  // 型号兜底（同列表）：旧记录 model 空时按 IMEI 补齐
+  if (!dev.model) {
+    const g = guessModelFromDeviceid(req.params.deviceid)
+    if (g) {
+      dev.model = g.model
+      if (!dev.name || dev.name === '智能手环') dev.name = g.name
+      saveDB(db)
+    }
+  }
+  const out = Object.assign({}, dev, dev.markedUnbound ? { unbound: true } : {})
+  res.json({ code: 0, data: out })
 })
+
+// 按已知 IMEI 前缀推断手环型号（deviceinfo/upload 缺席时兜底）
+// BP100CE：IMEI 862071 开头
+// KT65：   IMEI 860132 开头
+const MODEL_BY_PREFIX = [
+  { pref: '862071', model: 'BP100CE', name: '智能手环 - 血压款' },
+  { pref: '860132', model: 'KT65',    name: '智能手环' }
+]
+function guessModelFromDeviceid(deviceid) {
+  const s = String(deviceid || '')
+  for (const r of MODEL_BY_PREFIX) {
+    if (s.startsWith(r.pref)) return { model: r.model, name: r.name }
+  }
+  return null
+}
 
 app.post('/api/devices', (req, res) => {
   const { deviceid, name, model } = req.body || {}
@@ -560,21 +598,32 @@ app.post('/api/devices', (req, res) => {
   const dev = touch(deviceid)
   if (name) dev.name = name
   if (model) dev.model = model
+  // 型号兜底：如果没有显式传 model，且 deviceid 前缀能识别，则自动补齐（同时补齐一个合理的默认名称）
+  if (!dev.model) {
+    const g = guessModelFromDeviceid(deviceid)
+    if (g) {
+      dev.model = g.model
+      if (!dev.name || dev.name === '智能手环') dev.name = g.name
+    }
+  }
+  // 解绑后重新绑定：清除标记
+  if (dev.markedUnbound) delete dev.markedUnbound
   saveDB(db)
   broadcast('device_bind', { deviceid, name: dev.name, model: dev.model || null })
   res.json({ code: 0, data: dev })
 })
 
-// 解绑设备：从数据库中移除（保留后端设备记录以免影响手环上报解析，但前端不再展示）
-// 实际上由于 /pb/upload 仍会写入 touch(deviceid)，手环继续上报仍可见；
-// 解绑语义：前端 owner 层面的删除，不影响手环与平台的链路。
+// 解绑设备：⚠️ 不再真删 db.devices[id]（否则 model / latest / history 这些珍贵数据全部丢失），
+// 改为打标记 markedUnbound=true。注释里写的"保留后端设备记录以免影响手环上报解析"原本就是这个意图，
+// 之前 delete 直接删违背了该设计：用户点解绑 → 真实手环仍在上报 → DELETE 把整条删了 →
+// touch() 重建一条 model=''、latest={} 的空壳 → 页面全显示 "--"，用户看到"连不到数据"。
 app.delete('/api/devices/:deviceid', (req, res) => {
   const id = req.params.deviceid
   if (!id) return res.status(400).json({ code: 400, message: 'deviceid required' })
   if (!db.devices[id]) return res.status(404).json({ code: 404, message: 'device not found' })
-  delete db.devices[id]
+  db.devices[id].markedUnbound = true
   saveDB(db)
-  console.log('[api/devices] 解绑', id)
+  console.log('[api/devices] 解绑（标记）', id)
   broadcast('device_unbind', { deviceid: id })
   res.json({ code: 0, data: { deviceid: id } })
 })

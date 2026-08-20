@@ -3256,22 +3256,22 @@
       "name": "智能手环 - 血压款",
       "model": "BP100CE",
       "firstSeen": 1787136812838,
-      "lastSeen": 1787192331896,
+      "lastSeen": 1787193823576,
       "version": "91.0.0.59",
       "netType": "LTE",
       "wearing": "1",
       "lastDeviceInfo": 1787140482904,
       "latest": {
-        "steps": 3340,
-        "distance": 23380,
-        "calorie": 13,
-        "battery": 7,
+        "steps": 5500,
+        "distance": 38500,
+        "calorie": 22,
+        "battery": 66,
         "charging": false,
-        "ts": 1787192331,
-        "updatedAt": 1787192331896,
-        "sbp": 121,
-        "dbp": 81,
-        "hr": 76,
+        "ts": 1787193823,
+        "updatedAt": 1787193823576,
+        "sbp": 134,
+        "dbp": 89,
+        "hr": 112,
         "sleep": {
           "deep": 0,
           "light": 0,
@@ -3345,9 +3345,10 @@
           15026
         ],
         "ecgTs": 1787167501,
-        "bodyTemp": 32.68,
+        "bodyTemp": 34.2,
         "tempOk": true,
-        "stress": 62
+        "stress": 62,
+        "skinTemp": 33.5
       },
       "history": [
         {
@@ -3839,6 +3840,45 @@
           "hr": 76,
           "sbp": 121,
           "dbp": 81
+        },
+        {
+          "at": 1787193551974,
+          "steps": 3477,
+          "distance": 24339,
+          "calorie": 14,
+          "battery": 8,
+          "charging": false,
+          "ts": 1787193551,
+          "hr": 80,
+          "sbp": 123,
+          "dbp": 80
+        },
+        {
+          "at": 1787193551999,
+          "steps": 3576,
+          "distance": 25032,
+          "calorie": 14,
+          "battery": 7,
+          "charging": false,
+          "ts": 1787193551,
+          "hr": 70,
+          "sbp": 133,
+          "dbp": 85
+        },
+        {
+          "at": 1787193823576,
+          "steps": 5500,
+          "distance": 38500,
+          "calorie": 22,
+          "battery": 66,
+          "charging": false,
+          "ts": 1787193823,
+          "hr": 112,
+          "sbp": 134,
+          "dbp": 89,
+          "bodyTemp": 34.2,
+          "skinTemp": 33.5,
+          "tempOk": true
         }
       ]
     }

@@ -667,24 +667,37 @@ function buildFrame(opt, msgObj, encodeFn) {
 // 模拟器：随机生成一次上报（步数实时包 + 心率/血压健康包），走完整解析链路
 app.post('/api/simulate', (req, res) => {
   const deviceid = (req.body && req.body.deviceid) || '860132060872223'
+  const payload = (req.body && typeof req.body.payload === 'object') ? req.body.payload : {}
   const now = Math.floor(Date.now() / 1000)
   const dev = db.devices[deviceid] || {}
   const latest = dev.latest || {}
-  const steps = (latest.steps || 0) + Math.floor(Math.random() * 120 + 30)
+  const steps = (payload.stepCount != null ? Number(payload.stepCount) : null)
+    ?? ((latest.steps || 0) + Math.floor(Math.random() * 120 + 30))
 
-  // 0x0A OM0Report：实时步数/距离/卡路里/电量
+  // 0x0A OM0Report：实时步数/距离/卡路里/电量（payload 中可覆盖电量/步数）
   const om0 = OM0Report.fromObject({
     date_time: { date_time: { seconds: now }, time_zone: 8 },
-    health: { steps, distance: steps * 70, calorie: Math.round(steps * 0.04) },
-    battery: { level: 6 + Math.floor(Math.random() * 3), charging: false },
+    health: {
+      steps,
+      distance: (payload.distanceKm != null ? Math.round(payload.distanceKm * 1000) : null) ?? steps * 70,
+      calorie: (payload.caloriesKcal != null ? payload.caloriesKcal : null) ?? Math.round(steps * 0.04)
+    },
+    battery: {
+      // 前端显示用 battery * 10 做百分比，真实 OM0Report.battery.level 是百分比/10 的整数
+      //  这里用用户直觉语义：payload.battery=66 → 表示 66%
+      level: payload.battery != null ? Math.max(0, Math.floor(Number(payload.battery) / 10)) : (6 + Math.floor(Math.random() * 3)),
+      charging: !!payload.charging
+    },
     rssi: -60 - Math.floor(Math.random() * 20)
   })
   const frame0A = buildFrame(0x0a, om0, om => OM0Report.encode(om).finish())
 
-  // 0x80 HisNotification → HisData.health：一分钟心率/血压/步数
-  const hr = 65 + Math.floor(Math.random() * 20)
-  const sbp = 118 + Math.floor(Math.random() * 18)
-  const dbp = 76 + Math.floor(Math.random() * 12)
+  // 0x80 HisNotification → HisData.health：一分钟心率/血压/步数（payload 可覆盖心率/血压/血氧）
+  const hr = payload.heart != null ? Number(payload.heart) : (65 + Math.floor(Math.random() * 20))
+  const sbp = payload.sysPress != null ? Number(payload.sysPress) : (118 + Math.floor(Math.random() * 18))
+  const dbp = payload.diaPress != null ? Number(payload.diaPress) : (76 + Math.floor(Math.random() * 12))
+  const spo2 = payload.spo2 != null ? Number(payload.spo2) : (95 + Math.floor(Math.random() * 5))
+  const hrv = payload.hrv != null ? Number(payload.hrv) : null
   const his = HisNotification.fromObject({
     type: 0, // HEALTH_DATA
     his_data: {
@@ -692,16 +705,53 @@ app.post('/api/simulate', (req, res) => {
       health: {
         time_stamp: { date_time: { seconds: now }, time_zone: 8 },
         pedo_data: { type: 0, state: 0, calorie: Math.round(steps * 0.04), step: steps, distance: steps * 70 },
-        hr_data: { min_bpm: hr - 8, max_bpm: hr + 6, avg_bpm: hr },
+        hr_data: { min_bpm: hr - 8, max_bpm: hr + 6, avg_bpm: hr, spo2: spo2, hrv: hrv ?? 0 },
         bp_data: { sbp, dbp }
       }
     }
   })
   const frame80 = buildFrame(0x80, his, m => HisNotification.encode(m).finish())
 
-  const body = Buffer.concat([Buffer.from(deviceid.padEnd(15, ' ').slice(0, 15)), frame0A, frame80])
+  // 若 payload 传了 bodyTemp 或 skinTemp → 额外拼一条 TEMPERATURE(0x02) 包
+  //   SensorTemp.evi_body  = bodyTemp * 100
+  //   SensorTemp.esti_arm  = skinTemp * 100  （BP100CE 未单独上报皮肤温度时，esti_arm 会是 0）
+  let frameTemp = Buffer.alloc(0)
+  if (payload.bodyTemp != null || payload.skinTemp != null) {
+    const eviBody = payload.bodyTemp != null ? Math.round(payload.bodyTemp * 100) >>> 0 : 0
+    const estiArm = payload.skinTemp != null ? Math.round(payload.skinTemp * 100) >>> 0 : 0
+    const tempMsg = HisNotification.fromObject({
+      type: 2, // TEMPERATURE
+      his_data: {
+        seq: Math.floor(Math.random() * 0xffffff),
+        temp: {
+          time_stamp: { date_time: { seconds: now }, time_zone: 8 },
+          temperature: {
+            evi_body: eviBody,
+            esti_arm: estiArm
+          }
+        }
+      }
+    })
+    frameTemp = buildFrame(0x80, tempMsg, m => HisNotification.encode(m).finish())
+  }
+
+  const body = Buffer.concat([
+    Buffer.from(deviceid.padEnd(15, ' ').slice(0, 15)),
+    frame0A,
+    frame80,
+    frameTemp
+  ])
   const r = parseUploadBody(body)
   const dev2 = mergeSamples(r.deviceid, r.packets)
+  // 如果 payload 里有 mergeSamples 无法产出的衍生字段（如睡眠），直接手动写回 snapshot
+  if (payload.sleepMin != null && dev2 && dev2.latest) {
+    const total = Number(payload.sleepMin) || 0
+    dev2.latest.sleep = dev2.latest.sleep || { deep: 0, light: 0, wake: 0, total: 0 }
+    dev2.latest.sleep.total = total
+    dev2.latest.sleep.light = Math.round(total * 0.7)
+    dev2.latest.sleep.deep = Math.round(total * 0.25)
+    dev2.latest.sleep.wake = total - dev2.latest.sleep.light - dev2.latest.sleep.deep
+  }
   // 模拟接口走完完整解析链路后，也通过 SSE 广播出去一次，方便前端立刻看到数据变化
   broadcast('pb', {
     deviceid: r.deviceid,

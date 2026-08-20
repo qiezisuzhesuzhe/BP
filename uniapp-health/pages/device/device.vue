@@ -67,15 +67,17 @@
 
 <script>
 import { DEVICE_TYPES } from '@/common/mock.js'
-import { fetchBandLatestBatch } from '@/common/band.js'
+import { fetchBandLatestBatch, subscribeEvents } from '@/common/band.js'
 
-const LIVE_POLL_MS = 60 * 1000 // 列表页每 1 分钟拉一次手环实时数据（与详情页一致）
+// SSE 事件 800ms 内批量合并，避免 pb 高频上报触发多次 pull
+const MERGE_MS = 800
 
 export default {
   data() {
     return {
       bandLive: {}, // { [deviceid]: latestSnapshot }
-      timer: null
+      _sub: null,
+      _mergeTimer: null
     }
   },
   computed: {
@@ -85,26 +87,66 @@ export default {
   },
   onShow() {
     this.pullBandLive()
-    this.clearTimer()
-    this.timer = setInterval(() => this.pullBandLive(), LIVE_POLL_MS)
+    this.startSse()
   },
   onHide() {
-    this.clearTimer()
+    this.stopSse()
+    this._clearMerge()
   },
   onUnload() {
-    this.clearTimer()
+    this.stopSse()
+    this._clearMerge()
   },
   methods: {
-    clearTimer() {
-      if (this.timer) {
-        clearInterval(this.timer)
-        this.timer = null
+    startSse() {
+      this.stopSse()
+      this._sub = subscribeEvents({
+        kinds: ['pb','alarm','sos','status','deviceinfo','device_bind','device_unbind'],
+        onEvent: (evt) => this.handleSse(evt)
+      })
+    },
+    stopSse() {
+      if (this._sub) {
+        try { this._sub.close() } catch (e) {}
+        this._sub = null
+      }
+    },
+    _clearMerge() {
+      if (this._mergeTimer) {
+        clearTimeout(this._mergeTimer)
+        this._mergeTimer = null
+      }
+    },
+    handleSse(evt) {
+      const kind = evt.kind || ''
+      const p = (evt && evt.payload) || {}
+      // device_bind / unbind：直接刷新列表 store（无需特殊处理，Vuex 会联动）
+      // 有 deviceid 且是手环快照：直接写入 bandLive
+      if (p && p.deviceid && p.snapshot && typeof p.snapshot === 'object') {
+        const snap = Object.assign({}, p.snapshot || {})
+        for (const k of Object.keys(snap)) {
+          if (snap[k] === null || snap[k] === undefined || snap[k] === '') delete snap[k]
+        }
+        const prev = this.bandLive[p.deviceid] || {}
+        this.$set(this.bandLive, p.deviceid, Object.assign({}, prev, snap))
+      }
+      // 其他变动（在线状态、新增设备等）：延迟合并批量拉 1 次
+      this._clearMerge()
+      this._mergeTimer = setTimeout(() => {
+        this._mergeTimer = null
+        this.pullBandLive()
+      }, MERGE_MS)
+      // 异常告警：设备列表页不需要强弹窗，仅用轻 toast（去重依赖 mergeTimer 合并）
+      if (kind === 'alarm') {
+        uni.showToast({ title: '某手环上报健康告警', icon: 'none' })
+      } else if (kind === 'sos') {
+        uni.showToast({ title: '⚠️ 收到手环 SOS 呼叫', icon: 'none' })
       }
     },
     // 拉取所有血压款手环的后端实时数据
     async pullBandLive() {
       const bandIds = this.devices
-        .filter((d) => d.typeKey === 'band-bp' && d.deviceid)
+        .filter((d) => /^band/.test(d.typeKey || '') && d.deviceid)
         .map((d) => d.deviceid)
       if (bandIds.length === 0) {
         this.bandLive = {}

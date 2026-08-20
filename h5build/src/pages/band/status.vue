@@ -21,7 +21,13 @@
         </view>
         <view class="head__main">
           <text class="head__name">{{ device ? device.name : '智能手环 - 血压款' }}</text>
-          <text class="head__sn">{{ device ? device.model : '' }} · {{ deviceid || '未绑定' }}</text>
+          <text class="head__sn">
+            {{ device ? device.model : '' }} · {{ deviceid || '未绑定' }}
+            <text class="head__sse" :class="{ 'head__sse--on': sseOpen }">
+              <text class="fa-solid" :class="sseOpen ? 'fa-wifi' : 'fa-wifi-slash'"></text>
+              {{ sseOpen ? '实时接收' : '等待连接' }}
+            </text>
+          </text>
         </view>
         <view class="head__status" :class="{ 'head__status--off': !online }">
           <view class="head__dot"></view>
@@ -256,8 +262,10 @@
     <!-- 底部状态条 -->
     <view class="foot">
       <view class="foot__left">
-        <view class="foot__dot" :class="{ 'foot__dot--ok': online }"></view>
-        <text class="foot__t">{{ online ? '已连接接收服务' : '等待手环数据上报…' }}</text>
+        <view class="foot__dot" :class="{ 'foot__dot--ok': sseOpen }"></view>
+        <text class="foot__t">
+          {{ sseOpen ? '已连接实时通道，手环上报将自动刷新' : (online ? '连接通道建立中…' : '等待手环数据上报…') }}
+        </text>
       </view>
       <view class="foot__right">
         <text class="foot__sync">上次同步 {{ syncText }}</text>
@@ -268,9 +276,10 @@
 </template>
 
 <script>
-import { fetchBandLatest, fetchBandAddress, sendBandMessage, bpLevel, unbindBandDevice } from '@/common/band.js'
+import { fetchBandLatest, fetchBandAddress, sendBandMessage, bpLevel, unbindBandDevice, subscribeEvents } from '@/common/band.js'
 
-const POLL_MS = 60 * 1000 // 每 1 分钟刷新
+// SSE 事件：同设备同 kind 的事件 3 秒内去重，避免短时间重复 toast/flash
+const DEDUP_MS = 3000
 
 export default {
   data() {
@@ -279,7 +288,6 @@ export default {
       deviceid: '',
       latest: {},
       lastSyncAt: 0,
-      timer: null,
       refreshing: false,
       online: true,
       address: '',
@@ -288,7 +296,11 @@ export default {
       msgTitle: '',
       msgText: '',
       msgSending: false,
-      presets: ['记得测量血压', '记得按时吃药', '该起身活动了', '注意安全早点回家', '记得喝水', '不舒服请按 SOS']
+      presets: ['记得测量血压', '记得按时吃药', '该起身活动了', '注意安全早点回家', '记得喝水', '不舒服请按 SOS'],
+      // SSE 相关
+      sseOpen: false,
+      _sub: null,
+      _dedup: {} // { kind: ts }
     }
   },
   computed: {
@@ -422,26 +434,148 @@ export default {
   onShow() {
     this.ensureDevice()
     this.load()
-    this.timer = setInterval(() => this.load(), POLL_MS)
+    this.startSse()
   },
   onHide() {
-    this.clearTimer()
+    this.stopSse()
   },
   onUnload() {
-    this.clearTimer()
+    this.stopSse()
   },
   methods: {
-    clearTimer() {
-      if (this.timer) {
-        clearInterval(this.timer)
-        this.timer = null
+    /* ---------- SSE 实时通道 ---------- */
+    startSse() {
+      this.stopSse()
+      if (!this.deviceid) return
+      this._sub = subscribeEvents({
+        deviceid: this.deviceid,
+        kinds: ['pb','alarm','sos','status','deviceinfo','calllog','device_unbind'],
+        onOpen: () => {
+          this.sseOpen = true
+        },
+        onClose: () => {
+          this.sseOpen = false
+        },
+        onError: () => {
+          // 不打断用户：EventSource/长轮询都会自恢复
+        },
+        onEvent: (evt) => this.handleSse(evt)
+      })
+    },
+    stopSse() {
+      if (this._sub) {
+        try { this._sub.close() } catch (e) {}
+        this._sub = null
       }
+      this.sseOpen = false
+    },
+    handleSse(evt) {
+      const kind = evt.kind || (evt.payload && evt.payload.kind) || 'message'
+      const p = (evt && evt.payload) || {}
+      // device_unbind：如果是自己被解绑 → 立刻提示并回设备列表
+      if (kind === 'device_unbind') {
+        if (p.deviceid === this.deviceid) {
+          this.stopSse()
+          uni.showToast({ title: '本设备已被解绑', icon: 'none' })
+          setTimeout(() => {
+            uni.switchTab({ url: '/pages/device/device', fail: () => uni.navigateBack() })
+          }, 800)
+        }
+        return
+      }
+      // sos / alarm 关键事件：无论是否带 snapshot 都 toast（不做 dedup，这类事件值得强提醒）
+      if (kind === 'sos') {
+        uni.showModal({
+          title: '⚠️ 手环 SOS 呼叫',
+          content: '检测到 ' + (this.device && this.device.name ? this.device.name : '手环') + ' 触发 SOS 紧急呼叫，请尽快确认情况。',
+          showCancel: false,
+          confirmText: '知道了',
+          confirmColor: '#f15533'
+        })
+      } else if (kind === 'alarm') {
+        this.toast(kind, '⚠️ 检测到告警：心率/血压/血氧异常或跌倒，请注意查看')
+      }
+      // 若后端给了 snapshot，直接合并到 latest（省一次 request）
+      if (p && p.snapshot && typeof p.snapshot === 'object' && Object.keys(p.snapshot).length) {
+        const snap = Object.assign({}, p.snapshot)
+        // 避免空数据覆盖老数据
+        for (const k of Object.keys(snap)) {
+          if (snap[k] === null || snap[k] === undefined || snap[k] === '') delete snap[k]
+        }
+        this.latest = Object.assign({}, this.latest, snap)
+        this.lastSyncAt = Date.now()
+        // 回写 store
+        if (this.id) {
+          const l = this.latest
+          this.$store.commit('UPDATE_DEVICE_DATA', {
+            id: this.id,
+            data: {
+              sys: l.sbp,
+              dia: l.dbp,
+              heartRate: l.hr,
+              steps: l.steps,
+              battery: l.battery
+            },
+            lastSync: this.syncText
+          })
+        }
+        const l = this.latest
+        this.online = !!(l && (l.hr != null || l.sbp != null || l.dbp != null || l.steps != null))
+      } else {
+        // 没给 snapshot（如 status/notify 的 online）：做一次轻量拉取
+        this.lightLoad()
+      }
+      // 轻提示
+      if (kind === 'pb') this.toast(kind, '收到手环最新上报数据')
+      else if (kind === 'status') {
+        if (p.online === true) this.toast(kind, '设备已上线')
+        else if (p.online === false) this.toast(kind, '设备已下线')
+      } else if (kind === 'deviceinfo') {
+        if (p.wearing === true) this.toast(kind, '检测到用户已佩戴手环')
+        else if (p.wearing === false) this.toast(kind, '检测到手环已摘下')
+        else this.toast(kind, '设备信息已更新')
+      } else if (kind === 'calllog') {
+        this.toast(kind, '检测到新的通话记录')
+      }
+    },
+    // 同类事件 3s 内重复则不弹 toast，避免高频上报时刷屏
+    toast(kind, text) {
+      const now = Date.now()
+      if (this._dedup[kind] && now - this._dedup[kind] < DEDUP_MS) return
+      this._dedup[kind] = now
+      uni.showToast({ title: text, icon: 'none', duration: 1200 })
+    },
+    lightLoad() {
+      if (!this.deviceid) return
+      fetchBandLatest(this.deviceid).then((latest) => {
+        if (latest) this.latest = latest
+        this.lastSyncAt = Date.now()
+        const l = this.latest
+        this.online = !!(l && (l.hr != null || l.sbp != null || l.dbp != null || l.steps != null))
+        if (this.id) {
+          this.$store.commit('UPDATE_DEVICE_DATA', {
+            id: this.id,
+            data: {
+              sys: l.sbp,
+              dia: l.dbp,
+              heartRate: l.hr,
+              steps: l.steps,
+              battery: l.battery
+            },
+            lastSync: this.syncText
+          })
+        }
+      })
     },
     // 从 store 设备记录取 deviceid（扫码绑定跳转/页面重进时兜底）
     ensureDevice() {
       if (this.deviceid) return
       const dev = this.$store.getters.deviceById(this.id)
-      if (dev && dev.deviceid) this.deviceid = dev.deviceid
+      if (dev && dev.deviceid) {
+        this.deviceid = dev.deviceid
+        // 如果 deviceid 刚拿到而 SSE 还没启，启动它
+        if (!this._sub) this.startSse()
+      }
     },
     fmt(n) {
       return String(n == null ? 0 : n).replace(/\B(?=(\d{3})+(?!\d))/g, ',')
@@ -517,7 +651,7 @@ export default {
           await unbindBandDevice(this.deviceid)
           this.$store.dispatch('removeDevice', this.id)
           uni.showToast({ title: '已解绑', icon: 'success' })
-          this.clearTimer()
+          this.stopSse()
           setTimeout(() => {
             // 设备列表是 tabBar 页：switchTab 跳回
             uni.switchTab({
@@ -687,6 +821,30 @@ export default {
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+}
+
+/* SSE 连接状态徽标 */
+.head__sse {
+  display: inline-flex;
+  align-items: center;
+  gap: $space-1;
+  margin-left: $space-2;
+  padding: $space-1 $space-2;
+  border-radius: $radius-full;
+  background: $bg-section;
+  color: $text-hint;
+  font-size: $font-size-2xs;
+  line-height: 1;
+  vertical-align: middle;
+}
+.head__sse .fa-wifi,
+.head__sse .fa-wifi-slash {
+  font-size: $font-size-2xs;
+}
+.head__sse--on {
+  background: rgba(56, 154, 130, 0.15);
+  color: #2b7e6a;
+  font-weight: $font-weight-semibold;
 }
 
 .head__status {

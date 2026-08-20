@@ -3,20 +3,20 @@
     "860132060872223": {
       "deviceid": "860132060872223",
       "name": "智能手环",
-      "model": "",
+      "model": "KT65",
       "firstSeen": 1787134034521,
-      "lastSeen": 1787142581796,
+      "lastSeen": 1787190332739,
       "latest": {
-        "steps": 96,
-        "distance": 672,
-        "calorie": 0,
-        "battery": 6,
+        "steps": 257,
+        "distance": 1799,
+        "calorie": 1,
+        "battery": 7,
         "charging": false,
-        "updatedAt": 1787142581796,
-        "ts": 1787142581,
-        "hr": 77,
-        "sbp": 121,
-        "dbp": 85,
+        "updatedAt": 1787190332711,
+        "ts": 1787190332,
+        "hr": 80,
+        "sbp": 127,
+        "dbp": 86,
         "sleep": {
           "deep": 13,
           "light": 15,
@@ -3218,8 +3218,38 @@
           "skinTemp": 32.5,
           "tempOk": true,
           "stress": 70
+        },
+        {
+          "at": 1787190263543,
+          "steps": 216,
+          "distance": 1512,
+          "calorie": 1,
+          "battery": 7,
+          "charging": false,
+          "ts": 1787190263,
+          "hr": 65,
+          "sbp": 125,
+          "dbp": 76
+        },
+        {
+          "at": 1787190332711,
+          "steps": 257,
+          "distance": 1799,
+          "calorie": 1,
+          "battery": 7,
+          "charging": false,
+          "ts": 1787190332,
+          "hr": 80,
+          "sbp": 127,
+          "dbp": 86
         }
-      ]
+      ],
+      "online": true,
+      "lastNotify": 1787190332739,
+      "version": "1.0.2",
+      "netType": 1,
+      "wearing": 1,
+      "lastDeviceInfo": 1787190263609
     },
     "862071070111701": {
       "deviceid": "862071070111701",

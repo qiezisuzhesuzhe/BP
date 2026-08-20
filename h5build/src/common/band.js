@@ -191,6 +191,168 @@ export function fetchBandLatestBatch(deviceids) {
   })
 }
 
+/* ---------------- SSE 实时事件订阅（手环主动上报 → 前端即时感知） ---------------- */
+// 返回一个 { close(), isOpen() } 对象；
+// 用法：
+//   const sub = subscribeEvents({
+//     deviceid: '86xxx..', // 可选，仅收该设备
+//     kinds: ['pb','alarm','sos','status','deviceinfo','calllog','device_bind','device_unbind'],
+//     onOpen: () => {},
+//     onClose: () => {},
+//     onEvent: ({ kind, ts, id, payload }) => {},
+//     onError: (err) => {}
+//   })
+// 页面离开时 sub.close()
+export function subscribeEvents({ deviceid, kinds, onOpen, onClose, onEvent, onError } = {}) {
+  const opts = { deviceid: deviceid || null, kinds: kinds || [], onOpen, onClose, onEvent, onError }
+  let es = null
+  let closed = false
+  let manual = false
+  let lastTs = 0
+
+  function buildUrl() {
+    const query = []
+    if (opts.deviceid) query.push('deviceid=' + encodeURIComponent(opts.deviceid))
+    if (opts.kinds && opts.kinds.length) query.push('kinds=' + encodeURIComponent(opts.kinds.join(',')))
+    if (lastTs) query.push('since=' + lastTs)
+    return bandApi('/api/events/stream') + (query.length ? '?' + query.join('&') : '')
+  }
+
+  function fireOpen() { opts.onOpen && opts.onOpen() }
+  function fireClose() { opts.onClose && opts.onClose() }
+  function fireError(err) { opts.onError && opts.onError(err) }
+  function fireEvent(evt) {
+    if (!evt) return
+    try {
+      if (evt.ts && Number(evt.ts) > lastTs) lastTs = Number(evt.ts)
+    } catch (e) {}
+    opts.onEvent && opts.onEvent(evt)
+  }
+
+  function start() {
+    if (closed) return
+    if (typeof EventSource !== 'undefined') {
+      // H5 / 支持 EventSource 的平台
+      try {
+        es = new EventSource(buildUrl(), { withCredentials: false })
+      } catch (e) {
+        fireError(e && e.message ? e.message : String(e))
+        scheduleReconnect()
+        return
+      }
+      es.onopen = () => { fireOpen() }
+      es.onerror = (e) => {
+        if (closed) return
+        fireError(e && e.message ? e.message : 'sse error')
+        // EventSource 自身会自动重连，只需关闭 & 重建以追加 since
+        try { es && es.close() } catch (_e) {}
+        scheduleReconnect()
+      }
+      es.onmessage = (ev) => {
+        try {
+          const data = JSON.parse(ev.data)
+          fireEvent(data)
+        } catch (e) {
+          fireError('parse sse message failed: ' + String(e))
+        }
+      }
+      // 同时监听有名字的事件（后端 event: 对应事件名）
+      const KINDS_EXPECTED = ['pb','alarm','sos','calllog','deviceinfo','status','device_bind','device_unbind']
+      KINDS_EXPECTED.forEach((k) => {
+        es.addEventListener(k, (ev) => {
+          try {
+            const data = JSON.parse(ev.data)
+            fireEvent(Object.assign({ kind: k }, data))
+          } catch (e) {}
+        })
+      })
+      return
+    }
+    // 兜底：uni-app 小程序/APP 环境没有 EventSource，用 uni.request 长轮询（15 秒 + 立即再拉 + since）
+    manual = true
+    longPollOnce()
+  }
+
+  let reconnectTimer = null
+  function scheduleReconnect() {
+    if (closed) return
+    clearTimeout(reconnectTimer)
+    reconnectTimer = setTimeout(start, 3000)
+  }
+
+  let lpTimer = null
+  function longPollOnce() {
+    if (closed) return
+    clearTimeout(lpTimer)
+    let done = false
+    const req = uni.request({
+      url: buildUrl(),
+      method: 'GET',
+      // 允许长连接：超时 60s，服务端保持
+      timeout: 60000,
+      header: { Accept: 'text/event-stream' },
+      success(res) {
+        if (done) return
+        done = true
+        if (res && typeof res.data === 'string') {
+          // 解析 SSE 文本事件块
+          const blocks = String(res.data).split(/\n\n/)
+          blocks.forEach((blk) => {
+            const lines = blk.split(/\n/)
+            let kind = null
+            let id = null
+            let dataStr = ''
+            lines.forEach((l) => {
+              if (l.indexOf('event:') === 0) kind = l.slice(6).trim()
+              else if (l.indexOf('id:') === 0) id = l.slice(3).trim()
+              else if (l.indexOf('data:') === 0) dataStr += l.slice(5)
+            })
+            if (!dataStr) return
+            try {
+              const d = JSON.parse(dataStr)
+              fireEvent(Object.assign({ kind: kind || d.kind || null, id: id || d.id || null }, d))
+            } catch (e) {}
+          })
+        }
+        fireOpen()
+        // 立刻再拉下一条（since 已更新）
+        lpTimer = setTimeout(longPollOnce, 800)
+      },
+      fail(err) {
+        if (done) return
+        done = true
+        fireError(err && err.errMsg ? err.errMsg : 'long poll error')
+        scheduleReconnect()
+      }
+    })
+    // 防阻塞：最多 55 秒强制认为请求结束
+    setTimeout(() => {
+      if (done) return
+      done = true
+      try { req && req.abort && req.abort() } catch (e) {}
+      lpTimer = setTimeout(longPollOnce, 300)
+    }, 55000)
+  }
+
+  start()
+  return {
+    close() {
+      closed = true
+      clearTimeout(reconnectTimer)
+      clearTimeout(lpTimer)
+      if (es) {
+        try { es.close() } catch (e) {}
+        es = null
+      }
+      fireClose()
+    },
+    isOpen() {
+      if (manual) return !closed
+      return !!es && es.readyState === 1
+    }
+  }
+}
+
 // 从二维码文本中宽容提取设备号（IMEI/deviceid），兼容多种厂商二维码格式
 export function extractDeviceId(text) {
   const raw = String(text || '').trim()

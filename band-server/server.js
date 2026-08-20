@@ -296,9 +296,18 @@ app.use(express.json({ limit: '1mb' }))
 app.post('/pb/upload', (req, res) => {
   const r = parseUploadBody(req.body)
   if (r.error) return res.status(200).send(Buffer.from([0x02]))
-  mergeSamples(r.deviceid, r.packets)
-  console.log('[pb/upload]', r.deviceid, r.packets.map(p => 'opt=0x' + p.opt.toString(16)).join(','))
+  const dev = mergeSamples(r.deviceid, r.packets)
+  const opts = r.packets.map(p => 'opt=0x' + p.opt.toString(16)).join(',')
+  console.log('[pb/upload]', r.deviceid, opts)
   res.status(200).send(Buffer.from([0x00]))
+  // SSE 广播：带最新快照 & 每种 opt 作 detail 标签
+  const has0A = r.packets.some(p => p.opt === 0x0a)
+  const has80 = r.packets.some(p => p.opt === 0x80)
+  broadcast('pb', {
+    deviceid: r.deviceid,
+    snapshot: Object.assign({}, dev.latest || {}),
+    kind_detail: (has0A ? 'realtime ' : '') + (has80 ? 'health' : '').trim() || opts
+  })
 })
 
 // 报警上报（必选）
@@ -313,6 +322,12 @@ app.post('/alarm/upload', (req, res) => {
   }
   console.log('[alarm/upload]', r.deviceid)
   res.status(200).send(Buffer.from([0x00]))
+  broadcast('alarm', {
+    deviceid: r.deviceid,
+    snapshot: Object.assign({}, dev.latest || {}),
+    alarm_count: alarms.length,
+    parsed: alarms.map(a => a.parsed && a.parsed.data ? a.parsed.data : null).filter(Boolean)
+  })
 })
 
 // SOS / 通话记录（必选，JSON）
@@ -325,6 +340,13 @@ app.post('/call_log/upload', (req, res) => {
       dev.lastCallLog = { at: Date.now(), sos: info.sos || [], normal: info.normal_call_logs || [] }
       saveDB(db)
       console.log('[call_log/upload]', deviceid)
+      const sosCount = (info.sos || []).length
+      broadcast(sosCount ? 'sos' : 'calllog', {
+        deviceid,
+        snapshot: Object.assign({}, dev.latest || {}),
+        sos: info.sos || [],
+        normal: info.normal_call_logs || []
+      })
     }
     res.json({ ReturnCode: 0 })
   } catch (e) {
@@ -346,6 +368,12 @@ app.post('/deviceinfo/upload', (req, res) => {
       dev.lastDeviceInfo = Date.now()
       saveDB(db)
       console.log('[deviceinfo/upload]', deviceid, info.model)
+      broadcast('deviceinfo', {
+        deviceid,
+        snapshot: Object.assign({}, dev.latest || {}),
+        model: info.model || null,
+        wearing: info.wearing_status == null ? null : !!info.wearing_status
+      })
     }
     res.json({ ReturnCode: 0 })
   } catch (e) {
@@ -364,6 +392,11 @@ app.post('/status/notify', (req, res) => {
       dev.lastNotify = Date.now()
       saveDB(db)
       console.log('[status/notify]', deviceid, info.Status)
+      broadcast('status', {
+        deviceid,
+        snapshot: Object.assign({}, dev.latest || {}),
+        online: !!dev.online
+      })
     }
     res.json({ ReturnCode: 0 })
   } catch (e) {
@@ -396,6 +429,108 @@ app.use('/api', (req, res, next) => {
   next()
 })
 
+/* ---------------- SSE 实时推送（EventSource） ---------------- */
+// 手环一有主动上报事件立刻广播给所有前端订阅者；前端用 EventSource 订阅 /api/events/stream
+// 支持：?deviceid=xxx 仅单设备、?kinds=pb,alarm,sos 过滤类型、?since=ts 断线重连后重放最近 N 条
+const SSE_CLIENTS = new Map() // id -> { res, filter }
+const SSE_RING = []          // 事件环形缓冲，最近 100 条供 since 重放
+const SSE_RING_MAX = 100
+let _sseSeq = 0
+
+function sseSendOne(res, event) {
+  const id = event.id
+  const line =
+    'id: ' + id + '\n' +
+    'event: ' + (event.kind || 'message') + '\n' +
+    'data: ' + JSON.stringify(event) + '\n\n'
+  try { res.write(line) } catch (e) {}
+}
+
+function broadcast(kind, payload) {
+  const evt = {
+    id: String(++_sseSeq),
+    kind,
+    ts: Date.now(),
+    payload: payload || {}
+  }
+  SSE_RING.push(evt)
+  if (SSE_RING.length > SSE_RING_MAX) SSE_RING.splice(0, SSE_RING.length - SSE_RING_MAX)
+  for (const [, client] of SSE_CLIENTS) {
+    const f = client.filter || {}
+    if (f.deviceid && evt.payload.deviceid && f.deviceid !== evt.payload.deviceid) continue
+    if (f.kinds && f.kinds.length && !f.kinds.includes(evt.kind)) continue
+    sseSendOne(client.res, evt)
+  }
+  // 调试日志（只打 pb/alarm/sos/status 高频之外也保留，方便排查）
+  const p = evt.payload
+  const extra = p.deviceid
+    ? (' ' + p.deviceid + (p.snapshot ? ' items=' + Object.keys(p.snapshot).length : '') + (p.kind_detail ? ' ' + p.kind_detail : ''))
+    : ''
+  console.log('[sse][' + kind + '] id=' + evt.id + extra)
+}
+
+app.get('/api/events/stream', (req, res) => {
+  const deviceid = String(req.query.deviceid || '').trim()
+  const kindsRaw = String(req.query.kinds || '').trim()
+  const kinds = kindsRaw ? kindsRaw.split(',').map(s => s.trim()).filter(Boolean) : []
+  const since = Number(req.query.since) || 0
+  const resIn = req.raw && req.raw.res ? req.raw.res : res
+  const resObj = resIn || res
+  resObj.socket && resObj.socket.setTimeout && resObj.socket.setTimeout(0)
+  resObj.setTimeout && resObj.setTimeout(0)
+  res.status(200)
+  res.set({
+    'Content-Type': 'text/event-stream; charset=utf-8',
+    'Cache-Control': 'no-cache, no-transform',
+    Connection: 'keep-alive',
+    'X-Accel-Buffering': 'no'
+  })
+  res.flushHeaders && res.flushHeaders()
+  const ok = res.write
+  if (ok) {
+    res.write(': hello sse\n')
+    res.write('retry: 3000\n\n')
+  }
+  const id = 's_' + Date.now() + '_' + Math.random().toString(36).slice(2, 8)
+  SSE_CLIENTS.set(id, { res, filter: { deviceid: deviceid || null, kinds } })
+
+  // since 重放
+  if (since > 0) {
+    for (const e of SSE_RING) {
+      if (Number(e.ts) > since) {
+        const f = { deviceid: deviceid || null, kinds }
+        if (f.deviceid && e.payload.deviceid && f.deviceid !== e.payload.deviceid) continue
+        if (f.kinds && f.kinds.length && !f.kinds.includes(e.kind)) continue
+        sseSendOne(res, e)
+      }
+    }
+  }
+
+  const cleanup = () => {
+    if (SSE_CLIENTS.has(id)) {
+      SSE_CLIENTS.delete(id)
+      console.log('[sse] 断开，剩余连接=' + SSE_CLIENTS.size)
+    }
+  }
+  req.on('aborted', cleanup)
+  req.on('close', cleanup)
+  res.on('close', cleanup)
+  res.on('error', cleanup)
+  console.log('[sse] 新连接 id=' + id + ' 总数=' + SSE_CLIENTS.size + (deviceid ? (' @device=' + deviceid) : '') + (kinds.length ? (' kinds=' + kinds.join(',')) : ''))
+})
+
+// 给前端用于健康检查：当前连接数 & 最近 1 条事件（方便快速判断通道是否工作）
+app.get('/api/events/status', (_req, res) => {
+  res.json({
+    code: 0,
+    data: {
+      clients: SSE_CLIENTS.size,
+      ring: SSE_RING.length,
+      last: SSE_RING[SSE_RING.length - 1] || null
+    }
+  })
+})
+
 app.get('/api/devices', (req, res) => {
   const list = Object.keys(db.devices).map(id => db.devices[id])
   res.json({ code: 0, data: list })
@@ -414,6 +549,7 @@ app.post('/api/devices', (req, res) => {
   if (name) dev.name = name
   if (model) dev.model = model
   saveDB(db)
+  broadcast('device_bind', { deviceid, name: dev.name, model: dev.model || null })
   res.json({ code: 0, data: dev })
 })
 
@@ -427,6 +563,7 @@ app.delete('/api/devices/:deviceid', (req, res) => {
   delete db.devices[id]
   saveDB(db)
   console.log('[api/devices] 解绑', id)
+  broadcast('device_unbind', { deviceid: id })
   res.json({ code: 0, data: { deviceid: id } })
 })
 
@@ -553,6 +690,12 @@ app.post('/api/simulate', (req, res) => {
   const body = Buffer.concat([Buffer.from(deviceid.padEnd(15, ' ').slice(0, 15)), frame0A, frame80])
   const r = parseUploadBody(body)
   const dev2 = mergeSamples(r.deviceid, r.packets)
+  // 模拟接口走完完整解析链路后，也通过 SSE 广播出去一次，方便前端立刻看到数据变化
+  broadcast('pb', {
+    deviceid: r.deviceid,
+    snapshot: Object.assign({}, dev2.latest || {}),
+    kind_detail: 'simulate realtime+health'
+  })
   res.json({ code: 0, data: dev2.latest })
 })
 

@@ -64,7 +64,7 @@
 /******/
 /******/ 	// script path function
 /******/ 	function jsonpScriptSrc(chunkId) {
-/******/ 		return __webpack_require__.p + "static/js/" + ({"pages-band-status~pages-chat-chat~pages-device-detail~pages-device-device~pages-device-scan~pages-he~d57aada1":"pages-band-status~pages-chat-chat~pages-device-detail~pages-device-device~pages-device-scan~pages-he~d57aada1","pages-band-status":"pages-band-status","pages-chat-chat~pages-index-index":"pages-chat-chat~pages-index-index","pages-chat-chat":"pages-chat-chat","pages-index-index":"pages-index-index","pages-device-detail":"pages-device-detail","pages-device-device":"pages-device-device","pages-device-scan":"pages-device-scan","pages-health-health":"pages-health-health","pages-mall-mall":"pages-mall-mall","pages-message-message":"pages-message-message","pages-mine-agreement":"pages-mine-agreement","pages-mine-mine":"pages-mine-mine","pages-mine-orders":"pages-mine-orders","pages-mine-profile":"pages-mine-profile","pages-pay-pay":"pages-pay-pay","pages-rights-detail":"pages-rights-detail","pages-rights-rights":"pages-rights-rights","pages-service-detail":"pages-service-detail"}[chunkId]||chunkId) + ".js"
+/******/ 		return __webpack_require__.p + "static/js/" + ({"pages-band-status~pages-chat-chat~pages-device-detail~pages-device-device~pages-device-scan~pages-he~d57aada1":"pages-band-status~pages-chat-chat~pages-device-detail~pages-device-device~pages-device-scan~pages-he~d57aada1","pages-band-status~pages-device-device~pages-device-scan~pages-index-index":"pages-band-status~pages-device-device~pages-device-scan~pages-index-index","pages-band-status":"pages-band-status","pages-chat-chat~pages-index-index":"pages-chat-chat~pages-index-index","pages-index-index":"pages-index-index","pages-device-device":"pages-device-device","pages-device-scan":"pages-device-scan","pages-chat-chat":"pages-chat-chat","pages-device-detail":"pages-device-detail","pages-health-health":"pages-health-health","pages-mall-mall":"pages-mall-mall","pages-message-message":"pages-message-message","pages-mine-agreement":"pages-mine-agreement","pages-mine-mine":"pages-mine-mine","pages-mine-orders":"pages-mine-orders","pages-mine-profile":"pages-mine-profile","pages-pay-pay":"pages-pay-pay","pages-rights-detail":"pages-rights-detail","pages-rights-rights":"pages-rights-rights","pages-service-detail":"pages-service-detail"}[chunkId]||chunkId) + ".js"
 /******/ 	}
 /******/
 /******/ 	// The require function
@@ -1309,7 +1309,7 @@ global.__uniConfig.nvue = {
 global.__uniConfig.__webpack_chunk_load__ = __webpack_require__.e;
 vue__WEBPACK_IMPORTED_MODULE_6__["default"].component('pages-index-index', function (resolve) {
   var component = {
-    component: Promise.all(/*! require.ensure | pages-index-index */[__webpack_require__.e("pages-band-status~pages-chat-chat~pages-device-detail~pages-device-device~pages-device-scan~pages-he~d57aada1"), __webpack_require__.e("pages-chat-chat~pages-index-index"), __webpack_require__.e("pages-index-index")]).then((function () {
+    component: Promise.all(/*! require.ensure | pages-index-index */[__webpack_require__.e("pages-band-status~pages-chat-chat~pages-device-detail~pages-device-device~pages-device-scan~pages-he~d57aada1"), __webpack_require__.e("pages-band-status~pages-device-device~pages-device-scan~pages-index-index"), __webpack_require__.e("pages-chat-chat~pages-index-index"), __webpack_require__.e("pages-index-index")]).then((function () {
       return resolve(__webpack_require__(/*! ./src/pages/index/index.vue */ "91rt"));
     }).bind(null, __webpack_require__)).catch(__webpack_require__.oe),
     delay: __uniConfig['async'].delay,
@@ -1361,7 +1361,7 @@ vue__WEBPACK_IMPORTED_MODULE_6__["default"].component('pages-health-health', fun
 });
 vue__WEBPACK_IMPORTED_MODULE_6__["default"].component('pages-band-status', function (resolve) {
   var component = {
-    component: Promise.all(/*! require.ensure | pages-band-status */[__webpack_require__.e("pages-band-status~pages-chat-chat~pages-device-detail~pages-device-device~pages-device-scan~pages-he~d57aada1"), __webpack_require__.e("pages-band-status")]).then((function () {
+    component: Promise.all(/*! require.ensure | pages-band-status */[__webpack_require__.e("pages-band-status~pages-chat-chat~pages-device-detail~pages-device-device~pages-device-scan~pages-he~d57aada1"), __webpack_require__.e("pages-band-status~pages-device-device~pages-device-scan~pages-index-index"), __webpack_require__.e("pages-band-status")]).then((function () {
       return resolve(__webpack_require__(/*! ./src/pages/band/status.vue */ "4TEP"));
     }).bind(null, __webpack_require__)).catch(__webpack_require__.oe),
     delay: __uniConfig['async'].delay,
@@ -1673,7 +1673,7 @@ vue__WEBPACK_IMPORTED_MODULE_6__["default"].component('pages-mall-mall', functio
 });
 vue__WEBPACK_IMPORTED_MODULE_6__["default"].component('pages-device-device', function (resolve) {
   var component = {
-    component: Promise.all(/*! require.ensure | pages-device-device */[__webpack_require__.e("pages-band-status~pages-chat-chat~pages-device-detail~pages-device-device~pages-device-scan~pages-he~d57aada1"), __webpack_require__.e("pages-device-device")]).then((function () {
+    component: Promise.all(/*! require.ensure | pages-device-device */[__webpack_require__.e("pages-band-status~pages-chat-chat~pages-device-detail~pages-device-device~pages-device-scan~pages-he~d57aada1"), __webpack_require__.e("pages-band-status~pages-device-device~pages-device-scan~pages-index-index"), __webpack_require__.e("pages-device-device")]).then((function () {
       return resolve(__webpack_require__(/*! ./src/pages/device/device.vue */ "vjPZ"));
     }).bind(null, __webpack_require__)).catch(__webpack_require__.oe),
     delay: __uniConfig['async'].delay,
@@ -1699,7 +1699,7 @@ vue__WEBPACK_IMPORTED_MODULE_6__["default"].component('pages-device-device', fun
 });
 vue__WEBPACK_IMPORTED_MODULE_6__["default"].component('pages-device-scan', function (resolve) {
   var component = {
-    component: Promise.all(/*! require.ensure | pages-device-scan */[__webpack_require__.e("pages-band-status~pages-chat-chat~pages-device-detail~pages-device-device~pages-device-scan~pages-he~d57aada1"), __webpack_require__.e("pages-device-scan")]).then((function () {
+    component: Promise.all(/*! require.ensure | pages-device-scan */[__webpack_require__.e("pages-band-status~pages-chat-chat~pages-device-detail~pages-device-device~pages-device-scan~pages-he~d57aada1"), __webpack_require__.e("pages-band-status~pages-device-device~pages-device-scan~pages-index-index"), __webpack_require__.e("pages-device-scan")]).then((function () {
       return resolve(__webpack_require__(/*! ./src/pages/device/scan.vue */ "vG3x"));
     }).bind(null, __webpack_require__)).catch(__webpack_require__.oe),
     delay: __uniConfig['async'].delay,

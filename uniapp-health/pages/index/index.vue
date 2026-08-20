@@ -185,8 +185,11 @@
 </template>
 
 <script>
-import { sendBandMessage } from '@/common/band.js'
+import { sendBandMessage, subscribeEvents } from '@/common/band.js'
 import { deviceType } from '@/common/mock.js'
+
+// 首页 SSE：连续事件 1s 内合并成一次指标刷新，避免 pb 高频时反复触发 store 写入
+const MERGE_MS = 1000
 
 export default {
   data() {
@@ -199,7 +202,10 @@ export default {
       ],
       // 已发送记录：{ [dayIndex]: { [key]: { ts, deviceid, name } } }
       sentMap: {},
-      _sending: false
+      _sending: false,
+      // SSE
+      _sub: null,
+      _mergeTimer: null
     }
   },
   computed: {
@@ -244,8 +250,66 @@ export default {
       return n > 0 ? n + '天' : '已到期'
     }
   },
-  onShow() {},
+  onShow() {
+    this.startSse()
+  },
+  onHide() {
+    this.stopSse()
+    this._clearMerge()
+  },
+  onUnload() {
+    this.stopSse()
+    this._clearMerge()
+  },
   methods: {
+    /* ---------- SSE：首页仅静默更新顶部指标（不打扰 toast） ---------- */
+    startSse() {
+      this.stopSse()
+      this._sub = subscribeEvents({
+        kinds: ['pb','status','deviceinfo','device_bind','device_unbind'],
+        onEvent: (evt) => this.handleSse(evt)
+      })
+    },
+    stopSse() {
+      if (this._sub) {
+        try { this._sub.close() } catch (e) {}
+        this._sub = null
+      }
+    },
+    _clearMerge() {
+      if (this._mergeTimer) {
+        clearTimeout(this._mergeTimer)
+        this._mergeTimer = null
+      }
+    },
+    handleSse(evt) {
+      const p = (evt && evt.payload) || {}
+      if (!p || !p.deviceid) return
+      const snap = Object.assign({}, p.snapshot || {})
+      for (const k of Object.keys(snap)) {
+        if (snap[k] == null || snap[k] === '') delete snap[k]
+      }
+      if (!Object.keys(snap).length) return
+      // 找到 deviceid 对应的 store 里的本地设备：UPDATE_DEVICE_DATA 以触发顶部指标重算
+      const devs = (this.$store.getters.devices || []).slice()
+      const match = devs.find((d) => d.deviceid === p.deviceid)
+      if (!match) return
+      const id = match.id
+      this._clearMerge()
+      this._mergeTimer = setTimeout(() => {
+        this._mergeTimer = null
+        this.$store.commit('UPDATE_DEVICE_DATA', {
+          id,
+          data: {
+            sys: snap.sbp,
+            dia: snap.dbp,
+            heartRate: snap.hr,
+            steps: snap.steps,
+            battery: snap.battery
+          }
+        })
+      }, MERGE_MS)
+    },
     setDay(i) {
       this.$store.commit('SET_DAY', i)
     },

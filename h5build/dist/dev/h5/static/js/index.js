@@ -1169,7 +1169,7 @@ __webpack_require__.r(__webpack_exports__);
 /*!****************************!*\
   !*** ./src/common/band.js ***!
   \****************************/
-/*! exports provided: BAND_SERVER_DEFAULT_APP, setBandServer, getBandServer, BAND_SERVER, bandApi, fetchBandLatest, fetchBandAddress, sendBandMessage, bindBandDevice, unbindBandDevice, fetchBandLatestBatch, subscribeEvents, extractDeviceId, bpLevel */
+/*! exports provided: BAND_SERVER_DEFAULT_APP, setBandServer, getBandServer, BAND_SERVER, bandApi, fetchBandRecord, listBandDevices, fetchBandLatest, fetchBandAddress, sendBandMessage, bindBandDevice, unbindBandDevice, fetchBandLatestBatch, subscribeEvents, extractDeviceId, bpLevel */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -1179,6 +1179,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "getBandServer", function() { return getBandServer; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "BAND_SERVER", function() { return BAND_SERVER; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "bandApi", function() { return bandApi; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "fetchBandRecord", function() { return fetchBandRecord; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "listBandDevices", function() { return listBandDevices; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "fetchBandLatest", function() { return fetchBandLatest; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "fetchBandAddress", function() { return fetchBandAddress; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "sendBandMessage", function() { return sendBandMessage; });
@@ -1283,26 +1285,63 @@ function bandApi(path) {
   return base + path;
 }
 
-// 从后端拉取手环最新状态（心率 hr / 收缩压 sbp / 舒张压 dbp / 步数 steps / 电量 battery / 时间戳 ts）
-// 后端不可达或尚无上报数据时 resolve(null)，由页面显示 "--"，不做模拟兜底
-// URL 附加时间戳 + 后端 no-store，双保险绕过浏览器 HTTP 缓存，保证每次轮询都是最新数据
-function fetchBandLatest(deviceid) {
+// 从后端拉取手环完整设备记录（{ deviceid, latest, model, name, bindAt, ... }）
+// 失败 resolve(null)。注意：这个接口与 fetchBandLatest 走同一个路由，但返回完整 record 而不是只取 latest。
+function fetchBandRecord(deviceid) {
   return new Promise(function (resolve) {
+    if (!deviceid) {
+      resolve(null);
+      return;
+    }
     uni.request({
       url: bandApi('/api/devices/' + deviceid) + '?_t=' + Date.now(),
       method: 'GET',
       timeout: 5000,
       success: function success(res) {
-        if (res.statusCode === 200 && res.data && res.data.code === 0) {
-          var latest = res.data.data && res.data.data.latest;
-          if (latest && (latest.hr != null || latest.sbp != null || latest.steps != null || latest.spo2 != null || latest.ecgSamples != null || latest.sleep != null || latest.bodyTemp != null || latest.skinTemp != null || latest.stress != null)) {
-            resolve(latest);
-            return;
-          }
+        if (res.statusCode === 200 && res.data && res.data.code === 0 && res.data.data) {
+          resolve(res.data.data);
+        } else {
+          resolve(null);
         }
-        resolve(null);
       },
       fail: function fail() {
+        resolve(null);
+      }
+    });
+  });
+}
+
+// 拉取后端所有设备列表（[{ deviceid, latest, model, name, ... }]），失败返回 []
+function listBandDevices() {
+  return new Promise(function (resolve) {
+    uni.request({
+      url: bandApi('/api/devices?_t=') + Date.now(),
+      method: 'GET',
+      timeout: 5000,
+      success: function success(res) {
+        if (res.statusCode === 200 && res.data && res.data.code === 0 && Array.isArray(res.data.data)) {
+          resolve(res.data.data);
+        } else {
+          resolve([]);
+        }
+      },
+      fail: function fail() {
+        resolve([]);
+      }
+    });
+  });
+}
+
+// 从后端拉取手环最新状态（心率 hr / 收缩压 sbp / 舒张压 dbp / 步数 steps / 电量 battery / 时间戳 ts）
+// 后端不可达或尚无上报数据时 resolve(null)，由页面显示 "--"，不做模拟兜底
+// URL 附加时间戳 + 后端 no-store，双保险绕过浏览器 HTTP 缓存，保证每次轮询都是最新数据
+function fetchBandLatest(deviceid) {
+  return new Promise(function (resolve) {
+    fetchBandRecord(deviceid).then(function (rec) {
+      var latest = rec && rec.latest;
+      if (latest && (latest.hr != null || latest.sbp != null || latest.steps != null || latest.spo2 != null || latest.ecgSamples != null || latest.sleep != null || latest.bodyTemp != null || latest.skinTemp != null || latest.stress != null)) {
+        resolve(latest);
+      } else {
         resolve(null);
       }
     });

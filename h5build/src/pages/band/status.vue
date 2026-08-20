@@ -256,7 +256,7 @@
 </template>
 
 <script>
-import { fetchBandLatest, sendBandMessage, bpLevel, unbindBandDevice, subscribeEvents } from '@/common/band.js'
+import { fetchBandLatest, fetchBandRecord, listBandDevices, sendBandMessage, bpLevel, unbindBandDevice, subscribeEvents } from '@/common/band.js'
 
 // SSE 事件：同设备同 kind 的事件 3 秒内去重，避免短时间重复 toast/flash
 const DEDUP_MS = 3000
@@ -570,14 +570,78 @@ export default {
         }
       })
     },
-    // 从 store 设备记录取 deviceid（扫码绑定跳转/页面重进时兜底）
-    ensureDevice() {
-      if (this.deviceid) return
+    // 取 deviceid 的兜底链路：
+    //  1. 有就直接 return（快路径）
+    //  2. store 里能通过 this.id 查到 → 用它（原始设计：虚拟 id 映射到 deviceid）
+    //  3. 否则把 this.id 直接当作 deviceid 查后端：
+    //     - 若后端 /api/devices/:id 能查到，说明 this.id 本身就是 deviceid（后端真实键名），直接用
+    //     - 还查不到：再拉 /api/devices 列表取第一个有 latest 数据的设备兜底
+    //  4. 最终仍找不到：toast "设备不存在，请先绑定"
+    //  注意：只要成功拿到了 deviceid，就启动 SSE，确保页面进入后 SSE 必定建立，避免"数据永远不自动更新"。
+    async ensureDevice() {
+      if (this.deviceid) {
+        if (!this._sub) this.startSse()
+        return
+      }
       const dev = this.$store.getters.deviceById(this.id)
       if (dev && dev.deviceid) {
         this.deviceid = dev.deviceid
-        // 如果 deviceid 刚拿到而 SSE 还没启，启动它
         if (!this._sub) this.startSse()
+        return
+      }
+      // Fallback A：把 URL 的 id 直接当作后端 deviceid 查
+      if (this.id) {
+        try {
+          const rec = await fetchBandRecord(this.id)
+          if (rec && rec.deviceid) {
+            this.deviceid = rec.deviceid
+            this._applyLatestAndSync(rec.latest || {})
+            if (!this._sub) this.startSse()
+            return
+          }
+        } catch (e) { /* ignore */ }
+      }
+      // Fallback B：拉后端设备列表，挑一个（第一个带 latest 数据的）兜底
+      try {
+        const list = await listBandDevices()
+        if (list && list.length > 0) {
+          let pick = list.find(r => r && r.latest && (r.latest.hr != null || r.latest.sbp != null || r.latest.steps != null))
+          if (!pick) pick = list[0]
+          if (pick && pick.deviceid) {
+            this.deviceid = pick.deviceid
+            if (!this.id) this.id = pick.deviceid
+            this._applyLatestAndSync(pick.latest || {})
+            if (!this._sub) this.startSse()
+            return
+          }
+        }
+      } catch (e) { /* ignore */ }
+      // 彻底找不到
+      uni.showToast({
+        title: '设备不存在，请先绑定手环',
+        icon: 'none',
+        duration: 2500
+      })
+    },
+    // 统一把 latest 快照 + 同步时间 + store 回写 + 在线状态 一次性设置，
+    // 供 ensureDevice fallback 与 load / lightLoad 共用。
+    _applyLatestAndSync(latest) {
+      if (latest) this.latest = Object.assign({}, this.latest, latest)
+      this.lastSyncAt = Date.now()
+      const l = this.latest
+      this.online = !!(l && (l.hr != null || l.sbp != null || l.dbp != null || l.steps != null))
+      if (this.id) {
+        this.$store.commit('UPDATE_DEVICE_DATA', {
+          id: this.id,
+          data: {
+            sys: l.sbp,
+            dia: l.dbp,
+            heartRate: l.hr,
+            steps: l.steps,
+            battery: l.battery
+          },
+          lastSync: this.syncText
+        })
       }
     },
     fmt(n) {

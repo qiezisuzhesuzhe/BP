@@ -1148,17 +1148,29 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _workspace_h5build_node_modules_babel_runtime_helpers_esm_asyncToGenerator_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./node_modules/@babel/runtime/helpers/esm/asyncToGenerator.js */ "HaE+");
 /* harmony import */ var _workspace_h5build_node_modules_babel_runtime_helpers_esm_typeof_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./node_modules/@babel/runtime/helpers/esm/typeof.js */ "U8pU");
 /* harmony import */ var _workspace_h5build_node_modules_babel_runtime_helpers_esm_createForOfIteratorHelper_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./node_modules/@babel/runtime/helpers/esm/createForOfIteratorHelper.js */ "uFwe");
-/* harmony import */ var core_js_modules_es_array_push_js__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! core-js/modules/es.array.push.js */ "FNk8");
-/* harmony import */ var core_js_modules_es_array_push_js__WEBPACK_IMPORTED_MODULE_4___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_array_push_js__WEBPACK_IMPORTED_MODULE_4__);
-/* harmony import */ var core_js_modules_es_object_keys_js__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! core-js/modules/es.object.keys.js */ "tkto");
-/* harmony import */ var core_js_modules_es_object_keys_js__WEBPACK_IMPORTED_MODULE_5___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_object_keys_js__WEBPACK_IMPORTED_MODULE_5__);
-/* harmony import */ var core_js_modules_es_regexp_exec_js__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! core-js/modules/es.regexp.exec.js */ "rB9j");
-/* harmony import */ var core_js_modules_es_regexp_exec_js__WEBPACK_IMPORTED_MODULE_6___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_regexp_exec_js__WEBPACK_IMPORTED_MODULE_6__);
-/* harmony import */ var core_js_modules_es_string_replace_js__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! core-js/modules/es.string.replace.js */ "UxlC");
-/* harmony import */ var core_js_modules_es_string_replace_js__WEBPACK_IMPORTED_MODULE_7___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_string_replace_js__WEBPACK_IMPORTED_MODULE_7__);
-/* harmony import */ var core_js_modules_es_string_trim_js__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! core-js/modules/es.string.trim.js */ "SYor");
-/* harmony import */ var core_js_modules_es_string_trim_js__WEBPACK_IMPORTED_MODULE_8___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_string_trim_js__WEBPACK_IMPORTED_MODULE_8__);
-/* harmony import */ var _common_band_js__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! @/common/band.js */ "YNKN");
+/* harmony import */ var core_js_modules_es_array_find_js__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! core-js/modules/es.array.find.js */ "fbCW");
+/* harmony import */ var core_js_modules_es_array_find_js__WEBPACK_IMPORTED_MODULE_4___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_array_find_js__WEBPACK_IMPORTED_MODULE_4__);
+/* harmony import */ var core_js_modules_es_array_push_js__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! core-js/modules/es.array.push.js */ "FNk8");
+/* harmony import */ var core_js_modules_es_array_push_js__WEBPACK_IMPORTED_MODULE_5___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_array_push_js__WEBPACK_IMPORTED_MODULE_5__);
+/* harmony import */ var core_js_modules_es_iterator_constructor_js__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! core-js/modules/es.iterator.constructor.js */ "6fVz");
+/* harmony import */ var core_js_modules_es_iterator_constructor_js__WEBPACK_IMPORTED_MODULE_6___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_iterator_constructor_js__WEBPACK_IMPORTED_MODULE_6__);
+/* harmony import */ var core_js_modules_es_iterator_find_js__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! core-js/modules/es.iterator.find.js */ "9mV7");
+/* harmony import */ var core_js_modules_es_iterator_find_js__WEBPACK_IMPORTED_MODULE_7___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_iterator_find_js__WEBPACK_IMPORTED_MODULE_7__);
+/* harmony import */ var core_js_modules_es_object_keys_js__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! core-js/modules/es.object.keys.js */ "tkto");
+/* harmony import */ var core_js_modules_es_object_keys_js__WEBPACK_IMPORTED_MODULE_8___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_object_keys_js__WEBPACK_IMPORTED_MODULE_8__);
+/* harmony import */ var core_js_modules_es_object_to_string_js__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! core-js/modules/es.object.to-string.js */ "07d7");
+/* harmony import */ var core_js_modules_es_object_to_string_js__WEBPACK_IMPORTED_MODULE_9___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_object_to_string_js__WEBPACK_IMPORTED_MODULE_9__);
+/* harmony import */ var core_js_modules_es_regexp_exec_js__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! core-js/modules/es.regexp.exec.js */ "rB9j");
+/* harmony import */ var core_js_modules_es_regexp_exec_js__WEBPACK_IMPORTED_MODULE_10___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_regexp_exec_js__WEBPACK_IMPORTED_MODULE_10__);
+/* harmony import */ var core_js_modules_es_string_replace_js__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! core-js/modules/es.string.replace.js */ "UxlC");
+/* harmony import */ var core_js_modules_es_string_replace_js__WEBPACK_IMPORTED_MODULE_11___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_string_replace_js__WEBPACK_IMPORTED_MODULE_11__);
+/* harmony import */ var core_js_modules_es_string_trim_js__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! core-js/modules/es.string.trim.js */ "SYor");
+/* harmony import */ var core_js_modules_es_string_trim_js__WEBPACK_IMPORTED_MODULE_12___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_string_trim_js__WEBPACK_IMPORTED_MODULE_12__);
+/* harmony import */ var _common_band_js__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(/*! @/common/band.js */ "YNKN");
+
+
+
+
 
 
 
@@ -1456,7 +1468,7 @@ var DEDUP_MS = 3000;
       return this.$store.getters.deviceById(this.id) || null;
     },
     bp: function bp() {
-      var lv = Object(_common_band_js__WEBPACK_IMPORTED_MODULE_9__["bpLevel"])(this.latest.sbp, this.latest.dbp);
+      var lv = Object(_common_band_js__WEBPACK_IMPORTED_MODULE_13__["bpLevel"])(this.latest.sbp, this.latest.dbp);
       var bgMap = {
         normal: '#ddf7ed',
         'normal-h': '#fdf4ed',
@@ -1643,7 +1655,7 @@ var DEDUP_MS = 3000;
       var _this = this;
       this.stopSse();
       if (!this.deviceid) return;
-      this._sub = Object(_common_band_js__WEBPACK_IMPORTED_MODULE_9__["subscribeEvents"])({
+      this._sub = Object(_common_band_js__WEBPACK_IMPORTED_MODULE_13__["subscribeEvents"])({
         deviceid: this.deviceid,
         kinds: ['pb', 'alarm', 'sos', 'status', 'deviceinfo', 'calllog', 'device_unbind'],
         onOpen: function onOpen() {
@@ -1777,7 +1789,7 @@ var DEDUP_MS = 3000;
     lightLoad: function lightLoad() {
       var _this3 = this;
       if (!this.deviceid) return;
-      Object(_common_band_js__WEBPACK_IMPORTED_MODULE_9__["fetchBandLatest"])(this.deviceid).then(function (latest) {
+      Object(_common_band_js__WEBPACK_IMPORTED_MODULE_13__["fetchBandLatest"])(this.deviceid).then(function (latest) {
         if (latest) _this3.latest = latest;
         _this3.lastSyncAt = Date.now();
         var l = _this3.latest;
@@ -1797,14 +1809,121 @@ var DEDUP_MS = 3000;
         }
       });
     },
-    // 从 store 设备记录取 deviceid（扫码绑定跳转/页面重进时兜底）
+    // 取 deviceid 的兜底链路：
+    //  1. 有就直接 return（快路径）
+    //  2. store 里能通过 this.id 查到 → 用它（原始设计：虚拟 id 映射到 deviceid）
+    //  3. 否则把 this.id 直接当作 deviceid 查后端：
+    //     - 若后端 /api/devices/:id 能查到，说明 this.id 本身就是 deviceid（后端真实键名），直接用
+    //     - 还查不到：再拉 /api/devices 列表取第一个有 latest 数据的设备兜底
+    //  4. 最终仍找不到：toast "设备不存在，请先绑定"
+    //  注意：只要成功拿到了 deviceid，就启动 SSE，确保页面进入后 SSE 必定建立，避免"数据永远不自动更新"。
     ensureDevice: function ensureDevice() {
-      if (this.deviceid) return;
-      var dev = this.$store.getters.deviceById(this.id);
-      if (dev && dev.deviceid) {
-        this.deviceid = dev.deviceid;
-        // 如果 deviceid 刚拿到而 SSE 还没启，启动它
-        if (!this._sub) this.startSse();
+      var _this4 = this;
+      return Object(_workspace_h5build_node_modules_babel_runtime_helpers_esm_asyncToGenerator_js__WEBPACK_IMPORTED_MODULE_1__["default"])(/*#__PURE__*/Object(_workspace_h5build_node_modules_babel_runtime_helpers_esm_regenerator_js__WEBPACK_IMPORTED_MODULE_0__["default"])().m(function _callee() {
+        var dev, rec, list, pick, _t, _t2;
+        return Object(_workspace_h5build_node_modules_babel_runtime_helpers_esm_regenerator_js__WEBPACK_IMPORTED_MODULE_0__["default"])().w(function (_context) {
+          while (1) switch (_context.p = _context.n) {
+            case 0:
+              if (!_this4.deviceid) {
+                _context.n = 1;
+                break;
+              }
+              if (!_this4._sub) _this4.startSse();
+              return _context.a(2);
+            case 1:
+              dev = _this4.$store.getters.deviceById(_this4.id);
+              if (!(dev && dev.deviceid)) {
+                _context.n = 2;
+                break;
+              }
+              _this4.deviceid = dev.deviceid;
+              if (!_this4._sub) _this4.startSse();
+              return _context.a(2);
+            case 2:
+              if (!_this4.id) {
+                _context.n = 7;
+                break;
+              }
+              _context.p = 3;
+              _context.n = 4;
+              return Object(_common_band_js__WEBPACK_IMPORTED_MODULE_13__["fetchBandRecord"])(_this4.id);
+            case 4:
+              rec = _context.v;
+              if (!(rec && rec.deviceid)) {
+                _context.n = 5;
+                break;
+              }
+              _this4.deviceid = rec.deviceid;
+              _this4._applyLatestAndSync(rec.latest || {});
+              if (!_this4._sub) _this4.startSse();
+              return _context.a(2);
+            case 5:
+              _context.n = 7;
+              break;
+            case 6:
+              _context.p = 6;
+              _t = _context.v;
+            case 7:
+              _context.p = 7;
+              _context.n = 8;
+              return Object(_common_band_js__WEBPACK_IMPORTED_MODULE_13__["listBandDevices"])();
+            case 8:
+              list = _context.v;
+              if (!(list && list.length > 0)) {
+                _context.n = 9;
+                break;
+              }
+              pick = list.find(function (r) {
+                return r && r.latest && (r.latest.hr != null || r.latest.sbp != null || r.latest.steps != null);
+              });
+              if (!pick) pick = list[0];
+              if (!(pick && pick.deviceid)) {
+                _context.n = 9;
+                break;
+              }
+              _this4.deviceid = pick.deviceid;
+              if (!_this4.id) _this4.id = pick.deviceid;
+              _this4._applyLatestAndSync(pick.latest || {});
+              if (!_this4._sub) _this4.startSse();
+              return _context.a(2);
+            case 9:
+              _context.n = 11;
+              break;
+            case 10:
+              _context.p = 10;
+              _t2 = _context.v;
+            case 11:
+              // 彻底找不到
+              uni.showToast({
+                title: '设备不存在，请先绑定手环',
+                icon: 'none',
+                duration: 2500
+              });
+            case 12:
+              return _context.a(2);
+          }
+        }, _callee, null, [[7, 10], [3, 6]]);
+      }))();
+    },
+    // 统一把 latest 快照 + 同步时间 + store 回写 + 在线状态 一次性设置，
+    // 供 ensureDevice fallback 与 load / lightLoad 共用。
+    _applyLatestAndSync: function _applyLatestAndSync(latest) {
+      if (latest) this.latest = Object.assign({}, this.latest, latest);
+      this.lastSyncAt = Date.now();
+      var l = this.latest;
+      this.online = !!(l && (l.hr != null || l.sbp != null || l.dbp != null || l.steps != null));
+      if (this.id) {
+        this.$store.commit('UPDATE_DEVICE_DATA', {
+          id: this.id,
+          data: {
+            sys: l.sbp,
+            dia: l.dbp,
+            heartRate: l.hr,
+            steps: l.steps,
+            battery: l.battery
+          },
+          lastSync: this.syncText
+        });
       }
     },
     fmt: function fmt(n) {
@@ -1836,75 +1955,75 @@ var DEDUP_MS = 3000;
       this.doSend('安康提醒', p);
     },
     doSend: function doSend(title, text) {
-      var _this4 = this;
-      return Object(_workspace_h5build_node_modules_babel_runtime_helpers_esm_asyncToGenerator_js__WEBPACK_IMPORTED_MODULE_1__["default"])(/*#__PURE__*/Object(_workspace_h5build_node_modules_babel_runtime_helpers_esm_regenerator_js__WEBPACK_IMPORTED_MODULE_0__["default"])().m(function _callee() {
+      var _this5 = this;
+      return Object(_workspace_h5build_node_modules_babel_runtime_helpers_esm_asyncToGenerator_js__WEBPACK_IMPORTED_MODULE_1__["default"])(/*#__PURE__*/Object(_workspace_h5build_node_modules_babel_runtime_helpers_esm_regenerator_js__WEBPACK_IMPORTED_MODULE_0__["default"])().m(function _callee2() {
         var err;
-        return Object(_workspace_h5build_node_modules_babel_runtime_helpers_esm_regenerator_js__WEBPACK_IMPORTED_MODULE_0__["default"])().w(function (_context) {
-          while (1) switch (_context.n) {
+        return Object(_workspace_h5build_node_modules_babel_runtime_helpers_esm_regenerator_js__WEBPACK_IMPORTED_MODULE_0__["default"])().w(function (_context2) {
+          while (1) switch (_context2.n) {
             case 0:
               if (text) {
-                _context.n = 1;
+                _context2.n = 1;
                 break;
               }
               uni.showToast({
                 title: '请输入消息内容',
                 icon: 'none'
               });
-              return _context.a(2);
+              return _context2.a(2);
             case 1:
-              if (_this4.deviceid) {
-                _context.n = 2;
+              if (_this5.deviceid) {
+                _context2.n = 2;
                 break;
               }
               uni.showToast({
                 title: '未绑定设备号',
                 icon: 'none'
               });
-              return _context.a(2);
+              return _context2.a(2);
             case 2:
-              if (!(_this4.byteLen(title) > 15)) {
-                _context.n = 3;
+              if (!(_this5.byteLen(title) > 15)) {
+                _context2.n = 3;
                 break;
               }
               uni.showToast({
                 title: '标题不能超过15字节',
                 icon: 'none'
               });
-              return _context.a(2);
+              return _context2.a(2);
             case 3:
-              if (!(_this4.byteLen(text) > 240)) {
-                _context.n = 4;
+              if (!(_this5.byteLen(text) > 240)) {
+                _context2.n = 4;
                 break;
               }
               uni.showToast({
                 title: '内容不能超过240字节',
                 icon: 'none'
               });
-              return _context.a(2);
+              return _context2.a(2);
             case 4:
-              _this4.msgSending = true;
-              _context.n = 5;
-              return Object(_common_band_js__WEBPACK_IMPORTED_MODULE_9__["sendBandMessage"])(_this4.deviceid, title, text);
+              _this5.msgSending = true;
+              _context2.n = 5;
+              return Object(_common_band_js__WEBPACK_IMPORTED_MODULE_13__["sendBandMessage"])(_this5.deviceid, title, text);
             case 5:
-              err = _context.v;
-              _this4.msgSending = false;
+              err = _context2.v;
+              _this5.msgSending = false;
               uni.showToast({
                 title: err ? err : '消息已发送到手环',
                 icon: 'none'
               });
               if (!err) {
-                _this4.msgTitle = '';
-                _this4.msgText = '';
+                _this5.msgTitle = '';
+                _this5.msgText = '';
               }
             case 6:
-              return _context.a(2);
+              return _context2.a(2);
           }
-        }, _callee);
+        }, _callee2);
       }))();
     },
     // 解绑设备：二次确认 → 删后端记录 + 删本地 store → 回设备列表 Tab
     onUnbind: function onUnbind() {
-      var _this5 = this;
+      var _this6 = this;
       if (!this.id || !this.device) return;
       var name = this.device.name || '手环';
       uni.showModal({
@@ -1914,25 +2033,25 @@ var DEDUP_MS = 3000;
         confirmColor: '#f15533',
         cancelText: '取消',
         success: function () {
-          var _success = Object(_workspace_h5build_node_modules_babel_runtime_helpers_esm_asyncToGenerator_js__WEBPACK_IMPORTED_MODULE_1__["default"])(/*#__PURE__*/Object(_workspace_h5build_node_modules_babel_runtime_helpers_esm_regenerator_js__WEBPACK_IMPORTED_MODULE_0__["default"])().m(function _callee2(res) {
-            return Object(_workspace_h5build_node_modules_babel_runtime_helpers_esm_regenerator_js__WEBPACK_IMPORTED_MODULE_0__["default"])().w(function (_context2) {
-              while (1) switch (_context2.n) {
+          var _success = Object(_workspace_h5build_node_modules_babel_runtime_helpers_esm_asyncToGenerator_js__WEBPACK_IMPORTED_MODULE_1__["default"])(/*#__PURE__*/Object(_workspace_h5build_node_modules_babel_runtime_helpers_esm_regenerator_js__WEBPACK_IMPORTED_MODULE_0__["default"])().m(function _callee3(res) {
+            return Object(_workspace_h5build_node_modules_babel_runtime_helpers_esm_regenerator_js__WEBPACK_IMPORTED_MODULE_0__["default"])().w(function (_context3) {
+              while (1) switch (_context3.n) {
                 case 0:
                   if (res.confirm) {
-                    _context2.n = 1;
+                    _context3.n = 1;
                     break;
                   }
-                  return _context2.a(2);
+                  return _context3.a(2);
                 case 1:
-                  _context2.n = 2;
-                  return Object(_common_band_js__WEBPACK_IMPORTED_MODULE_9__["unbindBandDevice"])(_this5.deviceid);
+                  _context3.n = 2;
+                  return Object(_common_band_js__WEBPACK_IMPORTED_MODULE_13__["unbindBandDevice"])(_this6.deviceid);
                 case 2:
-                  _this5.$store.dispatch('removeDevice', _this5.id);
+                  _this6.$store.dispatch('removeDevice', _this6.id);
                   uni.showToast({
                     title: '已解绑',
                     icon: 'success'
                   });
-                  _this5.stopSse();
+                  _this6.stopSse();
                   setTimeout(function () {
                     // 设备列表是 tabBar 页：switchTab 跳回
                     uni.switchTab({
@@ -1943,9 +2062,9 @@ var DEDUP_MS = 3000;
                     });
                   }, 500);
                 case 3:
-                  return _context2.a(2);
+                  return _context3.a(2);
               }
-            }, _callee2);
+            }, _callee3);
           }));
           function success(_x) {
             return _success.apply(this, arguments);
@@ -1956,71 +2075,71 @@ var DEDUP_MS = 3000;
     },
     // 手动刷新：loading 反馈 + 结果提示
     doRefresh: function doRefresh() {
-      var _this6 = this;
-      return Object(_workspace_h5build_node_modules_babel_runtime_helpers_esm_asyncToGenerator_js__WEBPACK_IMPORTED_MODULE_1__["default"])(/*#__PURE__*/Object(_workspace_h5build_node_modules_babel_runtime_helpers_esm_regenerator_js__WEBPACK_IMPORTED_MODULE_0__["default"])().m(function _callee3() {
+      var _this7 = this;
+      return Object(_workspace_h5build_node_modules_babel_runtime_helpers_esm_asyncToGenerator_js__WEBPACK_IMPORTED_MODULE_1__["default"])(/*#__PURE__*/Object(_workspace_h5build_node_modules_babel_runtime_helpers_esm_regenerator_js__WEBPACK_IMPORTED_MODULE_0__["default"])().m(function _callee4() {
         var l, hasData;
-        return Object(_workspace_h5build_node_modules_babel_runtime_helpers_esm_regenerator_js__WEBPACK_IMPORTED_MODULE_0__["default"])().w(function (_context3) {
-          while (1) switch (_context3.n) {
+        return Object(_workspace_h5build_node_modules_babel_runtime_helpers_esm_regenerator_js__WEBPACK_IMPORTED_MODULE_0__["default"])().w(function (_context4) {
+          while (1) switch (_context4.n) {
             case 0:
-              if (!_this6.refreshing) {
-                _context3.n = 1;
+              if (!_this7.refreshing) {
+                _context4.n = 1;
                 break;
               }
-              return _context3.a(2);
+              return _context4.a(2);
             case 1:
-              _this6.refreshing = true;
-              _context3.n = 2;
-              return _this6.load();
+              _this7.refreshing = true;
+              _context4.n = 2;
+              return _this7.load();
             case 2:
-              _this6.refreshing = false;
-              if (_this6.deviceid) {
-                _context3.n = 3;
+              _this7.refreshing = false;
+              if (_this7.deviceid) {
+                _context4.n = 3;
                 break;
               }
               uni.showToast({
                 title: '未绑定设备号',
                 icon: 'none'
               });
-              return _context3.a(2);
+              return _context4.a(2);
             case 3:
-              l = _this6.latest;
+              l = _this7.latest;
               hasData = !!(l && (l.hr != null || l.sbp != null || l.dbp != null || l.steps != null));
               uni.showToast({
                 title: hasData ? '已刷新，数据已更新' : '暂无新数据，等待手环上报',
                 icon: 'none'
               });
             case 4:
-              return _context3.a(2);
+              return _context4.a(2);
           }
-        }, _callee3);
+        }, _callee4);
       }))();
     },
     load: function load() {
-      var _this7 = this;
-      return Object(_workspace_h5build_node_modules_babel_runtime_helpers_esm_asyncToGenerator_js__WEBPACK_IMPORTED_MODULE_1__["default"])(/*#__PURE__*/Object(_workspace_h5build_node_modules_babel_runtime_helpers_esm_regenerator_js__WEBPACK_IMPORTED_MODULE_0__["default"])().m(function _callee4() {
+      var _this8 = this;
+      return Object(_workspace_h5build_node_modules_babel_runtime_helpers_esm_asyncToGenerator_js__WEBPACK_IMPORTED_MODULE_1__["default"])(/*#__PURE__*/Object(_workspace_h5build_node_modules_babel_runtime_helpers_esm_regenerator_js__WEBPACK_IMPORTED_MODULE_0__["default"])().m(function _callee5() {
         var latest, l;
-        return Object(_workspace_h5build_node_modules_babel_runtime_helpers_esm_regenerator_js__WEBPACK_IMPORTED_MODULE_0__["default"])().w(function (_context4) {
-          while (1) switch (_context4.n) {
+        return Object(_workspace_h5build_node_modules_babel_runtime_helpers_esm_regenerator_js__WEBPACK_IMPORTED_MODULE_0__["default"])().w(function (_context5) {
+          while (1) switch (_context5.n) {
             case 0:
-              if (_this7.deviceid) {
-                _context4.n = 1;
+              if (_this8.deviceid) {
+                _context5.n = 1;
                 break;
               }
-              return _context4.a(2);
+              return _context5.a(2);
             case 1:
-              _context4.n = 2;
-              return Object(_common_band_js__WEBPACK_IMPORTED_MODULE_9__["fetchBandLatest"])(_this7.deviceid);
+              _context5.n = 2;
+              return Object(_common_band_js__WEBPACK_IMPORTED_MODULE_13__["fetchBandLatest"])(_this8.deviceid);
             case 2:
-              latest = _context4.v;
-              _this7.latest = latest || {};
-              _this7.lastSyncAt = Date.now();
+              latest = _context5.v;
+              _this8.latest = latest || {};
+              _this8.lastSyncAt = Date.now();
               // 只有后端真实上报过数据才视为在线
-              l = _this7.latest;
-              _this7.online = !!(l && (l.hr != null || l.sbp != null || l.dbp != null || l.steps != null));
+              l = _this8.latest;
+              _this8.online = !!(l && (l.hr != null || l.sbp != null || l.dbp != null || l.steps != null));
               // 回写本地 store，保持设备列表一致
-              if (_this7.id) {
-                _this7.$store.commit('UPDATE_DEVICE_DATA', {
-                  id: _this7.id,
+              if (_this8.id) {
+                _this8.$store.commit('UPDATE_DEVICE_DATA', {
+                  id: _this8.id,
                   data: {
                     sys: l.sbp,
                     dia: l.dbp,
@@ -2028,13 +2147,13 @@ var DEDUP_MS = 3000;
                     steps: l.steps,
                     battery: l.battery
                   },
-                  lastSync: _this7.syncText
+                  lastSync: _this8.syncText
                 });
               }
             case 3:
-              return _context4.a(2);
+              return _context5.a(2);
           }
-        }, _callee4);
+        }, _callee5);
       }))();
     }
   }

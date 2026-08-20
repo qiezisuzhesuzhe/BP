@@ -116,9 +116,12 @@
     <view class="wrap">
       <view class="sec-head">
         <text class="sec-title">血压</text>
-        <view class="bp-tag" :style="{ background: bp.bg, color: bp.color }">
-          <text class="bp-tag__dot" :style="{ background: bp.color }"></text>
-          <text class="bp-tag__t">{{ bp.label }}</text>
+        <view class="sec-head__right">
+          <text class="sec-sub">{{ bpTimeText }}</text>
+          <view class="bp-tag" :style="{ background: bp.bg, color: bp.color }">
+            <text class="bp-tag__dot" :style="{ background: bp.color }"></text>
+            <text class="bp-tag__t">{{ bp.label }}</text>
+          </view>
         </view>
       </view>
       <view class="bp">
@@ -303,6 +306,16 @@ export default {
       const d = new Date(this.latest.ts * 1000)
       const p = (n) => (n < 10 ? '0' + n : n)
       return p(d.getHours()) + ':' + p(d.getMinutes()) + ':' + p(d.getSeconds())
+    },
+    // 血压测量时间：优先用后端写入的独立时间戳 bpTs（若将来加），否则回退到快照整体 ts
+    bpTimeText() {
+      const l = this.latest || {}
+      const ts = (l.bpTs != null) ? l.bpTs : l.ts
+      if (!ts) return '最近测量 --'
+      if (l.sbp == null || l.dbp == null) return '最近测量 --'
+      const d = new Date(ts * 1000)
+      const p = (n) => (n < 10 ? '0' + n : n)
+      return '最近测量 ' + p(d.getHours()) + ':' + p(d.getMinutes())
     },
     syncText() {
       if (!this.lastSyncAt) return '--'
@@ -788,6 +801,13 @@ export default {
   justify-content: space-between;
   margin-top: $space-sec-head-top;
   margin-bottom: $space-sec-head-bottom;
+}
+
+.sec-head__right {
+  display: flex;
+  align-items: center;
+  gap: 16rpx;
+  flex-shrink: 0;
 }
 
 .sec-title {

@@ -3232,7 +3232,7 @@
       "name": "智能手环 - 血压款",
       "model": "BP100CE",
       "firstSeen": 1787198341420,
-      "lastSeen": 1787210678291,
+      "lastSeen": 1787211029131,
       "latest": {
         "ecgTs": 1787209586,
         "ecgN": 60,
@@ -3301,30 +3301,30 @@
         "steps": 1618,
         "distance": 1245,
         "calorie": 115,
-        "battery": 76,
+        "battery": 74,
         "charging": false,
-        "ts": 1787210640,
+        "ts": 1787211000,
         "hr": 75,
-        "sbp": 150,
-        "dbp": 78,
+        "sbp": 131,
+        "dbp": 92,
         "bodyTemp": 36.5,
         "skinTemp": 34.2,
         "tempOk": true,
-        "updatedAt": 1787210678291,
+        "updatedAt": 1787211029131,
         "sleep": {
-          "deep": 0,
+          "deep": 2,
           "light": 0,
-          "wake": 5,
+          "wake": 3,
           "total": 5
         },
         "spo2": 99,
         "spo2Max": 100,
         "spo2Min": 96,
-        "stepsTs": 1787210656,
-        "bpTs": 1787210580,
+        "stepsTs": 1787211008,
+        "bpTs": 1787210940,
         "spo2Ts": 1787210269,
         "tempTs": 1787210009,
-        "sleepTs": 1787210640,
+        "sleepTs": 1787211000,
         "stress": 38,
         "stressTs": 1787209586
       },
@@ -3993,6 +3993,51 @@
           },
           "ts": 1787210640,
           "sleepTs": 1787239440
+        },
+        {
+          "at": 1787210950070,
+          "steps": 1618,
+          "distance": 1245,
+          "calorie": 115,
+          "battery": 76,
+          "charging": false,
+          "ts": 1787210946,
+          "stepsTs": 1787210946
+        },
+        {
+          "at": 1787210966214,
+          "sleep": {
+            "deep": 1,
+            "light": 1,
+            "wake": 3,
+            "total": 5
+          },
+          "ts": 1787210940,
+          "sleepTs": 1787210940,
+          "sbp": 131,
+          "dbp": 92,
+          "bpTs": 1787210940
+        },
+        {
+          "at": 1787211010723,
+          "steps": 1618,
+          "distance": 1245,
+          "calorie": 115,
+          "battery": 74,
+          "charging": false,
+          "ts": 1787211008,
+          "stepsTs": 1787211008
+        },
+        {
+          "at": 1787211029131,
+          "sleep": {
+            "deep": 2,
+            "light": 0,
+            "wake": 3,
+            "total": 5
+          },
+          "ts": 1787211000,
+          "sleepTs": 1787211000
         }
       ],
       "version": "91.0.0.59",

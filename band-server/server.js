@@ -278,8 +278,8 @@ function mergeSamples(deviceid, packets) {
     } else if (type === 'ecg') {
       if (data.ecgN !== undefined) snap.ecgN = data.ecgN
       if (data.ecgSamples) snap.ecgSamples = data.ecgSamples
-      if (data.ecgTs) snap.ecgTs = data.ecgTs
-      if (!snap.ecgTs) snap.ecgTs = pktTs
+      snap.ecgTs = pktTs
+      snap.ts = pktTs
     } else if (type === 'spo2') {
       if (data.spo2 !== undefined) snap.spo2 = data.spo2
       if (data.spo2Max !== undefined) snap.spo2Max = data.spo2Max

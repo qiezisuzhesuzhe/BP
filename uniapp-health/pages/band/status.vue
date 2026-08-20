@@ -346,7 +346,8 @@ export default {
       if (!this.latest.ts) return '--'
       const d = new Date(this.latest.ts * 1000)
       const p = (n) => (n < 10 ? '0' + n : n)
-      return p(d.getHours()) + ':' + p(d.getMinutes()) + ':' + p(d.getSeconds())
+      const bjH = (d.getUTCHours() + 8) % 24
+      return p(bjH) + ':' + p(d.getUTCMinutes()) + ':' + p(d.getUTCSeconds())
     },
     // 血压测量时间：以 bpTs 为准，没有 bpTs 回退到 ts（保留旧字段以兼容旧数据）
     bpTimeText() {
@@ -482,9 +483,7 @@ export default {
     },
     ecgTimeText() {
       if (!this.latest.ecgTs) return '最近测量 --'
-      const d = new Date(this.latest.ecgTs * 1000)
-      const p = (n) => (n < 10 ? '0' + n : n)
-      return '最近测量 ' + p(d.getHours()) + ':' + p(d.getMinutes())
+      return '最近测量 ' + this._fmtSecTs(this.latest.ecgTs)
     },
     ecgMetaText() {
       if (this.latest.ecgN == null) return '测量后显示心电图波形'
@@ -526,12 +525,13 @@ export default {
     this.stopSse()
   },
   methods: {
-    // 秒级时间戳 → "HH:MM"（与血压"最近测量"文案保持一致；传 null/undefined 返回 '--'）
+    // 秒级时间戳 → "HH:MM"（固定按北京时间 UTC+8 显示，不依赖浏览器/设备时区）
     _fmtSecTs(secTs) {
       if (secTs == null) return '--'
       const d = new Date(secTs * 1000)
       const p = (n) => (n < 10 ? '0' + n : '' + n)
-      return p(d.getHours()) + ':' + p(d.getMinutes())
+      const bjH = (d.getUTCHours() + 8) % 24
+      return p(bjH) + ':' + p(d.getUTCMinutes())
     },
     // 拉取当前 band-server 的公网隧道地址（entservice 把手环数据上报到这里）
     // 作用：页面底部状态条展示，让用户一眼核对"手环 App 里配置的上报域名是否与此一致"

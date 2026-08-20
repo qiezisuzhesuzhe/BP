@@ -154,12 +154,20 @@ function parsePayload(opt, payload) {
       }
       // 体温/皮肤温度：HisHealthTemp.type=1 可用（0=算法计算中，暂不可用）
       // evi_body=体温（单位 0.01℃，如 3343=33.43℃）；esti_arm 高16位=体温冗余、低16位=皮肤温度，低16位为 0 表示无皮肤温度数据
+      // 注意：health 包的体温经常低于真实体温（可能是皮肤温/原始值），优先级低于独立 temp 包。
       if (h.temperature_data) {
         const t = h.temperature_data
-        o.tempOk = t.type === 1
-        if (t.evi_body != null && (t.evi_body >>> 0)) o.bodyTemp = (t.evi_body >>> 0) / 100
+        const ok = t.type === 1
+        o.tempOk = ok
+        if (ok && t.evi_body != null && (t.evi_body >>> 0)) {
+          const bt = (t.evi_body >>> 0) / 100
+          if (bt >= 25 && bt <= 45) o.bodyTemp = bt   // 范围校验：25-45°C 才接受
+        }
         const skin = t.esti_arm != null ? ((t.esti_arm >>> 0) & 0xffff) : 0
-        if (skin) o.skinTemp = skin / 100
+        if (skin) {
+          const st = skin / 100
+          if (st >= 20 && st <= 45) o.skinTemp = st   // 范围校验：皮肤温 20-45°C
+        }
       }
       // 压力值：HisHealthHrv.fatigue=疲劳度，压力值 = 100 - fatigue
       if (h.hrv_data && h.hrv_data.fatigue != null) {
@@ -190,17 +198,24 @@ function parsePayload(opt, payload) {
       return { type: 'spo2', data: o }
     }
     // 体温（HisDataType=TEMPERATURE_DATA=8，HisDataTemperature → SensorTemp.evi_body/esti_arm）
+    // 注意：独立体温包（his.temp）的温度比 health 包内的 temperature_data 更准确。
     if (his.temp) {
       const s = his.temp.temperature
       const o = {}
       if (his.temp.time_stamp && his.temp.time_stamp.date_time) o.ts = his.temp.time_stamp.date_time.seconds >>> 0
       if (s) {
         o.tempOk = true
-        if (s.evi_body != null && (s.evi_body >>> 0)) o.bodyTemp = (s.evi_body >>> 0) / 100
+        if (s.evi_body != null && (s.evi_body >>> 0)) {
+          const bt = (s.evi_body >>> 0) / 100
+          if (bt >= 25 && bt <= 45) o.bodyTemp = bt   // 范围校验：25-45°C 才接受
+        }
         const skin = s.esti_arm != null ? ((s.esti_arm >>> 0) & 0xffff) : 0
-        if (skin) o.skinTemp = skin / 100
+        if (skin) {
+          const st = skin / 100
+          if (st >= 20 && st <= 45) o.skinTemp = st   // 范围校验：皮肤温 20-45°C
+        }
       }
-      return { type: 'health', data: o }
+      return { type: 'temp', data: o }
     }
     return null
   }
@@ -240,7 +255,25 @@ function mergeSamples(deviceid, packets) {
   const dev = touch(deviceid)
   const snap = {}
   const nowSec = Math.floor(Date.now() / 1000)
+
+  // 把独立体温包（type==='temp'）推迟到最后处理：
+  //   因为独立体温包的体温是校准后的真实值，优先级最高。
+  //   如果先处理 temp 再处理 health，health 包的低估值（皮肤温/算法未收敛值，
+  //   如 33°C 左右）会把正常体温（36.5°C）覆盖，导致用户看到"体温经常很低"。
+  const ordered = []
+  const tempPackets = []
   for (const p of packets) {
+    if (p && p.parsed && p.parsed.type === 'temp') tempPackets.push(p)
+    else ordered.push(p)
+  }
+  for (const p of tempPackets) ordered.push(p)
+
+  // 记录一次上报中是否出现过独立体温包：
+  //   如果出现过，health 包的体温字段就不允许写入，避免 health 的低值覆盖正常值。
+  //   （temp 包最后处理的基础上再加一道防御）
+  const hasTempPacketInThisBatch = packets.some(p => p && p.parsed && p.parsed.type === 'temp')
+
+  for (const p of ordered) {
     if (!p.parsed) continue
     const { type, data } = p.parsed
     // 测量时间：优先用手环上报的 ts（真实测量时刻），无 ts 时回退到服务器收到时间
@@ -269,9 +302,25 @@ function mergeSamples(deviceid, packets) {
       if (data.spo2 !== undefined) snap.spo2 = data.spo2
       if (data.spo2Max !== undefined) snap.spo2Max = data.spo2Max
       if (data.spo2Min !== undefined) snap.spo2Min = data.spo2Min
-      if (data.bodyTemp !== undefined) snap.bodyTemp = data.bodyTemp
-      if (data.skinTemp !== undefined) snap.skinTemp = data.skinTemp
-      if (data.tempOk !== undefined) snap.tempOk = data.tempOk
+      // 体温：只有本批次没有独立 temp 包，且历史上也没有"有效独立体温"时，
+      //   才允许 health 包写入体温。独立 temp 包的体温精度最高，
+      //   health 里的 temperature_data 常是低估值/皮肤温/算法中间值（常见 32-34°C），
+      //   若允许它覆盖之前独立 temp 包的正常值（36.x°C），就会出现"体温经常变得很低"。
+      // 判定"历史上是否有有效独立体温"：
+      //   latest.tempTs 存在 且 latest.tempOk !== false 且 bodyTemp 在正常体温区间（>=35°C）
+      const latestT = dev.latest || {}
+      const hasGoodTempInHistory = !!(
+        latestT.tempTs != null &&
+        latestT.tempOk !== false &&
+        latestT.bodyTemp != null &&
+        latestT.bodyTemp >= 35
+      )
+      if (!hasTempPacketInThisBatch && !hasGoodTempInHistory) {
+        if (data.bodyTemp !== undefined) snap.bodyTemp = data.bodyTemp
+        if (data.skinTemp !== undefined) snap.skinTemp = data.skinTemp
+        if (data.tempOk !== undefined) snap.tempOk = data.tempOk
+        if (data.bodyTemp !== undefined || data.skinTemp !== undefined) snap.tempTs = pktTs
+      }
       if (data.stress !== undefined) snap.stress = data.stress
       snap.ts = pktTs
       // 为每项独立可测量指标打独立时间戳；hr 跟随 bp 一次测量
@@ -280,7 +329,6 @@ function mergeSamples(deviceid, packets) {
         snap.bpTs = pktTs
       }
       if (data.spo2 !== undefined) snap.spo2Ts = pktTs
-      if (data.bodyTemp !== undefined || data.skinTemp !== undefined) snap.tempTs = pktTs
       if (data.stress !== undefined) snap.stressTs = pktTs
       if (data.sleep !== undefined) snap.sleepTs = pktTs
       if (data.steps !== undefined) snap.stepsTs = pktTs
@@ -296,6 +344,13 @@ function mergeSamples(deviceid, packets) {
       if (data.spo2N !== undefined) snap.spo2N = data.spo2N
       snap.ts = pktTs
       snap.spo2Ts = pktTs
+    } else if (type === 'temp') {
+      // 独立体温包：HisDataType=TEMPERATURE_DATA=8，真实体温测量结果，优先级最高
+      if (data.bodyTemp !== undefined) snap.bodyTemp = data.bodyTemp
+      if (data.skinTemp !== undefined) snap.skinTemp = data.skinTemp
+      if (data.tempOk !== undefined) snap.tempOk = data.tempOk
+      if (data.bodyTemp !== undefined || data.skinTemp !== undefined) snap.tempTs = pktTs
+      snap.ts = pktTs
     }
   }
   if (Object.keys(snap).length) {

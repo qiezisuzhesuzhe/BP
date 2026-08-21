@@ -19,47 +19,91 @@
         </view>
       </view>
 
-      <!-- 实时数据 -->
-      <view class="sec-head">
-        <text class="hm-sec-title">实时数据</text>
-        <text class="hm-sec-sub">{{ refreshTip }}</text>
-      </view>
+      <!-- 雷达款：五项核心指标，手环风格 vital 卡布局，每项带最新数据时间 -->
+      <block v-if="isRadar">
+        <view class="vital">
+          <view class="vital__card vital__card--hr">
+            <view class="vital__head">
+              <text class="fa-solid fa-heart-pulse vital__icon"></text>
+              <text class="vital__name">心率</text>
+            </view>
+            <view class="vital__value">
+              <text class="vital__num">{{ radarLatest && radarLatest.heartRate != null ? radarLatest.heartRate : '--' }}</text>
+              <text class="vital__unit">bpm</text>
+            </view>
+            <text class="vital__sub">{{ latestTimeTip }}</text>
+          </view>
+          <view class="vital__card vital__card--resp">
+            <view class="vital__head">
+              <text class="fa-solid fa-wind vital__icon"></text>
+              <text class="vital__name">呼吸</text>
+            </view>
+            <view class="vital__value">
+              <text class="vital__num">{{ radarLatest && radarLatest.respRate != null ? radarLatest.respRate : '--' }}</text>
+              <text class="vital__unit">次/分</text>
+            </view>
+            <text class="vital__sub">{{ latestTimeTip }}</text>
+          </view>
+        </view>
+        <view class="vital">
+          <view class="vital__card vital__card--sleep">
+            <view class="vital__head">
+              <text class="fa-solid fa-moon vital__icon"></text>
+              <text class="vital__name">睡眠时长</text>
+            </view>
+            <view class="vital__value">
+              <text class="vital__num">{{ radarLatest && radarLatest.stay != null ? radarLatest.stay : '--' }}</text>
+              <text class="vital__unit">h</text>
+            </view>
+            <text class="vital__sub">{{ latestTimeTip }}</text>
+          </view>
+          <view class="vital__card vital__card--presence">
+            <view class="vital__head">
+              <text class="fa-solid fa-bed vital__icon"></text>
+              <text class="vital__name">存在状态</text>
+            </view>
+            <view class="vital__value">
+              <text class="vital__num" :style="{ color: inBedColor }">{{ inBedText }}</text>
+            </view>
+            <text class="vital__sub">{{ latestTimeTip }}</text>
+          </view>
+        </view>
+        <view class="wrap--single">
+          <view class="vital__card vital__card--struggle" :class="{ 'vital__card--alert': struggleInfo.active }">
+            <view class="vital__head">
+              <text class="fa-solid fa-triangle-exclamation vital__icon vital__icon--alert"></text>
+              <text class="vital__name" :style="{ color: struggleInfo.active ? '#f15533' : '' }">异常挣扎</text>
+            </view>
+            <view class="vital__value">
+              <text class="vital__num" :style="{ color: struggleInfo.active ? '#f15533' : '' }">{{ struggleInfo.active ? struggleInfo.count : '无' }}</text>
+              <text class="vital__unit" v-if="struggleInfo.active">次</text>
+              <text class="vital__unit" v-else>&nbsp;</text>
+            </view>
+            <text class="vital__sub" :class="{ 'vital__sub--alert': struggleInfo.active }">
+              {{ struggleInfo.active ? struggleInfo.text + '，最近挣扎时间' : '状态正常' }}
+            </text>
+            <!-- 最近三次挣扎时间 -->
+            <view v-if="struggleHistory.length" class="struggle-list">
+              <view v-for="(s, i) in struggleHistory" :key="i" class="struggle-list__item">
+                <text class="struggle-list__time">{{ fmtTs(s.ts) }}</text>
+                <text class="struggle-list__count">第{{ i + 1 }}次 · 共{{ s.count }}次</text>
+              </view>
+            </view>
+          </view>
+        </view>
+      </block>
 
-      <!-- 雷达款：平台推送的在床状态、设备状态、生命体征分级与挣扎预警 -->
-      <view v-if="isRadar" class="rstat">
-        <view class="rstat__item">
-          <text class="rstat__icon" :class="inBedIcon" :style="{ color: inBedColor }"></text>
-          <text class="rstat__t" :style="{ color: inBedColor }">{{ inBedText }}</text>
-        </view>
-        <view class="rstat__item" v-if="radarStateLabel">
-          <text class="rstat__icon fa-solid fa-circle-nodes" style="color:#8dcdd8"></text>
-          <text class="rstat__t">{{ radarStateLabel }}</text>
-        </view>
-        <view class="rstat__item" v-if="respTip">
-          <text class="rstat__icon fa-solid fa-wind" style="color:#f2994a"></text>
-          <text class="rstat__t">呼吸{{ respTip }}</text>
-        </view>
-        <view class="rstat__item" v-if="heartInfo && heartInfo.text">
-          <text class="rstat__icon fa-solid fa-heart" :style="{ color: heartInfo.level === 'danger' ? '#f15533' : heartInfo.level === 'high' ? '#f2994a' : '#389a82' }"></text>
-          <text class="rstat__t" :style="{ color: heartInfo.level === 'danger' ? '#f15533' : heartInfo.level === 'high' ? '#f2994a' : '#389a82' }">心率{{ heartInfo.text }}</text>
-        </view>
-        <view class="rstat__item" v-if="struggleInfo.active">
-          <text class="rstat__icon fa-solid fa-triangle-exclamation" style="color:#f15533"></text>
-          <text class="rstat__t" style="color:#f15533">挣扎{{ struggleInfo.text }}({{ struggleInfo.count }}次)</text>
-        </view>
-      </view>
-
-      <view class="grid">
-        <view v-for="(f, i) in type.fields" :key="f.key" class="cell" :class="[cellClass(f), { 'cell--pulse': pulsing[i] }]">
+      <!-- 非雷达设备：保留原有网格布局 -->
+      <view v-else class="grid">
+        <view v-for="(f, i) in type.fields" :key="f.key" class="cell" :class="{ 'cell--pulse': pulsing[i] }">
           <view class="cell__icon" :style="{ background: type.accentSoft }">
             <text class="cell__icon-t" :class="f.icon" :style="{ color: type.color }"></text>
           </view>
           <view class="cell__val">
-            <text class="cell__num" :style="{ color: f.key === 'struggleAlert' && struggleInfo.active ? '#f15533' : type.color }">{{ fmt(f) }}</text>
+            <text class="cell__num" :style="{ color: type.color }">{{ fmt(f) }}</text>
             <text class="cell__unit">{{ f.unit }}</text>
           </view>
           <text class="cell__label">{{ f.label }}</text>
-          <text v-if="cellSub(f)" class="cell__sub" :class="{ 'cell__sub--alert': f.key === 'struggleAlert' && struggleInfo.active }">{{ cellSub(f) }}</text>
         </view>
       </view>
 
@@ -87,7 +131,7 @@
 <script>
 import { deviceType } from '@/common/mock.js'
 import { subscribeEvents } from '@/common/band.js'
-import { fetchRadarRecord, unbindRadarDevice, radarInBed, radarStateText, respLevel, heartRateLevel, radarStruggleAlert } from '@/common/radar.js'
+import { fetchRadarRecord, unbindRadarDevice, radarInBed, radarStruggleAlert } from '@/common/radar.js'
 
 // 雷达为真实链路，无需 2 秒轮询：SSE 已实时推送，轮询仅作断线兜底
 const RADAR_POLL_MS = 60000
@@ -145,8 +189,21 @@ export default {
       return this.radarOnline ? '#389a82' : '#94a3b8'
     },
     refreshTip() {
-      if (this.isRadar) return '云平台实时推送'
-      return '每 2 秒自动刷新'
+      return ''  // 已移除"云平台实时推送"提示，时间信息移至每个卡片下方
+    },
+    // 最新数据时间提示：显示在每个 vital 卡片下方
+    latestTimeTip() {
+      if (!this.isRadar) return ''
+      const ts = this.radarLatest && this.radarLatest.ts
+      if (!ts) return '等待数据上报'
+      return '最新数据 ' + this.fmtTs(ts)
+    },
+    // 挣扎历史（最近 3 次）
+    struggleHistory() {
+      if (!this.isRadar) return []
+      const rec = this.radarRec
+      if (!rec || !Array.isArray(rec.struggleHistory)) return []
+      return rec.struggleHistory.slice(0, 3)
     },
     footTip() {
       if (this.isRadar) {
@@ -162,38 +219,17 @@ export default {
       if (v === false) return '离床'
       return '在床状态待上报'
     },
-    inBedIcon() {
-      const v = radarInBed(this.radarLatest)
-      if (v === true) return 'fa-solid fa-bed'
-      if (v === false) return 'fa-solid fa-person-walking-arrow-right'
-      return 'fa-solid fa-satellite-dish'
-    },
     inBedColor() {
       const v = radarInBed(this.radarLatest)
       if (v === true) return '#389a82'
       if (v === false) return '#f2994a'
       return '#94a3b8'
     },
-    radarStateLabel() {
-      if (!this.radarRec) return ''
-      return this.radarRec.stateText || radarStateText(this.radarRec.state)
-    },
-    // 呼吸频率分级（偏慢 / 正常 / 偏快 / 过快），无数据则不显示该 chip
-    respTip() {
-      if (!this.radarLatest) return ''
-      const r = respLevel(this.radarLatest.respRate)
-      return r && r.text ? r.text : ''
-    },
     // 平台上报但未命中内置字段映射的属性，原样列出（型号未知时兜住全部数据）
     extraAttrs() {
       if (!this.isRadar) return []
       const list = (this.radarRec && this.radarRec.attrs) || []
       return list.filter((a) => a && !a.key && a.name != null && a.value != null && a.value !== '')
-    },
-    // 心率分级（显示在 cell 下方）
-    heartInfo() {
-      if (!this.isRadar || !this.radarLatest) return null
-      return heartRateLevel(this.radarLatest.heartRate)
     },
     // 异常挣扎状态
     struggleInfo() {
@@ -279,36 +315,6 @@ export default {
       if (isNaN(d.getTime())) return '--'
       const p = (n) => (n < 10 ? '0' + n : String(n))
       return p(d.getMonth() + 1) + '-' + p(d.getDate()) + ' ' + p(d.getHours()) + ':' + p(d.getMinutes())
-    },
-    fmt(f) {
-      // 雷达取后端真实快照，其他设备沿用 store 中的原型数据
-      const src = this.isRadar ? this.radarLatest : (this.dev && this.dev.data)
-      if (!src) return '--'
-      // 特殊字段：在床状态显示文字
-      if (this.isRadar && f.key === 'inBed') {
-        const v = radarInBed(src)
-        if (v === true) return '在床'
-        if (v === false) return '离床'
-        return '--'
-      }
-      const v = src[f.key]
-      if (v === null || v === undefined || v === '') return '--'
-      return v
-    },
-    // 雷达单元特殊样式
-    cellClass(f) {
-      if (!this.isRadar) return ''
-      if (f.key === 'struggleAlert') {
-        return this.struggleInfo && this.struggleInfo.active ? 'cell--alert' : ''
-      }
-      return ''
-    },
-    // 单元附加文字（心率分级 / 挣扎预警等级）
-    cellSub(f) {
-      if (!this.isRadar) return ''
-      if (f.key === 'heartRate' && this.heartInfo && this.heartInfo.text) return this.heartInfo.text
-      if (f.key === 'struggleAlert' && this.struggleInfo && this.struggleInfo.active) return this.struggleInfo.text
-      return ''
     },
     unbind() {
       uni.showModal({
@@ -433,30 +439,143 @@ export default {
 }
 
 .rstat {
+  display: none;
+}
+
+/* Vital 卡片：手环风格布局，雷达详情用 */
+.vital {
   display: flex;
-  flex-wrap: wrap;
+  margin-top: $space-3;
+}
+
+.wrap--single {
+  padding: $space-4 $space-4 0;
+  margin-top: $space-3;
+}
+
+.wrap--single .vital__card {
+  width: 100%;
+}
+
+.vital__card {
+  flex: 1;
+  min-width: 0;
   background: $bg-surface;
   border-radius: $radius-card-child;
   box-shadow: $shadow-sm;
-  padding: $space-3;
-  margin-bottom: $space-data-list-gap;
+  padding: $space-4;
 }
 
-.rstat__item {
+.vital__card + .vital__card {
+  margin-left: $space-3;
+}
+
+.vital__card--alert {
+  border: 2rpx solid rgba(241, 85, 51, 0.4);
+}
+
+.vital__card--hr {
+  background: linear-gradient(145deg, #e8f8f0 0%, $bg-surface 75%);
+}
+
+.vital__card--struggle {
+  background: linear-gradient(145deg, #fff5f3 0%, $bg-surface 75%);
+}
+
+.vital__card--struggle.vital__card--alert {
+  background: linear-gradient(145deg, #fdeeee 0%, $bg-surface 75%);
+}
+
+.vital__head {
   display: flex;
   align-items: center;
-  margin-right: $space-4;
 }
 
-.rstat__icon {
+.vital__icon {
+  font-size: $font-size-md;
+  margin-right: $space-2;
+  color: $brand-green;
+}
+
+.vital__icon--alert {
+  color: #f15533;
+}
+
+.vital__card--resp .vital__icon { color: #8dcdd8; }
+.vital__card--sleep .vital__icon { color: #9b8fc9; }
+.vital__card--presence .vital__icon { color: #389a82; }
+.vital__card--struggle .vital__icon { color: #f15533; }
+
+.vital__name {
   font-size: $font-size-sm;
-  margin-right: $space-1;
-}
-
-.rstat__t {
-  font-size: $font-size-xs;
   font-weight: $font-weight-semibold;
   color: $text-secondary;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.vital__value {
+  display: flex;
+  align-items: baseline;
+  margin-top: $space-3;
+}
+
+.vital__num {
+  font-size: $font-size-2xl;
+  font-weight: $font-weight-heavy;
+  font-family: $font-family-en;
+  line-height: 1;
+  color: $text-primary;
+}
+
+.vital__card--hr .vital__num { color: $brand-green; }
+.vital__card--resp .vital__num { color: #8dcdd8; }
+.vital__card--sleep .vital__num { color: #9b8fc9; }
+
+.vital__unit {
+  margin-left: $space-1;
+  font-size: $font-size-2xs;
+  color: $text-muted;
+}
+
+.vital__sub {
+  display: block;
+  margin-top: $space-2;
+  font-size: $font-size-2xs;
+  color: $text-muted;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.vital__sub--alert {
+  color: #f15533;
+}
+
+/* 挣扎历史列表 */
+.struggle-list {
+  margin-top: $space-3;
+  padding-top: $space-2;
+  border-top: 1rpx solid $bg-section;
+}
+
+.struggle-list__item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: $space-1 0;
+}
+
+.struggle-list__time {
+  font-size: $font-size-xs;
+  color: $text-primary;
+  font-weight: $font-weight-semibold;
+}
+
+.struggle-list__count {
+  font-size: $font-size-2xs;
+  color: $text-muted;
 }
 
 .grid {
@@ -477,22 +596,6 @@ export default {
 
 .cell--pulse {
   box-shadow: 0 0 0 2rpx rgba(56, 154, 130, 0.35);
-}
-
-.cell--alert {
-  border: 2rpx solid rgba(241, 85, 51, 0.4);
-}
-
-.cell__sub {
-  display: block;
-  font-size: $font-size-2xs;
-  color: $text-muted;
-  margin-top: $space-1;
-  font-weight: $font-weight-medium;
-}
-
-.cell__sub--alert {
-  color: #f15533;
 }
 
 .cell__icon {

@@ -141,223 +141,413 @@ var render = function () {
                 ],
                 1
               ),
-              _c(
-                "v-uni-view",
-                { staticClass: "sec-head" },
-                [
-                  _c("v-uni-text", { staticClass: "hm-sec-title" }, [
-                    _vm._v("实时数据"),
-                  ]),
-                  _c("v-uni-text", { staticClass: "hm-sec-sub" }, [
-                    _vm._v(_vm._s(_vm.refreshTip)),
-                  ]),
-                ],
-                1
-              ),
               _vm.isRadar
-                ? _c(
-                    "v-uni-view",
-                    { staticClass: "rstat" },
-                    [
-                      _c(
-                        "v-uni-view",
-                        { staticClass: "rstat__item" },
-                        [
-                          _c("v-uni-text", {
-                            staticClass: "rstat__icon",
-                            class: _vm.inBedIcon,
-                            style: { color: _vm.inBedColor },
-                          }),
-                          _c(
-                            "v-uni-text",
-                            {
-                              staticClass: "rstat__t",
-                              style: { color: _vm.inBedColor },
-                            },
-                            [_vm._v(_vm._s(_vm.inBedText))]
-                          ),
-                        ],
-                        1
-                      ),
-                      _vm.radarStateLabel
-                        ? _c(
-                            "v-uni-view",
-                            { staticClass: "rstat__item" },
-                            [
-                              _c("v-uni-text", {
-                                staticClass:
-                                  "rstat__icon fa-solid fa-circle-nodes",
-                                staticStyle: { color: "#8dcdd8" },
-                              }),
-                              _c("v-uni-text", { staticClass: "rstat__t" }, [
-                                _vm._v(_vm._s(_vm.radarStateLabel)),
-                              ]),
-                            ],
-                            1
-                          )
-                        : _vm._e(),
-                      _vm.respTip
-                        ? _c(
-                            "v-uni-view",
-                            { staticClass: "rstat__item" },
-                            [
-                              _c("v-uni-text", {
-                                staticClass: "rstat__icon fa-solid fa-wind",
-                                staticStyle: { color: "#f2994a" },
-                              }),
-                              _c("v-uni-text", { staticClass: "rstat__t" }, [
-                                _vm._v("呼吸" + _vm._s(_vm.respTip)),
-                              ]),
-                            ],
-                            1
-                          )
-                        : _vm._e(),
-                      _vm.heartInfo && _vm.heartInfo.text
-                        ? _c(
-                            "v-uni-view",
-                            { staticClass: "rstat__item" },
-                            [
-                              _c("v-uni-text", {
-                                staticClass: "rstat__icon fa-solid fa-heart",
-                                style: {
-                                  color:
-                                    _vm.heartInfo.level === "danger"
-                                      ? "#f15533"
-                                      : _vm.heartInfo.level === "high"
-                                      ? "#f2994a"
-                                      : "#389a82",
-                                },
-                              }),
-                              _c(
-                                "v-uni-text",
-                                {
-                                  staticClass: "rstat__t",
-                                  style: {
-                                    color:
-                                      _vm.heartInfo.level === "danger"
-                                        ? "#f15533"
-                                        : _vm.heartInfo.level === "high"
-                                        ? "#f2994a"
-                                        : "#389a82",
-                                  },
-                                },
-                                [_vm._v("心率" + _vm._s(_vm.heartInfo.text))]
-                              ),
-                            ],
-                            1
-                          )
-                        : _vm._e(),
-                      _vm.struggleInfo.active
-                        ? _c(
-                            "v-uni-view",
-                            { staticClass: "rstat__item" },
-                            [
-                              _c("v-uni-text", {
-                                staticClass:
-                                  "rstat__icon fa-solid fa-triangle-exclamation",
-                                staticStyle: { color: "#f15533" },
-                              }),
-                              _c(
-                                "v-uni-text",
-                                {
-                                  staticClass: "rstat__t",
-                                  staticStyle: { color: "#f15533" },
-                                },
-                                [
-                                  _vm._v(
-                                    "挣扎" +
-                                      _vm._s(_vm.struggleInfo.text) +
-                                      "(" +
-                                      _vm._s(_vm.struggleInfo.count) +
-                                      "次)"
-                                  ),
-                                ]
-                              ),
-                            ],
-                            1
-                          )
-                        : _vm._e(),
-                    ],
-                    1
-                  )
-                : _vm._e(),
-              _c(
-                "v-uni-view",
-                { staticClass: "grid" },
-                _vm._l(_vm.type.fields, function (f, i) {
-                  return _c(
-                    "v-uni-view",
-                    {
-                      key: f.key,
-                      staticClass: "cell",
-                      class: [
-                        _vm.cellClass(f),
-                        { "cell--pulse": _vm.pulsing[i] },
+                ? [
+                    _c(
+                      "v-uni-view",
+                      { staticClass: "vital" },
+                      [
+                        _c(
+                          "v-uni-view",
+                          { staticClass: "vital__card vital__card--hr" },
+                          [
+                            _c(
+                              "v-uni-view",
+                              { staticClass: "vital__head" },
+                              [
+                                _c("v-uni-text", {
+                                  staticClass:
+                                    "fa-solid fa-heart-pulse vital__icon",
+                                }),
+                                _c(
+                                  "v-uni-text",
+                                  { staticClass: "vital__name" },
+                                  [_vm._v("心率")]
+                                ),
+                              ],
+                              1
+                            ),
+                            _c(
+                              "v-uni-view",
+                              { staticClass: "vital__value" },
+                              [
+                                _c(
+                                  "v-uni-text",
+                                  { staticClass: "vital__num" },
+                                  [
+                                    _vm._v(
+                                      _vm._s(
+                                        _vm.radarLatest &&
+                                          _vm.radarLatest.heartRate != null
+                                          ? _vm.radarLatest.heartRate
+                                          : "--"
+                                      )
+                                    ),
+                                  ]
+                                ),
+                                _c(
+                                  "v-uni-text",
+                                  { staticClass: "vital__unit" },
+                                  [_vm._v("bpm")]
+                                ),
+                              ],
+                              1
+                            ),
+                            _c("v-uni-text", { staticClass: "vital__sub" }, [
+                              _vm._v(_vm._s(_vm.latestTimeTip)),
+                            ]),
+                          ],
+                          1
+                        ),
+                        _c(
+                          "v-uni-view",
+                          { staticClass: "vital__card vital__card--resp" },
+                          [
+                            _c(
+                              "v-uni-view",
+                              { staticClass: "vital__head" },
+                              [
+                                _c("v-uni-text", {
+                                  staticClass: "fa-solid fa-wind vital__icon",
+                                }),
+                                _c(
+                                  "v-uni-text",
+                                  { staticClass: "vital__name" },
+                                  [_vm._v("呼吸")]
+                                ),
+                              ],
+                              1
+                            ),
+                            _c(
+                              "v-uni-view",
+                              { staticClass: "vital__value" },
+                              [
+                                _c(
+                                  "v-uni-text",
+                                  { staticClass: "vital__num" },
+                                  [
+                                    _vm._v(
+                                      _vm._s(
+                                        _vm.radarLatest &&
+                                          _vm.radarLatest.respRate != null
+                                          ? _vm.radarLatest.respRate
+                                          : "--"
+                                      )
+                                    ),
+                                  ]
+                                ),
+                                _c(
+                                  "v-uni-text",
+                                  { staticClass: "vital__unit" },
+                                  [_vm._v("次/分")]
+                                ),
+                              ],
+                              1
+                            ),
+                            _c("v-uni-text", { staticClass: "vital__sub" }, [
+                              _vm._v(_vm._s(_vm.latestTimeTip)),
+                            ]),
+                          ],
+                          1
+                        ),
                       ],
-                    },
-                    [
-                      _c(
+                      1
+                    ),
+                    _c(
+                      "v-uni-view",
+                      { staticClass: "vital" },
+                      [
+                        _c(
+                          "v-uni-view",
+                          { staticClass: "vital__card vital__card--sleep" },
+                          [
+                            _c(
+                              "v-uni-view",
+                              { staticClass: "vital__head" },
+                              [
+                                _c("v-uni-text", {
+                                  staticClass: "fa-solid fa-moon vital__icon",
+                                }),
+                                _c(
+                                  "v-uni-text",
+                                  { staticClass: "vital__name" },
+                                  [_vm._v("睡眠时长")]
+                                ),
+                              ],
+                              1
+                            ),
+                            _c(
+                              "v-uni-view",
+                              { staticClass: "vital__value" },
+                              [
+                                _c(
+                                  "v-uni-text",
+                                  { staticClass: "vital__num" },
+                                  [
+                                    _vm._v(
+                                      _vm._s(
+                                        _vm.radarLatest &&
+                                          _vm.radarLatest.stay != null
+                                          ? _vm.radarLatest.stay
+                                          : "--"
+                                      )
+                                    ),
+                                  ]
+                                ),
+                                _c(
+                                  "v-uni-text",
+                                  { staticClass: "vital__unit" },
+                                  [_vm._v("h")]
+                                ),
+                              ],
+                              1
+                            ),
+                            _c("v-uni-text", { staticClass: "vital__sub" }, [
+                              _vm._v(_vm._s(_vm.latestTimeTip)),
+                            ]),
+                          ],
+                          1
+                        ),
+                        _c(
+                          "v-uni-view",
+                          { staticClass: "vital__card vital__card--presence" },
+                          [
+                            _c(
+                              "v-uni-view",
+                              { staticClass: "vital__head" },
+                              [
+                                _c("v-uni-text", {
+                                  staticClass: "fa-solid fa-bed vital__icon",
+                                }),
+                                _c(
+                                  "v-uni-text",
+                                  { staticClass: "vital__name" },
+                                  [_vm._v("存在状态")]
+                                ),
+                              ],
+                              1
+                            ),
+                            _c(
+                              "v-uni-view",
+                              { staticClass: "vital__value" },
+                              [
+                                _c(
+                                  "v-uni-text",
+                                  {
+                                    staticClass: "vital__num",
+                                    style: { color: _vm.inBedColor },
+                                  },
+                                  [_vm._v(_vm._s(_vm.inBedText))]
+                                ),
+                              ],
+                              1
+                            ),
+                            _c("v-uni-text", { staticClass: "vital__sub" }, [
+                              _vm._v(_vm._s(_vm.latestTimeTip)),
+                            ]),
+                          ],
+                          1
+                        ),
+                      ],
+                      1
+                    ),
+                    _c(
+                      "v-uni-view",
+                      { staticClass: "wrap--single" },
+                      [
+                        _c(
+                          "v-uni-view",
+                          {
+                            staticClass: "vital__card vital__card--struggle",
+                            class: {
+                              "vital__card--alert": _vm.struggleInfo.active,
+                            },
+                          },
+                          [
+                            _c(
+                              "v-uni-view",
+                              { staticClass: "vital__head" },
+                              [
+                                _c("v-uni-text", {
+                                  staticClass:
+                                    "fa-solid fa-triangle-exclamation vital__icon vital__icon--alert",
+                                }),
+                                _c(
+                                  "v-uni-text",
+                                  {
+                                    staticClass: "vital__name",
+                                    style: {
+                                      color: _vm.struggleInfo.active
+                                        ? "#f15533"
+                                        : "",
+                                    },
+                                  },
+                                  [_vm._v("异常挣扎")]
+                                ),
+                              ],
+                              1
+                            ),
+                            _c(
+                              "v-uni-view",
+                              { staticClass: "vital__value" },
+                              [
+                                _c(
+                                  "v-uni-text",
+                                  {
+                                    staticClass: "vital__num",
+                                    style: {
+                                      color: _vm.struggleInfo.active
+                                        ? "#f15533"
+                                        : "",
+                                    },
+                                  },
+                                  [
+                                    _vm._v(
+                                      _vm._s(
+                                        _vm.struggleInfo.active
+                                          ? _vm.struggleInfo.count
+                                          : "无"
+                                      )
+                                    ),
+                                  ]
+                                ),
+                                _vm.struggleInfo.active
+                                  ? _c(
+                                      "v-uni-text",
+                                      { staticClass: "vital__unit" },
+                                      [_vm._v("次")]
+                                    )
+                                  : _c(
+                                      "v-uni-text",
+                                      { staticClass: "vital__unit" },
+                                      [_vm._v(" ")]
+                                    ),
+                              ],
+                              1
+                            ),
+                            _c(
+                              "v-uni-text",
+                              {
+                                staticClass: "vital__sub",
+                                class: {
+                                  "vital__sub--alert": _vm.struggleInfo.active,
+                                },
+                              },
+                              [
+                                _vm._v(
+                                  " " +
+                                    _vm._s(
+                                      _vm.struggleInfo.active
+                                        ? _vm.struggleInfo.text +
+                                            "，最近挣扎时间"
+                                        : "状态正常"
+                                    ) +
+                                    " "
+                                ),
+                              ]
+                            ),
+                            _vm.struggleHistory.length
+                              ? _c(
+                                  "v-uni-view",
+                                  { staticClass: "struggle-list" },
+                                  _vm._l(_vm.struggleHistory, function (s, i) {
+                                    return _c(
+                                      "v-uni-view",
+                                      {
+                                        key: i,
+                                        staticClass: "struggle-list__item",
+                                      },
+                                      [
+                                        _c(
+                                          "v-uni-text",
+                                          {
+                                            staticClass: "struggle-list__time",
+                                          },
+                                          [_vm._v(_vm._s(_vm.fmtTs(s.ts)))]
+                                        ),
+                                        _c(
+                                          "v-uni-text",
+                                          {
+                                            staticClass: "struggle-list__count",
+                                          },
+                                          [
+                                            _vm._v(
+                                              "第" +
+                                                _vm._s(i + 1) +
+                                                "次 · 共" +
+                                                _vm._s(s.count) +
+                                                "次"
+                                            ),
+                                          ]
+                                        ),
+                                      ],
+                                      1
+                                    )
+                                  }),
+                                  1
+                                )
+                              : _vm._e(),
+                          ],
+                          1
+                        ),
+                      ],
+                      1
+                    ),
+                  ]
+                : _c(
+                    "v-uni-view",
+                    { staticClass: "grid" },
+                    _vm._l(_vm.type.fields, function (f, i) {
+                      return _c(
                         "v-uni-view",
                         {
-                          staticClass: "cell__icon",
-                          style: { background: _vm.type.accentSoft },
+                          key: f.key,
+                          staticClass: "cell",
+                          class: { "cell--pulse": _vm.pulsing[i] },
                         },
                         [
-                          _c("v-uni-text", {
-                            staticClass: "cell__icon-t",
-                            class: f.icon,
-                            style: { color: _vm.type.color },
-                          }),
-                        ],
-                        1
-                      ),
-                      _c(
-                        "v-uni-view",
-                        { staticClass: "cell__val" },
-                        [
                           _c(
-                            "v-uni-text",
+                            "v-uni-view",
                             {
-                              staticClass: "cell__num",
-                              style: {
-                                color:
-                                  f.key === "struggleAlert" &&
-                                  _vm.struggleInfo.active
-                                    ? "#f15533"
-                                    : _vm.type.color,
-                              },
+                              staticClass: "cell__icon",
+                              style: { background: _vm.type.accentSoft },
                             },
-                            [_vm._v(_vm._s(_vm.fmt(f)))]
+                            [
+                              _c("v-uni-text", {
+                                staticClass: "cell__icon-t",
+                                class: f.icon,
+                                style: { color: _vm.type.color },
+                              }),
+                            ],
+                            1
                           ),
-                          _c("v-uni-text", { staticClass: "cell__unit" }, [
-                            _vm._v(_vm._s(f.unit)),
+                          _c(
+                            "v-uni-view",
+                            { staticClass: "cell__val" },
+                            [
+                              _c(
+                                "v-uni-text",
+                                {
+                                  staticClass: "cell__num",
+                                  style: { color: _vm.type.color },
+                                },
+                                [_vm._v(_vm._s(_vm.fmt(f)))]
+                              ),
+                              _c("v-uni-text", { staticClass: "cell__unit" }, [
+                                _vm._v(_vm._s(f.unit)),
+                              ]),
+                            ],
+                            1
+                          ),
+                          _c("v-uni-text", { staticClass: "cell__label" }, [
+                            _vm._v(_vm._s(f.label)),
                           ]),
                         ],
                         1
-                      ),
-                      _c("v-uni-text", { staticClass: "cell__label" }, [
-                        _vm._v(_vm._s(f.label)),
-                      ]),
-                      _vm.cellSub(f)
-                        ? _c(
-                            "v-uni-text",
-                            {
-                              staticClass: "cell__sub",
-                              class: {
-                                "cell__sub--alert":
-                                  f.key === "struggleAlert" &&
-                                  _vm.struggleInfo.active,
-                              },
-                            },
-                            [_vm._v(_vm._s(_vm.cellSub(f)))]
-                          )
-                        : _vm._e(),
-                    ],
+                      )
+                    }),
                     1
-                  )
-                }),
-                1
-              ),
+                  ),
               _vm.extraAttrs.length
                 ? _c(
                     "v-uni-view",
@@ -415,7 +605,7 @@ var render = function () {
               ),
               _c("v-uni-view", { staticClass: "hm-safe-bottom" }),
             ],
-            1
+            2
           )
         : _vm._e(),
     ],
@@ -485,21 +675,23 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _workspace_h5build_node_modules_babel_runtime_helpers_esm_asyncToGenerator_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./node_modules/@babel/runtime/helpers/esm/asyncToGenerator.js */ "HaE+");
 /* harmony import */ var core_js_modules_es_array_filter_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! core-js/modules/es.array.filter.js */ "TeQF");
 /* harmony import */ var core_js_modules_es_array_filter_js__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_array_filter_js__WEBPACK_IMPORTED_MODULE_2__);
-/* harmony import */ var core_js_modules_es_iterator_constructor_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! core-js/modules/es.iterator.constructor.js */ "6fVz");
-/* harmony import */ var core_js_modules_es_iterator_constructor_js__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_iterator_constructor_js__WEBPACK_IMPORTED_MODULE_3__);
-/* harmony import */ var core_js_modules_es_iterator_filter_js__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! core-js/modules/es.iterator.filter.js */ "kQ2C");
-/* harmony import */ var core_js_modules_es_iterator_filter_js__WEBPACK_IMPORTED_MODULE_4___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_iterator_filter_js__WEBPACK_IMPORTED_MODULE_4__);
-/* harmony import */ var core_js_modules_es_iterator_for_each_js__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! core-js/modules/es.iterator.for-each.js */ "fVRX");
-/* harmony import */ var core_js_modules_es_iterator_for_each_js__WEBPACK_IMPORTED_MODULE_5___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_iterator_for_each_js__WEBPACK_IMPORTED_MODULE_5__);
-/* harmony import */ var core_js_modules_es_number_constructor_js__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! core-js/modules/es.number.constructor.js */ "qePV");
-/* harmony import */ var core_js_modules_es_number_constructor_js__WEBPACK_IMPORTED_MODULE_6___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_number_constructor_js__WEBPACK_IMPORTED_MODULE_6__);
-/* harmony import */ var core_js_modules_es_object_to_string_js__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! core-js/modules/es.object.to-string.js */ "07d7");
-/* harmony import */ var core_js_modules_es_object_to_string_js__WEBPACK_IMPORTED_MODULE_7___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_object_to_string_js__WEBPACK_IMPORTED_MODULE_7__);
-/* harmony import */ var core_js_modules_web_dom_collections_for_each_js__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! core-js/modules/web.dom-collections.for-each.js */ "FZtP");
-/* harmony import */ var core_js_modules_web_dom_collections_for_each_js__WEBPACK_IMPORTED_MODULE_8___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_web_dom_collections_for_each_js__WEBPACK_IMPORTED_MODULE_8__);
-/* harmony import */ var _common_mock_js__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! @/common/mock.js */ "rfkh");
-/* harmony import */ var _common_band_js__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! @/common/band.js */ "YNKN");
-/* harmony import */ var _common_radar_js__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! @/common/radar.js */ "gMwk");
+/* harmony import */ var core_js_modules_es_array_slice_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! core-js/modules/es.array.slice.js */ "+2oP");
+/* harmony import */ var core_js_modules_es_array_slice_js__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_array_slice_js__WEBPACK_IMPORTED_MODULE_3__);
+/* harmony import */ var core_js_modules_es_iterator_constructor_js__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! core-js/modules/es.iterator.constructor.js */ "6fVz");
+/* harmony import */ var core_js_modules_es_iterator_constructor_js__WEBPACK_IMPORTED_MODULE_4___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_iterator_constructor_js__WEBPACK_IMPORTED_MODULE_4__);
+/* harmony import */ var core_js_modules_es_iterator_filter_js__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! core-js/modules/es.iterator.filter.js */ "kQ2C");
+/* harmony import */ var core_js_modules_es_iterator_filter_js__WEBPACK_IMPORTED_MODULE_5___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_iterator_filter_js__WEBPACK_IMPORTED_MODULE_5__);
+/* harmony import */ var core_js_modules_es_iterator_for_each_js__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! core-js/modules/es.iterator.for-each.js */ "fVRX");
+/* harmony import */ var core_js_modules_es_iterator_for_each_js__WEBPACK_IMPORTED_MODULE_6___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_iterator_for_each_js__WEBPACK_IMPORTED_MODULE_6__);
+/* harmony import */ var core_js_modules_es_number_constructor_js__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! core-js/modules/es.number.constructor.js */ "qePV");
+/* harmony import */ var core_js_modules_es_number_constructor_js__WEBPACK_IMPORTED_MODULE_7___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_number_constructor_js__WEBPACK_IMPORTED_MODULE_7__);
+/* harmony import */ var core_js_modules_es_object_to_string_js__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! core-js/modules/es.object.to-string.js */ "07d7");
+/* harmony import */ var core_js_modules_es_object_to_string_js__WEBPACK_IMPORTED_MODULE_8___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_object_to_string_js__WEBPACK_IMPORTED_MODULE_8__);
+/* harmony import */ var core_js_modules_web_dom_collections_for_each_js__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! core-js/modules/web.dom-collections.for-each.js */ "FZtP");
+/* harmony import */ var core_js_modules_web_dom_collections_for_each_js__WEBPACK_IMPORTED_MODULE_9___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_web_dom_collections_for_each_js__WEBPACK_IMPORTED_MODULE_9__);
+/* harmony import */ var _common_mock_js__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! @/common/mock.js */ "rfkh");
+/* harmony import */ var _common_band_js__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! @/common/band.js */ "YNKN");
+/* harmony import */ var _common_radar_js__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! @/common/radar.js */ "gMwk");
 
 
 
@@ -509,6 +701,51 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
+
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 //
 //
 //
@@ -619,7 +856,7 @@ var MOCK_POLL_MS = 2000;
       return this.$store.getters.deviceById(this.id);
     },
     type: function type() {
-      return this.dev ? Object(_common_mock_js__WEBPACK_IMPORTED_MODULE_9__["deviceType"])(this.dev.typeKey) : null;
+      return this.dev ? Object(_common_mock_js__WEBPACK_IMPORTED_MODULE_10__["deviceType"])(this.dev.typeKey) : null;
     },
     isRadar: function isRadar() {
       return !!(this.dev && this.dev.typeKey === 'radar');
@@ -656,8 +893,21 @@ var MOCK_POLL_MS = 2000;
       return this.radarOnline ? '#389a82' : '#94a3b8';
     },
     refreshTip: function refreshTip() {
-      if (this.isRadar) return '云平台实时推送';
-      return '每 2 秒自动刷新';
+      return ''; // 已移除"云平台实时推送"提示，时间信息移至每个卡片下方
+    },
+    // 最新数据时间提示：显示在每个 vital 卡片下方
+    latestTimeTip: function latestTimeTip() {
+      if (!this.isRadar) return '';
+      var ts = this.radarLatest && this.radarLatest.ts;
+      if (!ts) return '等待数据上报';
+      return '最新数据 ' + this.fmtTs(ts);
+    },
+    // 挣扎历史（最近 3 次）
+    struggleHistory: function struggleHistory() {
+      if (!this.isRadar) return [];
+      var rec = this.radarRec;
+      if (!rec || !Array.isArray(rec.struggleHistory)) return [];
+      return rec.struggleHistory.slice(0, 3);
     },
     footTip: function footTip() {
       if (this.isRadar) {
@@ -668,32 +918,16 @@ var MOCK_POLL_MS = 2000;
       return '数据由设备同步上传，本页为演示数据，仅供界面预览';
     },
     inBedText: function inBedText() {
-      var v = Object(_common_radar_js__WEBPACK_IMPORTED_MODULE_11__["radarInBed"])(this.radarLatest);
+      var v = Object(_common_radar_js__WEBPACK_IMPORTED_MODULE_12__["radarInBed"])(this.radarLatest);
       if (v === true) return '在床';
       if (v === false) return '离床';
       return '在床状态待上报';
     },
-    inBedIcon: function inBedIcon() {
-      var v = Object(_common_radar_js__WEBPACK_IMPORTED_MODULE_11__["radarInBed"])(this.radarLatest);
-      if (v === true) return 'fa-solid fa-bed';
-      if (v === false) return 'fa-solid fa-person-walking-arrow-right';
-      return 'fa-solid fa-satellite-dish';
-    },
     inBedColor: function inBedColor() {
-      var v = Object(_common_radar_js__WEBPACK_IMPORTED_MODULE_11__["radarInBed"])(this.radarLatest);
+      var v = Object(_common_radar_js__WEBPACK_IMPORTED_MODULE_12__["radarInBed"])(this.radarLatest);
       if (v === true) return '#389a82';
       if (v === false) return '#f2994a';
       return '#94a3b8';
-    },
-    radarStateLabel: function radarStateLabel() {
-      if (!this.radarRec) return '';
-      return this.radarRec.stateText || Object(_common_radar_js__WEBPACK_IMPORTED_MODULE_11__["radarStateText"])(this.radarRec.state);
-    },
-    // 呼吸频率分级（偏慢 / 正常 / 偏快 / 过快），无数据则不显示该 chip
-    respTip: function respTip() {
-      if (!this.radarLatest) return '';
-      var r = Object(_common_radar_js__WEBPACK_IMPORTED_MODULE_11__["respLevel"])(this.radarLatest.respRate);
-      return r && r.text ? r.text : '';
     },
     // 平台上报但未命中内置字段映射的属性，原样列出（型号未知时兜住全部数据）
     extraAttrs: function extraAttrs() {
@@ -703,14 +937,9 @@ var MOCK_POLL_MS = 2000;
         return a && !a.key && a.name != null && a.value != null && a.value !== '';
       });
     },
-    // 心率分级（显示在 cell 下方）
-    heartInfo: function heartInfo() {
-      if (!this.isRadar || !this.radarLatest) return null;
-      return Object(_common_radar_js__WEBPACK_IMPORTED_MODULE_11__["heartRateLevel"])(this.radarLatest.heartRate);
-    },
     // 异常挣扎状态
     struggleInfo: function struggleInfo() {
-      return Object(_common_radar_js__WEBPACK_IMPORTED_MODULE_11__["radarStruggleAlert"])(this.radarLatest);
+      return Object(_common_radar_js__WEBPACK_IMPORTED_MODULE_12__["radarStruggleAlert"])(this.radarLatest);
     }
   },
   onLoad: function onLoad(options) {
@@ -745,7 +974,7 @@ var MOCK_POLL_MS = 2000;
       this.stopSse();
       var deviceid = this.dev && this.dev.deviceid || '';
       if (!deviceid) return;
-      this._sub = Object(_common_band_js__WEBPACK_IMPORTED_MODULE_10__["subscribeEvents"])({
+      this._sub = Object(_common_band_js__WEBPACK_IMPORTED_MODULE_11__["subscribeEvents"])({
         kinds: ['radar', 'device_unbind'],
         onEvent: function onEvent(evt) {
           var p = evt && evt.payload || {};
@@ -816,7 +1045,7 @@ var MOCK_POLL_MS = 2000;
               return _context2.a(2);
             case 1:
               _context2.n = 2;
-              return Object(_common_radar_js__WEBPACK_IMPORTED_MODULE_11__["fetchRadarRecord"])(deviceid);
+              return Object(_common_radar_js__WEBPACK_IMPORTED_MODULE_12__["fetchRadarRecord"])(deviceid);
             case 2:
               rec = _context2.v;
               if (rec) {
@@ -851,36 +1080,6 @@ var MOCK_POLL_MS = 2000;
       };
       return p(d.getMonth() + 1) + '-' + p(d.getDate()) + ' ' + p(d.getHours()) + ':' + p(d.getMinutes());
     },
-    fmt: function fmt(f) {
-      // 雷达取后端真实快照，其他设备沿用 store 中的原型数据
-      var src = this.isRadar ? this.radarLatest : this.dev && this.dev.data;
-      if (!src) return '--';
-      // 特殊字段：在床状态显示文字
-      if (this.isRadar && f.key === 'inBed') {
-        var _v = Object(_common_radar_js__WEBPACK_IMPORTED_MODULE_11__["radarInBed"])(src);
-        if (_v === true) return '在床';
-        if (_v === false) return '离床';
-        return '--';
-      }
-      var v = src[f.key];
-      if (v === null || v === undefined || v === '') return '--';
-      return v;
-    },
-    // 雷达单元特殊样式
-    cellClass: function cellClass(f) {
-      if (!this.isRadar) return '';
-      if (f.key === 'struggleAlert') {
-        return this.struggleInfo && this.struggleInfo.active ? 'cell--alert' : '';
-      }
-      return '';
-    },
-    // 单元附加文字（心率分级 / 挣扎预警等级）
-    cellSub: function cellSub(f) {
-      if (!this.isRadar) return '';
-      if (f.key === 'heartRate' && this.heartInfo && this.heartInfo.text) return this.heartInfo.text;
-      if (f.key === 'struggleAlert' && this.struggleInfo && this.struggleInfo.active) return this.struggleInfo.text;
-      return '';
-    },
     unbind: function unbind() {
       var _this5 = this;
       uni.showModal({
@@ -913,7 +1112,7 @@ var MOCK_POLL_MS = 2000;
                     mask: true
                   });
                   _context3.n = 2;
-                  return Object(_common_radar_js__WEBPACK_IMPORTED_MODULE_11__["unbindRadarDevice"])(deviceid);
+                  return Object(_common_radar_js__WEBPACK_IMPORTED_MODULE_12__["unbindRadarDevice"])(deviceid);
                 case 2:
                   ok = _context3.v;
                   uni.hideLoading();
@@ -1004,7 +1203,7 @@ __webpack_require__.r(__webpack_exports__);
 var ___CSS_LOADER_API_IMPORT___ = __webpack_require__(/*! ../../../node_modules/css-loader/dist/runtime/api.js */ "JPst");
 exports = ___CSS_LOADER_API_IMPORT___(false);
 // Module
-exports.push([module.i, "@charset \"UTF-8\";\n/* 享相健康+ · 设计令牌\n   来源：/workspace/DESIGN.md\n   方案：rpx + SCSS 变量（1px = 2rpx，基于 750rpx 设计基准） */\n/* ---------- 品牌色 ---------- */\n/* ---------- 头像 ---------- */\n/* ---------- 语义状态色 ---------- */\n/* ---------- 金色（尊享装饰） ---------- */\n/* ---------- 背景 ---------- */\n/* 斜向两色渐变：左上(#ddf7ed) → 右下(#f3f3f3)，末端即底色；\n   配合 App.vue 中 background-attachment: fixed 铺满视口固定，不随页面滚动/变长 */\n/* ---------- 文字 ---------- */\n/* ---------- 描边 / 遮罩 ---------- */\n/* ---------- 字体 ---------- */\n/* 英文/数字优先匹配 DIN Pro（Mac 自带 DIN Alternate 作为备选），中文回退苹方/雅黑 */\n/* 移动端最小舒适字号（可读正文下限）：\n   说明/入口/数据标签等可读文字不得小于 12px(24rpx)；\n   $font-size-2xs(10px) 仅限角标、徽标、装饰性元素 */\n/* ---------- 语义排版 ---------- */\n/* ---------- 间距 ---------- */\n/* ---------- 区块标题 ---------- */\n/* 标题下间距 = 列表间距；上间距 = 下间距 × 2 */\n/* ---------- 尺寸 ---------- */\n/* ---------- 圆角（已减半，更克制干净） ---------- */\n/* ---------- 阴影 ---------- */\n/* ---------- 层级 ---------- */\n/* ---------- 动效 ---------- */\n.dev-head[data-v-52a6b4fe] {\n  display: flex;\n  align-items: center;\n  background: #ffffff;\n  border-radius: %?24?%;\n  box-shadow: 0 %?4?% %?24?% rgba(15, 61, 53, 0.06);\n  padding: %?32?% %?24?%;\n}\n.dev-head__icon[data-v-52a6b4fe] {\n  width: %?88?%;\n  height: %?88?%;\n  border-radius: %?20?%;\n  display: flex;\n  align-items: center;\n  justify-content: center;\n  flex-shrink: 0;\n  box-shadow: 0 %?12?% %?48?% rgba(125, 212, 188, 0.18);\n}\n.dev-head__icon-t[data-v-52a6b4fe] {\n  font-size: %?44?%;\n}\n.dev-head__main[data-v-52a6b4fe] {\n  flex: 1;\n  padding: 0 %?24?%;\n  overflow: hidden;\n}\n.dev-head__name[data-v-52a6b4fe] {\n  display: block;\n  font-size: %?36?%;\n  font-weight: 800;\n  color: #1a2a3c;\n  line-height: 1.1;\n}\n.dev-head__model[data-v-52a6b4fe] {\n  display: block;\n  font-size: %?24?%;\n  color: #334155;\n  margin-top: %?8?%;\n}\n.dev-head__sync[data-v-52a6b4fe] {\n  display: block;\n  font-size: %?20?%;\n  color: #94a3b8;\n  margin-top: %?8?%;\n}\n.dev-head__status[data-v-52a6b4fe] {\n  display: flex;\n  align-items: center;\n  flex-shrink: 0;\n  background: #27ae60;\n  border-radius: %?999?%;\n  padding: %?8?% %?16?%;\n}\n.dev-head__dot[data-v-52a6b4fe] {\n  width: %?12?%;\n  height: %?12?%;\n  border-radius: 50%;\n  background: #ffffff;\n  margin-right: %?8?%;\n  -webkit-animation: dot-blink-data-v-52a6b4fe 1.6s ease-in-out infinite;\n          animation: dot-blink-data-v-52a6b4fe 1.6s ease-in-out infinite;\n}\n@-webkit-keyframes dot-blink-data-v-52a6b4fe {\n0%, 100% {\n    opacity: 1;\n}\n50% {\n    opacity: 0.35;\n}\n}\n@keyframes dot-blink-data-v-52a6b4fe {\n0%, 100% {\n    opacity: 1;\n}\n50% {\n    opacity: 0.35;\n}\n}\n.dev-head__status-t[data-v-52a6b4fe] {\n  font-size: %?20?%;\n  color: #ffffff;\n  font-weight: 600;\n}\n.rstat[data-v-52a6b4fe] {\n  display: flex;\n  flex-wrap: wrap;\n  background: #ffffff;\n  border-radius: %?20?%;\n  box-shadow: 0 %?4?% %?24?% rgba(15, 61, 53, 0.06);\n  padding: %?24?%;\n  margin-bottom: %?32?%;\n}\n.rstat__item[data-v-52a6b4fe] {\n  display: flex;\n  align-items: center;\n  margin-right: %?32?%;\n}\n.rstat__icon[data-v-52a6b4fe] {\n  font-size: %?28?%;\n  margin-right: %?8?%;\n}\n.rstat__t[data-v-52a6b4fe] {\n  font-size: %?24?%;\n  font-weight: 600;\n  color: #334155;\n}\n.grid[data-v-52a6b4fe] {\n  display: flex;\n  flex-wrap: wrap;\n  justify-content: space-between;\n}\n.cell[data-v-52a6b4fe] {\n  width: 49%;\n  background: #ffffff;\n  border-radius: %?20?%;\n  box-shadow: 0 %?4?% %?24?% rgba(15, 61, 53, 0.06);\n  padding: %?24?%;\n  margin-bottom: %?32?%;\n  transition: box-shadow 200ms cubic-bezier(0.2, 0, 0, 1);\n}\n.cell--pulse[data-v-52a6b4fe] {\n  box-shadow: 0 0 0 %?2?% rgba(56, 154, 130, 0.35);\n}\n.cell--alert[data-v-52a6b4fe] {\n  border: %?2?% solid rgba(241, 85, 51, 0.4);\n}\n.cell__sub[data-v-52a6b4fe] {\n  display: block;\n  font-size: %?20?%;\n  color: #64748b;\n  margin-top: %?8?%;\n  font-weight: 500;\n}\n.cell__sub--alert[data-v-52a6b4fe] {\n  color: #f15533;\n}\n.cell__icon[data-v-52a6b4fe] {\n  width: %?48?%;\n  height: %?48?%;\n  border-radius: %?12?%;\n  display: flex;\n  align-items: center;\n  justify-content: center;\n}\n.cell__icon-t[data-v-52a6b4fe] {\n  font-size: %?28?%;\n}\n.cell__val[data-v-52a6b4fe] {\n  margin-top: %?16?%;\n  display: flex;\n  align-items: baseline;\n}\n.cell__num[data-v-52a6b4fe] {\n  font-size: %?56?%;\n  font-weight: 800;\n  line-height: 1.1;\n}\n.cell__unit[data-v-52a6b4fe] {\n  font-size: %?20?%;\n  color: #64748b;\n  margin-left: %?8?%;\n}\n.cell__label[data-v-52a6b4fe] {\n  display: block;\n  font-size: %?24?%;\n  color: #64748b;\n  margin-top: %?8?%;\n}\n.extra[data-v-52a6b4fe] {\n  background: #ffffff;\n  border-radius: %?20?%;\n  box-shadow: 0 %?4?% %?24?% rgba(15, 61, 53, 0.06);\n  padding: %?24?%;\n}\n.extra__title[data-v-52a6b4fe] {\n  display: block;\n  font-size: %?24?%;\n  font-weight: 600;\n  color: #334155;\n  margin-bottom: %?16?%;\n}\n.extra__row[data-v-52a6b4fe] {\n  display: flex;\n  align-items: center;\n  justify-content: space-between;\n  padding: %?8?% 0;\n}\n.extra__k[data-v-52a6b4fe] {\n  font-size: %?24?%;\n  color: #64748b;\n  flex: 1;\n  overflow: hidden;\n}\n.extra__v[data-v-52a6b4fe] {\n  font-size: %?24?%;\n  color: #1a2a3c;\n  font-weight: 600;\n  margin-left: %?16?%;\n  flex-shrink: 0;\n}\n.foot-tip[data-v-52a6b4fe] {\n  padding: %?32?% %?48?% %?24?%;\n  text-align: center;\n}\n.foot-tip__t[data-v-52a6b4fe] {\n  font-size: %?20?%;\n  color: #94a3b8;\n  line-height: 1.6;\n}\n.unbind[data-v-52a6b4fe] {\n  margin-top: %?16?%;\n  background: #ffffff;\n  border-radius: %?20?%;\n  box-shadow: 0 %?4?% %?24?% rgba(15, 61, 53, 0.06);\n  height: %?88?%;\n  display: flex;\n  align-items: center;\n  justify-content: center;\n}\n.unbind__t[data-v-52a6b4fe] {\n  font-size: %?28?%;\n  color: #eb5757;\n  font-weight: 600;\n}", ""]);
+exports.push([module.i, "@charset \"UTF-8\";\n/* 享相健康+ · 设计令牌\n   来源：/workspace/DESIGN.md\n   方案：rpx + SCSS 变量（1px = 2rpx，基于 750rpx 设计基准） */\n/* ---------- 品牌色 ---------- */\n/* ---------- 头像 ---------- */\n/* ---------- 语义状态色 ---------- */\n/* ---------- 金色（尊享装饰） ---------- */\n/* ---------- 背景 ---------- */\n/* 斜向两色渐变：左上(#ddf7ed) → 右下(#f3f3f3)，末端即底色；\n   配合 App.vue 中 background-attachment: fixed 铺满视口固定，不随页面滚动/变长 */\n/* ---------- 文字 ---------- */\n/* ---------- 描边 / 遮罩 ---------- */\n/* ---------- 字体 ---------- */\n/* 英文/数字优先匹配 DIN Pro（Mac 自带 DIN Alternate 作为备选），中文回退苹方/雅黑 */\n/* 移动端最小舒适字号（可读正文下限）：\n   说明/入口/数据标签等可读文字不得小于 12px(24rpx)；\n   $font-size-2xs(10px) 仅限角标、徽标、装饰性元素 */\n/* ---------- 语义排版 ---------- */\n/* ---------- 间距 ---------- */\n/* ---------- 区块标题 ---------- */\n/* 标题下间距 = 列表间距；上间距 = 下间距 × 2 */\n/* ---------- 尺寸 ---------- */\n/* ---------- 圆角（已减半，更克制干净） ---------- */\n/* ---------- 阴影 ---------- */\n/* ---------- 层级 ---------- */\n/* ---------- 动效 ---------- */\n.dev-head[data-v-52a6b4fe] {\n  display: flex;\n  align-items: center;\n  background: #ffffff;\n  border-radius: %?24?%;\n  box-shadow: 0 %?4?% %?24?% rgba(15, 61, 53, 0.06);\n  padding: %?32?% %?24?%;\n}\n.dev-head__icon[data-v-52a6b4fe] {\n  width: %?88?%;\n  height: %?88?%;\n  border-radius: %?20?%;\n  display: flex;\n  align-items: center;\n  justify-content: center;\n  flex-shrink: 0;\n  box-shadow: 0 %?12?% %?48?% rgba(125, 212, 188, 0.18);\n}\n.dev-head__icon-t[data-v-52a6b4fe] {\n  font-size: %?44?%;\n}\n.dev-head__main[data-v-52a6b4fe] {\n  flex: 1;\n  padding: 0 %?24?%;\n  overflow: hidden;\n}\n.dev-head__name[data-v-52a6b4fe] {\n  display: block;\n  font-size: %?36?%;\n  font-weight: 800;\n  color: #1a2a3c;\n  line-height: 1.1;\n}\n.dev-head__model[data-v-52a6b4fe] {\n  display: block;\n  font-size: %?24?%;\n  color: #334155;\n  margin-top: %?8?%;\n}\n.dev-head__sync[data-v-52a6b4fe] {\n  display: block;\n  font-size: %?20?%;\n  color: #94a3b8;\n  margin-top: %?8?%;\n}\n.dev-head__status[data-v-52a6b4fe] {\n  display: flex;\n  align-items: center;\n  flex-shrink: 0;\n  background: #27ae60;\n  border-radius: %?999?%;\n  padding: %?8?% %?16?%;\n}\n.dev-head__dot[data-v-52a6b4fe] {\n  width: %?12?%;\n  height: %?12?%;\n  border-radius: 50%;\n  background: #ffffff;\n  margin-right: %?8?%;\n  -webkit-animation: dot-blink-data-v-52a6b4fe 1.6s ease-in-out infinite;\n          animation: dot-blink-data-v-52a6b4fe 1.6s ease-in-out infinite;\n}\n@-webkit-keyframes dot-blink-data-v-52a6b4fe {\n0%, 100% {\n    opacity: 1;\n}\n50% {\n    opacity: 0.35;\n}\n}\n@keyframes dot-blink-data-v-52a6b4fe {\n0%, 100% {\n    opacity: 1;\n}\n50% {\n    opacity: 0.35;\n}\n}\n.dev-head__status-t[data-v-52a6b4fe] {\n  font-size: %?20?%;\n  color: #ffffff;\n  font-weight: 600;\n}\n.rstat[data-v-52a6b4fe] {\n  display: none;\n}\n/* Vital 卡片：手环风格布局，雷达详情用 */\n.vital[data-v-52a6b4fe] {\n  display: flex;\n  margin-top: %?24?%;\n}\n.wrap--single[data-v-52a6b4fe] {\n  padding: %?32?% %?32?% 0;\n  margin-top: %?24?%;\n}\n.wrap--single .vital__card[data-v-52a6b4fe] {\n  width: 100%;\n}\n.vital__card[data-v-52a6b4fe] {\n  flex: 1;\n  min-width: 0;\n  background: #ffffff;\n  border-radius: %?20?%;\n  box-shadow: 0 %?4?% %?24?% rgba(15, 61, 53, 0.06);\n  padding: %?32?%;\n}\n.vital__card + .vital__card[data-v-52a6b4fe] {\n  margin-left: %?24?%;\n}\n.vital__card--alert[data-v-52a6b4fe] {\n  border: %?2?% solid rgba(241, 85, 51, 0.4);\n}\n.vital__card--hr[data-v-52a6b4fe] {\n  background: linear-gradient(145deg, #e8f8f0 0%, #ffffff 75%);\n}\n.vital__card--struggle[data-v-52a6b4fe] {\n  background: linear-gradient(145deg, #fff5f3 0%, #ffffff 75%);\n}\n.vital__card--struggle.vital__card--alert[data-v-52a6b4fe] {\n  background: linear-gradient(145deg, #fdeeee 0%, #ffffff 75%);\n}\n.vital__head[data-v-52a6b4fe] {\n  display: flex;\n  align-items: center;\n}\n.vital__icon[data-v-52a6b4fe] {\n  font-size: %?32?%;\n  margin-right: %?16?%;\n  color: #84e8c2;\n}\n.vital__icon--alert[data-v-52a6b4fe] {\n  color: #f15533;\n}\n.vital__card--resp .vital__icon[data-v-52a6b4fe] {\n  color: #8dcdd8;\n}\n.vital__card--sleep .vital__icon[data-v-52a6b4fe] {\n  color: #9b8fc9;\n}\n.vital__card--presence .vital__icon[data-v-52a6b4fe] {\n  color: #389a82;\n}\n.vital__card--struggle .vital__icon[data-v-52a6b4fe] {\n  color: #f15533;\n}\n.vital__name[data-v-52a6b4fe] {\n  font-size: %?28?%;\n  font-weight: 600;\n  color: #334155;\n  white-space: nowrap;\n  overflow: hidden;\n  text-overflow: ellipsis;\n}\n.vital__value[data-v-52a6b4fe] {\n  display: flex;\n  align-items: baseline;\n  margin-top: %?24?%;\n}\n.vital__num[data-v-52a6b4fe] {\n  font-size: %?56?%;\n  font-weight: 800;\n  font-family: \"DIN Pro\", \"DIN Alternate\", \"Helvetica Neue\", Arial, sans-serif;\n  line-height: 1;\n  color: #1a2a3c;\n}\n.vital__card--hr .vital__num[data-v-52a6b4fe] {\n  color: #84e8c2;\n}\n.vital__card--resp .vital__num[data-v-52a6b4fe] {\n  color: #8dcdd8;\n}\n.vital__card--sleep .vital__num[data-v-52a6b4fe] {\n  color: #9b8fc9;\n}\n.vital__unit[data-v-52a6b4fe] {\n  margin-left: %?8?%;\n  font-size: %?20?%;\n  color: #64748b;\n}\n.vital__sub[data-v-52a6b4fe] {\n  display: block;\n  margin-top: %?16?%;\n  font-size: %?20?%;\n  color: #64748b;\n  white-space: nowrap;\n  overflow: hidden;\n  text-overflow: ellipsis;\n}\n.vital__sub--alert[data-v-52a6b4fe] {\n  color: #f15533;\n}\n/* 挣扎历史列表 */\n.struggle-list[data-v-52a6b4fe] {\n  margin-top: %?24?%;\n  padding-top: %?16?%;\n  border-top: %?1?% solid #f2f7fa;\n}\n.struggle-list__item[data-v-52a6b4fe] {\n  display: flex;\n  justify-content: space-between;\n  align-items: center;\n  padding: %?8?% 0;\n}\n.struggle-list__time[data-v-52a6b4fe] {\n  font-size: %?24?%;\n  color: #1a2a3c;\n  font-weight: 600;\n}\n.struggle-list__count[data-v-52a6b4fe] {\n  font-size: %?20?%;\n  color: #64748b;\n}\n.grid[data-v-52a6b4fe] {\n  display: flex;\n  flex-wrap: wrap;\n  justify-content: space-between;\n}\n.cell[data-v-52a6b4fe] {\n  width: 49%;\n  background: #ffffff;\n  border-radius: %?20?%;\n  box-shadow: 0 %?4?% %?24?% rgba(15, 61, 53, 0.06);\n  padding: %?24?%;\n  margin-bottom: %?32?%;\n  transition: box-shadow 200ms cubic-bezier(0.2, 0, 0, 1);\n}\n.cell--pulse[data-v-52a6b4fe] {\n  box-shadow: 0 0 0 %?2?% rgba(56, 154, 130, 0.35);\n}\n.cell__icon[data-v-52a6b4fe] {\n  width: %?48?%;\n  height: %?48?%;\n  border-radius: %?12?%;\n  display: flex;\n  align-items: center;\n  justify-content: center;\n}\n.cell__icon-t[data-v-52a6b4fe] {\n  font-size: %?28?%;\n}\n.cell__val[data-v-52a6b4fe] {\n  margin-top: %?16?%;\n  display: flex;\n  align-items: baseline;\n}\n.cell__num[data-v-52a6b4fe] {\n  font-size: %?56?%;\n  font-weight: 800;\n  line-height: 1.1;\n}\n.cell__unit[data-v-52a6b4fe] {\n  font-size: %?20?%;\n  color: #64748b;\n  margin-left: %?8?%;\n}\n.cell__label[data-v-52a6b4fe] {\n  display: block;\n  font-size: %?24?%;\n  color: #64748b;\n  margin-top: %?8?%;\n}\n.extra[data-v-52a6b4fe] {\n  background: #ffffff;\n  border-radius: %?20?%;\n  box-shadow: 0 %?4?% %?24?% rgba(15, 61, 53, 0.06);\n  padding: %?24?%;\n}\n.extra__title[data-v-52a6b4fe] {\n  display: block;\n  font-size: %?24?%;\n  font-weight: 600;\n  color: #334155;\n  margin-bottom: %?16?%;\n}\n.extra__row[data-v-52a6b4fe] {\n  display: flex;\n  align-items: center;\n  justify-content: space-between;\n  padding: %?8?% 0;\n}\n.extra__k[data-v-52a6b4fe] {\n  font-size: %?24?%;\n  color: #64748b;\n  flex: 1;\n  overflow: hidden;\n}\n.extra__v[data-v-52a6b4fe] {\n  font-size: %?24?%;\n  color: #1a2a3c;\n  font-weight: 600;\n  margin-left: %?16?%;\n  flex-shrink: 0;\n}\n.foot-tip[data-v-52a6b4fe] {\n  padding: %?32?% %?48?% %?24?%;\n  text-align: center;\n}\n.foot-tip__t[data-v-52a6b4fe] {\n  font-size: %?20?%;\n  color: #94a3b8;\n  line-height: 1.6;\n}\n.unbind[data-v-52a6b4fe] {\n  margin-top: %?16?%;\n  background: #ffffff;\n  border-radius: %?20?%;\n  box-shadow: 0 %?4?% %?24?% rgba(15, 61, 53, 0.06);\n  height: %?88?%;\n  display: flex;\n  align-items: center;\n  justify-content: center;\n}\n.unbind__t[data-v-52a6b4fe] {\n  font-size: %?28?%;\n  color: #eb5757;\n  font-weight: 600;\n}", ""]);
 // Exports
 module.exports = exports;
 

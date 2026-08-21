@@ -374,7 +374,15 @@ function mount(app, broadcast) {
       return
     }
     const d = touchDev(n.imei)
+    const prevStruggle = (d.latest && d.latest.struggleAlert) || 0
     d.latest = Object.assign({}, d.latest, n.latest, { ts: n.ts })
+    // 挣扎历史：struggleAlert 值增加时记录时间戳，保留最近 3 次
+    const curStruggle = d.latest.struggleAlert || 0
+    if (curStruggle > prevStruggle) {
+      if (!d.struggleHistory) d.struggleHistory = []
+      d.struggleHistory.unshift({ count: curStruggle, ts: n.ts })
+      if (d.struggleHistory.length > 3) d.struggleHistory.length = 3
+    }
     if (n.attrs.length) d.attrs = n.attrs
     if (n.deviceState != null) {
       d.state = n.deviceState
@@ -393,7 +401,8 @@ function mount(app, broadcast) {
       event: n.event,
       state: n.deviceState,
       stateText: n.deviceState == null ? '' : STATE_TEXT[n.deviceState] || '',
-      ts: n.ts
+      ts: n.ts,
+      struggleHistory: d.struggleHistory || []
     })
   }
 

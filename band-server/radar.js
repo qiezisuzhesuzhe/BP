@@ -155,7 +155,11 @@ const ATTR_RULES = [
   { key: 'signal', unit: '', kw: ['信号', 'signal'] },
   { key: 'fall', unit: '', kw: ['跌倒', '摔倒', 'fall'] },
   { key: 'struggleAlert', unit: '', kw: ['异常挣扎', '挣扎', '挣扎预警', 'abnormal', 'struggle'] },
-  { key: 'sleepDuration', unit: 'h', kw: ['睡眠时长', 'sleepDuration'] }
+  { key: 'sleepDuration', unit: 'h', kw: ['睡眠时长', 'sleepDuration'] },
+  { key: 'deepSleep', unit: '', kw: ['深睡', '深睡眠', 'deepSleep', 'deep_sleep'] },
+  { key: 'lightSleep', unit: '', kw: ['浅睡', '浅睡眠', 'lightSleep', 'light_sleep'] },
+  { key: 'awakeSleep', unit: '', kw: ['清醒次数', '清醒时长', 'awakeSleep', 'awake_duration', 'wake_duration'] },
+  { key: 'sleepTotal', unit: '', kw: ['总睡眠', '总睡眠时长', 'sleepTotal', 'sleep_total'] }
 ]
 
 function matchAttrKey(attrName) {

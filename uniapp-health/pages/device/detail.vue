@@ -60,17 +60,6 @@
           </view>
         </view>
         <view class="vital">
-          <view class="vital__card vital__card--sleep">
-            <view class="vital__head">
-              <text class="fa-solid fa-moon vital__icon vital__icon--sleep"></text>
-              <text class="vital__name">睡眠时长</text>
-            </view>
-            <view class="vital__value">
-              <text class="vital__num">{{ radarLatest && radarLatest.stay != null ? radarLatest.stay : '--' }}</text>
-              <text class="vital__unit">h</text>
-            </view>
-            <text class="vital__sub">{{ latestTimeTip }}</text>
-          </view>
           <view class="vital__card vital__card--presence">
             <view class="vital__head">
               <text class="fa-solid fa-bed vital__icon vital__icon--presence"></text>
@@ -104,16 +93,37 @@
           </view>
         </view>
       </view>
-      <!-- 平台透传的其他属性 -->
-      <view v-if="extraAttrs.length" class="wrap">
-        <view class="extra">
-          <text class="extra__title">设备上报的其他属性</text>
-          <view v-for="(a, i) in extraAttrs" :key="i" class="extra__row">
-            <text class="extra__k">{{ a.name }}</text>
-            <text class="extra__v">{{ a.value }}{{ a.unit }}</text>
+
+      <!-- 睡眠：深睡/浅睡/清醒 + 进度条，与手环风格一致 -->
+      <view class="wrap">
+        <view class="sec-head">
+          <text class="sec-title">睡眠</text>
+          <text class="sec-sub">{{ sleepTotalText }}</text>
+        </view>
+        <view class="sleep">
+          <view class="sleep__stats">
+            <view class="sleep__stat">
+              <text class="sleep__stat-num sleep__stat-num--deep">{{ fmtSleepMin(radarSleep.deep) }}</text>
+              <text class="sleep__stat-t">深睡</text>
+            </view>
+            <view class="sleep__stat">
+              <text class="sleep__stat-num sleep__stat-num--light">{{ fmtSleepMin(radarSleep.light) }}</text>
+              <text class="sleep__stat-t">浅睡</text>
+            </view>
+            <view class="sleep__stat">
+              <text class="sleep__stat-num sleep__stat-num--wake">{{ fmtSleepMin(radarSleep.wake) }}</text>
+              <text class="sleep__stat-t">清醒</text>
+            </view>
           </view>
+          <view v-if="radarSleep.total" class="sleep__strip">
+            <view class="sleep__strip-seg sleep__strip-seg--deep" :style="{ width: radarSleepPct.deep + '%' }"></view>
+            <view class="sleep__strip-seg sleep__strip-seg--light" :style="{ width: radarSleepPct.light + '%' }"></view>
+            <view class="sleep__strip-seg sleep__strip-seg--wake" :style="{ width: radarSleepPct.wake + '%' }"></view>
+          </view>
+          <view v-else class="sleep__strip sleep__strip--empty"></view>
         </view>
       </view>
+
       <view class="wrap">
         <view class="foot-tip">
           <text class="foot-tip__t">{{ footTip }}</text>
@@ -237,12 +247,26 @@ export default {
       if (v === false) return '#f2994a'
       return '#94a3b8'
     },
-    // 平台上报但未命中内置字段映射的属性，原样列出（型号未知时兜住全部数据）
-    extraAttrs() {
-      if (!this.isRadar) return []
-      const rec = this.radarRec
-      if (!rec || !Array.isArray(rec.attrs)) return []
-      return rec.attrs.filter((a) => !a.key)
+    // 雷达睡眠数据：从 latest 中取深睡/浅睡/清醒/总时长，兼容 stay 字段
+    radarSleep() {
+      const l = this.radarLatest || {}
+      const deep = l.deepSleep != null ? Number(l.deepSleep) : null
+      const light = l.lightSleep != null ? Number(l.lightSleep) : null
+      const wake = l.awakeSleep != null ? Number(l.awakeSleep) : null
+      const total = l.sleepTotal != null ? Number(l.sleepTotal) : (l.stay != null ? Number(l.stay) : null)
+      return { deep, light, wake, total }
+    },
+    radarSleepPct() {
+      const s = this.radarSleep
+      if (!s || !s.total) return { deep: 0, light: 0, wake: 0 }
+      const deep = s.deep != null ? Math.round((s.deep / s.total) * 100) : 0
+      const light = s.light != null ? Math.round((s.light / s.total) * 100) : 0
+      return { deep: deep, light: light, wake: Math.max(0, 100 - deep - light) }
+    },
+    sleepTotalText() {
+      const s = this.radarSleep
+      if (!s || !s.total) return '暂无睡眠数据'
+      return '共 ' + this.fmtSleepMin(s.total)
     },
     struggleInfo() {
       return radarStruggleAlert(this.radarLatest)
@@ -276,6 +300,21 @@ export default {
       const d = new Date(ts)
       const pad = (n) => String(n).padStart(2, '0')
       return `${pad(d.getMonth() + 1)}-${pad(d.getDate())} ${pad(d.getHours())}:${pad(d.getMinutes())}:${pad(d.getSeconds())}`
+    },
+    fmtSleepMin(min) {
+      if (min == null || isNaN(min)) return '--'
+      // 雷达上报的单位可能是小时(h)或分钟(min)，这里统一按分钟格式化
+      const v = Number(min)
+      if (v >= 100) {
+        // 可能是分钟单位
+        const h = Math.floor(v / 60)
+        const m = Math.round(v % 60)
+        return h ? h + '小时' + m + '分' : m + '分钟'
+      }
+      // 可能是小时单位
+      const h = Math.floor(v)
+      const m = Math.round((v - h) * 60)
+      return h ? h + '小时' + m + '分' : m + '分钟'
     },
     fmt(f) {
       const d = this.dev
@@ -777,42 +816,93 @@ export default {
   margin-top: $space-1;
 }
 
-/* ---------- 其他属性 / 底部提示 ---------- */
-.extra {
-  background: $bg-surface;
-  border-radius: $radius-card-child;
-  box-shadow: $shadow-sm;
-  padding: $space-3;
-}
-
-.extra__title {
-  display: block;
-  font-size: $font-size-xs;
-  font-weight: $font-weight-semibold;
-  color: $text-secondary;
-  margin-bottom: $space-2;
-}
-
-.extra__row {
+/* ---------- 分区标题（与手环一致） ---------- */
+.sec-head {
   display: flex;
-  align-items: center;
+  align-items: flex-end;
   justify-content: space-between;
-  padding: $space-1 0;
+  margin-top: $space-4;
+  margin-bottom: $space-3;
 }
 
-.extra__k {
+.sec-title {
+  font-size: $font-size-lg;
+  font-weight: $font-weight-heavy;
+  line-height: $line-height-tight;
+  color: $text-primary;
+  letter-spacing: 1rpx;
+}
+
+.sec-sub {
   font-size: $font-size-xs;
   color: $text-muted;
-  flex: 1;
-  overflow: hidden;
+  margin-top: $space-2;
 }
 
-.extra__v {
-  font-size: $font-size-xs;
-  color: $text-primary;
-  font-weight: $font-weight-semibold;
-  margin-left: $space-2;
-  flex-shrink: 0;
+/* ---------- 睡眠（与手环风格一致） ---------- */
+.sleep__stats {
+  display: flex;
+}
+
+.sleep__stat {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.sleep__stat-num {
+  font-size: $font-size-lg;
+  font-weight: $font-weight-heavy;
+  font-family: $font-family-en;
+  line-height: 1.1;
+}
+
+.sleep__stat-num--deep {
+  color: #1e6f5c;
+}
+
+.sleep__stat-num--light {
+  color: #3eb98f;
+}
+
+.sleep__stat-num--wake {
+  color: #94a3b8;
+}
+
+.sleep__stat-t {
+  margin-top: $space-1;
+  font-size: $font-size-2xs;
+  color: $text-muted;
+}
+
+.sleep__strip {
+  margin-top: $space-3;
+  height: $space-3;
+  border-radius: $radius-full;
+  overflow: hidden;
+  display: flex;
+}
+
+.sleep__strip-seg {
+  height: 100%;
+  transition: width 0.6s ease;
+}
+
+.sleep__strip-seg--deep {
+  background: #1e6f5c;
+}
+
+.sleep__strip-seg--light {
+  background: #7dd4bc;
+}
+
+.sleep__strip-seg--wake {
+  background: #c8d5df;
+}
+
+.sleep__strip--empty {
+  background: $bg-section;
 }
 
 .foot-tip {

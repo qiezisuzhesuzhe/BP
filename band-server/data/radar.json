@@ -8,56 +8,42 @@
       "firstSeen": 1787320921389,
       "latest": {
         "struggleAlert": 3,
-        "ts": 1787322054646,
+        "ts": 1787324177049,
         "heartRate": 72,
         "respRate": 16,
         "inBed": "有人",
-        "stay": 6.5,
+        "stay": 7.5,
         "battery": 85,
-        "signal": "强"
+        "signal": 31,
+        "deepSleep": 2.5,
+        "lightSleep": 3.5,
+        "awakeSleep": 1,
+        "sleepTotal": 7
       },
       "attrs": [
         {
-          "name": "心率",
-          "value": "72",
+          "name": "深睡",
+          "value": "2.5",
           "unit": "",
-          "key": "heartRate"
+          "key": "deepSleep"
         },
         {
-          "name": "呼吸",
-          "value": "16",
+          "name": "浅睡",
+          "value": "3.5",
           "unit": "",
-          "key": "respRate"
+          "key": "lightSleep"
         },
         {
-          "name": "在床",
-          "value": "有人",
+          "name": "清醒次数",
+          "value": "1",
           "unit": "",
-          "key": "inBed"
+          "key": "awakeSleep"
         },
         {
-          "name": "床内时长",
-          "value": "6.5",
+          "name": "总睡眠",
+          "value": "7",
           "unit": "",
-          "key": "stay"
-        },
-        {
-          "name": "异常挣扎",
-          "value": "3",
-          "unit": "",
-          "key": "struggleAlert"
-        },
-        {
-          "name": "电量",
-          "value": "85",
-          "unit": "",
-          "key": "battery"
-        },
-        {
-          "name": "信号",
-          "value": "强",
-          "unit": "",
-          "key": "signal"
+          "key": "sleepTotal"
         }
       ],
       "history": [
@@ -94,9 +80,70 @@
             "battery": 85,
             "signal": "强"
           }
+        },
+        {
+          "ts": 1787323282000,
+          "event": "心跳",
+          "latest": {
+            "signal": 31
+          }
+        },
+        {
+          "ts": 1787324015674,
+          "event": "",
+          "latest": {
+            "heartRate": 72,
+            "respRate": 16,
+            "inBed": "有人",
+            "stay": 7.5,
+            "struggleAlert": 3,
+            "battery": 85
+          }
+        },
+        {
+          "ts": 1787324046467,
+          "event": "",
+          "latest": {
+            "heartRate": 72,
+            "respRate": 16,
+            "inBed": "有人",
+            "deepSleep": 2.5,
+            "lightSleep": 3.5,
+            "awakeSleep": 1,
+            "sleepTotal": 7,
+            "stay": 7.5,
+            "struggleAlert": 3,
+            "battery": 85
+          }
+        },
+        {
+          "ts": 1787324105321,
+          "event": "",
+          "latest": {
+            "heartRate": 72,
+            "respRate": 16,
+            "inBed": "有人",
+            "deepSleep": 2.5,
+            "lightSleep": 3.5,
+            "awakeSleep": 1,
+            "sleepTotal": 7,
+            "stay": 7.5,
+            "struggleAlert": 3,
+            "battery": 85
+          }
+        },
+        {
+          "ts": 1787324177049,
+          "event": "",
+          "latest": {
+            "deepSleep": 2.5,
+            "lightSleep": 3.5,
+            "awakeSleep": 1,
+            "sleepTotal": 7
+          }
         }
       ],
-      "lastSeen": 1787322054646,
+      "lastSeen": 1787324177049,
       "boundAt": 1787320921389,
       "struggleHistory": [
         {
@@ -113,7 +160,9 @@
         }
       ],
       "state": 0,
-      "stateText": "正常"
+      "stateText": "正常",
+      "lastEvent": "心跳",
+      "site": "未绑定安装点"
     }
   }
 }

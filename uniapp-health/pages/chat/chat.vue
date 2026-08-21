@@ -466,7 +466,7 @@ export default {
       this.push({ role: 'ai', kind: 'text', text: '方案已生成，下面是您的首次评估结论，请先看一下关键判断与目标值。' })
       this.push({ role: 'ai', kind: 'report', report: report })
       this.delay(700, () => {
-        this.push({ role: 'ai', kind: 'text', text: '这是为您安排的第一天日程，按时间点执行即可，完成后我会陪您复盘。' })
+        this.push({ role: 'ai', kind: 'text', text: '这是为您安排的第一天日程。在APP的首页、微信消息或智能手环上，也将为您发送提醒。按时间点执行即可，完成后我会陪您复盘。' })
         this.push({ role: 'ai', kind: 'timeline', items: this.firstDayItems() })
         this.assessDone = true
         if (this.rightId) {

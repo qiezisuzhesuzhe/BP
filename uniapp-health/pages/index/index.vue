@@ -123,10 +123,12 @@
 
     <!-- 今日健康指导（仅首次对话确认激活并完成问询后显示） -->
     <view v-if="activatedRight" class="wrap">
-      <view class="sec-head">
-        <text class="hm-sec-title">今日健康指导</text>
-        <view class="sec-head__side">
+      <view class="sec-head sec-head--stack">
+        <view class="sec-head__main">
+          <text class="hm-sec-title">今日健康指导</text>
           <text class="hm-sec-sub">{{ todayLabel }} · 共 {{ todayTimeline.items.length }} 项安排</text>
+        </view>
+        <view class="sec-head__side">
           <view class="day-switch">
             <view
               v-for="(d, i) in dayTabs"
@@ -849,6 +851,23 @@ export default {
   display: flex;
   align-items: center;
   flex-shrink: 0;
+}
+
+/* 标题与日期小字竖排左对齐，右侧仅留切换器 */
+.sec-head--stack {
+  align-items: center;
+}
+
+.sec-head__main {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  flex: 1;
+  min-width: 0;
+}
+
+.sec-head__main .hm-sec-sub {
+  margin-top: $space-1;
 }
 
 .sec-head__side .hm-sec-sub {

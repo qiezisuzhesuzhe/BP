@@ -3019,6 +3019,10 @@ var PACKAGES = [{
     icon: 'fa-solid fa-arrow-trend-up',
     title: '双周方案迭代',
     desc: '晚间7问采集依从性数据，方案随身体反馈动态调整'
+  }, {
+    icon: 'fa-solid fa-hospital-user',
+    title: '互联网医院调药',
+    desc: '评估结果良好时，3次免费互联网医院问诊调药权益，医师在线优化用药方案'
   }],
   services: [{
     name: '健康小助手对话',
@@ -3043,6 +3047,10 @@ var PACKAGES = [{
   }, {
     name: '阶段性康复评估',
     spec: '每 14 天 1 次',
+    unit: '次'
+  }, {
+    name: '互联网医院免费调药',
+    spec: '3 次',
     unit: '次'
   }],
   detailSections: [{
@@ -3096,6 +3104,10 @@ var PACKAGES = [{
     icon: 'fa-solid fa-magnifying-glass',
     title: '并发症筛查日历',
     desc: '眼底、尿微量白蛋白、足部、糖化血红蛋白 到期自动提醒'
+  }, {
+    icon: 'fa-solid fa-hospital-user',
+    title: '互联网医院调药',
+    desc: '评估结果良好时，3次免费互联网医院问诊调药权益，医师在线优化降糖方案'
   }],
   services: [{
     name: '健康小助手对话',
@@ -3121,6 +3133,10 @@ var PACKAGES = [{
     name: '并发症筛查提醒',
     spec: '全周期',
     unit: '项'
+  }, {
+    name: '互联网医院免费调药',
+    spec: '3 次',
+    unit: '次'
   }],
   detailSections: [{
     title: '谁适合这个计划',
@@ -3692,7 +3708,11 @@ function hbpFlags(answers) {
     highMove: highMove,
     tier: tier,
     gradeLabel: g3 ? '3 级' : g2 ? '2 级' : g1 ? '1 级' : '分级待确认',
-    withLabel: cvd ? '伴临床合并症' : dmCkd ? '伴糖尿病/慢性肾病' : riskFactor ? '伴心血管危险因素' : '无合并症'
+    withLabel: cvd ? '伴临床合并症' : dmCkd ? '伴糖尿病/慢性肾病' : riskFactor ? '伴心血管危险因素' : '无合并症',
+    // 药物类型（用于调药建议）
+    medType: a.med_type || 'unknown',
+    // 评估结果良好：血压1级或以下 + 用药依从 + 运动达标
+    goodControl: (g1 || gUnknown) && !badMed && (highMove || a.exercise === 'medium')
   };
 }
 
@@ -3848,6 +3868,28 @@ function planHbp(items, f) {
         pinned: true
       });
     }
+  }
+
+  // 评估结果良好时，推荐互联网医院免费调药
+  if (f.goodControl && !f.noMed) {
+    var medTip = '您当前的血压控制情况良好';
+    if (f.medType === 'ccb') medTip += '，长期使用钙通道阻滞剂（地平类）可关注牙龈增生与踝部水肿';else if (f.medType === 'acei_arb') medTip += '，ACEI/沙坦类可关注干咳与血钾变化';else if (f.medType === 'diuretic') medTip += '，利尿剂可关注电解质与尿酸水平';else if (f.medType === 'beta') medTip += '，β受体阻滞剂可关注心率与血糖血脂影响';else if (f.medType === 'compound') medTip += '，复方制剂可关注各成分叠加副作用';
+    out.push({
+      time: '15:00',
+      cat: 'assessment',
+      title: '互联网医院 · 专家调药建议',
+      desc: medTip + '。建议通过服务包内的免费调药权益（共3次），与互联网医院医师沟通方案，评估是否可以精简或优化用药。数据同步至您的健康档案，供医师参考。',
+      basis: GUIDE_HBP + '：血压长期达标并稳定控制 >3 个月的患者，应在医师指导下评估是否可以简化治疗方案或调整药物剂量/种类。服务包含 3 次互联网医院免费调药问诊权益。',
+      icon: 'fa-solid fa-user-doctor',
+      goods: [{
+        id: 'g9',
+        name: '互联网医院 · 免费调药问诊（服务包权益）',
+        price: 0,
+        unit: '次',
+        badge: '服务包权益'
+      }],
+      pinned: true
+    });
   }
   return out;
 }
@@ -4101,7 +4143,7 @@ function buildDayPlan(pkgKey, answers, dayIndex, limit) {
 // 改文案只需改 label，不会影响危险分层逻辑；v 一经确定不要随意变更。
 var QUESTIONS = [{
   id: 'bp_grade',
-  text: '您好！我是健康小助手。为了按《中国高血压防治指南 2024》为您做危险分层，先了解 5 项必要信息。第一个问题：近 1 个月您在家中测到的最高血压，落在哪一档？',
+  text: '您好！我是健康小助手。为了按《中国高血压防治指南 2024》为您做危险分层，先了解 6 项必要信息。第一个问题：近 1 个月您在家中测到的最高血压，落在哪一档？',
   options: [{
     v: 'grade1',
     label: '1级：140-159 / 90-99 mmHg'
@@ -4130,6 +4172,28 @@ var QUESTIONS = [{
   }, {
     v: 'none',
     label: '尚未开始药物治疗'
+  }]
+}, {
+  id: 'med_type',
+  text: '了解。请问您目前正在服用的降压药属于哪一类？（用于后续调药参考）',
+  options: [{
+    v: 'ccb',
+    label: '钙通道阻滞剂（地平类，如硝苯地平）'
+  }, {
+    v: 'acei_arb',
+    label: 'ACEI/ARB（普利/沙坦类）'
+  }, {
+    v: 'diuretic',
+    label: '利尿剂（如氢氯噻嗪、呋塞米）'
+  }, {
+    v: 'beta',
+    label: 'β受体阻滞剂（洛尔类）'
+  }, {
+    v: 'compound',
+    label: '复方制剂（如缬沙坦氨氯地平）'
+  }, {
+    v: 'unknown',
+    label: '不清楚药名或记不清楚'
   }]
 }, {
   id: 'comorbidity',
@@ -4321,6 +4385,14 @@ var RIGHT_ENTRIES = [{
   color: '#b8932e',
   bg: '#faf3e0',
   quotaText: '无限制'
+}, {
+  key: 'medication',
+  label: '调药问诊',
+  icon: 'fa-solid fa-pills',
+  color: '#b8932e',
+  bg: '#faf3e0',
+  quota: 3,
+  quotaText: '剩3次'
 }, {
   key: 'expert',
   label: '专家预约',

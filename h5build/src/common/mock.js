@@ -25,7 +25,8 @@ export const PACKAGES = [
       { icon: 'fa-solid fa-dna', title: '指南级危险分层', desc: '依据《中国高血压防治指南2024》表8，25题精准评估低危/中危/高危/很高危' },
       { icon: 'fa-solid fa-calendar-days', title: '每日时间线方案', desc: '监测/用药/营养/运动/心理/睡眠 六维日程，到点提醒不遗漏' },
       { icon: 'fa-solid fa-pills', title: '六大类用药答疑', desc: '地平、普利、沙坦、利尿剂、洛尔、复方制剂副作用与应对全覆盖' },
-      { icon: 'fa-solid fa-arrow-trend-up', title: '双周方案迭代', desc: '晚间7问采集依从性数据，方案随身体反馈动态调整' }
+      { icon: 'fa-solid fa-arrow-trend-up', title: '双周方案迭代', desc: '晚间7问采集依从性数据，方案随身体反馈动态调整' },
+      { icon: 'fa-solid fa-hospital-user', title: '互联网医院调药', desc: '评估结果良好时，3次免费互联网医院问诊调药权益，医师在线优化用药方案' }
     ],
     services: [
       { name: '健康小助手对话', spec: '不限次数', unit: '次' },
@@ -33,7 +34,8 @@ export const PACKAGES = [
       { name: '每日健康时间线', spec: '90 天', unit: '天' },
       { name: '医师团队方案审核', spec: '每月 1 次', unit: '次' },
       { name: '用药副作用答疑', spec: '不限次数', unit: '次' },
-      { name: '阶段性康复评估', spec: '每 14 天 1 次', unit: '次' }
+      { name: '阶段性康复评估', spec: '每 14 天 1 次', unit: '次' },
+      { name: '互联网医院免费调药', spec: '3 次', unit: '次' }
     ],
     detailSections: [
       {
@@ -85,7 +87,8 @@ export const PACKAGES = [
       { icon: 'fa-solid fa-arrow-trend-down', title: '七点血糖谱解读', desc: '空腹/三餐后2h/睡前/夜间，识别黎明现象与餐后高峰' },
       { icon: 'fa-solid fa-leaf', title: '低GI 配餐方案', desc: '注册营养师按您的口味与三餐习惯定制，主食替换有具体克数' },
       { icon: 'fa-solid fa-person-running', title: '餐后运动窗口', desc: '餐后30-60分钟黄金降糖窗，给到具体运动类型与强度' },
-      { icon: 'fa-solid fa-magnifying-glass', title: '并发症筛查日历', desc: '眼底、尿微量白蛋白、足部、糖化血红蛋白 到期自动提醒' }
+      { icon: 'fa-solid fa-magnifying-glass', title: '并发症筛查日历', desc: '眼底、尿微量白蛋白、足部、糖化血红蛋白 到期自动提醒' },
+      { icon: 'fa-solid fa-hospital-user', title: '互联网医院调药', desc: '评估结果良好时，3次免费互联网医院问诊调药权益，医师在线优化降糖方案' }
     ],
     services: [
       { name: '健康小助手对话', spec: '不限次数', unit: '次' },
@@ -93,7 +96,8 @@ export const PACKAGES = [
       { name: '每日控糖时间线', spec: '90 天', unit: '天' },
       { name: '营养师定制配餐', spec: '每 2 周更新', unit: '次' },
       { name: '血糖曲线分析', spec: '每周 1 次', unit: '次' },
-      { name: '并发症筛查提醒', spec: '全周期', unit: '项' }
+      { name: '并发症筛查提醒', spec: '全周期', unit: '项' },
+      { name: '互联网医院免费调药', spec: '3 次', unit: '次' }
     ],
     detailSections: [
       {
@@ -296,7 +300,11 @@ export function hbpFlags(answers) {
       ? '伴糖尿病/慢性肾病'
       : riskFactor
       ? '伴心血管危险因素'
-      : '无合并症'
+      : '无合并症',
+    // 药物类型（用于调药建议）
+    medType: a.med_type || 'unknown',
+    // 评估结果良好：血压1级或以下 + 用药依从 + 运动达标
+    goodControl: (g1 || gUnknown) && !badMed && (highMove || a.exercise === 'medium')
   }
 }
 
@@ -489,6 +497,29 @@ function planHbp(items, f) {
         pinned: true
       })
     }
+  }
+
+  // 评估结果良好时，推荐互联网医院免费调药
+  if (f.goodControl && !f.noMed) {
+    var medTip = '您当前的血压控制情况良好'
+    if (f.medType === 'ccb') medTip += '，长期使用钙通道阻滞剂（地平类）可关注牙龈增生与踝部水肿'
+    else if (f.medType === 'acei_arb') medTip += '，ACEI/沙坦类可关注干咳与血钾变化'
+    else if (f.medType === 'diuretic') medTip += '，利尿剂可关注电解质与尿酸水平'
+    else if (f.medType === 'beta') medTip += '，β受体阻滞剂可关注心率与血糖血脂影响'
+    else if (f.medType === 'compound') medTip += '，复方制剂可关注各成分叠加副作用'
+
+    out.push({
+      time: '15:00',
+      cat: 'assessment',
+      title: '互联网医院 · 专家调药建议',
+      desc: medTip + '。建议通过服务包内的免费调药权益（共3次），与互联网医院医师沟通方案，评估是否可以精简或优化用药。数据同步至您的健康档案，供医师参考。',
+      basis: GUIDE_HBP + '：血压长期达标并稳定控制 >3 个月的患者，应在医师指导下评估是否可以简化治疗方案或调整药物剂量/种类。服务包含 3 次互联网医院免费调药问诊权益。',
+      icon: 'fa-solid fa-user-doctor',
+      goods: [
+        { id: 'g9', name: '互联网医院 · 免费调药问诊（服务包权益）', price: 0, unit: '次', badge: '服务包权益' }
+      ],
+      pinned: true
+    })
   }
 
   return out
@@ -756,7 +787,7 @@ export function buildDayPlan(pkgKey, answers, dayIndex, limit) {
 export const QUESTIONS = [
   {
     id: 'bp_grade',
-    text: '您好！我是健康小助手。为了按《中国高血压防治指南 2024》为您做危险分层，先了解 5 项必要信息。第一个问题：近 1 个月您在家中测到的最高血压，落在哪一档？',
+    text: '您好！我是健康小助手。为了按《中国高血压防治指南 2024》为您做危险分层，先了解 6 项必要信息。第一个问题：近 1 个月您在家中测到的最高血压，落在哪一档？',
     options: [
       { v: 'grade1', label: '1级：140-159 / 90-99 mmHg' },
       { v: 'grade2', label: '2级：160-179 / 100-109 mmHg' },
@@ -772,6 +803,18 @@ export const QUESTIONS = [
       { v: 'irregular', label: '经常漏服或自行减量' },
       { v: 'self_stop', label: '血压降下来就停药' },
       { v: 'none', label: '尚未开始药物治疗' }
+    ]
+  },
+  {
+    id: 'med_type',
+    text: '了解。请问您目前正在服用的降压药属于哪一类？（用于后续调药参考）',
+    options: [
+      { v: 'ccb', label: '钙通道阻滞剂（地平类，如硝苯地平）' },
+      { v: 'acei_arb', label: 'ACEI/ARB（普利/沙坦类）' },
+      { v: 'diuretic', label: '利尿剂（如氢氯噻嗪、呋塞米）' },
+      { v: 'beta', label: 'β受体阻滞剂（洛尔类）' },
+      { v: 'compound', label: '复方制剂（如缬沙坦氨氯地平）' },
+      { v: 'unknown', label: '不清楚药名或记不清楚' }
     ]
   },
   {
@@ -878,6 +921,7 @@ export const KNOWLEDGE = [
 export const RIGHT_ENTRIES = [
   { key: 'ai', label: 'AI自测', icon: 'fa-solid fa-face-grin-tongue', color: '#b8932e', bg: '#faf3e0', quotaText: '无限制' },
   { key: 'consult', label: '免费问诊', icon: 'fa-solid fa-comments', color: '#b8932e', bg: '#faf3e0', quotaText: '无限制' },
+  { key: 'medication', label: '调药问诊', icon: 'fa-solid fa-pills', color: '#b8932e', bg: '#faf3e0', quota: 3, quotaText: '剩3次' },
   { key: 'expert', label: '专家预约', icon: 'fa-solid fa-user-doctor', color: '#b8932e', bg: '#faf3e0', quota: 3, quotaText: '剩3次' },
   { key: 'video', label: '视频问诊', icon: 'fa-solid fa-video', color: '#b8932e', bg: '#faf3e0', quota: 12, quotaText: '剩12次' },
   { key: 'accompany', label: '陪诊', icon: 'fa-solid fa-hand-holding-heart', color: '#b8932e', bg: '#faf3e0', quota: 3, quotaText: '剩3次' },

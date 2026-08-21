@@ -186,13 +186,15 @@
 
             <!-- 关联商品 -->
             <view v-if="it.goods && it.goods.length" class="plan__goods-wrap">
-              <text class="plan__goods-label">推荐健康产品</text>
+              <text class="plan__goods-label">{{ it.goods[0].badge ? '服务包权益' : '推荐健康产品' }}</text>
               <view class="plan__goods">
-                <view v-for="g in it.goods" :key="g.id" class="plan__good" @tap="goGood(g)">
-                  <image class="plan__good-img" :src="g.img" mode="aspectFill"></image>
+                <view v-for="g in it.goods" :key="g.id" class="plan__good" :class="{ 'plan__good--entitlement': g.badge }" @tap="goGood(g)">
+                  <image v-if="g.img" class="plan__good-img" :src="g.img" mode="aspectFill"></image>
+                  <view v-else class="plan__good-icon fa-solid fa-hospital-user"></view>
                   <view class="plan__good-info">
                     <text class="plan__good-name">{{ g.name }}</text>
-                    <text class="plan__good-price">¥{{ g.price }}</text>
+                    <text v-if="g.badge" class="plan__good-badge">{{ g.badge }}</text>
+                    <text v-else class="plan__good-price">¥{{ g.price }}</text>
                   </view>
                 </view>
               </view>
@@ -1156,6 +1158,34 @@ export default {
   color: $badge;
   font-family: $font-family-en;
   margin-top: 2rpx;
+}
+
+/* 服务包权益商品（无图片） */
+.plan__good--entitlement {
+  background: linear-gradient(135deg, #e8f3ef 0%, #f5ede0 100%);
+  border: 2rpx dashed $brand-primary;
+}
+
+.plan__good-icon {
+  width: 100%;
+  height: 140rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 64rpx;
+  color: $brand-primary;
+  background: $brand-soft;
+}
+
+.plan__good-badge {
+  display: inline-block;
+  font-size: $font-size-2xs;
+  color: $brand-primary;
+  background: $brand-soft;
+  padding: 4rpx 12rpx;
+  border-radius: $radius-xs;
+  margin-top: 4rpx;
+  font-weight: $font-weight-semibold;
 }
 
 /* ---------- 健康风险预测 ---------- */

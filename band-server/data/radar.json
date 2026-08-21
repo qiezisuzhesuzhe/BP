@@ -8,7 +8,7 @@
       "firstSeen": 1787320921389,
       "latest": {
         "struggleAlert": 0,
-        "ts": 1787325353443,
+        "ts": 1787327098000,
         "heartRate": 72,
         "respRate": 16,
         "inBed": "无人",
@@ -22,10 +22,22 @@
       },
       "attrs": [
         {
-          "name": "在床",
-          "value": "无人",
+          "name": "信号强度",
+          "value": "31",
           "unit": "",
-          "key": "inBed"
+          "key": "signal"
+        },
+        {
+          "name": "硬件版本",
+          "value": "SM-C03-UMA503-1.0|10310",
+          "unit": "",
+          "key": ""
+        },
+        {
+          "name": "软件版本",
+          "value": "00000008",
+          "unit": "",
+          "key": ""
         }
       ],
       "history": [
@@ -214,9 +226,16 @@
           "latest": {
             "inBed": "无人"
           }
+        },
+        {
+          "ts": 1787327098000,
+          "event": "心跳",
+          "latest": {
+            "signal": 31
+          }
         }
       ],
-      "lastSeen": 1787325353443,
+      "lastSeen": 1787327099456,
       "boundAt": 1787320921389,
       "struggleHistory": [
         {

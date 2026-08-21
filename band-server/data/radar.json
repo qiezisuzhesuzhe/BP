@@ -1,3 +1,79 @@
 {
-  "devices": {}
+  "devices": {
+    "867561088869642": {
+      "deviceid": "867561088869642",
+      "name": "张先生的睡眠雷达",
+      "model": "SM-C03",
+      "typeKey": "radar",
+      "firstSeen": 1787319928705,
+      "latest": {
+        "heartRate": 72,
+        "respRate": 16,
+        "stay": 6.5,
+        "inBed": 1,
+        "struggleAlert": 2,
+        "bodyMove": 8,
+        "ts": 1787320000000
+      },
+      "attrs": [
+        {
+          "name": "心率",
+          "value": "72",
+          "unit": "",
+          "key": "heartRate"
+        },
+        {
+          "name": "呼吸",
+          "value": "16",
+          "unit": "",
+          "key": "respRate"
+        },
+        {
+          "name": "睡眠时长",
+          "value": "6.5h",
+          "unit": "",
+          "key": "stay"
+        },
+        {
+          "name": "在床状态",
+          "value": "1",
+          "unit": "",
+          "key": "inBed"
+        },
+        {
+          "name": "异常挣扎",
+          "value": "2",
+          "unit": "",
+          "key": "struggleAlert"
+        },
+        {
+          "name": "体动次数",
+          "value": "8",
+          "unit": "",
+          "key": "bodyMove"
+        }
+      ],
+      "history": [
+        {
+          "ts": 1787320000000,
+          "event": "",
+          "latest": {
+            "heartRate": 72,
+            "respRate": 16,
+            "stay": 6.5,
+            "inBed": 1,
+            "struggleAlert": 2,
+            "bodyMove": 8
+          }
+        }
+      ],
+      "lastSeen": 1787319959872,
+      "platformDeviceId": 152166722,
+      "state": 0,
+      "stateText": "正常",
+      "companyName": "叁陆伍智慧（北京）医疗科技有限公司",
+      "platformSyncAt": 1787319928705,
+      "boundAt": 1787319959437
+    }
+  }
 }

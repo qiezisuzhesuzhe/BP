@@ -696,7 +696,7 @@ __webpack_require__.r(__webpack_exports__);
         _this9.push({
           role: 'ai',
           kind: 'text',
-          text: '这是为您安排的第一天日程。在APP的首页、微信消息或智能手环上，也将为您发送提醒。按时间点执行即可，完成后我会陪您复盘。'
+          text: '这是根据您本次评估结论、依据' + Object(_common_mock_js__WEBPACK_IMPORTED_MODULE_16__["guideName"])(_this9.pkgKey) + '为您安排的第一天日程。每条都标注了对应的指南依据。在APP的首页、微信消息或智能手环上，也将为您发送提醒。按时间点执行即可，完成后我会陪您复盘。'
         });
         _this9.push({
           role: 'ai',
@@ -714,39 +714,33 @@ __webpack_require__.r(__webpack_exports__);
       });
     },
     firstDayItems: function firstDayItems() {
-      var days = _common_mock_js__WEBPACK_IMPORTED_MODULE_16__["TIMELINE"][this.pkgKey] || _common_mock_js__WEBPACK_IMPORTED_MODULE_16__["TIMELINE"].hbp;
-      var items = days[0] || [];
-      return items.slice(0, 6);
+      return Object(_common_mock_js__WEBPACK_IMPORTED_MODULE_16__["buildDayPlan"])(this.pkgKey, this.answers, 0, 7);
     },
     buildReport: function buildReport() {
       return this.pkgKey === 'dm' ? this.buildDmReport() : this.buildHbpReport();
     },
+    // 判定逻辑统一在 mock.js，报告与日程（对话页/首页/消息中心）共用同一套结论
+    hbpFlags: function hbpFlags() {
+      return Object(_common_mock_js__WEBPACK_IMPORTED_MODULE_16__["hbpFlags"])(this.answers);
+    },
+    dmFlags: function dmFlags() {
+      return Object(_common_mock_js__WEBPACK_IMPORTED_MODULE_16__["dmFlags"])(this.answers);
+    },
     buildHbpReport: function buildHbpReport() {
-      var a = this.answers;
-
-      // 血压分级（《中国高血压防治指南 2024》）
-      var g1 = a.bp_grade === 'grade1';
-      var g2 = a.bp_grade === 'grade2';
-      var g3 = a.bp_grade === 'grade3';
-      var gUnknown = a.bp_grade === 'unknown';
-
-      // 临床合并症与心血管危险因素
-      var cvd = a.comorbidity === 'cvd';
-      var dmCkd = a.comorbidity === 'dm_ckd';
-      var riskFactor = a.comorbidity === 'risk_factor';
-
-      // 用药依从性
-      var badMed = a.medication === 'irregular' || a.medication === 'self_stop';
-      var noMed = a.medication === 'none';
-
-      // 生活方式（不参与危险分层，仅驱动干预建议）
-      var heavySalt = a.salt_intake === 'high';
-      var naiveSalt = a.salt_intake === 'unaware';
-      var lowMove = a.exercise === 'none' || a.exercise === 'low';
-
-      // 危险分层：血压分级 × 合并症/危险因素
-      var tier = 1;
-      if (cvd) tier = 4;else if (dmCkd) tier = g2 || g3 ? 4 : 3;else if (g3) tier = riskFactor ? 4 : 3;else if (g2) tier = riskFactor ? 3 : 2;else if (g1) tier = riskFactor ? 2 : 1;else tier = 0;
+      var f = this.hbpFlags();
+      var g1 = f.g1;
+      var g2 = f.g2;
+      var g3 = f.g3;
+      var gUnknown = f.gUnknown;
+      var cvd = f.cvd;
+      var dmCkd = f.dmCkd;
+      var riskFactor = f.riskFactor;
+      var badMed = f.badMed;
+      var noMed = f.noMed;
+      var heavySalt = f.heavySalt;
+      var naiveSalt = f.naiveSalt;
+      var lowMove = f.lowMove;
+      var tier = f.tier;
       var RISK = {
         0: {
           risk: '待评估（需先完成血压分级）',
@@ -774,8 +768,8 @@ __webpack_require__.r(__webpack_exports__);
           bg: '#fde8e3'
         }
       };
-      var gradeLabel = g3 ? '3 级' : g2 ? '2 级' : g1 ? '1 级' : '分级待确认';
-      var withLabel = cvd ? '伴临床合并症' : dmCkd ? '伴糖尿病/慢性肾病' : riskFactor ? '伴心血管危险因素' : '无合并症';
+      var gradeLabel = f.gradeLabel;
+      var withLabel = f.withLabel;
       var target = cvd || dmCkd ? '目标 <130/80 mmHg（合并症人群更严格），避免舒张压低于 60 mmHg' : g3 ? '先在 2-4 周内降至 <140/90 mmHg，稳定后能耐受者进一步降至 <130/80 mmHg' : '一般目标 <140/90 mmHg，能耐受者可降至 <130/80 mmHg';
       var points = [];
 
@@ -873,12 +867,11 @@ __webpack_require__.r(__webpack_exports__);
     },
     buildDmReport: function buildDmReport() {
       var a = this.answers;
-      var highA1c = a.hba1c === 'r70_80' || a.hba1c === 'gt80';
-      var highFpg = a.fpg === 'high';
-      var bigStaple = a.staple === 'large' || a.staple === 'varies';
-      var noMove = a.dm_exercise === 'rarely' || a.dm_exercise === 'never';
-      var onInsulin = a.dm_med === 'insulin' || a.dm_med === 'both';
-      var midHigh = highA1c || highFpg;
+      var f = this.dmFlags();
+      var bigStaple = f.bigStaple;
+      var noMove = f.noMove;
+      var onInsulin = f.onInsulin;
+      var midHigh = f.midHigh;
       var points = [];
       points.push({
         title: '建立血糖监测谱',

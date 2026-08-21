@@ -1,6 +1,6 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
-import { PACKAGES, TIMELINE, RIGHT_ENTRIES, makeOrderNo, deviceType, makeDeviceSnapshot } from '@/common/mock.js'
+import { PACKAGES, buildDayPlan, RIGHT_ENTRIES, makeOrderNo, deviceType, makeDeviceSnapshot } from '@/common/mock.js'
 
 Vue.use(Vuex)
 
@@ -125,11 +125,10 @@ const store = new Vuex.Store({
     todayTimeline(state) {
       const r = state.rights.find((x) => x.chatStarted) || state.rights[0]
       const key = r ? r.pkgKey : 'hbp'
-      const days = TIMELINE[key] || TIMELINE.hbp
       return {
         pkgKey: key,
         preview: !r,
-        items: days[state.currentDayIndex] || days[0]
+        items: buildDayPlan(key, r ? r.answers : null, state.currentDayIndex)
       }
     },
     devices(state) {
@@ -334,9 +333,8 @@ const store = new Vuex.Store({
         patch: { chatStarted: true, usedDays: 1, answers: payload.answers || {} }
       })
 
-      const days = TIMELINE[right.pkgKey] || TIMELINE.hbp
-      const items = days[0] || []
-      const picked = items.slice(0, 4).map((it) => ({
+      // 与对话页、首页同源：按评估结论生成，再按类目重要性取 4 条推送
+      const picked = buildDayPlan(right.pkgKey, payload.answers, 0, 4).map((it) => ({
         id: uid('m'),
         type: 'timeline',
         icon: it.icon,

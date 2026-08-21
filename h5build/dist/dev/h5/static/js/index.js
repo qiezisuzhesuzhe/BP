@@ -409,40 +409,38 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var core_js_modules_es_array_find_js__WEBPACK_IMPORTED_MODULE_4___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_array_find_js__WEBPACK_IMPORTED_MODULE_4__);
 /* harmony import */ var core_js_modules_es_array_map_js__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! core-js/modules/es.array.map.js */ "2B1R");
 /* harmony import */ var core_js_modules_es_array_map_js__WEBPACK_IMPORTED_MODULE_5___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_array_map_js__WEBPACK_IMPORTED_MODULE_5__);
-/* harmony import */ var core_js_modules_es_array_slice_js__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! core-js/modules/es.array.slice.js */ "+2oP");
-/* harmony import */ var core_js_modules_es_array_slice_js__WEBPACK_IMPORTED_MODULE_6___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_array_slice_js__WEBPACK_IMPORTED_MODULE_6__);
-/* harmony import */ var core_js_modules_es_array_unshift_js__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! core-js/modules/es.array.unshift.js */ "PGW+");
-/* harmony import */ var core_js_modules_es_array_unshift_js__WEBPACK_IMPORTED_MODULE_7___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_array_unshift_js__WEBPACK_IMPORTED_MODULE_7__);
-/* harmony import */ var core_js_modules_es_date_to_json_js__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! core-js/modules/es.date.to-json.js */ "9LPj");
-/* harmony import */ var core_js_modules_es_date_to_json_js__WEBPACK_IMPORTED_MODULE_8___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_date_to_json_js__WEBPACK_IMPORTED_MODULE_8__);
-/* harmony import */ var core_js_modules_es_iterator_constructor_js__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! core-js/modules/es.iterator.constructor.js */ "6fVz");
-/* harmony import */ var core_js_modules_es_iterator_constructor_js__WEBPACK_IMPORTED_MODULE_9___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_iterator_constructor_js__WEBPACK_IMPORTED_MODULE_9__);
-/* harmony import */ var core_js_modules_es_iterator_filter_js__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! core-js/modules/es.iterator.filter.js */ "kQ2C");
-/* harmony import */ var core_js_modules_es_iterator_filter_js__WEBPACK_IMPORTED_MODULE_10___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_iterator_filter_js__WEBPACK_IMPORTED_MODULE_10__);
-/* harmony import */ var core_js_modules_es_iterator_find_js__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! core-js/modules/es.iterator.find.js */ "9mV7");
-/* harmony import */ var core_js_modules_es_iterator_find_js__WEBPACK_IMPORTED_MODULE_11___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_iterator_find_js__WEBPACK_IMPORTED_MODULE_11__);
-/* harmony import */ var core_js_modules_es_iterator_for_each_js__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! core-js/modules/es.iterator.for-each.js */ "fVRX");
-/* harmony import */ var core_js_modules_es_iterator_for_each_js__WEBPACK_IMPORTED_MODULE_12___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_iterator_for_each_js__WEBPACK_IMPORTED_MODULE_12__);
-/* harmony import */ var core_js_modules_es_iterator_map_js__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(/*! core-js/modules/es.iterator.map.js */ "q0NK");
-/* harmony import */ var core_js_modules_es_iterator_map_js__WEBPACK_IMPORTED_MODULE_13___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_iterator_map_js__WEBPACK_IMPORTED_MODULE_13__);
-/* harmony import */ var core_js_modules_es_json_parse_js__WEBPACK_IMPORTED_MODULE_14__ = __webpack_require__(/*! core-js/modules/es.json.parse.js */ "EjbG");
-/* harmony import */ var core_js_modules_es_json_parse_js__WEBPACK_IMPORTED_MODULE_14___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_json_parse_js__WEBPACK_IMPORTED_MODULE_14__);
-/* harmony import */ var core_js_modules_es_json_stringify_js__WEBPACK_IMPORTED_MODULE_15__ = __webpack_require__(/*! core-js/modules/es.json.stringify.js */ "6cQw");
-/* harmony import */ var core_js_modules_es_json_stringify_js__WEBPACK_IMPORTED_MODULE_15___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_json_stringify_js__WEBPACK_IMPORTED_MODULE_15__);
-/* harmony import */ var core_js_modules_es_object_keys_js__WEBPACK_IMPORTED_MODULE_16__ = __webpack_require__(/*! core-js/modules/es.object.keys.js */ "tkto");
-/* harmony import */ var core_js_modules_es_object_keys_js__WEBPACK_IMPORTED_MODULE_16___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_object_keys_js__WEBPACK_IMPORTED_MODULE_16__);
-/* harmony import */ var core_js_modules_es_object_to_string_js__WEBPACK_IMPORTED_MODULE_17__ = __webpack_require__(/*! core-js/modules/es.object.to-string.js */ "07d7");
-/* harmony import */ var core_js_modules_es_object_to_string_js__WEBPACK_IMPORTED_MODULE_17___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_object_to_string_js__WEBPACK_IMPORTED_MODULE_17__);
-/* harmony import */ var core_js_modules_es_parse_int_js__WEBPACK_IMPORTED_MODULE_18__ = __webpack_require__(/*! core-js/modules/es.parse-int.js */ "4l63");
-/* harmony import */ var core_js_modules_es_parse_int_js__WEBPACK_IMPORTED_MODULE_18___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_parse_int_js__WEBPACK_IMPORTED_MODULE_18__);
-/* harmony import */ var core_js_modules_es_regexp_to_string_js__WEBPACK_IMPORTED_MODULE_19__ = __webpack_require__(/*! core-js/modules/es.regexp.to-string.js */ "JfAA");
-/* harmony import */ var core_js_modules_es_regexp_to_string_js__WEBPACK_IMPORTED_MODULE_19___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_regexp_to_string_js__WEBPACK_IMPORTED_MODULE_19__);
-/* harmony import */ var core_js_modules_web_dom_collections_for_each_js__WEBPACK_IMPORTED_MODULE_20__ = __webpack_require__(/*! core-js/modules/web.dom-collections.for-each.js */ "FZtP");
-/* harmony import */ var core_js_modules_web_dom_collections_for_each_js__WEBPACK_IMPORTED_MODULE_20___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_web_dom_collections_for_each_js__WEBPACK_IMPORTED_MODULE_20__);
-/* harmony import */ var vue__WEBPACK_IMPORTED_MODULE_21__ = __webpack_require__(/*! vue */ "4UNb");
-/* harmony import */ var vuex__WEBPACK_IMPORTED_MODULE_22__ = __webpack_require__(/*! vuex */ "JstF");
-/* harmony import */ var vuex__WEBPACK_IMPORTED_MODULE_22___default = /*#__PURE__*/__webpack_require__.n(vuex__WEBPACK_IMPORTED_MODULE_22__);
-/* harmony import */ var _common_mock_js__WEBPACK_IMPORTED_MODULE_23__ = __webpack_require__(/*! @/common/mock.js */ "rfkh");
+/* harmony import */ var core_js_modules_es_array_unshift_js__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! core-js/modules/es.array.unshift.js */ "PGW+");
+/* harmony import */ var core_js_modules_es_array_unshift_js__WEBPACK_IMPORTED_MODULE_6___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_array_unshift_js__WEBPACK_IMPORTED_MODULE_6__);
+/* harmony import */ var core_js_modules_es_date_to_json_js__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! core-js/modules/es.date.to-json.js */ "9LPj");
+/* harmony import */ var core_js_modules_es_date_to_json_js__WEBPACK_IMPORTED_MODULE_7___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_date_to_json_js__WEBPACK_IMPORTED_MODULE_7__);
+/* harmony import */ var core_js_modules_es_iterator_constructor_js__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! core-js/modules/es.iterator.constructor.js */ "6fVz");
+/* harmony import */ var core_js_modules_es_iterator_constructor_js__WEBPACK_IMPORTED_MODULE_8___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_iterator_constructor_js__WEBPACK_IMPORTED_MODULE_8__);
+/* harmony import */ var core_js_modules_es_iterator_filter_js__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! core-js/modules/es.iterator.filter.js */ "kQ2C");
+/* harmony import */ var core_js_modules_es_iterator_filter_js__WEBPACK_IMPORTED_MODULE_9___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_iterator_filter_js__WEBPACK_IMPORTED_MODULE_9__);
+/* harmony import */ var core_js_modules_es_iterator_find_js__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! core-js/modules/es.iterator.find.js */ "9mV7");
+/* harmony import */ var core_js_modules_es_iterator_find_js__WEBPACK_IMPORTED_MODULE_10___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_iterator_find_js__WEBPACK_IMPORTED_MODULE_10__);
+/* harmony import */ var core_js_modules_es_iterator_for_each_js__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! core-js/modules/es.iterator.for-each.js */ "fVRX");
+/* harmony import */ var core_js_modules_es_iterator_for_each_js__WEBPACK_IMPORTED_MODULE_11___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_iterator_for_each_js__WEBPACK_IMPORTED_MODULE_11__);
+/* harmony import */ var core_js_modules_es_iterator_map_js__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! core-js/modules/es.iterator.map.js */ "q0NK");
+/* harmony import */ var core_js_modules_es_iterator_map_js__WEBPACK_IMPORTED_MODULE_12___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_iterator_map_js__WEBPACK_IMPORTED_MODULE_12__);
+/* harmony import */ var core_js_modules_es_json_parse_js__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(/*! core-js/modules/es.json.parse.js */ "EjbG");
+/* harmony import */ var core_js_modules_es_json_parse_js__WEBPACK_IMPORTED_MODULE_13___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_json_parse_js__WEBPACK_IMPORTED_MODULE_13__);
+/* harmony import */ var core_js_modules_es_json_stringify_js__WEBPACK_IMPORTED_MODULE_14__ = __webpack_require__(/*! core-js/modules/es.json.stringify.js */ "6cQw");
+/* harmony import */ var core_js_modules_es_json_stringify_js__WEBPACK_IMPORTED_MODULE_14___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_json_stringify_js__WEBPACK_IMPORTED_MODULE_14__);
+/* harmony import */ var core_js_modules_es_object_keys_js__WEBPACK_IMPORTED_MODULE_15__ = __webpack_require__(/*! core-js/modules/es.object.keys.js */ "tkto");
+/* harmony import */ var core_js_modules_es_object_keys_js__WEBPACK_IMPORTED_MODULE_15___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_object_keys_js__WEBPACK_IMPORTED_MODULE_15__);
+/* harmony import */ var core_js_modules_es_object_to_string_js__WEBPACK_IMPORTED_MODULE_16__ = __webpack_require__(/*! core-js/modules/es.object.to-string.js */ "07d7");
+/* harmony import */ var core_js_modules_es_object_to_string_js__WEBPACK_IMPORTED_MODULE_16___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_object_to_string_js__WEBPACK_IMPORTED_MODULE_16__);
+/* harmony import */ var core_js_modules_es_parse_int_js__WEBPACK_IMPORTED_MODULE_17__ = __webpack_require__(/*! core-js/modules/es.parse-int.js */ "4l63");
+/* harmony import */ var core_js_modules_es_parse_int_js__WEBPACK_IMPORTED_MODULE_17___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_parse_int_js__WEBPACK_IMPORTED_MODULE_17__);
+/* harmony import */ var core_js_modules_es_regexp_to_string_js__WEBPACK_IMPORTED_MODULE_18__ = __webpack_require__(/*! core-js/modules/es.regexp.to-string.js */ "JfAA");
+/* harmony import */ var core_js_modules_es_regexp_to_string_js__WEBPACK_IMPORTED_MODULE_18___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_regexp_to_string_js__WEBPACK_IMPORTED_MODULE_18__);
+/* harmony import */ var core_js_modules_web_dom_collections_for_each_js__WEBPACK_IMPORTED_MODULE_19__ = __webpack_require__(/*! core-js/modules/web.dom-collections.for-each.js */ "FZtP");
+/* harmony import */ var core_js_modules_web_dom_collections_for_each_js__WEBPACK_IMPORTED_MODULE_19___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_web_dom_collections_for_each_js__WEBPACK_IMPORTED_MODULE_19__);
+/* harmony import */ var vue__WEBPACK_IMPORTED_MODULE_20__ = __webpack_require__(/*! vue */ "4UNb");
+/* harmony import */ var vuex__WEBPACK_IMPORTED_MODULE_21__ = __webpack_require__(/*! vuex */ "JstF");
+/* harmony import */ var vuex__WEBPACK_IMPORTED_MODULE_21___default = /*#__PURE__*/__webpack_require__.n(vuex__WEBPACK_IMPORTED_MODULE_21__);
+/* harmony import */ var _common_mock_js__WEBPACK_IMPORTED_MODULE_22__ = __webpack_require__(/*! @/common/mock.js */ "rfkh");
 
 
 
@@ -466,8 +464,7 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
-
-vue__WEBPACK_IMPORTED_MODULE_21__["default"].use(vuex__WEBPACK_IMPORTED_MODULE_22___default.a);
+vue__WEBPACK_IMPORTED_MODULE_20__["default"].use(vuex__WEBPACK_IMPORTED_MODULE_21___default.a);
 var STORAGE_KEY = 'ankang_store_v1';
 function now() {
   return Date.now();
@@ -534,7 +531,7 @@ function load() {
   return null;
 }
 var cache = load();
-var store = new vuex__WEBPACK_IMPORTED_MODULE_22___default.a.Store({
+var store = new vuex__WEBPACK_IMPORTED_MODULE_21___default.a.Store({
   state: {
     profile: cache && cache.profile || defaultProfile,
     orders: cache && cache.orders || [],
@@ -546,7 +543,7 @@ var store = new vuex__WEBPACK_IMPORTED_MODULE_22___default.a.Store({
   },
   getters: {
     packages: function packages() {
-      return _common_mock_js__WEBPACK_IMPORTED_MODULE_23__["PACKAGES"];
+      return _common_mock_js__WEBPACK_IMPORTED_MODULE_22__["PACKAGES"];
     },
     unreadCount: function unreadCount(state) {
       return state.messages.filter(function (m) {
@@ -588,18 +585,17 @@ var store = new vuex__WEBPACK_IMPORTED_MODULE_22___default.a.Store({
         return x.chatStarted;
       }) || state.rights[0];
       var key = r ? r.pkgKey : 'hbp';
-      var days = _common_mock_js__WEBPACK_IMPORTED_MODULE_23__["TIMELINE"][key] || _common_mock_js__WEBPACK_IMPORTED_MODULE_23__["TIMELINE"].hbp;
       return {
         pkgKey: key,
         preview: !r,
-        items: days[state.currentDayIndex] || days[0]
+        items: Object(_common_mock_js__WEBPACK_IMPORTED_MODULE_22__["buildDayPlan"])(key, r ? r.answers : null, state.currentDayIndex)
       };
     },
     devices: function devices(state) {
       return state.devices;
     },
     rightEntries: function rightEntries() {
-      return _common_mock_js__WEBPACK_IMPORTED_MODULE_23__["RIGHT_ENTRIES"];
+      return _common_mock_js__WEBPACK_IMPORTED_MODULE_22__["RIGHT_ENTRIES"];
     },
     deviceById: function deviceById(state) {
       return function (id) {
@@ -703,12 +699,12 @@ var store = new vuex__WEBPACK_IMPORTED_MODULE_22___default.a.Store({
     },
     // 创建待支付订单
     createOrder: function createOrder(context, pkgId) {
-      var pkg = _common_mock_js__WEBPACK_IMPORTED_MODULE_23__["PACKAGES"].find(function (p) {
+      var pkg = _common_mock_js__WEBPACK_IMPORTED_MODULE_22__["PACKAGES"].find(function (p) {
         return p.id === pkgId;
       });
       if (!pkg) return null;
       var order = {
-        orderNo: Object(_common_mock_js__WEBPACK_IMPORTED_MODULE_23__["makeOrderNo"])(),
+        orderNo: Object(_common_mock_js__WEBPACK_IMPORTED_MODULE_22__["makeOrderNo"])(),
         pkgId: pkg.id,
         pkgKey: pkg.key,
         pkgName: pkg.name,
@@ -732,7 +728,7 @@ var store = new vuex__WEBPACK_IMPORTED_MODULE_22___default.a.Store({
       });
       if (!order) return null;
       context.commit('PAY_ORDER', orderNo);
-      var pkg = _common_mock_js__WEBPACK_IMPORTED_MODULE_23__["PACKAGES"].find(function (p) {
+      var pkg = _common_mock_js__WEBPACK_IMPORTED_MODULE_22__["PACKAGES"].find(function (p) {
         return p.id === order.pkgId;
       });
       var months = parseInt(order.duration, 10) || 3;
@@ -812,9 +808,9 @@ var store = new vuex__WEBPACK_IMPORTED_MODULE_22___default.a.Store({
           answers: payload.answers || {}
         }
       });
-      var days = _common_mock_js__WEBPACK_IMPORTED_MODULE_23__["TIMELINE"][right.pkgKey] || _common_mock_js__WEBPACK_IMPORTED_MODULE_23__["TIMELINE"].hbp;
-      var items = days[0] || [];
-      var picked = items.slice(0, 4).map(function (it) {
+
+      // 与对话页、首页同源：按评估结论生成，再按类目重要性取 4 条推送
+      var picked = Object(_common_mock_js__WEBPACK_IMPORTED_MODULE_22__["buildDayPlan"])(right.pkgKey, payload.answers, 0, 4).map(function (it) {
         return {
           id: uid('m'),
           type: 'timeline',
@@ -846,7 +842,7 @@ var store = new vuex__WEBPACK_IMPORTED_MODULE_22___default.a.Store({
     },
     // 扫码添加设备：生成设备记录 + 初始数据快照 + 通知消息
     addDevice: function addDevice(context, payload) {
-      var type = Object(_common_mock_js__WEBPACK_IMPORTED_MODULE_23__["deviceType"])(payload.typeKey);
+      var type = Object(_common_mock_js__WEBPACK_IMPORTED_MODULE_22__["deviceType"])(payload.typeKey);
       if (!type) return null;
       var id = uid('d');
       var device = {
@@ -859,7 +855,7 @@ var store = new vuex__WEBPACK_IMPORTED_MODULE_22___default.a.Store({
         addedAt: fmtDateTime(now()),
         lastSync: fmtDateTime(now()),
         online: true,
-        data: Object(_common_mock_js__WEBPACK_IMPORTED_MODULE_23__["makeDeviceSnapshot"])(type, null)
+        data: Object(_common_mock_js__WEBPACK_IMPORTED_MODULE_22__["makeDeviceSnapshot"])(type, null)
       };
       context.commit('ADD_DEVICE', device);
       context.commit('ADD_MESSAGES', [{
@@ -882,8 +878,8 @@ var store = new vuex__WEBPACK_IMPORTED_MODULE_22___default.a.Store({
         return x.id === id;
       });
       if (!d) return null;
-      var type = Object(_common_mock_js__WEBPACK_IMPORTED_MODULE_23__["deviceType"])(d.typeKey);
-      var data = Object(_common_mock_js__WEBPACK_IMPORTED_MODULE_23__["makeDeviceSnapshot"])(type, d.data);
+      var type = Object(_common_mock_js__WEBPACK_IMPORTED_MODULE_22__["deviceType"])(d.typeKey);
+      var data = Object(_common_mock_js__WEBPACK_IMPORTED_MODULE_22__["makeDeviceSnapshot"])(type, d.data);
       context.commit('UPDATE_DEVICE_DATA', {
         id: id,
         data: data,
@@ -2922,7 +2918,7 @@ global.UniApp && new global.UniApp();
 /*!****************************!*\
   !*** ./src/common/mock.js ***!
   \****************************/
-/*! exports provided: PACKAGES, TIMELINE, CAT_META, QUESTIONS, QUESTIONS_DM, KNOWLEDGE, RIGHT_ENTRIES, SHOP_GOODS, makeOrderNo, DEVICE_TYPES, deviceType, makeDeviceSnapshot, HEALTH_MEMBERS, HEALTH_QUICK, HEALTH_SCORE, HEALTH_FOCUS, HEALTH_ACHIEVE, HEALTH_PLAN, HEALTH_PLAN_META, HEALTH_RISK_FORECAST, HEALTH_DISEASE_RISK, HEALTH_RECOMMEND */
+/*! exports provided: PACKAGES, TIMELINE, CAT_META, guideName, hbpFlags, dmFlags, buildDayPlan, QUESTIONS, QUESTIONS_DM, KNOWLEDGE, RIGHT_ENTRIES, SHOP_GOODS, makeOrderNo, DEVICE_TYPES, deviceType, makeDeviceSnapshot, HEALTH_MEMBERS, HEALTH_QUICK, HEALTH_SCORE, HEALTH_FOCUS, HEALTH_ACHIEVE, HEALTH_PLAN, HEALTH_PLAN_META, HEALTH_RISK_FORECAST, HEALTH_DISEASE_RISK, HEALTH_RECOMMEND */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -2930,6 +2926,10 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "PACKAGES", function() { return PACKAGES; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "TIMELINE", function() { return TIMELINE; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "CAT_META", function() { return CAT_META; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "guideName", function() { return guideName; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "hbpFlags", function() { return hbpFlags; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "dmFlags", function() { return dmFlags; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "buildDayPlan", function() { return buildDayPlan; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "QUESTIONS", function() { return QUESTIONS; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "QUESTIONS_DM", function() { return QUESTIONS_DM; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "KNOWLEDGE", function() { return KNOWLEDGE; });
@@ -2951,8 +2951,29 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "HEALTH_RECOMMEND", function() { return HEALTH_RECOMMEND; });
 /* harmony import */ var core_js_modules_es_array_find_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! core-js/modules/es.array.find.js */ "fbCW");
 /* harmony import */ var core_js_modules_es_array_find_js__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_array_find_js__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var core_js_modules_es_object_to_string_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! core-js/modules/es.object.to-string.js */ "07d7");
-/* harmony import */ var core_js_modules_es_object_to_string_js__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_object_to_string_js__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var core_js_modules_es_array_index_of_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! core-js/modules/es.array.index-of.js */ "yXV3");
+/* harmony import */ var core_js_modules_es_array_index_of_js__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_array_index_of_js__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var core_js_modules_es_array_map_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! core-js/modules/es.array.map.js */ "2B1R");
+/* harmony import */ var core_js_modules_es_array_map_js__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_array_map_js__WEBPACK_IMPORTED_MODULE_2__);
+/* harmony import */ var core_js_modules_es_array_push_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! core-js/modules/es.array.push.js */ "FNk8");
+/* harmony import */ var core_js_modules_es_array_push_js__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_array_push_js__WEBPACK_IMPORTED_MODULE_3__);
+/* harmony import */ var core_js_modules_es_array_sort_js__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! core-js/modules/es.array.sort.js */ "ToJy");
+/* harmony import */ var core_js_modules_es_array_sort_js__WEBPACK_IMPORTED_MODULE_4___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_array_sort_js__WEBPACK_IMPORTED_MODULE_4__);
+/* harmony import */ var core_js_modules_es_iterator_constructor_js__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! core-js/modules/es.iterator.constructor.js */ "6fVz");
+/* harmony import */ var core_js_modules_es_iterator_constructor_js__WEBPACK_IMPORTED_MODULE_5___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_iterator_constructor_js__WEBPACK_IMPORTED_MODULE_5__);
+/* harmony import */ var core_js_modules_es_iterator_map_js__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! core-js/modules/es.iterator.map.js */ "q0NK");
+/* harmony import */ var core_js_modules_es_iterator_map_js__WEBPACK_IMPORTED_MODULE_6___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_iterator_map_js__WEBPACK_IMPORTED_MODULE_6__);
+/* harmony import */ var core_js_modules_es_object_keys_js__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! core-js/modules/es.object.keys.js */ "tkto");
+/* harmony import */ var core_js_modules_es_object_keys_js__WEBPACK_IMPORTED_MODULE_7___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_object_keys_js__WEBPACK_IMPORTED_MODULE_7__);
+/* harmony import */ var core_js_modules_es_object_to_string_js__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! core-js/modules/es.object.to-string.js */ "07d7");
+/* harmony import */ var core_js_modules_es_object_to_string_js__WEBPACK_IMPORTED_MODULE_8___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_object_to_string_js__WEBPACK_IMPORTED_MODULE_8__);
+
+
+
+
+
+
+
 
 
 var IMG = 'https://trae-api-cn.mchost.guru/api/ide/v1/text_to_image?prompt=';
@@ -3598,6 +3619,377 @@ var CAT_META = {
     bg: '#fdf4ed'
   }
 };
+
+// ===== 评估判定与日程生成 =====
+// 说明：日程必须由问卷评估结论驱动，并标注指南依据。
+// 这里做成纯函数，供对话页、首页时间线、消息中心三处共用，
+// 避免同一用户在不同入口看到互相矛盾的日程。
+
+var GUIDE_HBP = '《中国高血压防治指南 2024》';
+var GUIDE_DM = '《中国 2 型糖尿病防治指南 2024》';
+
+// 供界面文案引用，避免指南名称在多处硬编码
+function guideName(pkgKey) {
+  return pkgKey === 'dm' ? GUIDE_DM : GUIDE_HBP;
+}
+
+// 高血压评估判定
+function hbpFlags(answers) {
+  var a = answers || {};
+
+  // 血压分级
+  var g1 = a.bp_grade === 'grade1';
+  var g2 = a.bp_grade === 'grade2';
+  var g3 = a.bp_grade === 'grade3';
+  var gUnknown = a.bp_grade === 'unknown';
+
+  // 临床合并症与心血管危险因素
+  var cvd = a.comorbidity === 'cvd';
+  var dmCkd = a.comorbidity === 'dm_ckd';
+  var riskFactor = a.comorbidity === 'risk_factor';
+
+  // 用药依从性
+  var badMed = a.medication === 'irregular' || a.medication === 'self_stop';
+  var noMed = a.medication === 'none';
+
+  // 生活方式（不参与危险分层，仅驱动干预建议）
+  var heavySalt = a.salt_intake === 'high';
+  var naiveSalt = a.salt_intake === 'unaware';
+  var lowMove = a.exercise === 'none' || a.exercise === 'low';
+  var highMove = a.exercise === 'high';
+
+  // 危险分层：血压分级 × 合并症/危险因素
+  var tier = 1;
+  if (cvd) tier = 4;else if (dmCkd) tier = g2 || g3 ? 4 : 3;else if (g3) tier = riskFactor ? 4 : 3;else if (g2) tier = riskFactor ? 3 : 2;else if (g1) tier = riskFactor ? 2 : 1;else tier = 0;
+  return {
+    g1: g1,
+    g2: g2,
+    g3: g3,
+    gUnknown: gUnknown,
+    cvd: cvd,
+    dmCkd: dmCkd,
+    riskFactor: riskFactor,
+    badMed: badMed,
+    noMed: noMed,
+    heavySalt: heavySalt,
+    naiveSalt: naiveSalt,
+    lowMove: lowMove,
+    highMove: highMove,
+    tier: tier,
+    gradeLabel: g3 ? '3 级' : g2 ? '2 级' : g1 ? '1 级' : '分级待确认',
+    withLabel: cvd ? '伴临床合并症' : dmCkd ? '伴糖尿病/慢性肾病' : riskFactor ? '伴心血管危险因素' : '无合并症'
+  };
+}
+
+// 糖尿病评估判定
+function dmFlags(answers) {
+  var a = answers || {};
+  var highA1c = a.hba1c === 'r70_80' || a.hba1c === 'gt80';
+  var veryHighA1c = a.hba1c === 'gt80';
+  var highFpg = a.fpg === 'high';
+  var unknownFpg = a.fpg === 'unknown';
+  var bigStaple = a.staple === 'large' || a.staple === 'varies';
+  var noMove = a.dm_exercise === 'rarely' || a.dm_exercise === 'never';
+  var onInsulin = a.dm_med === 'insulin' || a.dm_med === 'both';
+  var noMed = a.dm_med === 'none';
+  return {
+    highA1c: highA1c,
+    veryHighA1c: veryHighA1c,
+    highFpg: highFpg,
+    unknownFpg: unknownFpg,
+    bigStaple: bigStaple,
+    noMove: noMove,
+    onInsulin: onInsulin,
+    noMed: noMed,
+    midHigh: highA1c || highFpg
+  };
+}
+
+// 判断运动条目是否属于中高强度：极高危未达标者需要回避
+var HIGH_INTENSITY = ['慢跑', '游泳', '快走', '有氧运动', '抗阻训练', '黄金降糖窗'];
+function isHighIntensity(title) {
+  for (var i = 0; i < HIGH_INTENSITY.length; i++) {
+    if (title.indexOf(HIGH_INTENSITY[i]) >= 0) return true;
+  }
+  return false;
+}
+function baseDay(pkgKey, dayIndex) {
+  var days = TIMELINE[pkgKey] || TIMELINE.hbp;
+  return days[dayIndex] || days[0] || [];
+}
+
+// 条目副本 + 覆盖字段，避免污染 TIMELINE 源对象
+function withBasis(item, basis, patch) {
+  return Object.assign({}, item, patch || {}, {
+    basis: basis
+  });
+}
+
+// 高血压：按评估结论改写当天日程
+function planHbp(items, f) {
+  var out = [];
+  for (var i = 0; i < items.length; i++) {
+    var it = items[i];
+    if (it.cat === 'monitor') {
+      out.push(withBasis(it, GUIDE_HBP + '推荐家庭血压监测：晨起排尿后、服药前，静坐 5 分钟再测' + (f.gUnknown ? '；分级待确认者需连续 7 天早晚各测以建立基线' : ''), f.gUnknown ? {
+        desc: '连续 7 天早晚各测一次并记录，用于确认您的血压分级'
+      } : null));
+      continue;
+    }
+    if (it.cat === 'medication') {
+      // 未用药者不能直接给服药提醒，应先就诊评估是否启动药物
+      if (f.noMed) {
+        out.push({
+          time: it.time,
+          cat: 'assessment',
+          title: '就诊评估是否启动降压药',
+          desc: '带上近 7 天血压记录到全科或心内科门诊，由医生判断是否需要起始药物治疗',
+          basis: GUIDE_HBP + '：2 级及以上高血压、或伴心血管危险因素与合并症者，应在生活方式干预同时启动药物治疗',
+          icon: 'fa-solid fa-user-doctor'
+        });
+      } else if (f.badMed) {
+        out.push(withBasis(it, GUIDE_HBP + '强调长期规律服药：自行停药或漏服会导致血压反弹，显著增加心脑血管事件风险', {
+          desc: '按医嘱服药，血压降至正常也不可自行减量或停药；漏服请如实记录'
+        }));
+      } else {
+        out.push(withBasis(it, GUIDE_HBP + '推荐优先使用长效制剂，固定时间服药以平稳控制 24 小时血压'));
+      }
+      continue;
+    }
+    if (it.cat === 'nutrition') {
+      out.push(withBasis(it, GUIDE_HBP + '推荐限盐：每日食盐 <5g（钠 <2000mg），并增加富钾蔬果摄入', f.heavySalt ? {
+        desc: it.desc + '；使用限盐勺定量，避免腌制品与加工肉'
+      } : f.naiveSalt ? {
+        desc: it.desc + '；先学会看包装钠含量，把隐形盐找出来'
+      } : null));
+      continue;
+    }
+    if (it.cat === 'exercise') {
+      // 极高危且血压未达标：回避中高强度运动
+      if (f.tier >= 4 && isHighIntensity(it.title)) {
+        out.push({
+          time: it.time,
+          cat: 'exercise',
+          title: '低强度舒缓活动',
+          desc: '室内散步或站式八段锦 15-20 分钟，全程可正常说话即为合适强度',
+          basis: GUIDE_HBP + '：极高危或血压未控制到 <160/100 mmHg 前，应暂缓中高强度运动，先以低强度活动过渡',
+          icon: 'fa-solid fa-spa'
+        });
+      } else if (f.lowMove) {
+        out.push(withBasis(it, GUIDE_HBP + '推荐每周 5-7 天、每次 30 分钟中等强度有氧运动；久坐者应循序渐进', {
+          desc: '从 10 分钟起步，每周增加 5 分钟，逐步过渡到 30 分钟'
+        }));
+      } else {
+        out.push(withBasis(it, GUIDE_HBP + '推荐每周 5-7 天、每次 30 分钟中等强度有氧运动，并配合柔韧性练习'));
+      }
+      continue;
+    }
+    if (it.cat === 'psychology') {
+      out.push(withBasis(it, GUIDE_HBP + '将心理压力列为血压影响因素，推荐通过呼吸放松等方式进行压力管理'));
+      continue;
+    }
+    if (it.cat === 'sleep') {
+      out.push(withBasis(it, GUIDE_HBP + '提示睡眠不足与睡眠呼吸暂停可致血压升高，应保证 7-8 小时规律睡眠'));
+      continue;
+    }
+    if (it.cat === 'assessment') {
+      out.push(withBasis(it, GUIDE_HBP + '推荐记录血压与症状变化，作为医生调整方案的依据'));
+      continue;
+    }
+    out.push(withBasis(it, GUIDE_HBP + '综合管理建议'));
+  }
+
+  // 危险分层高者插入就诊安排
+  if (f.tier >= 3 && !f.noMed) {
+    out.push({
+      time: '09:00',
+      cat: 'assessment',
+      title: f.tier >= 4 ? '尽快预约心内科就诊' : '两周内安排复诊评估',
+      desc: f.tier >= 4 ? '您属于极高危分层，建议 1 周内就诊，携带血压记录评估靶器官损害与用药方案' : '您属于高危分层，建议 2 周内复诊，复查血压与相关指标',
+      basis: GUIDE_HBP + '：' + (f.tier >= 4 ? '极高危患者应立即启动药物治疗并短期内随访' : '高危患者应尽早药物治疗并密切随访'),
+      icon: 'fa-solid fa-user-doctor',
+      pinned: true
+    });
+  }
+
+  // 高危及以上补测晚间血压，掌握全天波动
+  if (f.tier >= 3) {
+    var hasEvening = false;
+    for (var j = 0; j < out.length; j++) {
+      if (out[j].cat === 'monitor' && out[j].time >= '18:00') hasEvening = true;
+    }
+    if (!hasEvening) {
+      out.push({
+        time: '20:00',
+        cat: 'monitor',
+        title: '晚间血压监测',
+        desc: '晚饭后静坐 5 分钟测量，与晨起数值对比，观察全天波动',
+        basis: GUIDE_HBP + '推荐家庭血压早晚各测一次，用于评估血压变异与夜间控制情况',
+        icon: 'fa-solid fa-stethoscope',
+        pinned: true
+      });
+    }
+  }
+  return out;
+}
+
+// 糖尿病：按评估结论改写当天日程
+function planDm(items, f) {
+  var out = [];
+  for (var i = 0; i < items.length; i++) {
+    var it = items[i];
+    if (it.cat === 'monitor') {
+      // 依据按监测时点区分：空腹条目讲空腹目标，餐后条目讲餐后目标，
+      // 否则会出现「餐后 2h 血糖」下方挂空腹目标的错配
+      var isPost = it.title.indexOf('餐后') >= 0;
+      var mBasis = isPost ? GUIDE_DM + '推荐餐后 2 小时血糖 <10.0 mmol/L，与餐前配对监测可评估该餐主食量是否合适' : GUIDE_DM + '推荐空腹血糖控制目标 4.4-7.0 mmol/L，晨起未进食状态下测量';
+      out.push(withBasis(it, mBasis, f.unknownFpg && !isPost && it.time < '08:00' ? {
+        desc: '连续 3 天测空腹血糖并记录，先把基线水平摸清楚'
+      } : null));
+      continue;
+    }
+    if (it.cat === 'medication') {
+      if (f.noMed) {
+        out.push({
+          time: it.time,
+          cat: 'assessment',
+          title: '就诊评估是否起始降糖药',
+          desc: '带上血糖记录与最近一次 HbA1c 结果就诊，由医生判断是否需要药物治疗',
+          basis: GUIDE_DM + '：生活方式干预 3 个月后 HbA1c 仍未达标（一般 <7.0%）者，应及时起始降糖药物治疗',
+          icon: 'fa-solid fa-user-doctor'
+        });
+      } else if (f.onInsulin) {
+        out.push(withBasis(it, GUIDE_DM + '强调胰岛素治疗者的低血糖防范：注射部位轮换，随身备糖，出现心慌出汗立即检测', {
+          title: '胰岛素注射提醒',
+          desc: '按医嘱注射并轮换注射部位，随身携带糖块以备低血糖',
+          icon: 'fa-solid fa-syringe'
+        }));
+      } else {
+        out.push(withBasis(it, GUIDE_DM + '推荐二甲双胍作为首选口服降糖药，随餐服用以减轻胃肠道反应'));
+      }
+      continue;
+    }
+    if (it.cat === 'nutrition') {
+      out.push(withBasis(it, GUIDE_DM + '医学营养治疗：主食定量、优选低 GI 食物，先吃蔬菜与蛋白质再吃主食', f.bigStaple ? {
+        desc: it.desc + '；主食按生重 50-75g 定量，一半换成杂粮'
+      } : null));
+      continue;
+    }
+    if (it.cat === 'exercise') {
+      if (f.noMove) {
+        out.push(withBasis(it, GUIDE_DM + '推荐每周至少 150 分钟中等强度有氧运动，并每周 2-3 次抗阻训练；久坐者循序渐进', {
+          desc: '从餐后 10 分钟慢走起步，每周递增，逐步达到 30 分钟'
+        }));
+      } else if (f.veryHighA1c) {
+        out.push(withBasis(it, GUIDE_DM + '提示血糖显著升高时应谨慎运动：血糖 >16.7 mmol/L 或有酮症时暂缓运动', {
+          desc: it.desc + '；运动前后各测一次血糖，异常升高时改为静息拉伸'
+        }));
+      } else {
+        out.push(withBasis(it, GUIDE_DM + '推荐每周至少 150 分钟中等强度有氧运动，配合每周 2-3 次抗阻训练'));
+      }
+      continue;
+    }
+    if (it.cat === 'psychology') {
+      out.push(withBasis(it, GUIDE_DM + '将心理压力列为血糖波动因素，推荐纳入常规压力管理'));
+      continue;
+    }
+    if (it.cat === 'sleep') {
+      out.push(withBasis(it, GUIDE_DM + '提示夜间低血糖风险：睡前血糖 <5.6 mmol/L 建议适量加餐', f.onInsulin ? {
+        desc: it.desc + '；胰岛素治疗者尤需重视睡前自检'
+      } : null));
+      continue;
+    }
+    if (it.cat === 'assessment') {
+      out.push(withBasis(it, GUIDE_DM + '推荐记录血糖谱与饮食运动完成度，作为方案调整依据'));
+      continue;
+    }
+    out.push(withBasis(it, GUIDE_DM + '综合管理建议'));
+  }
+
+  // 血糖未达标者补充餐后配对监测
+  if (f.midHigh) {
+    var hasPost = false;
+    for (var j = 0; j < out.length; j++) {
+      if (out[j].cat === 'monitor' && out[j].title.indexOf('餐后') >= 0) hasPost = true;
+    }
+    if (!hasPost) {
+      out.push({
+        time: '14:30',
+        cat: 'monitor',
+        title: '午餐后 2 小时血糖',
+        desc: '与餐前对比，增幅超过 3.0 mmol/L 说明主食量偏多',
+        basis: GUIDE_DM + '：血糖未达标者应增加监测频率，通过配对监测定位升糖餐次',
+        icon: 'fa-solid fa-arrow-trend-up',
+        pinned: true
+      });
+    }
+  }
+  return out;
+}
+
+// 裁剪优先级：越靠前越应保留（就诊、用药、监测优先）
+var CAT_PRIORITY = ['assessment', 'medication', 'monitor', 'nutrition', 'exercise', 'psychology', 'sleep'];
+
+// 按类目轮转裁剪：每轮每个类目最多取 1 条。
+// 不用「按类目穷尽」，否则营养类会占满名额、把运动等类目整体挤掉，
+// 导致日程与评估报告里的运动处方自相矛盾。
+function trimPlan(items, limit) {
+  if (!limit || items.length <= limit) return items;
+  var keep = [];
+  var used = [];
+  var i = 0;
+
+  // 评估结论追加的条目（如极高危就诊安排、晚间血压监测）必须保留
+  for (i = 0; i < items.length && keep.length < limit; i++) {
+    if (items[i].pinned) {
+      used.push(i);
+      keep.push(items[i]);
+    }
+  }
+  var round = 0;
+  while (keep.length < limit && round < items.length) {
+    var picked = false;
+    for (var p = 0; p < CAT_PRIORITY.length && keep.length < limit; p++) {
+      for (i = 0; i < items.length; i++) {
+        if (items[i].cat !== CAT_PRIORITY[p] || used.indexOf(i) >= 0) continue;
+        used.push(i);
+        keep.push(items[i]);
+        picked = true;
+        break;
+      }
+    }
+    if (!picked) break;
+    round = round + 1;
+  }
+  return keep;
+}
+
+/**
+ * 生成个性化日程
+ * @param {String} pkgKey  hbp | dm
+ * @param {Object} answers 问卷答案；为空时退回通用模板
+ * @param {Number} dayIndex 第几天（0 起）
+ * @param {Number} limit   可选，最多返回条数（按类目重要性裁剪）
+ */
+function buildDayPlan(pkgKey, answers, dayIndex, limit) {
+  var key = pkgKey === 'dm' ? 'dm' : 'hbp';
+  var items = baseDay(key, dayIndex || 0);
+  var hasAnswers = !!(answers && Object.keys(answers).length);
+  var planned;
+  if (!hasAnswers) {
+    // 未评估时不编造依据，仅给通用模板
+    planned = items.map(function (it) {
+      return Object.assign({}, it);
+    });
+  } else {
+    planned = key === 'dm' ? planDm(items, dmFlags(answers)) : planHbp(items, hbpFlags(answers));
+  }
+  planned = trimPlan(planned, limit);
+  planned.sort(function (x, y) {
+    return x.time < y.time ? -1 : x.time > y.time ? 1 : 0;
+  });
+  return planned;
+}
 
 // 问卷选项统一结构：{ v: 稳定值码, label: 展示文案 }
 // v 用于报告生成的逻辑判定，label 仅用于界面展示与对话气泡。

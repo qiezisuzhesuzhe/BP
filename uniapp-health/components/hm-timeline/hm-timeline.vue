@@ -30,6 +30,12 @@
         <text class="tl__title">{{ item.title }}</text>
         <text class="tl__desc">{{ item.desc }}</text>
 
+        <!-- 评估结论与指南依据 -->
+        <view v-if="item.basis" class="tl__basis">
+          <text class="tl__basis-icon fa-solid fa-book-medical"></text>
+          <text class="tl__basis-t">{{ item.basis }}</text>
+        </view>
+
         <!-- 运动：视频封面缩略图 -->
         <view v-if="item.cat === 'exercise'" class="tl__cover" @tap="playVideo(item.title)">
           <image class="tl__cover-img" :src="item._coverFail ? FALLBACK_IMG : exerciseCover(item.title)" mode="aspectFill" @error="onCoverErr(item)"></image>
@@ -273,6 +279,31 @@ export default {
 
 .tl__desc {
   display: block;
+  font-size: $font-size-xs;
+  color: $text-muted;
+  line-height: $line-height-relaxed;
+}
+
+/* ---------- 评估结论与指南依据 ---------- */
+.tl__basis {
+  display: flex;
+  align-items: flex-start;
+  margin-top: $space-2;
+  padding: $space-2;
+  background: rgba(56, 154, 130, 0.06);
+  border-left: 4rpx solid $brand-primary-active;
+  border-radius: $radius-sm;
+}
+
+.tl__basis-icon {
+  font-size: $font-size-xs;
+  color: $brand-primary-active;
+  margin-right: $space-1;
+  line-height: $line-height-relaxed;
+}
+
+.tl__basis-t {
+  flex: 1;
   font-size: $font-size-xs;
   color: $text-muted;
   line-height: $line-height-relaxed;

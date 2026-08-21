@@ -190,7 +190,7 @@
 </template>
 
 <script>
-import { QUESTIONS, QUESTIONS_DM, TIMELINE } from '@/common/mock.js'
+import { QUESTIONS, QUESTIONS_DM, buildDayPlan, hbpFlags, dmFlags, guideName } from '@/common/mock.js'
 import * as tts from '@/common/tts.js'
 
 export default {
@@ -466,7 +466,7 @@ export default {
       this.push({ role: 'ai', kind: 'text', text: '方案已生成，下面是您的首次评估结论，请先看一下关键判断与目标值。' })
       this.push({ role: 'ai', kind: 'report', report: report })
       this.delay(700, () => {
-        this.push({ role: 'ai', kind: 'text', text: '这是为您安排的第一天日程。在APP的首页、微信消息或智能手环上，也将为您发送提醒。按时间点执行即可，完成后我会陪您复盘。' })
+        this.push({ role: 'ai', kind: 'text', text: '这是根据您本次评估结论、依据' + guideName(this.pkgKey) + '为您安排的第一天日程。每条都标注了对应的指南依据。在APP的首页、微信消息或智能手环上，也将为您发送提醒。按时间点执行即可，完成后我会陪您复盘。' })
         this.push({ role: 'ai', kind: 'timeline', items: this.firstDayItems() })
         this.assessDone = true
         if (this.rightId) {
@@ -476,44 +476,33 @@ export default {
       })
     },
     firstDayItems() {
-      const days = TIMELINE[this.pkgKey] || TIMELINE.hbp
-      const items = days[0] || []
-      return items.slice(0, 6)
+      return buildDayPlan(this.pkgKey, this.answers, 0, 7)
     },
     buildReport() {
       return this.pkgKey === 'dm' ? this.buildDmReport() : this.buildHbpReport()
     },
+    // 判定逻辑统一在 mock.js，报告与日程（对话页/首页/消息中心）共用同一套结论
+    hbpFlags() {
+      return hbpFlags(this.answers)
+    },
+    dmFlags() {
+      return dmFlags(this.answers)
+    },
     buildHbpReport() {
-      const a = this.answers
-
-      // 血压分级（《中国高血压防治指南 2024》）
-      const g1 = a.bp_grade === 'grade1'
-      const g2 = a.bp_grade === 'grade2'
-      const g3 = a.bp_grade === 'grade3'
-      const gUnknown = a.bp_grade === 'unknown'
-
-      // 临床合并症与心血管危险因素
-      const cvd = a.comorbidity === 'cvd'
-      const dmCkd = a.comorbidity === 'dm_ckd'
-      const riskFactor = a.comorbidity === 'risk_factor'
-
-      // 用药依从性
-      const badMed = a.medication === 'irregular' || a.medication === 'self_stop'
-      const noMed = a.medication === 'none'
-
-      // 生活方式（不参与危险分层，仅驱动干预建议）
-      const heavySalt = a.salt_intake === 'high'
-      const naiveSalt = a.salt_intake === 'unaware'
-      const lowMove = a.exercise === 'none' || a.exercise === 'low'
-
-      // 危险分层：血压分级 × 合并症/危险因素
-      let tier = 1
-      if (cvd) tier = 4
-      else if (dmCkd) tier = g2 || g3 ? 4 : 3
-      else if (g3) tier = riskFactor ? 4 : 3
-      else if (g2) tier = riskFactor ? 3 : 2
-      else if (g1) tier = riskFactor ? 2 : 1
-      else tier = 0
+      const f = this.hbpFlags()
+      const g1 = f.g1
+      const g2 = f.g2
+      const g3 = f.g3
+      const gUnknown = f.gUnknown
+      const cvd = f.cvd
+      const dmCkd = f.dmCkd
+      const riskFactor = f.riskFactor
+      const badMed = f.badMed
+      const noMed = f.noMed
+      const heavySalt = f.heavySalt
+      const naiveSalt = f.naiveSalt
+      const lowMove = f.lowMove
+      const tier = f.tier
 
       const RISK = {
         0: { risk: '待评估（需先完成血压分级）', color: '#64748b', bg: '#f2f7fa' },
@@ -523,14 +512,8 @@ export default {
         4: { risk: '很高危（需尽早达标并保护靶器官）', color: '#d14b3d', bg: '#fde8e3' }
       }
 
-      const gradeLabel = g3 ? '3 级' : g2 ? '2 级' : g1 ? '1 级' : '分级待确认'
-      const withLabel = cvd
-        ? '伴临床合并症'
-        : dmCkd
-        ? '伴糖尿病/慢性肾病'
-        : riskFactor
-        ? '伴心血管危险因素'
-        : '无合并症'
+      const gradeLabel = f.gradeLabel
+      const withLabel = f.withLabel
 
       const target =
         cvd || dmCkd
@@ -638,12 +621,11 @@ export default {
     },
     buildDmReport() {
       const a = this.answers
-      const highA1c = a.hba1c === 'r70_80' || a.hba1c === 'gt80'
-      const highFpg = a.fpg === 'high'
-      const bigStaple = a.staple === 'large' || a.staple === 'varies'
-      const noMove = a.dm_exercise === 'rarely' || a.dm_exercise === 'never'
-      const onInsulin = a.dm_med === 'insulin' || a.dm_med === 'both'
-      const midHigh = highA1c || highFpg
+      const f = this.dmFlags()
+      const bigStaple = f.bigStaple
+      const noMove = f.noMove
+      const onInsulin = f.onInsulin
+      const midHigh = f.midHigh
 
       const points = []
       points.push({

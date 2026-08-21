@@ -622,8 +622,8 @@ export default {
 .buybar__btn {
   padding: $space-3 $space-5;
   border-radius: $radius-full;
-  background: $brand-primary;
-  box-shadow: $shadow-md;
+  background: $badge;
+  box-shadow: $shadow-sm;
 }
 
 .buybar__btn-t {

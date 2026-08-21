@@ -25,7 +25,7 @@
         <text class="hm-sec-sub">{{ refreshTip }}</text>
       </view>
 
-      <!-- 雷达款：平台推送的在床状态与设备状态，是非接触监测最关键的结论 -->
+      <!-- 雷达款：平台推送的在床状态、设备状态、生命体征分级与挣扎预警 -->
       <view v-if="isRadar" class="rstat">
         <view class="rstat__item">
           <text class="rstat__icon" :class="inBedIcon" :style="{ color: inBedColor }"></text>
@@ -39,18 +39,27 @@
           <text class="rstat__icon fa-solid fa-wind" style="color:#f2994a"></text>
           <text class="rstat__t">呼吸{{ respTip }}</text>
         </view>
+        <view class="rstat__item" v-if="heartInfo && heartInfo.text">
+          <text class="rstat__icon fa-solid fa-heart" :style="{ color: heartInfo.level === 'danger' ? '#f15533' : heartInfo.level === 'high' ? '#f2994a' : '#389a82' }"></text>
+          <text class="rstat__t" :style="{ color: heartInfo.level === 'danger' ? '#f15533' : heartInfo.level === 'high' ? '#f2994a' : '#389a82' }">心率{{ heartInfo.text }}</text>
+        </view>
+        <view class="rstat__item" v-if="struggleInfo.active">
+          <text class="rstat__icon fa-solid fa-triangle-exclamation" style="color:#f15533"></text>
+          <text class="rstat__t" style="color:#f15533">挣扎{{ struggleInfo.text }}({{ struggleInfo.count }}次)</text>
+        </view>
       </view>
 
       <view class="grid">
-        <view v-for="(f, i) in type.fields" :key="f.key" class="cell" :class="{ 'cell--pulse': pulsing[i] }">
+        <view v-for="(f, i) in type.fields" :key="f.key" class="cell" :class="[cellClass(f), { 'cell--pulse': pulsing[i] }]">
           <view class="cell__icon" :style="{ background: type.accentSoft }">
             <text class="cell__icon-t" :class="f.icon" :style="{ color: type.color }"></text>
           </view>
           <view class="cell__val">
-            <text class="cell__num" :style="{ color: type.color }">{{ fmt(f) }}</text>
+            <text class="cell__num" :style="{ color: f.key === 'struggleAlert' && struggleInfo.active ? '#f15533' : type.color }">{{ fmt(f) }}</text>
             <text class="cell__unit">{{ f.unit }}</text>
           </view>
           <text class="cell__label">{{ f.label }}</text>
+          <text v-if="cellSub(f)" class="cell__sub" :class="{ 'cell__sub--alert': f.key === 'struggleAlert' && struggleInfo.active }">{{ cellSub(f) }}</text>
         </view>
       </view>
 
@@ -78,7 +87,7 @@
 <script>
 import { deviceType } from '@/common/mock.js'
 import { subscribeEvents } from '@/common/band.js'
-import { fetchRadarRecord, unbindRadarDevice, radarInBed, radarStateText, respLevel } from '@/common/radar.js'
+import { fetchRadarRecord, unbindRadarDevice, radarInBed, radarStateText, respLevel, heartRateLevel, radarStruggleAlert } from '@/common/radar.js'
 
 // 雷达为真实链路，无需 2 秒轮询：SSE 已实时推送，轮询仅作断线兜底
 const RADAR_POLL_MS = 60000
@@ -180,6 +189,15 @@ export default {
       if (!this.isRadar) return []
       const list = (this.radarRec && this.radarRec.attrs) || []
       return list.filter((a) => a && !a.key && a.name != null && a.value != null && a.value !== '')
+    },
+    // 心率分级（显示在 cell 下方）
+    heartInfo() {
+      if (!this.isRadar || !this.radarLatest) return null
+      return heartRateLevel(this.radarLatest.heartRate)
+    },
+    // 异常挣扎状态
+    struggleInfo() {
+      return radarStruggleAlert(this.radarLatest)
     }
   },
   onLoad(options) {
@@ -265,9 +283,32 @@ export default {
     fmt(f) {
       // 雷达取后端真实快照，其他设备沿用 store 中的原型数据
       const src = this.isRadar ? this.radarLatest : (this.dev && this.dev.data)
-      const v = src ? src[f.key] : null
+      if (!src) return '--'
+      // 特殊字段：在床状态显示文字
+      if (this.isRadar && f.key === 'inBed') {
+        const v = radarInBed(src)
+        if (v === true) return '在床'
+        if (v === false) return '离床'
+        return '--'
+      }
+      const v = src[f.key]
       if (v === null || v === undefined || v === '') return '--'
       return v
+    },
+    // 雷达单元特殊样式
+    cellClass(f) {
+      if (!this.isRadar) return ''
+      if (f.key === 'struggleAlert') {
+        return this.struggleInfo && this.struggleInfo.active ? 'cell--alert' : ''
+      }
+      return ''
+    },
+    // 单元附加文字（心率分级 / 挣扎预警等级）
+    cellSub(f) {
+      if (!this.isRadar) return ''
+      if (f.key === 'heartRate' && this.heartInfo && this.heartInfo.text) return this.heartInfo.text
+      if (f.key === 'struggleAlert' && this.struggleInfo && this.struggleInfo.active) return this.struggleInfo.text
+      return ''
     },
     unbind() {
       uni.showModal({
@@ -436,6 +477,22 @@ export default {
 
 .cell--pulse {
   box-shadow: 0 0 0 2rpx rgba(56, 154, 130, 0.35);
+}
+
+.cell--alert {
+  border: 2rpx solid rgba(241, 85, 51, 0.4);
+}
+
+.cell__sub {
+  display: block;
+  font-size: $font-size-2xs;
+  color: $text-muted;
+  margin-top: $space-1;
+  font-weight: $font-weight-medium;
+}
+
+.cell__sub--alert {
+  color: #f15533;
 }
 
 .cell__icon {

@@ -44,21 +44,26 @@
               <text class="dev__chip-u">%</text>
             </view>
           </view>
-          <!-- 睡眠监测仪（毫米波雷达款）：展示在床状态 + 呼吸频率 + 体动 -->
+          <!-- 睡眠监测仪（毫米波雷达款）：心率 + 呼吸 + 睡眠 + 存在 + 挣扎预警 -->
           <view v-else-if="dev.typeKey === 'radar' && radarLive[dev.deviceid]" class="dev__live">
             <view class="dev__chip">
               <text class="dev__chip-icon" :class="inBedIcon(dev.deviceid)" :style="{ color: inBedColor(dev.deviceid) }"></text>
               <text class="dev__chip-n dev__chip-n--txt">{{ inBedText(dev.deviceid) }}</text>
+            </view>
+            <view class="dev__chip" v-if="radarLive[dev.deviceid].heartRate != null">
+              <text class="dev__chip-icon fa-solid fa-heart" style="color:#e74c3c"></text>
+              <text class="dev__chip-n">{{ radarLive[dev.deviceid].heartRate }}</text>
+              <text class="dev__chip-u">bpm</text>
             </view>
             <view class="dev__chip" v-if="radarLive[dev.deviceid].respRate != null">
               <text class="dev__chip-icon fa-solid fa-wind" style="color:#8dcdd8"></text>
               <text class="dev__chip-n">{{ radarLive[dev.deviceid].respRate }}</text>
               <text class="dev__chip-u">次/分</text>
             </view>
-            <view class="dev__chip" v-if="radarLive[dev.deviceid].bodyMove != null">
-              <text class="dev__chip-icon fa-solid fa-person-walking" style="color:#f2994a"></text>
-              <text class="dev__chip-n">{{ radarLive[dev.deviceid].bodyMove }}</text>
-              <text class="dev__chip-u">次</text>
+            <view class="dev__chip" v-if="radarLive[dev.deviceid].struggleAlert > 0">
+              <text class="dev__chip-icon fa-solid fa-triangle-exclamation" style="color:#f15533"></text>
+              <text class="dev__chip-n" style="color:#f15533">{{ radarLive[dev.deviceid].struggleAlert }}</text>
+              <text class="dev__chip-u">次挣扎</text>
             </view>
           </view>
           <!-- 其他设备：展示最近同步 -->

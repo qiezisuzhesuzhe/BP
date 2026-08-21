@@ -163,3 +163,24 @@ export function respLevel(respRate) {
   if (v <= 24) return { level: 'high', text: '偏快' }
   return { level: 'danger', text: '过快' }
 }
+
+// 心率评估（成人静息 60-100 bpm）：返回 { level, text }
+export function heartRateLevel(hr) {
+  const v = Number(hr)
+  if (!isFinite(v) || v <= 0) return { level: 'unknown', text: '' }
+  if (v < 60) return { level: 'low', text: '偏慢' }
+  if (v <= 100) return { level: 'normal', text: '正常' }
+  if (v <= 120) return { level: 'high', text: '偏快' }
+  return { level: 'danger', text: '过快' }
+}
+
+// 异常挣扎检测：struggleAlert > 0 视为有挣扎预警
+// 返回 { count, active, level, text }
+export function radarStruggleAlert(latest) {
+  if (!latest) return { count: 0, active: false, level: 'normal', text: '无' }
+  const c = Number(latest.struggleAlert) || 0
+  if (c <= 0) return { count: 0, active: false, level: 'normal', text: '无' }
+  if (c <= 2) return { count: c, active: true, level: 'warning', text: '偶发' }
+  if (c <= 5) return { count: c, active: true, level: 'high', text: '频繁' }
+  return { count: c, active: true, level: 'danger', text: '剧烈' }
+}

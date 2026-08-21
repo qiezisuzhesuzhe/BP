@@ -64,7 +64,7 @@
 /******/
 /******/ 	// script path function
 /******/ 	function jsonpScriptSrc(chunkId) {
-/******/ 		return __webpack_require__.p + "static/js/" + ({"pages-band-status~pages-chat-chat~pages-device-detail~pages-device-device~pages-device-scan~pages-he~d57aada1":"pages-band-status~pages-chat-chat~pages-device-detail~pages-device-device~pages-device-scan~pages-he~d57aada1","pages-band-status":"pages-band-status","pages-chat-chat~pages-index-index":"pages-chat-chat~pages-index-index","pages-chat-chat":"pages-chat-chat","pages-index-index":"pages-index-index","pages-device-detail":"pages-device-detail","pages-device-device":"pages-device-device","pages-device-scan":"pages-device-scan","pages-health-health":"pages-health-health","pages-mall-mall":"pages-mall-mall","pages-message-message":"pages-message-message","pages-mine-agreement":"pages-mine-agreement","pages-mine-mine":"pages-mine-mine","pages-mine-orders":"pages-mine-orders","pages-mine-profile":"pages-mine-profile","pages-pay-pay":"pages-pay-pay","pages-rights-detail":"pages-rights-detail","pages-rights-rights":"pages-rights-rights","pages-service-detail":"pages-service-detail"}[chunkId]||chunkId) + ".js"
+/******/ 		return __webpack_require__.p + "static/js/" + ({"pages-band-status~pages-chat-chat~pages-device-detail~pages-device-device~pages-device-scan~pages-he~d57aada1":"pages-band-status~pages-chat-chat~pages-device-detail~pages-device-device~pages-device-scan~pages-he~d57aada1","pages-band-status":"pages-band-status","pages-chat-chat~pages-index-index":"pages-chat-chat~pages-index-index","pages-chat-chat":"pages-chat-chat","pages-index-index":"pages-index-index","pages-device-detail~pages-device-device~pages-device-scan":"pages-device-detail~pages-device-device~pages-device-scan","pages-device-detail":"pages-device-detail","pages-device-device":"pages-device-device","pages-device-scan":"pages-device-scan","pages-health-health":"pages-health-health","pages-mall-mall":"pages-mall-mall","pages-message-message":"pages-message-message","pages-mine-agreement":"pages-mine-agreement","pages-mine-mine":"pages-mine-mine","pages-mine-orders":"pages-mine-orders","pages-mine-profile":"pages-mine-profile","pages-pay-pay":"pages-pay-pay","pages-rights-detail":"pages-rights-detail","pages-rights-rights":"pages-rights-rights","pages-service-detail":"pages-service-detail"}[chunkId]||chunkId) + ".js"
 /******/ 	}
 /******/
 /******/ 	// The require function
@@ -2399,7 +2399,7 @@ vue__WEBPACK_IMPORTED_MODULE_6__["default"].component('pages-mall-mall', functio
 });
 vue__WEBPACK_IMPORTED_MODULE_6__["default"].component('pages-device-device', function (resolve) {
   var component = {
-    component: Promise.all(/*! require.ensure | pages-device-device */[__webpack_require__.e("pages-band-status~pages-chat-chat~pages-device-detail~pages-device-device~pages-device-scan~pages-he~d57aada1"), __webpack_require__.e("pages-device-device")]).then((function () {
+    component: Promise.all(/*! require.ensure | pages-device-device */[__webpack_require__.e("pages-band-status~pages-chat-chat~pages-device-detail~pages-device-device~pages-device-scan~pages-he~d57aada1"), __webpack_require__.e("pages-device-detail~pages-device-device~pages-device-scan"), __webpack_require__.e("pages-device-device")]).then((function () {
       return resolve(__webpack_require__(/*! ./src/pages/device/device.vue */ "vjPZ"));
     }).bind(null, __webpack_require__)).catch(__webpack_require__.oe),
     delay: __uniConfig['async'].delay,
@@ -2425,7 +2425,7 @@ vue__WEBPACK_IMPORTED_MODULE_6__["default"].component('pages-device-device', fun
 });
 vue__WEBPACK_IMPORTED_MODULE_6__["default"].component('pages-device-scan', function (resolve) {
   var component = {
-    component: Promise.all(/*! require.ensure | pages-device-scan */[__webpack_require__.e("pages-band-status~pages-chat-chat~pages-device-detail~pages-device-device~pages-device-scan~pages-he~d57aada1"), __webpack_require__.e("pages-device-scan")]).then((function () {
+    component: Promise.all(/*! require.ensure | pages-device-scan */[__webpack_require__.e("pages-band-status~pages-chat-chat~pages-device-detail~pages-device-device~pages-device-scan~pages-he~d57aada1"), __webpack_require__.e("pages-device-detail~pages-device-device~pages-device-scan"), __webpack_require__.e("pages-device-scan")]).then((function () {
       return resolve(__webpack_require__(/*! ./src/pages/device/scan.vue */ "vG3x"));
     }).bind(null, __webpack_require__)).catch(__webpack_require__.oe),
     delay: __uniConfig['async'].delay,
@@ -2451,7 +2451,7 @@ vue__WEBPACK_IMPORTED_MODULE_6__["default"].component('pages-device-scan', funct
 });
 vue__WEBPACK_IMPORTED_MODULE_6__["default"].component('pages-device-detail', function (resolve) {
   var component = {
-    component: Promise.all(/*! require.ensure | pages-device-detail */[__webpack_require__.e("pages-band-status~pages-chat-chat~pages-device-detail~pages-device-device~pages-device-scan~pages-he~d57aada1"), __webpack_require__.e("pages-device-detail")]).then((function () {
+    component: Promise.all(/*! require.ensure | pages-device-detail */[__webpack_require__.e("pages-band-status~pages-chat-chat~pages-device-detail~pages-device-device~pages-device-scan~pages-he~d57aada1"), __webpack_require__.e("pages-device-detail~pages-device-device~pages-device-scan"), __webpack_require__.e("pages-device-detail")]).then((function () {
       return resolve(__webpack_require__(/*! ./src/pages/device/detail.vue */ "ngQi"));
     }).bind(null, __webpack_require__)).catch(__webpack_require__.oe),
     delay: __uniConfig['async'].delay,
@@ -4396,31 +4396,36 @@ var DEVICE_TYPES = [{
 }, {
   key: 'radar',
   name: '睡眠监测仪 - 毫米波雷达款',
-  model: '享相雷达 R1',
+  model: 'SM-C03',
   icon: 'fa-solid fa-satellite-dish',
   color: '#8dcdd8',
   accentSoft: '#e2f2f6',
-  desc: '非接触式呼吸、体动与离床监测',
+  desc: '非接触式心率、呼吸、存在与异常挣扎监测',
   fields: [{
+    key: 'heartRate',
+    label: '心率',
+    unit: 'bpm',
+    icon: 'fa-solid fa-heart'
+  }, {
     key: 'respRate',
-    label: '呼吸频率',
+    label: '呼吸',
     unit: '次/分',
     icon: 'fa-solid fa-wind'
   }, {
-    key: 'bodyMove',
-    label: '体动次数',
-    unit: '次',
-    icon: 'fa-solid fa-person-walking'
-  }, {
-    key: 'bedOff',
-    label: '离床次数',
-    unit: '次',
-    icon: 'fa-solid fa-bed'
-  }, {
     key: 'stay',
-    label: '床内时长',
+    label: '睡眠时长',
     unit: 'h',
     icon: 'fa-solid fa-moon'
+  }, {
+    key: 'inBed',
+    label: '存在状态',
+    unit: '',
+    icon: 'fa-solid fa-bed'
+  }, {
+    key: 'struggleAlert',
+    label: '异常挣扎',
+    unit: '次',
+    icon: 'fa-solid fa-triangle-exclamation'
   }]
 }, {
   key: 'bed',
@@ -4479,10 +4484,11 @@ function makeDeviceSnapshot(type, prev) {
       d.steps = (p.steps || 0) + rnd(0, 18);
       break;
     case 'radar':
-      d.respRate = rnd(14, 20);
-      d.bodyMove = (p.bodyMove || 0) + rnd(0, 2);
-      d.bedOff = (p.bedOff || 0) + rnd(0, 1);
-      d.stay = +((p.stay || 7.2) + rnd(-0.05, 0.05, 2)).toFixed(2);
+      d.heartRate = rnd(58, 90);
+      d.respRate = rnd(12, 22);
+      d.stay = +((p.stay || 6.5) + rnd(-0.1, 0.1, 2)).toFixed(2);
+      d.inBed = Math.random() > 0.15 ? 1 : 0;
+      d.struggleAlert = (p.struggleAlert || 0) + (Math.random() > 0.92 ? 1 : 0);
       break;
     case 'bed':
       d.sleepScore = rnd(72, 96);

@@ -873,16 +873,17 @@ export const DEVICE_TYPES = [
   {
     key: 'radar',
     name: '睡眠监测仪 - 毫米波雷达款',
-    model: '享相雷达 R1',
+    model: 'SM-C03',
     icon: 'fa-solid fa-satellite-dish',
     color: '#8dcdd8',
     accentSoft: '#e2f2f6',
-    desc: '非接触式呼吸、体动与离床监测',
+    desc: '非接触式心率、呼吸、存在与异常挣扎监测',
     fields: [
-      { key: 'respRate', label: '呼吸频率', unit: '次/分', icon: 'fa-solid fa-wind' },
-      { key: 'bodyMove', label: '体动次数', unit: '次', icon: 'fa-solid fa-person-walking' },
-      { key: 'bedOff', label: '离床次数', unit: '次', icon: 'fa-solid fa-bed' },
-      { key: 'stay', label: '床内时长', unit: 'h', icon: 'fa-solid fa-moon' }
+      { key: 'heartRate', label: '心率', unit: 'bpm', icon: 'fa-solid fa-heart' },
+      { key: 'respRate', label: '呼吸', unit: '次/分', icon: 'fa-solid fa-wind' },
+      { key: 'stay', label: '睡眠时长', unit: 'h', icon: 'fa-solid fa-moon' },
+      { key: 'inBed', label: '存在状态', unit: '', icon: 'fa-solid fa-bed' },
+      { key: 'struggleAlert', label: '异常挣扎', unit: '次', icon: 'fa-solid fa-triangle-exclamation' }
     ]
   },
   {
@@ -925,10 +926,11 @@ export function makeDeviceSnapshot(type, prev) {
       d.steps = (p.steps || 0) + rnd(0, 18)
       break
     case 'radar':
-      d.respRate = rnd(14, 20)
-      d.bodyMove = (p.bodyMove || 0) + rnd(0, 2)
-      d.bedOff = (p.bedOff || 0) + rnd(0, 1)
-      d.stay = +((p.stay || 7.2) + rnd(-0.05, 0.05, 2)).toFixed(2)
+      d.heartRate = rnd(58, 90)
+      d.respRate = rnd(12, 22)
+      d.stay = +((p.stay || 6.5) + rnd(-0.1, 0.1, 2)).toFixed(2)
+      d.inBed = Math.random() > 0.15 ? 1 : 0
+      d.struggleAlert = (p.struggleAlert || 0) + (Math.random() > 0.92 ? 1 : 0)
       break
     case 'bed':
       d.sleepScore = rnd(72, 96)

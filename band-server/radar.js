@@ -141,16 +141,18 @@ function apiListModels() {
 // 平台把所有实时值塞进 attrList/items，属性名由型号决定。这里按关键词归一到前端字段，
 // 命中不了的原样保留在 attrs 数组里展示，保证「拿到真实型号前也不丢数据」。
 const ATTR_RULES = [
-  { key: 'respRate', unit: '次/分', kw: ['呼吸'] },
-  { key: 'heartRate', unit: 'bpm', kw: ['心率', '心跳'] },
-  { key: 'bodyMove', unit: '次', kw: ['体动', '翻身', '动作'] },
-  { key: 'bedOff', unit: '次', kw: ['离床'] },
-  { key: 'inBed', unit: '', kw: ['在床', '有人', '人体存在', '存在'] },
-  { key: 'sleepScore', unit: '分', kw: ['睡眠评分', '睡眠得分', '评分'] },
-  { key: 'stay', unit: 'h', kw: ['床内时长', '在床时长', '睡眠时长'] },
-  { key: 'battery', unit: '%', kw: ['电量', '电池'] },
-  { key: 'signal', unit: '', kw: ['信号'] },
-  { key: 'fall', unit: '', kw: ['跌倒', '摔倒'] }
+  { key: 'respRate', unit: '次/分', kw: ['呼吸', 'respRate'] },
+  { key: 'heartRate', unit: 'bpm', kw: ['心率', '心跳', 'heartRate'] },
+  { key: 'bodyMove', unit: '次', kw: ['体动', '翻身', '动作', 'bodyMove'] },
+  { key: 'bedOff', unit: '次', kw: ['离床', 'bedOff'] },
+  { key: 'inBed', unit: '', kw: ['在床', '有人', '人体存在', '存在', 'inBed', 'presence'] },
+  { key: 'sleepScore', unit: '分', kw: ['睡眠评分', '睡眠得分', '评分', 'sleepScore'] },
+  { key: 'stay', unit: 'h', kw: ['床内时长', '在床时长', '睡眠时长', 'stay'] },
+  { key: 'battery', unit: '%', kw: ['电量', '电池', 'battery'] },
+  { key: 'signal', unit: '', kw: ['信号', 'signal'] },
+  { key: 'fall', unit: '', kw: ['跌倒', '摔倒', 'fall'] },
+  { key: 'struggleAlert', unit: '', kw: ['异常挣扎', '挣扎', '挣扎预警', 'abnormal', 'struggle'] },
+  { key: 'sleepDuration', unit: 'h', kw: ['睡眠时长', 'sleepDuration'] }
 ]
 
 function matchAttrKey(attrName) {

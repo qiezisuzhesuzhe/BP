@@ -69,23 +69,7 @@
         </view>
       </view>
 
-      <!-- 健康管理服务包 → 专属健康管理师（加企业微信引导卡） -->
-      <view v-if="!right.wecomAdded" class="hm-card entry">
-        <view class="entry__left">
-          <view class="entry__badge" :style="{ background: right.accentSoft }">
-            <text class="entry__badge-icon fa-solid fa-user-doctor" :style="{ color: right.accent }"></text>
-          </view>
-          <view class="entry__main">
-            <text class="entry__t">加企业微信 · 1v1 专属管理师</text>
-            <text class="entry__d">添加后将协助您完成首次健康问询，并全程跟踪方案</text>
-          </view>
-        </view>
-        <view class="entry__btn" @tap="openWecom">
-          <text class="entry__btn-t">立即添加</text>
-        </view>
-      </view>
-
-      <view v-else class="hm-card entry entry--done">
+      <view v-if="right.wecomAdded" class="hm-card entry entry--done">
         <view class="entry__ok fa-solid fa-circle-check"></view>
         <view class="entry__main">
           <text class="entry__t">已添加健康管理师 · 李静</text>
@@ -156,7 +140,7 @@
           <text class="buybar__t">{{ ctaHint }}</text>
           <text class="buybar__d">{{ ctaDesc }}</text>
         </view>
-        <view class="buybar__btn" :style="{ background: right.accent }" @tap="onUse">
+        <view class="buybar__btn" @tap="onUse">
           <text class="buybar__btn-t">{{ ctaLabel }}</text>
         </view>
       </view>
@@ -634,6 +618,7 @@ export default {
 .buybar__btn {
   padding: $space-3 $space-5;
   border-radius: $radius-full;
+  background: $brand-primary;
   box-shadow: $shadow-md;
 }
 
@@ -675,7 +660,7 @@ export default {
   color: $text-inverse;
 }
 
-/* 健康管理师引导卡 */
+/* 健康管理师已添加确认卡 */
 .entry {
   margin: $space-data-list-gap $space-4 0;
   padding: $space-3;
@@ -685,27 +670,6 @@ export default {
   background: $bg-surface;
   border: 1rpx solid $border-subtle;
   box-shadow: $shadow-sm;
-}
-
-.entry__left {
-  display: flex;
-  align-items: center;
-  flex: 1;
-  min-width: 0;
-}
-
-.entry__badge {
-  width: $size-avatar-sm;
-  height: $size-avatar-sm;
-  border-radius: $radius-card-child;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-shrink: 0;
-}
-
-.entry__badge-icon {
-  font-size: $size-icon-sm;
 }
 
 .entry__main {
@@ -727,21 +691,6 @@ export default {
   color: $text-muted;
   margin-top: $space-1;
   line-height: $line-height-normal;
-}
-
-.entry__btn {
-  padding: $space-2 $space-4;
-  border-radius: $radius-full;
-  background: $brand-primary;
-  flex-shrink: 0;
-  box-shadow: $shadow-sm;
-}
-
-.entry__btn-t {
-  color: $text-inverse;
-  font-size: $font-size-xs;
-  font-weight: $font-weight-bold;
-  white-space: nowrap;
 }
 
 .entry--done {

@@ -28,7 +28,7 @@ export const PACKAGES = [
       { icon: 'fa-solid fa-arrow-trend-up', title: '双周方案迭代', desc: '晚间7问采集依从性数据，方案随身体反馈动态调整' }
     ],
     services: [
-      { name: 'AI 健康助手对话', spec: '不限次数', unit: '次' },
+      { name: '健康小助手对话', spec: '不限次数', unit: '次' },
       { name: '初次分型评估报告', spec: '1 份（7段式）', unit: '份' },
       { name: '每日健康时间线', spec: '90 天', unit: '天' },
       { name: '医师团队方案审核', spec: '每月 1 次', unit: '次' },
@@ -88,7 +88,7 @@ export const PACKAGES = [
       { icon: 'fa-solid fa-magnifying-glass', title: '并发症筛查日历', desc: '眼底、尿微量白蛋白、足部、糖化血红蛋白 到期自动提醒' }
     ],
     services: [
-      { name: 'AI 健康助手对话', spec: '不限次数', unit: '次' },
+      { name: '健康小助手对话', spec: '不限次数', unit: '次' },
       { name: '控糖基线评估报告', spec: '1 份', unit: '份' },
       { name: '每日控糖时间线', spec: '90 天', unit: '天' },
       { name: '营养师定制配餐', spec: '每 2 周更新', unit: '次' },
@@ -221,7 +221,7 @@ export const CAT_META = {
 export const QUESTIONS = [
   {
     id: 'medication',
-    text: '您好！我是安康，您的AI血压健康助手。在开始之前，我想先了解一下您的基本情况。第一个问题：您目前是否有服用降压药物？',
+    text: '您好！我是健康小助手。在开始之前，我想先了解一下您的基本情况。第一个问题：您目前是否有服用降压药物？',
     options: ['是，按时服药', '偶尔服用', '没有服药', '记不清了']
   },
   {

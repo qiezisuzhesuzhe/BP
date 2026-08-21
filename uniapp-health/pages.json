@@ -61,7 +61,7 @@
     {
       "path": "pages/chat/chat",
       "style": {
-        "navigationBarTitleText": "AI健康助手",
+        "navigationBarTitleText": "健康小助手",
         "navigationStyle": "custom"
       }
     },

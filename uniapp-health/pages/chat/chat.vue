@@ -13,7 +13,7 @@
         <text class="chat__head-emoji fa-solid fa-stethoscope"></text>
       </view>
       <view class="chat__head-main">
-        <text class="chat__head-name">安康 · AI健康助手</text>
+        <text class="chat__head-name">健康小助手</text>
         <view class="chat__head-state">
           <view class="chat__dot-live"></view>
           <text class="chat__head-status">在线 · 三甲医师团队支持</text>

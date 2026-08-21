@@ -133,7 +133,7 @@ export default {
           icon: 'fa-solid fa-comment-dots',
           bg: '#fdf4ed',
           label: '健康对话',
-          desc: this.activeRight ? '继续与 AI 健康助手对话' : '开通服务后可使用',
+          desc: this.activeRight ? '继续与健康小助手对话' : '开通服务后可使用',
           badge: this.activeRight && !this.activeRight.chatStarted ? '待问询' : ''
         }
       ]

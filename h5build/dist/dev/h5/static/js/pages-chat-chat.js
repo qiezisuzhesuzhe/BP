@@ -944,7 +944,7 @@ var render = function () {
             { staticClass: "chat__head-main" },
             [
               _c("v-uni-text", { staticClass: "chat__head-name" }, [
-                _vm._v("安康 · AI健康助手"),
+                _vm._v("健康小助手"),
               ]),
               _c(
                 "v-uni-view",

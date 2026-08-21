@@ -2,8 +2,9 @@
   <view class="chat">
     <hm-navbar title="" bg-color="transparent">
       <template #right>
-        <view class="chat__voice" @tap="toggleVoice" @longpress="pickVoice">
+        <view class="chat__voice" :class="{ 'chat__voice--off': !voiceOn }" @tap="toggleVoice" @longpress="pickVoice">
           <text class="chat__voice-icon" :class="voiceOn ? 'fa-solid fa-volume-high' : 'fa-solid fa-volume-xmark'"></text>
+          <text class="chat__voice-t">{{ voiceOn ? '自动朗读' : '已静音' }}</text>
         </view>
       </template>
     </hm-navbar>
@@ -79,21 +80,6 @@
                 <text class="plan__count">共 {{ m.items.length }} 项</text>
               </view>
               <hm-timeline :items="m.items" />
-            </view>
-
-            <!-- AI 文本气泡下方的重听按钮：点击重新播报该条内容 -->
-            <view
-              v-if="m.role === 'ai' && m.kind === 'text'"
-              class="replay"
-              :class="{ 'replay--on': speakingId === m.id }"
-              @tap="replay(m)"
-            >
-              <view class="replay__wave">
-                <view class="replay__bar replay__bar--1"></view>
-                <view class="replay__bar replay__bar--2"></view>
-                <view class="replay__bar replay__bar--3"></view>
-              </view>
-              <text class="replay__t">{{ speakingId === m.id ? '播放中' : '朗读' }}</text>
             </view>
           </view>
         </view>
@@ -352,15 +338,6 @@ export default {
       }
       if (this.speakingId === m.id) this.speakingId = ''
     },
-    // 点击气泡下方的"朗读"：正在播的再点一次为停止，否则强制重听
-    replay(m) {
-      if (this.speakingId === m.id) {
-        tts.stop()
-        this.speakingId = ''
-        return
-      }
-      this.speakMessage(m, true)
-    },
     save() {
       if (!this.rightId) return
       this.$store.dispatch('saveChat', {
@@ -378,7 +355,7 @@ export default {
       tts.setEnabled(this.voiceOn)
       if (!this.voiceOn) this.speakingId = ''
       uni.showToast({
-        title: this.voiceOn ? '语音播报已开启，长按可换音色' : '语音播报已关闭',
+        title: this.voiceOn ? '已开启自动朗读，长按可换音色' : '已关闭自动朗读',
         icon: 'none'
       })
     },
@@ -780,18 +757,36 @@ export default {
 }
 
 .chat__voice {
-  width: $size-avatar-sm;
   height: $size-avatar-sm;
-  border-radius: 50%;
+  padding: 0 $space-2;
+  border-radius: $radius-full;
   background: $brand-soft;
   display: flex;
   align-items: center;
-  justify-content: center;
+}
+
+.chat__voice--off {
+  background: $bg-page;
 }
 
 .chat__voice-icon {
-  font-size: $font-size-md;
-  color: $icon-ink;
+  font-size: $font-size-sm;
+  color: $brand-primary-active;
+  margin-right: 6rpx;
+}
+
+.chat__voice--off .chat__voice-icon {
+  color: $text-hint;
+}
+
+.chat__voice-t {
+  font-size: $font-size-xs;
+  color: $brand-primary-active;
+  white-space: nowrap;
+}
+
+.chat__voice--off .chat__voice-t {
+  color: $text-hint;
 }
 
 .chat__head {
@@ -920,8 +915,6 @@ export default {
 .msg__body {
   max-width: 78%;
   padding-left: $space-2;
-  display: flex;
-  flex-direction: column;
 }
 
 .msg--user .msg__body {
@@ -954,75 +947,6 @@ export default {
 
 .bubble__t--user {
   color: $text-inverse;
-}
-
-.replay {
-  display: flex;
-  align-items: center;
-  align-self: flex-start;
-  margin-top: $space-1;
-  padding: $space-1 $space-2;
-  background: $brand-soft;
-  border-radius: $radius-full;
-}
-
-.replay--on {
-  background: $brand-primary;
-}
-
-.replay__wave {
-  display: flex;
-  align-items: center;
-  margin-right: $space-1;
-}
-
-.replay__bar {
-  width: 4rpx;
-  height: 16rpx;
-  margin-right: 3rpx;
-  border-radius: 2rpx;
-  background: $brand-primary-active;
-}
-
-.replay__bar--2 {
-  height: 24rpx;
-}
-
-.replay__bar--3 {
-  height: 12rpx;
-  margin-right: 0;
-}
-
-.replay--on .replay__bar {
-  background: $text-inverse;
-  animation: voiceBar 0.8s ease-in-out infinite;
-}
-
-.replay--on .replay__bar--2 {
-  animation-delay: 0.1s;
-}
-
-.replay--on .replay__bar--3 {
-  animation-delay: 0.2s;
-}
-
-.replay__t {
-  font-size: $font-size-xs;
-  color: $brand-primary-active;
-}
-
-.replay--on .replay__t {
-  color: $text-inverse;
-}
-
-@keyframes voiceBar {
-  0%,
-  100% {
-    transform: scaleY(0.4);
-  }
-  50% {
-    transform: scaleY(1);
-  }
 }
 
 .typing {

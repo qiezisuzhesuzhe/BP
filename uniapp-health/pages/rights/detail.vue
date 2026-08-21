@@ -81,7 +81,7 @@
         <text class="hm-sec-title">权益内容</text>
         <text class="hm-sec-sub">服务期内可使用的全部项目</text>
       </view>
-      <view class="hm-card">
+      <view class="hm-card hm-card--flush">
         <view v-for="(s, i) in right.services" :key="i" class="srv" :class="{ 'srv--last': i === right.services.length - 1 }">
           <view class="srv__dot" :style="{ background: right.accentSoft }">
             <text class="srv__dot-t" :style="{ color: right.accent }">✓</text>
@@ -97,7 +97,7 @@
       <view class="sec">
         <text class="hm-sec-title">订单信息</text>
       </view>
-      <view class="hm-card">
+      <view class="hm-card hm-card--flush">
         <view class="row">
           <text class="row__l">订单编号</text>
           <text class="row__v row__v--mono">{{ right.orderNo }}</text>
@@ -127,7 +127,7 @@
       <view class="sec">
         <text class="hm-sec-title">服务说明</text>
       </view>
-      <view class="hm-card note">
+      <view class="hm-card note hm-card--flush">
         <text class="note__p">1. 本服务为健康管理与生活方式干预服务，不属于诊疗行为，不可替代医院就诊与医师处方。</text>
         <text class="note__p">2. 服务期自开通日起计算 {{ right.duration }}，到期后历史记录仍可查看，但不再推送每日健康指导。</text>
         <text class="note__p">3. 如出现胸痛、意识障碍、肢体无力等急症表现，请立即就近急诊或拨打 120。</text>
@@ -387,6 +387,11 @@ export default {
   padding: $space-3;
 }
 
+/* 紧跟区块标题的卡片，与标题贴合无间距 */
+.hm-card--flush {
+  margin-top: 0;
+}
+
 .panel > .hm-divider {
   margin-bottom: $space-4;
 }
@@ -462,7 +467,7 @@ export default {
 }
 
 .sec {
-  padding: $space-5 $space-4 $space-2;
+  padding: $space-5 $space-4 0;
   display: flex;
   align-items: baseline;
   justify-content: space-between;

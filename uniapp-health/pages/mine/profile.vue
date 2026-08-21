@@ -37,7 +37,7 @@
       <text class="hm-sec-title">身体指标</text>
       <text class="hm-sec-sub">影响 BMI 与运动处方强度计算</text>
     </view>
-    <view class="hm-card">
+    <view class="hm-card hm-card--flush">
       <view class="fi">
         <text class="fi__l">年龄</text>
         <view class="unit">
@@ -76,7 +76,7 @@
       <text class="hm-sec-title">健康标签</text>
       <text class="hm-sec-sub">由问询结果与服务记录自动生成</text>
     </view>
-    <view class="hm-card">
+    <view class="hm-card hm-card--flush">
       <view class="tags">
         <view v-for="(t, i) in profile.tags" :key="i" class="tg">
           <text class="tg__t">{{ t }}</text>
@@ -241,6 +241,11 @@ export default {
   padding: $space-3;
 }
 
+/* 紧跟区块标题的卡片，与标题贴合无间距 */
+.hm-card--flush {
+  margin-top: 0;
+}
+
 .fi {
   display: flex;
   align-items: center;
@@ -323,7 +328,7 @@ export default {
 }
 
 .sec {
-  padding: $space-5 $space-4 $space-2;
+  padding: $space-5 $space-4 0;
   display: flex;
   align-items: baseline;
   justify-content: space-between;

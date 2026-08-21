@@ -363,7 +363,7 @@ export default {
 }
 
 .sec {
-  padding: $space-5 $space-4 $space-2;
+  padding: $space-5 $space-4 0;
 }
 
 .menu {

@@ -1,5 +1,5 @@
 {
-  "name": "安康健康管理",
+  "name": "享相健康+",
   "appid": "",
   "description": "高血压/高血糖数字化健康管理服务，AI 助手陪伴式问诊与个性化时间线方案",
   "versionName": "1.0.0",
@@ -83,7 +83,7 @@
     "usingComponents": true
   },
   "h5": {
-    "title": "安康健康管理",
+    "title": "享相健康+",
     "router": {
       "mode": "hash",
       "base": "./"

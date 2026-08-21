@@ -198,7 +198,7 @@ export default {
             // 扫码内容无法识别为设备码，给出提示
             uni.showModal({
               title: '无法识别二维码',
-              content: '请确认二维码为安康手环机身二维码，或选择"手动输入设备号"。',
+              content: '请确认二维码为享相手环机身二维码，或选择"手动输入设备号"。',
               showCancel: false
             })
           }
@@ -269,7 +269,7 @@ export default {
       // #endif
     },
     // 解析设备机身二维码：
-    // 1) 安康自定义格式 ankang://device?type=xxx&sn=xxx[&deviceid=xxx]
+    // 1) 享相自定义格式 ankang://device?type=xxx&sn=xxx[&deviceid=xxx]
     // 2) 通用格式（真实手环常见）：URL 带 imei/deviceid 参数、JSON、混有文本的 15 位数字等，
     //    通过 extractDeviceId 宽容提取设备号，按血压款手环识别
     handleCode(text) {

@@ -277,7 +277,7 @@ export const QUESTIONS = [
 export const QUESTIONS_DM = [
   {
     id: 'dm_med',
-    text: '您好！我是安康，您的AI控糖助手。先了解基本情况：您目前是否在使用降糖药物或胰岛素？',
+    text: '您好！我是健康小助手。先了解基本情况：您目前是否在使用降糖药物或胰岛素？',
     options: [
       { v: 'oral', label: '口服降糖药' },
       { v: 'insulin', label: '注射胰岛素' },
@@ -372,7 +372,7 @@ export const DEVICE_TYPES = [
   {
     key: 'band',
     name: '智能手环',
-    model: '安康手环 S1',
+    model: '享相手环 S1',
     icon: 'fa-solid fa-hand-holding-heart',
     color: '#389a82',
     accentSoft: '#d4f5ee',
@@ -387,7 +387,7 @@ export const DEVICE_TYPES = [
   {
     key: 'band-bp',
     name: '智能手环 - 血压款',
-    model: '安康手环 BP',
+    model: '享相手环 BP',
     icon: 'fa-solid fa-heart-circle-check',
     color: '#f15533',
     accentSoft: '#fdf4ed',
@@ -402,7 +402,7 @@ export const DEVICE_TYPES = [
   {
     key: 'radar',
     name: '睡眠监测仪 - 毫米波雷达款',
-    model: '安康雷达 R1',
+    model: '享相雷达 R1',
     icon: 'fa-solid fa-satellite-dish',
     color: '#8dcdd8',
     accentSoft: '#e2f2f6',
@@ -417,7 +417,7 @@ export const DEVICE_TYPES = [
   {
     key: 'bed',
     name: '睡眠监测仪 - 床上款',
-    model: '安康床垫 B1',
+    model: '享相床垫 B1',
     icon: 'fa-solid fa-bed-pulse',
     color: '#f2c94c',
     accentSoft: '#fdf4ed',

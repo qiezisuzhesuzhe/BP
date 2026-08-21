@@ -83,7 +83,7 @@
     </view>
 
     <view class="foot">
-      <text class="foot__t">安康健康管理 · 演示版本 v1.0.0</text>
+      <text class="foot__t">享相健康+ · 演示版本 v1.0.0</text>
       <text class="foot__d">本应用为产品演示用途，不提供真实医疗诊疗服务</text>
     </view>
     <view class="hm-safe-bottom"></view>

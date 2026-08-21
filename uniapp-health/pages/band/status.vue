@@ -781,7 +781,7 @@ export default {
     },
     // 快捷提醒语：一键填充并发送
     sendPreset(p) {
-      this.doSend('安康提醒', p)
+      this.doSend('享相提醒', p)
     },
     async doSend(title, text) {
       if (!text) {

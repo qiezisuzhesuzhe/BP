@@ -7254,7 +7254,7 @@ function getAppName() {
  */
 function getEnvAppName() {
   var _a;
-  return (_a = "安康健康管理") !== null && _a !== void 0 ? _a : '';
+  return (_a = "享相健康+") !== null && _a !== void 0 ? _a : '';
 }
 /**
  * 取 H5 端应用名：优先编译期注入，回退 `document.title`。
@@ -8992,7 +8992,7 @@ function installPublicStat() {
   tryRun(function () {
     var _a, _b, _c;
     var cfgBoot = app.getConfig();
-    var appName = "安康健康管理" || false;
+    var appName = "享相健康+" || false;
     var injected = parseInjectedUniStatistics();
     var bootBase = {
       channel: (_a = cfgBoot === null || cfgBoot === void 0 ? void 0 : cfgBoot.version) !== null && _a !== void 0 ? _a : 'image',

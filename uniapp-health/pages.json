@@ -9,7 +9,7 @@
     {
       "path": "pages/index/index",
       "style": {
-        "navigationBarTitleText": "安康健康管理",
+        "navigationBarTitleText": "享相健康+",
         "navigationStyle": "custom",
         "enablePullDownRefresh": false
       }
@@ -131,7 +131,7 @@
   ],
   "globalStyle": {
     "navigationBarTextStyle": "black",
-    "navigationBarTitleText": "安康健康管理",
+    "navigationBarTitleText": "享相健康+",
     "navigationBarBackgroundColor": "#FBFAF7",
     "backgroundColor": "#FBFAF7"
   },

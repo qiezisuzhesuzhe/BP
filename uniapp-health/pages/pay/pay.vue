@@ -116,7 +116,6 @@
             <text class="modal__amount-cur">¥</text>
             <text class="modal__amount-v">{{ order.price }}</text>
           </view>
-          <text class="modal__note">已开通 {{ order.duration }} 服务</text>
           <text class="modal__tip">正在跳转到我的权益…</text>
         </block>
         <text v-else class="modal__tip">请勿关闭页面</text>
@@ -166,7 +165,7 @@ export default {
     stageText() {
       if (this.stage === 1) return '正在调起' + this.methodName + '…'
       if (this.stage === 2) return '支付处理中…'
-      if (this.stage >= 3) return '支付成功'
+      if (this.stage >= 3) return '购买成功'
       return ''
     }
   },
@@ -450,7 +449,7 @@ export default {
 .paybar__btn {
   height: $size-input-height;
   border-radius: $radius-full;
-  background: $brand-primary;
+  background: $badge;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -613,13 +612,6 @@ export default {
   color: $text-primary;
   font-weight: 700;
   margin-left: 0;
-}
-
-.modal__note {
-  font-size: $font-size-xs;
-  color: $success;
-  font-weight: 600;
-  margin-top: $space-2;
 }
 
 .modal__tip {

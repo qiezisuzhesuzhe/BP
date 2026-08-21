@@ -400,6 +400,10 @@ export default {
   padding: $space-3;
 }
 
+.panel > .hm-divider {
+  margin-bottom: $space-4;
+}
+
 .prog__head {
   display: flex;
   justify-content: space-between;

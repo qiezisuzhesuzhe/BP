@@ -931,6 +931,17 @@ app.post('/api/simulate', (req, res) => {
 
 app.get('/api/health', (req, res) => res.json({ code: 0, msg: 'band-server running', devices: Object.keys(db.devices).length }))
 
+/* ---------------- 睡眠监测仪（毫米波雷达款）对接 ---------------- */
+// 独立模块：自带 data/radar.json 存储与平台鉴权，复用本服务的 SSE broadcast 下发实时数据
+// 必须挂在 express.static 之前，否则静态中间件会先响应 /api/radar/*
+let radar = null
+try {
+  radar = require('./radar.js')
+  radar.mount(app, broadcast)
+} catch (e) {
+  console.error('[radar] 模块加载失败，雷达相关接口不可用:', e && e.message)
+}
+
 /* ---------------- 托管 H5（与 API 同源） ---------------- */
 // H5 构建产物与后端接口同端口托管：前端用相对路径即可请求到本服务，
 // 无论是本地预览、内网穿透公网地址还是手机访问都能正常工作

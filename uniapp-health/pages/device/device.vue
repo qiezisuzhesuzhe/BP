@@ -44,7 +44,24 @@
               <text class="dev__chip-u">%</text>
             </view>
           </view>
-          <!-- 非血压款：展示最近同步 -->
+          <!-- 睡眠监测仪（毫米波雷达款）：展示在床状态 + 呼吸频率 + 体动 -->
+          <view v-else-if="dev.typeKey === 'radar' && radarLive[dev.deviceid]" class="dev__live">
+            <view class="dev__chip">
+              <text class="dev__chip-icon" :class="inBedIcon(dev.deviceid)" :style="{ color: inBedColor(dev.deviceid) }"></text>
+              <text class="dev__chip-n dev__chip-n--txt">{{ inBedText(dev.deviceid) }}</text>
+            </view>
+            <view class="dev__chip" v-if="radarLive[dev.deviceid].respRate != null">
+              <text class="dev__chip-icon fa-solid fa-wind" style="color:#8dcdd8"></text>
+              <text class="dev__chip-n">{{ radarLive[dev.deviceid].respRate }}</text>
+              <text class="dev__chip-u">次/分</text>
+            </view>
+            <view class="dev__chip" v-if="radarLive[dev.deviceid].bodyMove != null">
+              <text class="dev__chip-icon fa-solid fa-person-walking" style="color:#f2994a"></text>
+              <text class="dev__chip-n">{{ radarLive[dev.deviceid].bodyMove }}</text>
+              <text class="dev__chip-u">次</text>
+            </view>
+          </view>
+          <!-- 其他设备：展示最近同步 -->
           <text v-else class="dev__sync">最近同步 {{ dev.lastSync }}</text>
         </view>
         <view class="dev__right">
@@ -68,6 +85,7 @@
 <script>
 import { DEVICE_TYPES } from '@/common/mock.js'
 import { fetchBandLatestBatch, subscribeEvents } from '@/common/band.js'
+import { fetchRadarLatestBatch, radarInBed } from '@/common/radar.js'
 
 // SSE 事件 800ms 内批量合并，避免 pb 高频上报触发多次 pull
 const MERGE_MS = 800
@@ -76,6 +94,7 @@ export default {
   data() {
     return {
       bandLive: {}, // { [deviceid]: latestSnapshot }
+      radarLive: {}, // { [deviceid]: 雷达最新快照 }
       _sub: null,
       _mergeTimer: null
     }
@@ -87,6 +106,7 @@ export default {
   },
   onShow() {
     this.pullBandLive()
+    this.pullRadarLive()
     this.startSse()
   },
   onHide() {
@@ -101,7 +121,7 @@ export default {
     startSse() {
       this.stopSse()
       this._sub = subscribeEvents({
-        kinds: ['pb','alarm','sos','status','deviceinfo','device_bind','device_unbind'],
+        kinds: ['pb','alarm','sos','status','deviceinfo','device_bind','device_unbind','radar'],
         onEvent: (evt) => this.handleSse(evt)
       })
     },
@@ -121,20 +141,22 @@ export default {
       const kind = evt.kind || ''
       const p = (evt && evt.payload) || {}
       // device_bind / unbind：直接刷新列表 store（无需特殊处理，Vuex 会联动）
-      // 有 deviceid 且是手环快照：直接写入 bandLive
+      // 有 deviceid 且带快照：按事件类型分流写入 radarLive / bandLive
       if (p && p.deviceid && p.snapshot && typeof p.snapshot === 'object') {
         const snap = Object.assign({}, p.snapshot || {})
         for (const k of Object.keys(snap)) {
           if (snap[k] === null || snap[k] === undefined || snap[k] === '') delete snap[k]
         }
-        const prev = this.bandLive[p.deviceid] || {}
-        this.$set(this.bandLive, p.deviceid, Object.assign({}, prev, snap))
+        const bucket = kind === 'radar' ? 'radarLive' : 'bandLive'
+        const prev = this[bucket][p.deviceid] || {}
+        this.$set(this[bucket], p.deviceid, Object.assign({}, prev, snap))
       }
       // 其他变动（在线状态、新增设备等）：延迟合并批量拉 1 次
       this._clearMerge()
       this._mergeTimer = setTimeout(() => {
         this._mergeTimer = null
         this.pullBandLive()
+        this.pullRadarLive()
       }, MERGE_MS)
       // 异常告警：设备列表页不需要强弹窗，仅用轻 toast（去重依赖 mergeTimer 合并）
       if (kind === 'alarm') {
@@ -155,6 +177,37 @@ export default {
       const data = await fetchBandLatestBatch(bandIds)
       if (data) this.bandLive = data
     },
+    // 拉取所有睡眠监测仪（雷达款）的后端实时数据
+    async pullRadarLive() {
+      const ids = this.devices
+        .filter((d) => d.typeKey === 'radar' && d.deviceid)
+        .map((d) => d.deviceid)
+      if (ids.length === 0) {
+        this.radarLive = {}
+        return
+      }
+      const data = await fetchRadarLatestBatch(ids)
+      if (data) this.radarLive = data
+    },
+    // 在床状态：true 在床 / false 离床 / null 平台未上报该属性
+    inBedText(deviceid) {
+      const v = radarInBed(this.radarLive[deviceid])
+      if (v === true) return '在床'
+      if (v === false) return '离床'
+      return '待上报'
+    },
+    inBedIcon(deviceid) {
+      const v = radarInBed(this.radarLive[deviceid])
+      if (v === true) return 'fa-solid fa-bed'
+      if (v === false) return 'fa-solid fa-person-walking-arrow-right'
+      return 'fa-solid fa-satellite-dish'
+    },
+    inBedColor(deviceid) {
+      const v = radarInBed(this.radarLive[deviceid])
+      if (v === true) return '#389a82'
+      if (v === false) return '#f2994a'
+      return '#94a3b8'
+    },
     meta(dev) {
       return DEVICE_TYPES.find((t) => t.key === dev.typeKey) || DEVICE_TYPES[0]
     },
@@ -166,6 +219,13 @@ export default {
         // updatedAt 20 分钟内视为在线
         if (l.updatedAt) return Date.now() - l.updatedAt < 20 * 60 * 1000
         return (l.hr != null) || (l.sbp != null) || (l.battery != null)
+      }
+      // 雷达款：以平台推送的最近上报时间为准（雷达常驻供电，上报间隔通常在分钟级）
+      if (dev.typeKey === 'radar' && dev.deviceid) {
+        const l = this.radarLive[dev.deviceid]
+        if (!l) return dev.online === true
+        if (l.ts) return Date.now() - l.ts < 20 * 60 * 1000
+        return false
       }
       return dev.online === true
     },
@@ -194,7 +254,8 @@ export default {
       uni.navigateTo({ url: '/pages/device/detail?id=' + id })
     },
     goScan() {
-      uni.navigateTo({ url: '/pages/device/scan' })
+      // 来源为设备列表 tab：绑定成功后 switchTab 回本页查看新设备
+      uni.navigateTo({ url: '/pages/device/scan?from=device' })
     }
   }
 }
@@ -364,6 +425,13 @@ export default {
 
 .dev__chip-n--sub {
   color: $text-secondary;
+}
+
+/* 中文短语（如"在床/离床"）不走英文数字字体，避免字形与字重错位 */
+.dev__chip-n--txt {
+  font-family: inherit;
+  font-weight: $font-weight-bold;
+  font-size: $font-size-xs;
 }
 
 .dev__chip-sep {

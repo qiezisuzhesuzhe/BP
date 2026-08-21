@@ -376,9 +376,12 @@ const store = new Vuex.Store({
         id: id,
         typeKey: type.key,
         name: payload.name || type.name,
-        model: type.model,
+        // 云平台回传的真实型号优先（如雷达款由平台按设备号查得），否则用内置默认型号
+        model: payload.model || type.model,
         sn: payload.sn || 'SN' + Math.floor(Math.random() * 900000 + 100000),
         deviceid: payload.deviceid || '',
+        // 安装位置：仅平台有回传时才落库（雷达等固定安装设备）
+        site: payload.site || '',
         addedAt: fmtDateTime(now()),
         lastSync: fmtDateTime(now()),
         online: true,

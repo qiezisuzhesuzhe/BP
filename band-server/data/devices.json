@@ -3232,7 +3232,7 @@
       "name": "智能手环 - 血压款",
       "model": "BP100CE",
       "firstSeen": 1787198341420,
-      "lastSeen": 1787307980904,
+      "lastSeen": 1787313029833,
       "latest": {
         "ecgTs": 1787209586,
         "ecgN": 60,
@@ -3303,11 +3303,11 @@
         "calorie": 53,
         "battery": 57,
         "charging": false,
-        "ts": 1787296440,
+        "ts": 1787312040,
         "hr": 96,
         "sbp": 122,
         "dbp": 80,
-        "updatedAt": 1787297429147,
+        "updatedAt": 1787313029833,
         "sleep": {
           "deep": 0,
           "light": 1,
@@ -3317,10 +3317,10 @@
         "spo2": 97,
         "spo2Max": 97,
         "spo2Min": 97,
-        "stepsTs": 1787295780,
+        "stepsTs": 1787313009,
         "bpTs": 1787294520,
         "spo2Ts": 1787295720,
-        "sleepTs": 1787296440,
+        "sleepTs": 1787312040,
         "stress": 31,
         "stressTs": 1787295720,
         "hrTs": 1787295660,
@@ -4533,6 +4533,48 @@
           "stress": 31,
           "spo2Ts": 1787295720,
           "stressTs": 1787295720
+        },
+        {
+          "at": 1787311641967,
+          "steps": 756,
+          "distance": 577,
+          "calorie": 53,
+          "battery": 57,
+          "charging": false,
+          "ts": 1787311638,
+          "stepsTs": 1787311638
+        },
+        {
+          "at": 1787311656699,
+          "sleep": {
+            "deep": 1,
+            "light": 0,
+            "wake": 4,
+            "total": 5
+          },
+          "ts": 1787311620,
+          "sleepTs": 1787311620
+        },
+        {
+          "at": 1787313013745,
+          "steps": 756,
+          "distance": 577,
+          "calorie": 53,
+          "battery": 57,
+          "charging": false,
+          "ts": 1787313009,
+          "stepsTs": 1787313009
+        },
+        {
+          "at": 1787313029833,
+          "sleep": {
+            "deep": 0,
+            "light": 1,
+            "wake": 4,
+            "total": 5
+          },
+          "ts": 1787312040,
+          "sleepTs": 1787312040
         }
       ],
       "version": "91.0.0.59",

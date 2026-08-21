@@ -849,9 +849,12 @@ var store = new vuex__WEBPACK_IMPORTED_MODULE_21___default.a.Store({
         id: id,
         typeKey: type.key,
         name: payload.name || type.name,
-        model: type.model,
+        // 云平台回传的真实型号优先（如雷达款由平台按设备号查得），否则用内置默认型号
+        model: payload.model || type.model,
         sn: payload.sn || 'SN' + Math.floor(Math.random() * 900000 + 100000),
         deviceid: payload.deviceid || '',
+        // 安装位置：仅平台有回传时才落库（雷达等固定安装设备）
+        site: payload.site || '',
         addedAt: fmtDateTime(now()),
         lastSync: fmtDateTime(now()),
         online: true,
@@ -1706,7 +1709,8 @@ function subscribeEvents() {
         }
       };
       // 同时监听有名字的事件（后端 event: 对应事件名）
-      var KINDS_EXPECTED = ['pb', 'alarm', 'sos', 'calllog', 'deviceinfo', 'status', 'device_bind', 'device_unbind'];
+      // radar：睡眠监测仪（毫米波雷达款）实时数据，由 band-server/radar.js 经 MQTT 归一化后广播
+      var KINDS_EXPECTED = ['pb', 'alarm', 'sos', 'calllog', 'deviceinfo', 'status', 'device_bind', 'device_unbind', 'radar'];
       KINDS_EXPECTED.forEach(function (k) {
         es.addEventListener(k, function (ev) {
           try {

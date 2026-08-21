@@ -741,8 +741,9 @@ __webpack_require__.r(__webpack_exports__);
       }
     },
     goBindDevice: function goBindDevice() {
+      // 带上来源标记，绑定成功后原路返回对话页，不打断当前会话上下文
       uni.navigateTo({
-        url: '/pages/device/scan'
+        url: '/pages/device/scan?from=chat'
       });
     },
     firstDayItems: function firstDayItems() {

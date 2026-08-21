@@ -269,6 +269,95 @@ var render = function () {
                           ],
                           1
                         )
+                      : dev.typeKey === "radar" && _vm.radarLive[dev.deviceid]
+                      ? _c(
+                          "v-uni-view",
+                          { staticClass: "dev__live" },
+                          [
+                            _c(
+                              "v-uni-view",
+                              { staticClass: "dev__chip" },
+                              [
+                                _c("v-uni-text", {
+                                  staticClass: "dev__chip-icon",
+                                  class: _vm.inBedIcon(dev.deviceid),
+                                  style: {
+                                    color: _vm.inBedColor(dev.deviceid),
+                                  },
+                                }),
+                                _c(
+                                  "v-uni-text",
+                                  {
+                                    staticClass: "dev__chip-n dev__chip-n--txt",
+                                  },
+                                  [_vm._v(_vm._s(_vm.inBedText(dev.deviceid)))]
+                                ),
+                              ],
+                              1
+                            ),
+                            _vm.radarLive[dev.deviceid].respRate != null
+                              ? _c(
+                                  "v-uni-view",
+                                  { staticClass: "dev__chip" },
+                                  [
+                                    _c("v-uni-text", {
+                                      staticClass:
+                                        "dev__chip-icon fa-solid fa-wind",
+                                      staticStyle: { color: "#8dcdd8" },
+                                    }),
+                                    _c(
+                                      "v-uni-text",
+                                      { staticClass: "dev__chip-n" },
+                                      [
+                                        _vm._v(
+                                          _vm._s(
+                                            _vm.radarLive[dev.deviceid].respRate
+                                          )
+                                        ),
+                                      ]
+                                    ),
+                                    _c(
+                                      "v-uni-text",
+                                      { staticClass: "dev__chip-u" },
+                                      [_vm._v("次/分")]
+                                    ),
+                                  ],
+                                  1
+                                )
+                              : _vm._e(),
+                            _vm.radarLive[dev.deviceid].bodyMove != null
+                              ? _c(
+                                  "v-uni-view",
+                                  { staticClass: "dev__chip" },
+                                  [
+                                    _c("v-uni-text", {
+                                      staticClass:
+                                        "dev__chip-icon fa-solid fa-person-walking",
+                                      staticStyle: { color: "#f2994a" },
+                                    }),
+                                    _c(
+                                      "v-uni-text",
+                                      { staticClass: "dev__chip-n" },
+                                      [
+                                        _vm._v(
+                                          _vm._s(
+                                            _vm.radarLive[dev.deviceid].bodyMove
+                                          )
+                                        ),
+                                      ]
+                                    ),
+                                    _c(
+                                      "v-uni-text",
+                                      { staticClass: "dev__chip-u" },
+                                      [_vm._v("次")]
+                                    ),
+                                  ],
+                                  1
+                                )
+                              : _vm._e(),
+                          ],
+                          1
+                        )
                       : _c("v-uni-text", { staticClass: "dev__sync" }, [
                           _vm._v("最近同步 " + _vm._s(dev.lastSync)),
                         ]),
@@ -355,7 +444,7 @@ render._withStripped = true
 var ___CSS_LOADER_API_IMPORT___ = __webpack_require__(/*! ../../../node_modules/css-loader/dist/runtime/api.js */ "JPst");
 exports = ___CSS_LOADER_API_IMPORT___(false);
 // Module
-exports.push([module.i, "@charset \"UTF-8\";\n/* 享相健康+ · 设计令牌\n   来源：/workspace/DESIGN.md\n   方案：rpx + SCSS 变量（1px = 2rpx，基于 750rpx 设计基准） */\n/* ---------- 品牌色 ---------- */\n/* ---------- 头像 ---------- */\n/* ---------- 语义状态色 ---------- */\n/* ---------- 金色（尊享装饰） ---------- */\n/* ---------- 背景 ---------- */\n/* 斜向两色渐变：左上(#ddf7ed) → 右下(#f3f3f3)，末端即底色；\n   配合 App.vue 中 background-attachment: fixed 铺满视口固定，不随页面滚动/变长 */\n/* ---------- 文字 ---------- */\n/* ---------- 描边 / 遮罩 ---------- */\n/* ---------- 字体 ---------- */\n/* 英文/数字优先匹配 DIN Pro（Mac 自带 DIN Alternate 作为备选），中文回退苹方/雅黑 */\n/* 移动端最小舒适字号（可读正文下限）：\n   说明/入口/数据标签等可读文字不得小于 12px(24rpx)；\n   $font-size-2xs(10px) 仅限角标、徽标、装饰性元素 */\n/* ---------- 语义排版 ---------- */\n/* ---------- 间距 ---------- */\n/* ---------- 区块标题 ---------- */\n/* 标题下间距 = 列表间距；上间距 = 下间距 × 2 */\n/* ---------- 尺寸 ---------- */\n/* ---------- 圆角（已减半，更克制干净） ---------- */\n/* ---------- 阴影 ---------- */\n/* ---------- 层级 ---------- */\n/* ---------- 动效 ---------- */\n.empty[data-v-43012106] {\n  padding: %?96?% %?48?% %?80?%;\n  display: flex;\n  flex-direction: column;\n  align-items: center;\n  text-align: center;\n}\n.empty__icon[data-v-43012106] {\n  width: %?128?%;\n  height: %?128?%;\n  border-radius: %?999?%;\n  background: #d4f5ee;\n  display: flex;\n  align-items: center;\n  justify-content: center;\n  box-shadow: 0 %?12?% %?48?% rgba(125, 212, 188, 0.18);\n  margin-bottom: %?32?%;\n}\n.empty__icon-t[data-v-43012106] {\n  font-size: %?64?%;\n  color: rgba(0, 0, 0, 0.1);\n}\n.empty__t[data-v-43012106] {\n  font-size: %?32?%;\n  font-weight: 800;\n  color: #1a2a3c;\n  line-height: 1.1;\n}\n.empty__d[data-v-43012106] {\n  display: block;\n  font-size: %?24?%;\n  color: #64748b;\n  line-height: 1.6;\n  margin-top: %?16?%;\n  max-width: %?480?%;\n}\n.empty__btn[data-v-43012106] {\n  margin-top: %?40?%;\n  display: flex;\n  align-items: center;\n  background: #389a82;\n  border-radius: %?999?%;\n  padding: %?24?% %?48?%;\n  box-shadow: 0 %?12?% %?48?% rgba(125, 212, 188, 0.18);\n}\n.empty__btn-icon[data-v-43012106] {\n  color: #ffffff;\n  font-size: %?28?%;\n  margin-right: %?16?%;\n}\n.empty__btn-t[data-v-43012106] {\n  color: #ffffff;\n  font-size: %?28?%;\n  font-weight: 600;\n}\n.dev[data-v-43012106] {\n  display: flex;\n  align-items: center;\n  background: #ffffff;\n  border-radius: %?20?%;\n  box-shadow: 0 %?4?% %?24?% rgba(15, 61, 53, 0.06);\n  padding: %?24?%;\n  margin-left: %?32?%;\n  margin-right: %?32?%;\n  margin-bottom: %?32?%;\n  transition: box-shadow 0.2s ease, -webkit-transform 0.1s ease;\n  transition: transform 0.1s ease, box-shadow 0.2s ease;\n  transition: transform 0.1s ease, box-shadow 0.2s ease, -webkit-transform 0.1s ease;\n}\n.dev[data-v-43012106]:active {\n  -webkit-transform: scale(0.99);\n          transform: scale(0.99);\n  box-shadow: 0 %?4?% %?24?% rgba(15, 61, 53, 0.06);\n}\n.dev__icon[data-v-43012106] {\n  width: %?88?%;\n  height: %?88?%;\n  border-radius: %?20?%;\n  display: flex;\n  align-items: center;\n  justify-content: center;\n  flex-shrink: 0;\n}\n.dev__icon-t[data-v-43012106] {\n  font-size: %?44?%;\n}\n.dev__main[data-v-43012106] {\n  flex: 1;\n  padding: 0 %?24?%;\n  overflow: hidden;\n  min-width: 0;\n}\n.dev__name[data-v-43012106] {\n  display: block;\n  font-size: %?32?%;\n  font-weight: 800;\n  color: #1a2a3c;\n  line-height: 1.1;\n  overflow: hidden;\n  text-overflow: ellipsis;\n  white-space: nowrap;\n}\n.dev__sn[data-v-43012106] {\n  display: block;\n  font-size: %?24?%;\n  color: #334155;\n  margin-top: %?8?%;\n  overflow: hidden;\n  text-overflow: ellipsis;\n  white-space: nowrap;\n}\n.dev__sync[data-v-43012106] {\n  display: block;\n  font-size: %?20?%;\n  color: #94a3b8;\n  margin-top: %?8?%;\n}\n/* 手环实时数据：指标 chip 行 */\n.dev__live[data-v-43012106] {\n  display: flex;\n  align-items: center;\n  flex-wrap: wrap;\n  gap: %?16?%;\n  margin-top: %?16?%;\n}\n.dev__chip[data-v-43012106] {\n  display: inline-flex;\n  align-items: baseline;\n  padding: %?8?% %?16?%;\n  border-radius: %?12?%;\n  background: #f2f7fa;\n}\n.dev__chip-icon[data-v-43012106] {\n  font-size: %?24?%;\n  margin-right: %?8?%;\n  opacity: 0.9;\n}\n.dev__chip-n[data-v-43012106] {\n  font-family: \"DIN Pro\", \"DIN Alternate\", \"Helvetica Neue\", Arial, sans-serif;\n  font-weight: 800;\n  color: #1a2a3c;\n  font-size: %?28?%;\n  line-height: 1;\n}\n.dev__chip-n--sub[data-v-43012106] {\n  color: #334155;\n}\n.dev__chip-sep[data-v-43012106] {\n  margin: 0 %?4?%;\n  color: #64748b;\n  font-size: %?24?%;\n}\n.dev__chip-u[data-v-43012106] {\n  margin-left: %?8?%;\n  font-size: %?20?%;\n  color: #64748b;\n}\n.dev__right[data-v-43012106] {\n  display: flex;\n  align-items: center;\n  gap: %?16?%;\n  flex-shrink: 0;\n}\n.dev__status[data-v-43012106] {\n  display: flex;\n  align-items: center;\n  flex-shrink: 0;\n  padding: %?8?% %?16?%;\n  border-radius: %?999?%;\n  background: #27ae60;\n}\n.dev__status--off[data-v-43012106] {\n  background: #f2f7fa;\n}\n.dev__status-dot[data-v-43012106] {\n  width: %?12?%;\n  height: %?12?%;\n  border-radius: 50%;\n  background: #ffffff;\n  margin-right: %?8?%;\n}\n.dev__status--off .dev__status-dot[data-v-43012106] {\n  background: #94a3b8;\n}\n.dev__status-t[data-v-43012106] {\n  font-size: %?20?%;\n  color: #ffffff;\n  font-weight: 600;\n}\n.dev__status--off .dev__status-t[data-v-43012106] {\n  color: #64748b;\n}\n.dev__arrow[data-v-43012106] {\n  font-size: %?24?%;\n  color: #94a3b8;\n}\n.add-bar[data-v-43012106] {\n  position: fixed;\n  left: %?32?%;\n  right: %?32?%;\n  /* 底部留出 tabBar(约54px) + 安全间距 */\n  bottom: 64px;\n  height: %?88?%;\n  border-radius: %?999?%;\n  background: #389a82;\n  box-shadow: 0 %?16?% %?96?% rgba(15, 61, 53, 0.1);\n  display: flex;\n  align-items: center;\n  justify-content: center;\n  transition: opacity 0.2s ease, -webkit-transform 0.1s ease;\n  transition: opacity 0.2s ease, transform 0.1s ease;\n  transition: opacity 0.2s ease, transform 0.1s ease, -webkit-transform 0.1s ease;\n}\n.add-bar[data-v-43012106]:active {\n  -webkit-transform: scale(0.99);\n          transform: scale(0.99);\n  opacity: 0.9;\n}\n.add-bar__icon[data-v-43012106] {\n  color: #ffffff;\n  font-size: %?32?%;\n  margin-right: %?16?%;\n}\n.add-bar__t[data-v-43012106] {\n  color: #ffffff;\n  font-size: %?28?%;\n  font-weight: 700;\n}", ""]);
+exports.push([module.i, "@charset \"UTF-8\";\n/* 享相健康+ · 设计令牌\n   来源：/workspace/DESIGN.md\n   方案：rpx + SCSS 变量（1px = 2rpx，基于 750rpx 设计基准） */\n/* ---------- 品牌色 ---------- */\n/* ---------- 头像 ---------- */\n/* ---------- 语义状态色 ---------- */\n/* ---------- 金色（尊享装饰） ---------- */\n/* ---------- 背景 ---------- */\n/* 斜向两色渐变：左上(#ddf7ed) → 右下(#f3f3f3)，末端即底色；\n   配合 App.vue 中 background-attachment: fixed 铺满视口固定，不随页面滚动/变长 */\n/* ---------- 文字 ---------- */\n/* ---------- 描边 / 遮罩 ---------- */\n/* ---------- 字体 ---------- */\n/* 英文/数字优先匹配 DIN Pro（Mac 自带 DIN Alternate 作为备选），中文回退苹方/雅黑 */\n/* 移动端最小舒适字号（可读正文下限）：\n   说明/入口/数据标签等可读文字不得小于 12px(24rpx)；\n   $font-size-2xs(10px) 仅限角标、徽标、装饰性元素 */\n/* ---------- 语义排版 ---------- */\n/* ---------- 间距 ---------- */\n/* ---------- 区块标题 ---------- */\n/* 标题下间距 = 列表间距；上间距 = 下间距 × 2 */\n/* ---------- 尺寸 ---------- */\n/* ---------- 圆角（已减半，更克制干净） ---------- */\n/* ---------- 阴影 ---------- */\n/* ---------- 层级 ---------- */\n/* ---------- 动效 ---------- */\n.empty[data-v-43012106] {\n  padding: %?96?% %?48?% %?80?%;\n  display: flex;\n  flex-direction: column;\n  align-items: center;\n  text-align: center;\n}\n.empty__icon[data-v-43012106] {\n  width: %?128?%;\n  height: %?128?%;\n  border-radius: %?999?%;\n  background: #d4f5ee;\n  display: flex;\n  align-items: center;\n  justify-content: center;\n  box-shadow: 0 %?12?% %?48?% rgba(125, 212, 188, 0.18);\n  margin-bottom: %?32?%;\n}\n.empty__icon-t[data-v-43012106] {\n  font-size: %?64?%;\n  color: rgba(0, 0, 0, 0.1);\n}\n.empty__t[data-v-43012106] {\n  font-size: %?32?%;\n  font-weight: 800;\n  color: #1a2a3c;\n  line-height: 1.1;\n}\n.empty__d[data-v-43012106] {\n  display: block;\n  font-size: %?24?%;\n  color: #64748b;\n  line-height: 1.6;\n  margin-top: %?16?%;\n  max-width: %?480?%;\n}\n.empty__btn[data-v-43012106] {\n  margin-top: %?40?%;\n  display: flex;\n  align-items: center;\n  background: #389a82;\n  border-radius: %?999?%;\n  padding: %?24?% %?48?%;\n  box-shadow: 0 %?12?% %?48?% rgba(125, 212, 188, 0.18);\n}\n.empty__btn-icon[data-v-43012106] {\n  color: #ffffff;\n  font-size: %?28?%;\n  margin-right: %?16?%;\n}\n.empty__btn-t[data-v-43012106] {\n  color: #ffffff;\n  font-size: %?28?%;\n  font-weight: 600;\n}\n.dev[data-v-43012106] {\n  display: flex;\n  align-items: center;\n  background: #ffffff;\n  border-radius: %?20?%;\n  box-shadow: 0 %?4?% %?24?% rgba(15, 61, 53, 0.06);\n  padding: %?24?%;\n  margin-left: %?32?%;\n  margin-right: %?32?%;\n  margin-bottom: %?32?%;\n  transition: box-shadow 0.2s ease, -webkit-transform 0.1s ease;\n  transition: transform 0.1s ease, box-shadow 0.2s ease;\n  transition: transform 0.1s ease, box-shadow 0.2s ease, -webkit-transform 0.1s ease;\n}\n.dev[data-v-43012106]:active {\n  -webkit-transform: scale(0.99);\n          transform: scale(0.99);\n  box-shadow: 0 %?4?% %?24?% rgba(15, 61, 53, 0.06);\n}\n.dev__icon[data-v-43012106] {\n  width: %?88?%;\n  height: %?88?%;\n  border-radius: %?20?%;\n  display: flex;\n  align-items: center;\n  justify-content: center;\n  flex-shrink: 0;\n}\n.dev__icon-t[data-v-43012106] {\n  font-size: %?44?%;\n}\n.dev__main[data-v-43012106] {\n  flex: 1;\n  padding: 0 %?24?%;\n  overflow: hidden;\n  min-width: 0;\n}\n.dev__name[data-v-43012106] {\n  display: block;\n  font-size: %?32?%;\n  font-weight: 800;\n  color: #1a2a3c;\n  line-height: 1.1;\n  overflow: hidden;\n  text-overflow: ellipsis;\n  white-space: nowrap;\n}\n.dev__sn[data-v-43012106] {\n  display: block;\n  font-size: %?24?%;\n  color: #334155;\n  margin-top: %?8?%;\n  overflow: hidden;\n  text-overflow: ellipsis;\n  white-space: nowrap;\n}\n.dev__sync[data-v-43012106] {\n  display: block;\n  font-size: %?20?%;\n  color: #94a3b8;\n  margin-top: %?8?%;\n}\n/* 手环实时数据：指标 chip 行 */\n.dev__live[data-v-43012106] {\n  display: flex;\n  align-items: center;\n  flex-wrap: wrap;\n  gap: %?16?%;\n  margin-top: %?16?%;\n}\n.dev__chip[data-v-43012106] {\n  display: inline-flex;\n  align-items: baseline;\n  padding: %?8?% %?16?%;\n  border-radius: %?12?%;\n  background: #f2f7fa;\n}\n.dev__chip-icon[data-v-43012106] {\n  font-size: %?24?%;\n  margin-right: %?8?%;\n  opacity: 0.9;\n}\n.dev__chip-n[data-v-43012106] {\n  font-family: \"DIN Pro\", \"DIN Alternate\", \"Helvetica Neue\", Arial, sans-serif;\n  font-weight: 800;\n  color: #1a2a3c;\n  font-size: %?28?%;\n  line-height: 1;\n}\n.dev__chip-n--sub[data-v-43012106] {\n  color: #334155;\n}\n/* 中文短语（如\"在床/离床\"）不走英文数字字体，避免字形与字重错位 */\n.dev__chip-n--txt[data-v-43012106] {\n  font-family: inherit;\n  font-weight: 700;\n  font-size: %?24?%;\n}\n.dev__chip-sep[data-v-43012106] {\n  margin: 0 %?4?%;\n  color: #64748b;\n  font-size: %?24?%;\n}\n.dev__chip-u[data-v-43012106] {\n  margin-left: %?8?%;\n  font-size: %?20?%;\n  color: #64748b;\n}\n.dev__right[data-v-43012106] {\n  display: flex;\n  align-items: center;\n  gap: %?16?%;\n  flex-shrink: 0;\n}\n.dev__status[data-v-43012106] {\n  display: flex;\n  align-items: center;\n  flex-shrink: 0;\n  padding: %?8?% %?16?%;\n  border-radius: %?999?%;\n  background: #27ae60;\n}\n.dev__status--off[data-v-43012106] {\n  background: #f2f7fa;\n}\n.dev__status-dot[data-v-43012106] {\n  width: %?12?%;\n  height: %?12?%;\n  border-radius: 50%;\n  background: #ffffff;\n  margin-right: %?8?%;\n}\n.dev__status--off .dev__status-dot[data-v-43012106] {\n  background: #94a3b8;\n}\n.dev__status-t[data-v-43012106] {\n  font-size: %?20?%;\n  color: #ffffff;\n  font-weight: 600;\n}\n.dev__status--off .dev__status-t[data-v-43012106] {\n  color: #64748b;\n}\n.dev__arrow[data-v-43012106] {\n  font-size: %?24?%;\n  color: #94a3b8;\n}\n.add-bar[data-v-43012106] {\n  position: fixed;\n  left: %?32?%;\n  right: %?32?%;\n  /* 底部留出 tabBar(约54px) + 安全间距 */\n  bottom: 64px;\n  height: %?88?%;\n  border-radius: %?999?%;\n  background: #389a82;\n  box-shadow: 0 %?16?% %?96?% rgba(15, 61, 53, 0.1);\n  display: flex;\n  align-items: center;\n  justify-content: center;\n  transition: opacity 0.2s ease, -webkit-transform 0.1s ease;\n  transition: opacity 0.2s ease, transform 0.1s ease;\n  transition: opacity 0.2s ease, transform 0.1s ease, -webkit-transform 0.1s ease;\n}\n.add-bar[data-v-43012106]:active {\n  -webkit-transform: scale(0.99);\n          transform: scale(0.99);\n  opacity: 0.9;\n}\n.add-bar__icon[data-v-43012106] {\n  color: #ffffff;\n  font-size: %?32?%;\n  margin-right: %?16?%;\n}\n.add-bar__t[data-v-43012106] {\n  color: #ffffff;\n  font-size: %?28?%;\n  font-weight: 700;\n}", ""]);
 // Exports
 module.exports = exports;
 
@@ -456,6 +545,299 @@ __webpack_require__.r(__webpack_exports__);
 
 /***/ }),
 
+/***/ "gMwk":
+/*!*****************************!*\
+  !*** ./src/common/radar.js ***!
+  \*****************************/
+/*! exports provided: lastRadarError, getLastRadarError, fetchRadarStatus, pingRadarPlatform, verifyRadarDevice, listRadarDevices, fetchRadarRecord, fetchRadarLatest, fetchRadarLatestBatch, fetchRadarAttributes, bindRadarDevice, unbindRadarDevice, RADAR_STATE_TEXT, radarStateText, radarInBed, respLevel */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "lastRadarError", function() { return lastRadarError; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "getLastRadarError", function() { return getLastRadarError; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "fetchRadarStatus", function() { return fetchRadarStatus; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "pingRadarPlatform", function() { return pingRadarPlatform; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "verifyRadarDevice", function() { return verifyRadarDevice; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "listRadarDevices", function() { return listRadarDevices; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "fetchRadarRecord", function() { return fetchRadarRecord; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "fetchRadarLatest", function() { return fetchRadarLatest; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "fetchRadarLatestBatch", function() { return fetchRadarLatestBatch; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "fetchRadarAttributes", function() { return fetchRadarAttributes; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "bindRadarDevice", function() { return bindRadarDevice; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "unbindRadarDevice", function() { return unbindRadarDevice; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "RADAR_STATE_TEXT", function() { return RADAR_STATE_TEXT; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "radarStateText", function() { return radarStateText; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "radarInBed", function() { return radarInBed; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "respLevel", function() { return respLevel; });
+/* harmony import */ var _workspace_h5build_node_modules_babel_runtime_helpers_esm_slicedToArray_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./node_modules/@babel/runtime/helpers/esm/slicedToArray.js */ "ODXe");
+/* harmony import */ var core_js_modules_es_array_filter_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! core-js/modules/es.array.filter.js */ "TeQF");
+/* harmony import */ var core_js_modules_es_array_filter_js__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_array_filter_js__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var core_js_modules_es_array_index_of_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! core-js/modules/es.array.index-of.js */ "yXV3");
+/* harmony import */ var core_js_modules_es_array_index_of_js__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_array_index_of_js__WEBPACK_IMPORTED_MODULE_2__);
+/* harmony import */ var core_js_modules_es_array_map_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! core-js/modules/es.array.map.js */ "2B1R");
+/* harmony import */ var core_js_modules_es_array_map_js__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_array_map_js__WEBPACK_IMPORTED_MODULE_3__);
+/* harmony import */ var core_js_modules_es_date_to_json_js__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! core-js/modules/es.date.to-json.js */ "9LPj");
+/* harmony import */ var core_js_modules_es_date_to_json_js__WEBPACK_IMPORTED_MODULE_4___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_date_to_json_js__WEBPACK_IMPORTED_MODULE_4__);
+/* harmony import */ var core_js_modules_es_iterator_constructor_js__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! core-js/modules/es.iterator.constructor.js */ "6fVz");
+/* harmony import */ var core_js_modules_es_iterator_constructor_js__WEBPACK_IMPORTED_MODULE_5___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_iterator_constructor_js__WEBPACK_IMPORTED_MODULE_5__);
+/* harmony import */ var core_js_modules_es_iterator_filter_js__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! core-js/modules/es.iterator.filter.js */ "kQ2C");
+/* harmony import */ var core_js_modules_es_iterator_filter_js__WEBPACK_IMPORTED_MODULE_6___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_iterator_filter_js__WEBPACK_IMPORTED_MODULE_6__);
+/* harmony import */ var core_js_modules_es_iterator_for_each_js__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! core-js/modules/es.iterator.for-each.js */ "fVRX");
+/* harmony import */ var core_js_modules_es_iterator_for_each_js__WEBPACK_IMPORTED_MODULE_7___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_iterator_for_each_js__WEBPACK_IMPORTED_MODULE_7__);
+/* harmony import */ var core_js_modules_es_iterator_map_js__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! core-js/modules/es.iterator.map.js */ "q0NK");
+/* harmony import */ var core_js_modules_es_iterator_map_js__WEBPACK_IMPORTED_MODULE_8___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_iterator_map_js__WEBPACK_IMPORTED_MODULE_8__);
+/* harmony import */ var core_js_modules_es_json_stringify_js__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! core-js/modules/es.json.stringify.js */ "6cQw");
+/* harmony import */ var core_js_modules_es_json_stringify_js__WEBPACK_IMPORTED_MODULE_9___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_json_stringify_js__WEBPACK_IMPORTED_MODULE_9__);
+/* harmony import */ var core_js_modules_es_number_constructor_js__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! core-js/modules/es.number.constructor.js */ "qePV");
+/* harmony import */ var core_js_modules_es_number_constructor_js__WEBPACK_IMPORTED_MODULE_10___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_number_constructor_js__WEBPACK_IMPORTED_MODULE_10__);
+/* harmony import */ var core_js_modules_es_object_to_string_js__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! core-js/modules/es.object.to-string.js */ "07d7");
+/* harmony import */ var core_js_modules_es_object_to_string_js__WEBPACK_IMPORTED_MODULE_11___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_object_to_string_js__WEBPACK_IMPORTED_MODULE_11__);
+/* harmony import */ var core_js_modules_es_regexp_exec_js__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! core-js/modules/es.regexp.exec.js */ "rB9j");
+/* harmony import */ var core_js_modules_es_regexp_exec_js__WEBPACK_IMPORTED_MODULE_12___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_regexp_exec_js__WEBPACK_IMPORTED_MODULE_12__);
+/* harmony import */ var core_js_modules_es_regexp_test_js__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(/*! core-js/modules/es.regexp.test.js */ "ALS0");
+/* harmony import */ var core_js_modules_es_regexp_test_js__WEBPACK_IMPORTED_MODULE_13___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_regexp_test_js__WEBPACK_IMPORTED_MODULE_13__);
+/* harmony import */ var core_js_modules_es_string_iterator_js__WEBPACK_IMPORTED_MODULE_14__ = __webpack_require__(/*! core-js/modules/es.string.iterator.js */ "PKPk");
+/* harmony import */ var core_js_modules_es_string_iterator_js__WEBPACK_IMPORTED_MODULE_14___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_string_iterator_js__WEBPACK_IMPORTED_MODULE_14__);
+/* harmony import */ var core_js_modules_es_string_trim_js__WEBPACK_IMPORTED_MODULE_15__ = __webpack_require__(/*! core-js/modules/es.string.trim.js */ "SYor");
+/* harmony import */ var core_js_modules_es_string_trim_js__WEBPACK_IMPORTED_MODULE_15___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_string_trim_js__WEBPACK_IMPORTED_MODULE_15__);
+/* harmony import */ var core_js_modules_web_dom_collections_for_each_js__WEBPACK_IMPORTED_MODULE_16__ = __webpack_require__(/*! core-js/modules/web.dom-collections.for-each.js */ "FZtP");
+/* harmony import */ var core_js_modules_web_dom_collections_for_each_js__WEBPACK_IMPORTED_MODULE_16___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_web_dom_collections_for_each_js__WEBPACK_IMPORTED_MODULE_16__);
+/* harmony import */ var core_js_modules_web_dom_collections_iterator_js__WEBPACK_IMPORTED_MODULE_17__ = __webpack_require__(/*! core-js/modules/web.dom-collections.iterator.js */ "3bBZ");
+/* harmony import */ var core_js_modules_web_dom_collections_iterator_js__WEBPACK_IMPORTED_MODULE_17___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_web_dom_collections_iterator_js__WEBPACK_IMPORTED_MODULE_17__);
+/* harmony import */ var _band_js__WEBPACK_IMPORTED_MODULE_18__ = __webpack_require__(/*! ./band.js */ "YNKN");
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/**
+ * 睡眠监测仪（毫米波雷达款）—— 智慧物联网云平台数据桥接
+ *
+ * 后端接收服务：/workspace/band-server/radar.js（挂在 band-server 上，默认端口 8091）
+ *  - 平台鉴权：appKey + timestamp + signature=MD5(path+timestamp+appSecret)
+ *  - 实时数据：MQTT 订阅 topic 推送 → 后端归一化 → SSE kind='radar' 下发前端
+ *  - /api/radar/* 供 H5 校验设备、绑定/解绑、查询最新呼吸/体动/离床
+ *
+ * 本模块只展示后端真实上报的数据，未收到数据时返回 null，由页面显示占位符（--）。
+ * 地址解析复用 band.js 的 bandApi()：雷达接口与手环接口同源同端口。
+ */
+
+
+var lastRadarError = null;
+function getLastRadarError() {
+  return lastRadarError;
+}
+function _logReq(tag, url, resOrErr, extra) {
+  try {
+    var isErr = resOrErr && resOrErr.__fail || resOrErr && typeof resOrErr.statusCode === 'number' && (resOrErr.statusCode < 200 || resOrErr.statusCode >= 300);
+    var code = resOrErr && typeof resOrErr.statusCode === 'number' ? resOrErr.statusCode : resOrErr && resOrErr.__fail ? 'FAIL' : '?';
+    var busCode = resOrErr && resOrErr.data && typeof resOrErr.data.code !== 'undefined' ? resOrErr.data.code : null;
+    if (isErr || busCode != null && busCode !== 0) {
+      var msg = '[radar][' + tag + '] 失败 HTTP=' + code + ' 业务=' + busCode + '  URL=' + url + (extra ? '  EXTRA=' + JSON.stringify(extra) : '');
+      if (typeof console !== 'undefined' && console.error) console.error(msg, resOrErr || '');
+      lastRadarError = {
+        at: Date.now(),
+        tag: tag,
+        url: url,
+        http: code,
+        bus: busCode,
+        extra: extra || null
+      };
+    } else if (typeof console !== 'undefined' && console.debug) {
+      console.debug('[radar][' + tag + '] OK HTTP=' + code + ' 业务=' + busCode + '  ' + url, extra || '');
+    }
+  } catch (e) {/* ignore */}
+}
+
+// 统一请求封装：失败一律 resolve(fallback)，绝不 reject，也不弹 toast（会被轮询高频调用）
+function _req(tag, path, method, data, fallback) {
+  return new Promise(function (resolve) {
+    var url = Object(_band_js__WEBPACK_IMPORTED_MODULE_18__["bandApi"])(path);
+    uni.request({
+      url: url,
+      method: method || 'GET',
+      data: data || undefined,
+      timeout: 20000,
+      success: function success(res) {
+        var ok = res.statusCode === 200 && res.data && res.data.code === 0;
+        _logReq(tag, url, res, ok ? null : {
+          message: res.data && res.data.message || null
+        });
+        resolve(ok ? res.data.data : fallback);
+      },
+      fail: function fail(err) {
+        _logReq(tag, url, Object.assign({
+          __fail: true
+        }, err || {}));
+        resolve(fallback);
+      }
+    });
+  });
+}
+
+/* ---------------- 通道自检 ---------------- */
+
+// 平台通道状态：{ company, appKey, apiBase, modelName, mq: { state, error, msgCount... }, devices }
+// mq.state: idle / connecting / connected / reconnecting / offline / error
+function fetchRadarStatus() {
+  return _req('GET /api/radar/status', '/api/radar/status?_t=' + Date.now(), 'GET', null, null);
+}
+
+// 平台连通性 + 签名校验（调型号列表）。返回 { ok, models } 或 null
+function pingRadarPlatform() {
+  return _req('GET /api/radar/ping', '/api/radar/ping?_t=' + Date.now(), 'GET', null, null);
+}
+
+/* ---------------- 设备查询 ---------------- */
+
+// 扫码后绑定前置校验：设备号是否真实存在于平台
+// 成功返回 { deviceImei, deviceId, model, typeName, state, stateText, companyName, site }
+// 平台查不到 / 网络失败均返回 null
+function verifyRadarDevice(deviceid) {
+  if (!deviceid) return Promise.resolve(null);
+  return _req('GET /api/radar/verify/:imei', '/api/radar/verify/' + encodeURIComponent(deviceid) + '?_t=' + Date.now(), 'GET', null, null);
+}
+
+// 本地已绑定的雷达设备列表（不含 history）
+function listRadarDevices() {
+  return _req('GET /api/radar/devices', '/api/radar/devices?_t=' + Date.now(), 'GET', null, []);
+}
+
+// 单台雷达完整记录：{ deviceid, name, model, latest, attrs, state, stateText, site, lastSeen }
+// refresh=true 时后端会回平台同步一次基础信息（受每秒 1 次限流保护，略慢）
+function fetchRadarRecord(deviceid, refresh) {
+  if (!deviceid) return Promise.resolve(null);
+  var path = '/api/radar/devices/' + encodeURIComponent(deviceid) + '?_t=' + Date.now();
+  if (refresh) path += '&refresh=1';
+  return _req('GET /api/radar/devices/:imei', path, 'GET', null, null);
+}
+
+// 只取最新快照（给设备列表页用）
+function fetchRadarLatest(deviceid) {
+  return fetchRadarRecord(deviceid).then(function (rec) {
+    return rec && rec.latest ? rec.latest : null;
+  });
+}
+
+// 批量拉取多台雷达最新快照，返回 { [deviceid]: latest | null }
+function fetchRadarLatestBatch(deviceids) {
+  var ids = Array.isArray(deviceids) ? deviceids.filter(Boolean) : [];
+  if (ids.length === 0) return Promise.resolve({});
+  return Promise.all(ids.map(function (id) {
+    return fetchRadarLatest(id).then(function (v) {
+      return [id, v];
+    });
+  })).then(function (pairs) {
+    var out = {};
+    pairs.forEach(function (_ref) {
+      var _ref2 = Object(_workspace_h5build_node_modules_babel_runtime_helpers_esm_slicedToArray_js__WEBPACK_IMPORTED_MODULE_0__["default"])(_ref, 2),
+        id = _ref2[0],
+        v = _ref2[1];
+      out[id] = v;
+    });
+    return out;
+  });
+}
+
+// 型号属性表（日后拿到真实 deviceModelName 后校准字段映射用）
+function fetchRadarAttributes(model) {
+  var m = String(model || '').trim();
+  if (!m) return Promise.resolve(null);
+  return _req('GET /api/radar/attributes', '/api/radar/attributes?model=' + encodeURIComponent(m), 'GET', null, null);
+}
+
+/* ---------------- 绑定 / 解绑 ---------------- */
+
+// 绑定雷达设备：后端先向平台校验设备真实存在，再落本地库并广播 device_bind
+// 返回设备记录，失败返回 null（错误详情见 getLastRadarError()）
+function bindRadarDevice(deviceid, name) {
+  if (!deviceid) return Promise.resolve(null);
+  return _req('POST /api/radar/devices', '/api/radar/devices', 'POST', {
+    deviceid: deviceid,
+    name: name || ''
+  }, null);
+}
+
+// 解绑：后端打 markedUnbound 标记而非真删，保住历史数据
+function unbindRadarDevice(deviceid) {
+  if (!deviceid) return Promise.resolve(false);
+  return _req('DELETE /api/radar/devices/:imei', '/api/radar/devices/' + encodeURIComponent(deviceid), 'DELETE', null, null).then(function (d) {
+    return !!d;
+  });
+}
+
+/* ---------------- 展示辅助 ---------------- */
+
+// 平台设备状态码 → 中文
+var RADAR_STATE_TEXT = {
+  0: '正常',
+  1: '故障',
+  2: '报警',
+  3: '手动报警',
+  4: '离线',
+  5: '待删除',
+  6: '停用',
+  7: '未激活'
+};
+function radarStateText(state) {
+  if (state == null || state === '') return '';
+  return RADAR_STATE_TEXT[Number(state)] || String(state);
+}
+
+// 在床状态判定：latest.inBed 由后端按属性名关键词归一（1/0 或 有人/无人）
+// 返回 true 在床 / false 离床 / null 未知
+function radarInBed(latest) {
+  if (!latest) return null;
+  var v = latest.inBed;
+  if (v == null || v === '') return null;
+  if (typeof v === 'number') return v > 0;
+  var s = String(v);
+  if (/^(1|true|yes)$/i.test(s) || s.indexOf('有人') >= 0 || s.indexOf('在床') >= 0) return true;
+  if (/^(0|false|no)$/i.test(s) || s.indexOf('无人') >= 0 || s.indexOf('离床') >= 0) return false;
+  return null;
+}
+
+// 呼吸频率评估（成人静息 12-20 次/分）：返回 { level, text }
+function respLevel(respRate) {
+  var v = Number(respRate);
+  if (!isFinite(v) || v <= 0) return {
+    level: 'unknown',
+    text: ''
+  };
+  if (v < 12) return {
+    level: 'low',
+    text: '偏慢'
+  };
+  if (v <= 20) return {
+    level: 'normal',
+    text: '正常'
+  };
+  if (v <= 24) return {
+    level: 'high',
+    text: '偏快'
+  };
+  return {
+    level: 'danger',
+    text: '过快'
+  };
+}
+
+/***/ }),
+
 /***/ "jrQb":
 /*!********************************************************************************!*\
   !*** ./src/pages/device/device.vue?vue&type=template&id=43012106&scoped=true& ***!
@@ -516,6 +898,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var core_js_modules_es_regexp_test_js__WEBPACK_IMPORTED_MODULE_14___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_regexp_test_js__WEBPACK_IMPORTED_MODULE_14__);
 /* harmony import */ var _common_mock_js__WEBPACK_IMPORTED_MODULE_15__ = __webpack_require__(/*! @/common/mock.js */ "rfkh");
 /* harmony import */ var _common_band_js__WEBPACK_IMPORTED_MODULE_16__ = __webpack_require__(/*! @/common/band.js */ "YNKN");
+/* harmony import */ var _common_radar_js__WEBPACK_IMPORTED_MODULE_17__ = __webpack_require__(/*! @/common/radar.js */ "gMwk");
 
 
 
@@ -598,6 +981,24 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
 
 
 
@@ -609,6 +1010,8 @@ var MERGE_MS = 800;
     return {
       bandLive: {},
       // { [deviceid]: latestSnapshot }
+      radarLive: {},
+      // { [deviceid]: 雷达最新快照 }
       _sub: null,
       _mergeTimer: null
     };
@@ -620,6 +1023,7 @@ var MERGE_MS = 800;
   },
   onShow: function onShow() {
     this.pullBandLive();
+    this.pullRadarLive();
     this.startSse();
   },
   onHide: function onHide() {
@@ -635,7 +1039,7 @@ var MERGE_MS = 800;
       var _this = this;
       this.stopSse();
       this._sub = Object(_common_band_js__WEBPACK_IMPORTED_MODULE_16__["subscribeEvents"])({
-        kinds: ['pb', 'alarm', 'sos', 'status', 'deviceinfo', 'device_bind', 'device_unbind'],
+        kinds: ['pb', 'alarm', 'sos', 'status', 'deviceinfo', 'device_bind', 'device_unbind', 'radar'],
         onEvent: function onEvent(evt) {
           return _this.handleSse(evt);
         }
@@ -660,21 +1064,23 @@ var MERGE_MS = 800;
       var kind = evt.kind || '';
       var p = evt && evt.payload || {};
       // device_bind / unbind：直接刷新列表 store（无需特殊处理，Vuex 会联动）
-      // 有 deviceid 且是手环快照：直接写入 bandLive
+      // 有 deviceid 且带快照：按事件类型分流写入 radarLive / bandLive
       if (p && p.deviceid && p.snapshot && Object(_workspace_h5build_node_modules_babel_runtime_helpers_esm_typeof_js__WEBPACK_IMPORTED_MODULE_2__["default"])(p.snapshot) === 'object') {
         var snap = Object.assign({}, p.snapshot || {});
         for (var _i = 0, _Object$keys = Object.keys(snap); _i < _Object$keys.length; _i++) {
           var k = _Object$keys[_i];
           if (snap[k] === null || snap[k] === undefined || snap[k] === '') delete snap[k];
         }
-        var prev = this.bandLive[p.deviceid] || {};
-        this.$set(this.bandLive, p.deviceid, Object.assign({}, prev, snap));
+        var bucket = kind === 'radar' ? 'radarLive' : 'bandLive';
+        var prev = this[bucket][p.deviceid] || {};
+        this.$set(this[bucket], p.deviceid, Object.assign({}, prev, snap));
       }
       // 其他变动（在线状态、新增设备等）：延迟合并批量拉 1 次
       this._clearMerge();
       this._mergeTimer = setTimeout(function () {
         _this2._mergeTimer = null;
         _this2.pullBandLive();
+        _this2.pullRadarLive();
       }, MERGE_MS);
       // 异常告警：设备列表页不需要强弹窗，仅用轻 toast（去重依赖 mergeTimer 合并）
       if (kind === 'alarm') {
@@ -720,6 +1126,56 @@ var MERGE_MS = 800;
         }, _callee);
       }))();
     },
+    // 拉取所有睡眠监测仪（雷达款）的后端实时数据
+    pullRadarLive: function pullRadarLive() {
+      var _this4 = this;
+      return Object(_workspace_h5build_node_modules_babel_runtime_helpers_esm_asyncToGenerator_js__WEBPACK_IMPORTED_MODULE_1__["default"])(/*#__PURE__*/Object(_workspace_h5build_node_modules_babel_runtime_helpers_esm_regenerator_js__WEBPACK_IMPORTED_MODULE_0__["default"])().m(function _callee2() {
+        var ids, data;
+        return Object(_workspace_h5build_node_modules_babel_runtime_helpers_esm_regenerator_js__WEBPACK_IMPORTED_MODULE_0__["default"])().w(function (_context2) {
+          while (1) switch (_context2.n) {
+            case 0:
+              ids = _this4.devices.filter(function (d) {
+                return d.typeKey === 'radar' && d.deviceid;
+              }).map(function (d) {
+                return d.deviceid;
+              });
+              if (!(ids.length === 0)) {
+                _context2.n = 1;
+                break;
+              }
+              _this4.radarLive = {};
+              return _context2.a(2);
+            case 1:
+              _context2.n = 2;
+              return Object(_common_radar_js__WEBPACK_IMPORTED_MODULE_17__["fetchRadarLatestBatch"])(ids);
+            case 2:
+              data = _context2.v;
+              if (data) _this4.radarLive = data;
+            case 3:
+              return _context2.a(2);
+          }
+        }, _callee2);
+      }))();
+    },
+    // 在床状态：true 在床 / false 离床 / null 平台未上报该属性
+    inBedText: function inBedText(deviceid) {
+      var v = Object(_common_radar_js__WEBPACK_IMPORTED_MODULE_17__["radarInBed"])(this.radarLive[deviceid]);
+      if (v === true) return '在床';
+      if (v === false) return '离床';
+      return '待上报';
+    },
+    inBedIcon: function inBedIcon(deviceid) {
+      var v = Object(_common_radar_js__WEBPACK_IMPORTED_MODULE_17__["radarInBed"])(this.radarLive[deviceid]);
+      if (v === true) return 'fa-solid fa-bed';
+      if (v === false) return 'fa-solid fa-person-walking-arrow-right';
+      return 'fa-solid fa-satellite-dish';
+    },
+    inBedColor: function inBedColor(deviceid) {
+      var v = Object(_common_radar_js__WEBPACK_IMPORTED_MODULE_17__["radarInBed"])(this.radarLive[deviceid]);
+      if (v === true) return '#389a82';
+      if (v === false) return '#f2994a';
+      return '#94a3b8';
+    },
     meta: function meta(dev) {
       return _common_mock_js__WEBPACK_IMPORTED_MODULE_15__["DEVICE_TYPES"].find(function (t) {
         return t.key === dev.typeKey;
@@ -733,6 +1189,13 @@ var MERGE_MS = 800;
         // updatedAt 20 分钟内视为在线
         if (l.updatedAt) return Date.now() - l.updatedAt < 20 * 60 * 1000;
         return l.hr != null || l.sbp != null || l.battery != null;
+      }
+      // 雷达款：以平台推送的最近上报时间为准（雷达常驻供电，上报间隔通常在分钟级）
+      if (dev.typeKey === 'radar' && dev.deviceid) {
+        var _l = this.radarLive[dev.deviceid];
+        if (!_l) return dev.online === true;
+        if (_l.ts) return Date.now() - _l.ts < 20 * 60 * 1000;
+        return false;
       }
       return dev.online === true;
     },
@@ -765,8 +1228,9 @@ var MERGE_MS = 800;
       });
     },
     goScan: function goScan() {
+      // 来源为设备列表 tab：绑定成功后 switchTab 回本页查看新设备
       uni.navigateTo({
-        url: '/pages/device/scan'
+        url: '/pages/device/scan?from=device'
       });
     }
   }

@@ -497,7 +497,8 @@ export default {
       }
     },
     goBindDevice() {
-      uni.navigateTo({ url: '/pages/device/scan' })
+      // 带上来源标记，绑定成功后原路返回对话页，不打断当前会话上下文
+      uni.navigateTo({ url: '/pages/device/scan?from=chat' })
     },
     firstDayItems() {
       return buildDayPlan(this.pkgKey, this.answers, 0, 7)

@@ -133,6 +133,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var core_js_modules_web_dom_collections_for_each_js__WEBPACK_IMPORTED_MODULE_10___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_web_dom_collections_for_each_js__WEBPACK_IMPORTED_MODULE_10__);
 /* harmony import */ var _common_mock_js__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! @/common/mock.js */ "rfkh");
 /* harmony import */ var _common_band_js__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! @/common/band.js */ "YNKN");
+/* harmony import */ var _common_radar_js__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(/*! @/common/radar.js */ "gMwk");
 
 
 
@@ -221,6 +222,8 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+
 
 
 
@@ -234,6 +237,12 @@ var scanSeq = 0;
       fakeDeviceId: '',
       manualVisible: false,
       manualInput: '',
+      // 绑定成功后的返回目标：'back' 返回来源页（如对话页），'device' 回设备列表 tab
+      from: '',
+      // 平台查证中（雷达设备号需回云平台核验，耗时约 1-2 秒）
+      verifying: false,
+      // 平台核验拿到的设备信息（型号、安装位置、状态），用于确认弹层展示真实信息
+      platformInfo: null,
       // 相机状态：idle 准备中 / starting 启动中 / on 已开启 / fail 不可用
       camState: 'idle',
       stream: null,
@@ -251,7 +260,17 @@ var scanSeq = 0;
         fail: '未检测到可用相机，可点击下方按钮模拟识别'
       };
       return tips[this.camState] || '';
+    },
+    // 确认弹层里的型号：平台查得的真实型号优先于内置默认型号
+    shownModel: function shownModel() {
+      if (this.platformInfo && this.platformInfo.model) return this.platformInfo.model;
+      return this.result && this.result.model || '';
     }
+  },
+  onLoad: function onLoad(options) {
+    // from 由跳转方传入（如对话页 '立即绑定' 传 from=chat），绑定成功后原路返回；
+    // 缺省或来自设备列表 tab 时统一回设备列表
+    this.from = options && options.from || '';
   },
   onShow: function onShow() {
     this.startCamera();
@@ -359,23 +378,57 @@ var scanSeq = 0;
       this.stopScanLoop();
       var canvas = document.createElement('canvas');
       this.canvasEl = canvas;
-      this.scanTimer = setInterval(function () {
-        var v = _this2.videoEl;
-        if (!v || !v.videoWidth || _this2.result) return;
-        var w = Math.min(v.videoWidth, 640);
-        var h = Math.round(w / v.videoWidth * v.videoHeight);
-        canvas.width = w;
-        canvas.height = h;
-        var ctx = canvas.getContext('2d');
-        if (!ctx) return;
-        ctx.drawImage(v, 0, 0, w, h);
-        var img = ctx.getImageData(0, 0, w, h);
-        // attemptBoth：兼容深色背景/反色二维码，提高真实手环小屏二维码识别率
-        var code = window.jsQR(img.data, w, h, {
-          inversionAttempts: 'attemptBoth'
-        });
-        if (code && code.data) _this2.handleCode(code.data);
-      }, 220);
+      this.scanTimer = setInterval(/*#__PURE__*/Object(_workspace_h5build_node_modules_babel_runtime_helpers_esm_asyncToGenerator_js__WEBPACK_IMPORTED_MODULE_1__["default"])(/*#__PURE__*/Object(_workspace_h5build_node_modules_babel_runtime_helpers_esm_regenerator_js__WEBPACK_IMPORTED_MODULE_0__["default"])().m(function _callee2() {
+        var v, w, h, ctx, img, code;
+        return Object(_workspace_h5build_node_modules_babel_runtime_helpers_esm_regenerator_js__WEBPACK_IMPORTED_MODULE_0__["default"])().w(function (_context2) {
+          while (1) switch (_context2.p = _context2.n) {
+            case 0:
+              v = _this2.videoEl;
+              if (!(!v || !v.videoWidth || _this2.result || _this2.verifying)) {
+                _context2.n = 1;
+                break;
+              }
+              return _context2.a(2);
+            case 1:
+              w = Math.min(v.videoWidth, 640);
+              h = Math.round(w / v.videoWidth * v.videoHeight);
+              canvas.width = w;
+              canvas.height = h;
+              ctx = canvas.getContext('2d');
+              if (ctx) {
+                _context2.n = 2;
+                break;
+              }
+              return _context2.a(2);
+            case 2:
+              ctx.drawImage(v, 0, 0, w, h);
+              img = ctx.getImageData(0, 0, w, h); // attemptBoth：兼容深色背景/反色二维码，提高真实手环小屏二维码识别率
+              code = window.jsQR(img.data, w, h, {
+                inversionAttempts: 'attemptBoth'
+              });
+              if (!(!code || !code.data)) {
+                _context2.n = 3;
+                break;
+              }
+              return _context2.a(2);
+            case 3:
+              // 识别到码后要回平台查证设备类型（约 1-2 秒），期间给出 loading，避免界面像卡住
+              uni.showLoading({
+                title: '查询设备…',
+                mask: true
+              });
+              _context2.p = 4;
+              _context2.n = 5;
+              return _this2.handleCode(code.data);
+            case 5:
+              _context2.p = 5;
+              uni.hideLoading();
+              return _context2.f(5);
+            case 6:
+              return _context2.a(2);
+          }
+        }, _callee2, null, [[4,, 5, 6]]);
+      })), 220);
     },
     stopScanLoop: function stopScanLoop() {
       if (this.scanTimer) {
@@ -407,45 +460,124 @@ var scanSeq = 0;
       // 非 H5 没有需要释放的对象，仅 reset 视觉状态即可
     },
     // 解析设备机身二维码：
-    // 1) 享相自定义格式 ankang://device?type=xxx&sn=xxx[&deviceid=xxx]
-    // 2) 通用格式（真实手环常见）：URL 带 imei/deviceid 参数、JSON、混有文本的 15 位数字等，
-    //    通过 extractDeviceId 宽容提取设备号，按血压款手环识别
+    // 1) 享相自定义格式 ankang://device?type=xxx&sn=xxx[&deviceid=xxx]，type 直接指明设备类型
+    // 2) 通用格式（真实设备机身码常见）：URL 带 imei/deviceid 参数、JSON、混有文本的 15 位数字等，
+    //    先用 extractDeviceId 宽容提取设备号，再回物联网云平台查证该设备号是否为毫米波雷达；
+    //    平台查得到 → 睡眠监测仪（雷达款），并带回真实型号/安装位置；查不到 → 回落血压款手环。
+    // 返回 Promise<boolean>：true 已识别并弹出确认层
     handleCode: function handleCode(text) {
-      if (this.result) return false;
-      var raw = String(text || '').trim();
-      if (!raw) return false;
-      var m = raw.match(/ankang:\/\/device\?type=([a-z0-9-]+)(?:&sn=([A-Za-z0-9-]+))?(?:&deviceid=([A-Za-z0-9-]+))?/i);
-      var type = null;
-      var deviceid = '';
-      if (m) {
-        type = Object(_common_mock_js__WEBPACK_IMPORTED_MODULE_11__["deviceType"])(m[1]);
-        deviceid = m[3] || '';
-      }
-      if (!type) {
-        deviceid = Object(_common_band_js__WEBPACK_IMPORTED_MODULE_12__["extractDeviceId"])(raw);
-        if (deviceid) type = Object(_common_mock_js__WEBPACK_IMPORTED_MODULE_11__["deviceType"])('band-bp');
-      }
-      if (!type) return false;
-      this.stopScanLoop();
-      this.fakeSn = m && m[2] || 'AK-' + String(100000 + Math.floor(Math.random() * 899999));
-      this.fakeDeviceId = deviceid || '86' + String(Math.floor(Math.random() * 9000000000000 + 1000000000000));
-      this.result = type;
-      return true;
+      var _this3 = this;
+      return Object(_workspace_h5build_node_modules_babel_runtime_helpers_esm_asyncToGenerator_js__WEBPACK_IMPORTED_MODULE_1__["default"])(/*#__PURE__*/Object(_workspace_h5build_node_modules_babel_runtime_helpers_esm_regenerator_js__WEBPACK_IMPORTED_MODULE_0__["default"])().m(function _callee3() {
+        var raw, m, type, deviceid, platform, _t3;
+        return Object(_workspace_h5build_node_modules_babel_runtime_helpers_esm_regenerator_js__WEBPACK_IMPORTED_MODULE_0__["default"])().w(function (_context3) {
+          while (1) switch (_context3.p = _context3.n) {
+            case 0:
+              if (!(_this3.result || _this3.verifying)) {
+                _context3.n = 1;
+                break;
+              }
+              return _context3.a(2, false);
+            case 1:
+              raw = String(text || '').trim();
+              if (raw) {
+                _context3.n = 2;
+                break;
+              }
+              return _context3.a(2, false);
+            case 2:
+              m = raw.match(/ankang:\/\/device\?type=([a-z0-9-]+)(?:&sn=([A-Za-z0-9-]+))?(?:&deviceid=([A-Za-z0-9-]+))?/i);
+              type = null;
+              deviceid = '';
+              platform = null;
+              if (m) {
+                type = Object(_common_mock_js__WEBPACK_IMPORTED_MODULE_11__["deviceType"])(m[1]);
+                deviceid = m[3] || '';
+              }
+              if (type) {
+                _context3.n = 8;
+                break;
+              }
+              deviceid = Object(_common_band_js__WEBPACK_IMPORTED_MODULE_12__["extractDeviceId"])(raw);
+              if (!deviceid) {
+                _context3.n = 8;
+                break;
+              }
+              // 回平台查证设备归属：这是区分雷达与手环的唯一可靠依据（二维码内容本身不含类型信息）
+              _this3.verifying = true;
+              _context3.p = 3;
+              _context3.n = 4;
+              return Object(_common_radar_js__WEBPACK_IMPORTED_MODULE_13__["verifyRadarDevice"])(deviceid);
+            case 4:
+              platform = _context3.v;
+              _context3.n = 6;
+              break;
+            case 5:
+              _context3.p = 5;
+              _t3 = _context3.v;
+              platform = null;
+            case 6:
+              _this3.verifying = false;
+              if (!_this3.result) {
+                _context3.n = 7;
+                break;
+              }
+              return _context3.a(2, false);
+            case 7:
+              type = Object(_common_mock_js__WEBPACK_IMPORTED_MODULE_11__["deviceType"])(platform ? 'radar' : 'band-bp');
+            case 8:
+              if (type) {
+                _context3.n = 9;
+                break;
+              }
+              return _context3.a(2, false);
+            case 9:
+              _this3.stopScanLoop();
+              _this3.fakeSn = m && m[2] || 'AK-' + String(100000 + Math.floor(Math.random() * 899999));
+              _this3.fakeDeviceId = deviceid || '86' + String(Math.floor(Math.random() * 9000000000000 + 1000000000000));
+              _this3.platformInfo = platform;
+              _this3.result = type;
+              return _context3.a(2, true);
+          }
+        }, _callee3, null, [[3, 5]]);
+      }))();
     },
     // 原型演示：生成一张设备机身二维码内容，走与相机相同的识别流程
     simulate: function simulate() {
-      if (this.result) return;
-      var type = this.types[scanSeq % this.types.length];
-      scanSeq++;
-      this.fakeSn = 'AK-' + String(100000 + Math.floor(Math.random() * 899999));
-      if (type.key === 'band-bp') {
-        var imei = '86' + String(Math.floor(Math.random() * 9000000000000 + 1000000000000));
-        this.fakeDeviceId = imei;
-        this.handleCode('ankang://device?type=' + type.key + '&sn=' + this.fakeSn + '&deviceid=' + imei);
-      } else {
-        this.fakeDeviceId = '';
-        this.handleCode('ankang://device?type=' + type.key + '&sn=' + this.fakeSn);
-      }
+      var _this4 = this;
+      return Object(_workspace_h5build_node_modules_babel_runtime_helpers_esm_asyncToGenerator_js__WEBPACK_IMPORTED_MODULE_1__["default"])(/*#__PURE__*/Object(_workspace_h5build_node_modules_babel_runtime_helpers_esm_regenerator_js__WEBPACK_IMPORTED_MODULE_0__["default"])().m(function _callee4() {
+        var type, imei;
+        return Object(_workspace_h5build_node_modules_babel_runtime_helpers_esm_regenerator_js__WEBPACK_IMPORTED_MODULE_0__["default"])().w(function (_context4) {
+          while (1) switch (_context4.n) {
+            case 0:
+              if (!(_this4.result || _this4.verifying)) {
+                _context4.n = 1;
+                break;
+              }
+              return _context4.a(2);
+            case 1:
+              type = _this4.types[scanSeq % _this4.types.length];
+              scanSeq++;
+              _this4.fakeSn = 'AK-' + String(100000 + Math.floor(Math.random() * 899999));
+              if (!(type.key === 'band-bp')) {
+                _context4.n = 3;
+                break;
+              }
+              imei = '86' + String(Math.floor(Math.random() * 9000000000000 + 1000000000000));
+              _this4.fakeDeviceId = imei;
+              _context4.n = 2;
+              return _this4.handleCode('ankang://device?type=' + type.key + '&sn=' + _this4.fakeSn + '&deviceid=' + imei);
+            case 2:
+              _context4.n = 4;
+              break;
+            case 3:
+              _this4.fakeDeviceId = '';
+              _context4.n = 4;
+              return _this4.handleCode('ankang://device?type=' + type.key + '&sn=' + _this4.fakeSn);
+            case 4:
+              return _context4.a(2);
+          }
+        }, _callee4);
+      }))();
     },
     openManual: function openManual() {
       this.manualVisible = true;
@@ -453,57 +585,127 @@ var scanSeq = 0;
     },
     // 手动输入的设备号走与扫码相同的解析/绑定流程
     confirmManual: function confirmManual() {
-      var raw = String(this.manualInput || '').trim();
-      if (!raw) {
-        uni.showToast({
-          title: '请输入设备号',
-          icon: 'none'
-        });
-        return;
-      }
-      this.manualVisible = false;
-      if (!this.handleCode(raw)) {
-        uni.showToast({
-          title: '未识别到有效设备号，请检查后重试',
-          icon: 'none'
-        });
-      }
+      var _this5 = this;
+      return Object(_workspace_h5build_node_modules_babel_runtime_helpers_esm_asyncToGenerator_js__WEBPACK_IMPORTED_MODULE_1__["default"])(/*#__PURE__*/Object(_workspace_h5build_node_modules_babel_runtime_helpers_esm_regenerator_js__WEBPACK_IMPORTED_MODULE_0__["default"])().m(function _callee5() {
+        var raw, ok;
+        return Object(_workspace_h5build_node_modules_babel_runtime_helpers_esm_regenerator_js__WEBPACK_IMPORTED_MODULE_0__["default"])().w(function (_context5) {
+          while (1) switch (_context5.p = _context5.n) {
+            case 0:
+              raw = String(_this5.manualInput || '').trim();
+              if (raw) {
+                _context5.n = 1;
+                break;
+              }
+              uni.showToast({
+                title: '请输入设备号',
+                icon: 'none'
+              });
+              return _context5.a(2);
+            case 1:
+              _this5.manualVisible = false;
+              uni.showLoading({
+                title: '查询设备…',
+                mask: true
+              });
+              ok = false;
+              _context5.p = 2;
+              _context5.n = 3;
+              return _this5.handleCode(raw);
+            case 3:
+              ok = _context5.v;
+            case 4:
+              _context5.p = 4;
+              uni.hideLoading();
+              return _context5.f(4);
+            case 5:
+              if (!ok) {
+                uni.showToast({
+                  title: '未识别到有效设备号，请检查后重试',
+                  icon: 'none'
+                });
+              }
+            case 6:
+              return _context5.a(2);
+          }
+        }, _callee5, null, [[2,, 4, 5]]);
+      }))();
     },
     confirm: function confirm() {
-      var _this3 = this;
-      return Object(_workspace_h5build_node_modules_babel_runtime_helpers_esm_asyncToGenerator_js__WEBPACK_IMPORTED_MODULE_1__["default"])(/*#__PURE__*/Object(_workspace_h5build_node_modules_babel_runtime_helpers_esm_regenerator_js__WEBPACK_IMPORTED_MODULE_0__["default"])().m(function _callee2() {
-        var type, dev;
-        return Object(_workspace_h5build_node_modules_babel_runtime_helpers_esm_regenerator_js__WEBPACK_IMPORTED_MODULE_0__["default"])().w(function (_context2) {
-          while (1) switch (_context2.n) {
+      var _this6 = this;
+      return Object(_workspace_h5build_node_modules_babel_runtime_helpers_esm_asyncToGenerator_js__WEBPACK_IMPORTED_MODULE_1__["default"])(/*#__PURE__*/Object(_workspace_h5build_node_modules_babel_runtime_helpers_esm_regenerator_js__WEBPACK_IMPORTED_MODULE_0__["default"])().m(function _callee6() {
+        var type, deviceid, platform, rec;
+        return Object(_workspace_h5build_node_modules_babel_runtime_helpers_esm_regenerator_js__WEBPACK_IMPORTED_MODULE_0__["default"])().w(function (_context6) {
+          while (1) switch (_context6.n) {
             case 0:
-              type = _this3.result;
-              _this3.result = null;
-              _context2.n = 1;
-              return _this3.$store.dispatch('addDevice', {
-                typeKey: type.key,
-                sn: _this3.fakeSn,
-                deviceid: _this3.fakeDeviceId
+              type = _this6.result;
+              deviceid = _this6.fakeDeviceId;
+              platform = _this6.platformInfo;
+              _this6.result = null;
+              _this6.platformInfo = null;
+
+              // 雷达款：先向对接后端注册（后端会再回平台核验一次），注册失败则不入库，避免出现"绑了但永远没数据"的僵尸设备
+              if (!(type.key === 'radar')) {
+                _context6.n = 2;
+                break;
+              }
+              uni.showLoading({
+                title: '正在绑定…',
+                mask: true
               });
+              _context6.n = 1;
+              return Object(_common_radar_js__WEBPACK_IMPORTED_MODULE_13__["bindRadarDevice"])(deviceid, type.name);
             case 1:
-              dev = _context2.v;
-              // 血压款手环：注册到对接后端，进入手环状态页
-              if (type.key === 'band-bp' && _this3.fakeDeviceId) {
-                Object(_common_band_js__WEBPACK_IMPORTED_MODULE_12__["bindBandDevice"])(_this3.fakeDeviceId, type.name);
+              rec = _context6.v;
+              uni.hideLoading();
+              if (rec) {
+                _context6.n = 2;
+                break;
+              }
+              uni.showModal({
+                title: '绑定失败',
+                content: '云平台未能确认该设备（设备号 ' + deviceid + '）。请确认设备已在平台注册并联网后重试。',
+                showCancel: false
+              });
+              return _context6.a(2);
+            case 2:
+              _context6.n = 3;
+              return _this6.$store.dispatch('addDevice', {
+                typeKey: type.key,
+                sn: _this6.fakeSn,
+                deviceid: deviceid,
+                // 平台回传的真实型号/安装位置优先于内置默认值
+                model: platform && platform.model || undefined,
+                site: platform && platform.site || undefined
+              });
+            case 3:
+              // 血压款手环：注册到对接后端
+              if (type.key === 'band-bp' && deviceid) {
+                Object(_common_band_js__WEBPACK_IMPORTED_MODULE_12__["bindBandDevice"])(deviceid, type.name);
               }
               uni.showToast({
                 title: '设备添加成功',
                 icon: 'success'
               });
               setTimeout(function () {
-                // 添加完成后回到设备列表 tab（多设备都在同一个入口），不再直接跳详情
+                // 从对话页等普通页面进来的，绑定完原路返回，保住用户此前的上下文；
+                // 从设备列表 tab 进来（或无来源标记）的，回设备列表查看新设备
+                if (_this6.from && _this6.from !== 'device') {
+                  var pages = getCurrentPages ? getCurrentPages() : [];
+                  if (pages && pages.length > 1) {
+                    uni.navigateBack({
+                      delta: 1
+                    });
+                    return;
+                  }
+                }
                 uni.switchTab({
                   url: '/pages/device/device'
                 });
               }, 600);
-            case 2:
-              return _context2.a(2);
+            case 4:
+              return _context6.a(2);
           }
-        }, _callee2);
+        }, _callee6);
       }))();
     }
   }
@@ -666,7 +868,9 @@ var render = function () {
                     _vm._v("手动输入设备号"),
                   ]),
                   _c("v-uni-text", { staticClass: "sheet__d" }, [
-                    _vm._v("输入手环机身上的 IMEI 或二维码中的设备编号"),
+                    _vm._v(
+                      "输入手环或睡眠监测仪机身上的 IMEI / 二维码中的设备编号"
+                    ),
                   ]),
                   _c("v-uni-input", {
                     staticClass: "sheet__input",
@@ -778,7 +982,7 @@ var render = function () {
                             _vm._v(_vm._s(_vm.result.name)),
                           ]),
                           _c("v-uni-text", { staticClass: "sheet__dev-sn" }, [
-                            _vm._v(_vm._s(_vm.result.model)),
+                            _vm._v(_vm._s(_vm.shownModel)),
                           ]),
                           _c("v-uni-text", { staticClass: "sheet__dev-sn" }, [
                             _vm._v("SN：" + _vm._s(_vm.fakeSn)),
@@ -791,6 +995,17 @@ var render = function () {
                                     "sheet__dev-sn sheet__dev-sn--id",
                                 },
                                 [_vm._v("设备号：" + _vm._s(_vm.fakeDeviceId))]
+                              )
+                            : _vm._e(),
+                          _vm.platformInfo && _vm.platformInfo.site
+                            ? _c(
+                                "v-uni-text",
+                                { staticClass: "sheet__dev-sn" },
+                                [
+                                  _vm._v(
+                                    "安装位置：" + _vm._s(_vm.platformInfo.site)
+                                  ),
+                                ]
                               )
                             : _vm._e(),
                         ],
@@ -854,6 +1069,299 @@ var staticRenderFns = []
 render._withStripped = true
 
 
+
+/***/ }),
+
+/***/ "gMwk":
+/*!*****************************!*\
+  !*** ./src/common/radar.js ***!
+  \*****************************/
+/*! exports provided: lastRadarError, getLastRadarError, fetchRadarStatus, pingRadarPlatform, verifyRadarDevice, listRadarDevices, fetchRadarRecord, fetchRadarLatest, fetchRadarLatestBatch, fetchRadarAttributes, bindRadarDevice, unbindRadarDevice, RADAR_STATE_TEXT, radarStateText, radarInBed, respLevel */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "lastRadarError", function() { return lastRadarError; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "getLastRadarError", function() { return getLastRadarError; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "fetchRadarStatus", function() { return fetchRadarStatus; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "pingRadarPlatform", function() { return pingRadarPlatform; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "verifyRadarDevice", function() { return verifyRadarDevice; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "listRadarDevices", function() { return listRadarDevices; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "fetchRadarRecord", function() { return fetchRadarRecord; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "fetchRadarLatest", function() { return fetchRadarLatest; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "fetchRadarLatestBatch", function() { return fetchRadarLatestBatch; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "fetchRadarAttributes", function() { return fetchRadarAttributes; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "bindRadarDevice", function() { return bindRadarDevice; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "unbindRadarDevice", function() { return unbindRadarDevice; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "RADAR_STATE_TEXT", function() { return RADAR_STATE_TEXT; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "radarStateText", function() { return radarStateText; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "radarInBed", function() { return radarInBed; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "respLevel", function() { return respLevel; });
+/* harmony import */ var _workspace_h5build_node_modules_babel_runtime_helpers_esm_slicedToArray_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./node_modules/@babel/runtime/helpers/esm/slicedToArray.js */ "ODXe");
+/* harmony import */ var core_js_modules_es_array_filter_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! core-js/modules/es.array.filter.js */ "TeQF");
+/* harmony import */ var core_js_modules_es_array_filter_js__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_array_filter_js__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var core_js_modules_es_array_index_of_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! core-js/modules/es.array.index-of.js */ "yXV3");
+/* harmony import */ var core_js_modules_es_array_index_of_js__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_array_index_of_js__WEBPACK_IMPORTED_MODULE_2__);
+/* harmony import */ var core_js_modules_es_array_map_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! core-js/modules/es.array.map.js */ "2B1R");
+/* harmony import */ var core_js_modules_es_array_map_js__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_array_map_js__WEBPACK_IMPORTED_MODULE_3__);
+/* harmony import */ var core_js_modules_es_date_to_json_js__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! core-js/modules/es.date.to-json.js */ "9LPj");
+/* harmony import */ var core_js_modules_es_date_to_json_js__WEBPACK_IMPORTED_MODULE_4___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_date_to_json_js__WEBPACK_IMPORTED_MODULE_4__);
+/* harmony import */ var core_js_modules_es_iterator_constructor_js__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! core-js/modules/es.iterator.constructor.js */ "6fVz");
+/* harmony import */ var core_js_modules_es_iterator_constructor_js__WEBPACK_IMPORTED_MODULE_5___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_iterator_constructor_js__WEBPACK_IMPORTED_MODULE_5__);
+/* harmony import */ var core_js_modules_es_iterator_filter_js__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! core-js/modules/es.iterator.filter.js */ "kQ2C");
+/* harmony import */ var core_js_modules_es_iterator_filter_js__WEBPACK_IMPORTED_MODULE_6___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_iterator_filter_js__WEBPACK_IMPORTED_MODULE_6__);
+/* harmony import */ var core_js_modules_es_iterator_for_each_js__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! core-js/modules/es.iterator.for-each.js */ "fVRX");
+/* harmony import */ var core_js_modules_es_iterator_for_each_js__WEBPACK_IMPORTED_MODULE_7___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_iterator_for_each_js__WEBPACK_IMPORTED_MODULE_7__);
+/* harmony import */ var core_js_modules_es_iterator_map_js__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! core-js/modules/es.iterator.map.js */ "q0NK");
+/* harmony import */ var core_js_modules_es_iterator_map_js__WEBPACK_IMPORTED_MODULE_8___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_iterator_map_js__WEBPACK_IMPORTED_MODULE_8__);
+/* harmony import */ var core_js_modules_es_json_stringify_js__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! core-js/modules/es.json.stringify.js */ "6cQw");
+/* harmony import */ var core_js_modules_es_json_stringify_js__WEBPACK_IMPORTED_MODULE_9___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_json_stringify_js__WEBPACK_IMPORTED_MODULE_9__);
+/* harmony import */ var core_js_modules_es_number_constructor_js__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! core-js/modules/es.number.constructor.js */ "qePV");
+/* harmony import */ var core_js_modules_es_number_constructor_js__WEBPACK_IMPORTED_MODULE_10___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_number_constructor_js__WEBPACK_IMPORTED_MODULE_10__);
+/* harmony import */ var core_js_modules_es_object_to_string_js__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! core-js/modules/es.object.to-string.js */ "07d7");
+/* harmony import */ var core_js_modules_es_object_to_string_js__WEBPACK_IMPORTED_MODULE_11___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_object_to_string_js__WEBPACK_IMPORTED_MODULE_11__);
+/* harmony import */ var core_js_modules_es_regexp_exec_js__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! core-js/modules/es.regexp.exec.js */ "rB9j");
+/* harmony import */ var core_js_modules_es_regexp_exec_js__WEBPACK_IMPORTED_MODULE_12___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_regexp_exec_js__WEBPACK_IMPORTED_MODULE_12__);
+/* harmony import */ var core_js_modules_es_regexp_test_js__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(/*! core-js/modules/es.regexp.test.js */ "ALS0");
+/* harmony import */ var core_js_modules_es_regexp_test_js__WEBPACK_IMPORTED_MODULE_13___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_regexp_test_js__WEBPACK_IMPORTED_MODULE_13__);
+/* harmony import */ var core_js_modules_es_string_iterator_js__WEBPACK_IMPORTED_MODULE_14__ = __webpack_require__(/*! core-js/modules/es.string.iterator.js */ "PKPk");
+/* harmony import */ var core_js_modules_es_string_iterator_js__WEBPACK_IMPORTED_MODULE_14___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_string_iterator_js__WEBPACK_IMPORTED_MODULE_14__);
+/* harmony import */ var core_js_modules_es_string_trim_js__WEBPACK_IMPORTED_MODULE_15__ = __webpack_require__(/*! core-js/modules/es.string.trim.js */ "SYor");
+/* harmony import */ var core_js_modules_es_string_trim_js__WEBPACK_IMPORTED_MODULE_15___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_string_trim_js__WEBPACK_IMPORTED_MODULE_15__);
+/* harmony import */ var core_js_modules_web_dom_collections_for_each_js__WEBPACK_IMPORTED_MODULE_16__ = __webpack_require__(/*! core-js/modules/web.dom-collections.for-each.js */ "FZtP");
+/* harmony import */ var core_js_modules_web_dom_collections_for_each_js__WEBPACK_IMPORTED_MODULE_16___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_web_dom_collections_for_each_js__WEBPACK_IMPORTED_MODULE_16__);
+/* harmony import */ var core_js_modules_web_dom_collections_iterator_js__WEBPACK_IMPORTED_MODULE_17__ = __webpack_require__(/*! core-js/modules/web.dom-collections.iterator.js */ "3bBZ");
+/* harmony import */ var core_js_modules_web_dom_collections_iterator_js__WEBPACK_IMPORTED_MODULE_17___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_web_dom_collections_iterator_js__WEBPACK_IMPORTED_MODULE_17__);
+/* harmony import */ var _band_js__WEBPACK_IMPORTED_MODULE_18__ = __webpack_require__(/*! ./band.js */ "YNKN");
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/**
+ * 睡眠监测仪（毫米波雷达款）—— 智慧物联网云平台数据桥接
+ *
+ * 后端接收服务：/workspace/band-server/radar.js（挂在 band-server 上，默认端口 8091）
+ *  - 平台鉴权：appKey + timestamp + signature=MD5(path+timestamp+appSecret)
+ *  - 实时数据：MQTT 订阅 topic 推送 → 后端归一化 → SSE kind='radar' 下发前端
+ *  - /api/radar/* 供 H5 校验设备、绑定/解绑、查询最新呼吸/体动/离床
+ *
+ * 本模块只展示后端真实上报的数据，未收到数据时返回 null，由页面显示占位符（--）。
+ * 地址解析复用 band.js 的 bandApi()：雷达接口与手环接口同源同端口。
+ */
+
+
+var lastRadarError = null;
+function getLastRadarError() {
+  return lastRadarError;
+}
+function _logReq(tag, url, resOrErr, extra) {
+  try {
+    var isErr = resOrErr && resOrErr.__fail || resOrErr && typeof resOrErr.statusCode === 'number' && (resOrErr.statusCode < 200 || resOrErr.statusCode >= 300);
+    var code = resOrErr && typeof resOrErr.statusCode === 'number' ? resOrErr.statusCode : resOrErr && resOrErr.__fail ? 'FAIL' : '?';
+    var busCode = resOrErr && resOrErr.data && typeof resOrErr.data.code !== 'undefined' ? resOrErr.data.code : null;
+    if (isErr || busCode != null && busCode !== 0) {
+      var msg = '[radar][' + tag + '] 失败 HTTP=' + code + ' 业务=' + busCode + '  URL=' + url + (extra ? '  EXTRA=' + JSON.stringify(extra) : '');
+      if (typeof console !== 'undefined' && console.error) console.error(msg, resOrErr || '');
+      lastRadarError = {
+        at: Date.now(),
+        tag: tag,
+        url: url,
+        http: code,
+        bus: busCode,
+        extra: extra || null
+      };
+    } else if (typeof console !== 'undefined' && console.debug) {
+      console.debug('[radar][' + tag + '] OK HTTP=' + code + ' 业务=' + busCode + '  ' + url, extra || '');
+    }
+  } catch (e) {/* ignore */}
+}
+
+// 统一请求封装：失败一律 resolve(fallback)，绝不 reject，也不弹 toast（会被轮询高频调用）
+function _req(tag, path, method, data, fallback) {
+  return new Promise(function (resolve) {
+    var url = Object(_band_js__WEBPACK_IMPORTED_MODULE_18__["bandApi"])(path);
+    uni.request({
+      url: url,
+      method: method || 'GET',
+      data: data || undefined,
+      timeout: 20000,
+      success: function success(res) {
+        var ok = res.statusCode === 200 && res.data && res.data.code === 0;
+        _logReq(tag, url, res, ok ? null : {
+          message: res.data && res.data.message || null
+        });
+        resolve(ok ? res.data.data : fallback);
+      },
+      fail: function fail(err) {
+        _logReq(tag, url, Object.assign({
+          __fail: true
+        }, err || {}));
+        resolve(fallback);
+      }
+    });
+  });
+}
+
+/* ---------------- 通道自检 ---------------- */
+
+// 平台通道状态：{ company, appKey, apiBase, modelName, mq: { state, error, msgCount... }, devices }
+// mq.state: idle / connecting / connected / reconnecting / offline / error
+function fetchRadarStatus() {
+  return _req('GET /api/radar/status', '/api/radar/status?_t=' + Date.now(), 'GET', null, null);
+}
+
+// 平台连通性 + 签名校验（调型号列表）。返回 { ok, models } 或 null
+function pingRadarPlatform() {
+  return _req('GET /api/radar/ping', '/api/radar/ping?_t=' + Date.now(), 'GET', null, null);
+}
+
+/* ---------------- 设备查询 ---------------- */
+
+// 扫码后绑定前置校验：设备号是否真实存在于平台
+// 成功返回 { deviceImei, deviceId, model, typeName, state, stateText, companyName, site }
+// 平台查不到 / 网络失败均返回 null
+function verifyRadarDevice(deviceid) {
+  if (!deviceid) return Promise.resolve(null);
+  return _req('GET /api/radar/verify/:imei', '/api/radar/verify/' + encodeURIComponent(deviceid) + '?_t=' + Date.now(), 'GET', null, null);
+}
+
+// 本地已绑定的雷达设备列表（不含 history）
+function listRadarDevices() {
+  return _req('GET /api/radar/devices', '/api/radar/devices?_t=' + Date.now(), 'GET', null, []);
+}
+
+// 单台雷达完整记录：{ deviceid, name, model, latest, attrs, state, stateText, site, lastSeen }
+// refresh=true 时后端会回平台同步一次基础信息（受每秒 1 次限流保护，略慢）
+function fetchRadarRecord(deviceid, refresh) {
+  if (!deviceid) return Promise.resolve(null);
+  var path = '/api/radar/devices/' + encodeURIComponent(deviceid) + '?_t=' + Date.now();
+  if (refresh) path += '&refresh=1';
+  return _req('GET /api/radar/devices/:imei', path, 'GET', null, null);
+}
+
+// 只取最新快照（给设备列表页用）
+function fetchRadarLatest(deviceid) {
+  return fetchRadarRecord(deviceid).then(function (rec) {
+    return rec && rec.latest ? rec.latest : null;
+  });
+}
+
+// 批量拉取多台雷达最新快照，返回 { [deviceid]: latest | null }
+function fetchRadarLatestBatch(deviceids) {
+  var ids = Array.isArray(deviceids) ? deviceids.filter(Boolean) : [];
+  if (ids.length === 0) return Promise.resolve({});
+  return Promise.all(ids.map(function (id) {
+    return fetchRadarLatest(id).then(function (v) {
+      return [id, v];
+    });
+  })).then(function (pairs) {
+    var out = {};
+    pairs.forEach(function (_ref) {
+      var _ref2 = Object(_workspace_h5build_node_modules_babel_runtime_helpers_esm_slicedToArray_js__WEBPACK_IMPORTED_MODULE_0__["default"])(_ref, 2),
+        id = _ref2[0],
+        v = _ref2[1];
+      out[id] = v;
+    });
+    return out;
+  });
+}
+
+// 型号属性表（日后拿到真实 deviceModelName 后校准字段映射用）
+function fetchRadarAttributes(model) {
+  var m = String(model || '').trim();
+  if (!m) return Promise.resolve(null);
+  return _req('GET /api/radar/attributes', '/api/radar/attributes?model=' + encodeURIComponent(m), 'GET', null, null);
+}
+
+/* ---------------- 绑定 / 解绑 ---------------- */
+
+// 绑定雷达设备：后端先向平台校验设备真实存在，再落本地库并广播 device_bind
+// 返回设备记录，失败返回 null（错误详情见 getLastRadarError()）
+function bindRadarDevice(deviceid, name) {
+  if (!deviceid) return Promise.resolve(null);
+  return _req('POST /api/radar/devices', '/api/radar/devices', 'POST', {
+    deviceid: deviceid,
+    name: name || ''
+  }, null);
+}
+
+// 解绑：后端打 markedUnbound 标记而非真删，保住历史数据
+function unbindRadarDevice(deviceid) {
+  if (!deviceid) return Promise.resolve(false);
+  return _req('DELETE /api/radar/devices/:imei', '/api/radar/devices/' + encodeURIComponent(deviceid), 'DELETE', null, null).then(function (d) {
+    return !!d;
+  });
+}
+
+/* ---------------- 展示辅助 ---------------- */
+
+// 平台设备状态码 → 中文
+var RADAR_STATE_TEXT = {
+  0: '正常',
+  1: '故障',
+  2: '报警',
+  3: '手动报警',
+  4: '离线',
+  5: '待删除',
+  6: '停用',
+  7: '未激活'
+};
+function radarStateText(state) {
+  if (state == null || state === '') return '';
+  return RADAR_STATE_TEXT[Number(state)] || String(state);
+}
+
+// 在床状态判定：latest.inBed 由后端按属性名关键词归一（1/0 或 有人/无人）
+// 返回 true 在床 / false 离床 / null 未知
+function radarInBed(latest) {
+  if (!latest) return null;
+  var v = latest.inBed;
+  if (v == null || v === '') return null;
+  if (typeof v === 'number') return v > 0;
+  var s = String(v);
+  if (/^(1|true|yes)$/i.test(s) || s.indexOf('有人') >= 0 || s.indexOf('在床') >= 0) return true;
+  if (/^(0|false|no)$/i.test(s) || s.indexOf('无人') >= 0 || s.indexOf('离床') >= 0) return false;
+  return null;
+}
+
+// 呼吸频率评估（成人静息 12-20 次/分）：返回 { level, text }
+function respLevel(respRate) {
+  var v = Number(respRate);
+  if (!isFinite(v) || v <= 0) return {
+    level: 'unknown',
+    text: ''
+  };
+  if (v < 12) return {
+    level: 'low',
+    text: '偏慢'
+  };
+  if (v <= 20) return {
+    level: 'normal',
+    text: '正常'
+  };
+  if (v <= 24) return {
+    level: 'high',
+    text: '偏快'
+  };
+  return {
+    level: 'danger',
+    text: '过快'
+  };
+}
 
 /***/ }),
 

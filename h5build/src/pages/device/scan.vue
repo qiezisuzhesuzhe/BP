@@ -29,7 +29,7 @@
       <view class="sheet__mask" @tap="manualVisible = false"></view>
       <view class="sheet__card">
         <text class="sheet__t">手动输入设备号</text>
-        <text class="sheet__d">输入手环机身上的 IMEI 或二维码中的设备编号</text>
+        <text class="sheet__d">输入手环或睡眠监测仪机身上的 IMEI / 二维码中的设备编号</text>
         <input
           class="sheet__input"
           v-model="manualInput"
@@ -59,9 +59,10 @@
           </view>
           <view class="sheet__dev-main">
             <text class="sheet__dev-name">{{ result.name }}</text>
-            <text class="sheet__dev-sn">{{ result.model }}</text>
+            <text class="sheet__dev-sn">{{ shownModel }}</text>
             <text class="sheet__dev-sn">SN：{{ fakeSn }}</text>
             <text v-if="fakeDeviceId" class="sheet__dev-sn sheet__dev-sn--id">设备号：{{ fakeDeviceId }}</text>
+            <text v-if="platformInfo && platformInfo.site" class="sheet__dev-sn">安装位置：{{ platformInfo.site }}</text>
           </view>
         </view>
         <view class="sheet__btns">
@@ -78,6 +79,7 @@
 <script>
 import { DEVICE_TYPES, deviceType } from '@/common/mock.js'
 import { bindBandDevice, extractDeviceId } from '@/common/band.js'
+import { verifyRadarDevice, bindRadarDevice } from '@/common/radar.js'
 
 let scanSeq = 0
 
@@ -90,6 +92,12 @@ export default {
       fakeDeviceId: '',
       manualVisible: false,
       manualInput: '',
+      // 绑定成功后的返回目标：'back' 返回来源页（如对话页），'device' 回设备列表 tab
+      from: '',
+      // 平台查证中（雷达设备号需回云平台核验，耗时约 1-2 秒）
+      verifying: false,
+      // 平台核验拿到的设备信息（型号、安装位置、状态），用于确认弹层展示真实信息
+      platformInfo: null,
       // 相机状态：idle 准备中 / starting 启动中 / on 已开启 / fail 不可用
       camState: 'idle',
       stream: null,
@@ -107,7 +115,17 @@ export default {
         fail: '未检测到可用相机，可点击下方按钮模拟识别'
       }
       return tips[this.camState] || ''
+    },
+    // 确认弹层里的型号：平台查得的真实型号优先于内置默认型号
+    shownModel() {
+      if (this.platformInfo && this.platformInfo.model) return this.platformInfo.model
+      return (this.result && this.result.model) || ''
     }
+  },
+  onLoad(options) {
+    // from 由跳转方传入（如对话页 '立即绑定' 传 from=chat），绑定成功后原路返回；
+    // 缺省或来自设备列表 tab 时统一回设备列表
+    this.from = (options && options.from) || ''
   },
   onShow() {
     this.startCamera()
@@ -193,12 +211,19 @@ export default {
         this.camState = 'on'
         // uni.scanCode 扫码成功后直接解析内容
         if (res && (res.result || res.charSet)) {
-          const ok = this.handleCode(res.result || '')
+          // handleCode 内含回平台查证，是异步的，必须 await，否则拿到的是 Promise（恒真）会漏掉失败提示
+          uni.showLoading({ title: '查询设备…', mask: true })
+          let ok = false
+          try {
+            ok = await this.handleCode(res.result || '')
+          } finally {
+            uni.hideLoading()
+          }
           if (!ok) {
             // 扫码内容无法识别为设备码，给出提示
             uni.showModal({
               title: '无法识别二维码',
-              content: '请确认二维码为享相手环机身二维码，或选择"手动输入设备号"。',
+              content: '请确认二维码为享相手环或睡眠监测仪机身上的二维码，或选择"手动输入设备号"。',
               showCancel: false
             })
           }
@@ -219,9 +244,9 @@ export default {
       this.stopScanLoop()
       const canvas = document.createElement('canvas')
       this.canvasEl = canvas
-      this.scanTimer = setInterval(() => {
+      this.scanTimer = setInterval(async () => {
         const v = this.videoEl
-        if (!v || !v.videoWidth || this.result) return
+        if (!v || !v.videoWidth || this.result || this.verifying) return
         const w = Math.min(v.videoWidth, 640)
         const h = Math.round((w / v.videoWidth) * v.videoHeight)
         canvas.width = w
@@ -232,7 +257,14 @@ export default {
         const img = ctx.getImageData(0, 0, w, h)
         // attemptBoth：兼容深色背景/反色二维码，提高真实手环小屏二维码识别率
         const code = window.jsQR(img.data, w, h, { inversionAttempts: 'attemptBoth' })
-        if (code && code.data) this.handleCode(code.data)
+        if (!code || !code.data) return
+        // 识别到码后要回平台查证设备类型（约 1-2 秒），期间给出 loading，避免界面像卡住
+        uni.showLoading({ title: '查询设备…', mask: true })
+        try {
+          await this.handleCode(code.data)
+        } finally {
+          uni.hideLoading()
+        }
       }, 220)
     },
     stopScanLoop() {
@@ -269,44 +301,59 @@ export default {
       // #endif
     },
     // 解析设备机身二维码：
-    // 1) 享相自定义格式 ankang://device?type=xxx&sn=xxx[&deviceid=xxx]
-    // 2) 通用格式（真实手环常见）：URL 带 imei/deviceid 参数、JSON、混有文本的 15 位数字等，
-    //    通过 extractDeviceId 宽容提取设备号，按血压款手环识别
-    handleCode(text) {
-      if (this.result) return false
+    // 1) 享相自定义格式 ankang://device?type=xxx&sn=xxx[&deviceid=xxx]，type 直接指明设备类型
+    // 2) 通用格式（真实设备机身码常见）：URL 带 imei/deviceid 参数、JSON、混有文本的 15 位数字等，
+    //    先用 extractDeviceId 宽容提取设备号，再回物联网云平台查证该设备号是否为毫米波雷达；
+    //    平台查得到 → 睡眠监测仪（雷达款），并带回真实型号/安装位置；查不到 → 回落血压款手环。
+    // 返回 Promise<boolean>：true 已识别并弹出确认层
+    async handleCode(text) {
+      if (this.result || this.verifying) return false
       const raw = String(text || '').trim()
       if (!raw) return false
       const m = raw.match(/ankang:\/\/device\?type=([a-z0-9-]+)(?:&sn=([A-Za-z0-9-]+))?(?:&deviceid=([A-Za-z0-9-]+))?/i)
       let type = null
       let deviceid = ''
+      let platform = null
       if (m) {
         type = deviceType(m[1])
         deviceid = m[3] || ''
       }
       if (!type) {
         deviceid = extractDeviceId(raw)
-        if (deviceid) type = deviceType('band-bp')
+        if (deviceid) {
+          // 回平台查证设备归属：这是区分雷达与手环的唯一可靠依据（二维码内容本身不含类型信息）
+          this.verifying = true
+          try {
+            platform = await verifyRadarDevice(deviceid)
+          } catch (e) {
+            platform = null
+          }
+          this.verifying = false
+          if (this.result) return false
+          type = deviceType(platform ? 'radar' : 'band-bp')
+        }
       }
       if (!type) return false
       this.stopScanLoop()
       this.fakeSn = (m && m[2]) || 'AK-' + String(100000 + Math.floor(Math.random() * 899999))
       this.fakeDeviceId = deviceid || '86' + String(Math.floor(Math.random() * 9000000000000 + 1000000000000))
+      this.platformInfo = platform
       this.result = type
       return true
     },
     // 原型演示：生成一张设备机身二维码内容，走与相机相同的识别流程
-    simulate() {
-      if (this.result) return
+    async simulate() {
+      if (this.result || this.verifying) return
       const type = this.types[scanSeq % this.types.length]
       scanSeq++
       this.fakeSn = 'AK-' + String(100000 + Math.floor(Math.random() * 899999))
       if (type.key === 'band-bp') {
         const imei = '86' + String(Math.floor(Math.random() * 9000000000000 + 1000000000000))
         this.fakeDeviceId = imei
-        this.handleCode('ankang://device?type=' + type.key + '&sn=' + this.fakeSn + '&deviceid=' + imei)
+        await this.handleCode('ankang://device?type=' + type.key + '&sn=' + this.fakeSn + '&deviceid=' + imei)
       } else {
         this.fakeDeviceId = ''
-        this.handleCode('ankang://device?type=' + type.key + '&sn=' + this.fakeSn)
+        await this.handleCode('ankang://device?type=' + type.key + '&sn=' + this.fakeSn)
       }
     },
     openManual() {
@@ -314,32 +361,71 @@ export default {
       this.manualInput = ''
     },
     // 手动输入的设备号走与扫码相同的解析/绑定流程
-    confirmManual() {
+    async confirmManual() {
       const raw = String(this.manualInput || '').trim()
       if (!raw) {
         uni.showToast({ title: '请输入设备号', icon: 'none' })
         return
       }
       this.manualVisible = false
-      if (!this.handleCode(raw)) {
+      uni.showLoading({ title: '查询设备…', mask: true })
+      let ok = false
+      try {
+        ok = await this.handleCode(raw)
+      } finally {
+        uni.hideLoading()
+      }
+      if (!ok) {
         uni.showToast({ title: '未识别到有效设备号，请检查后重试', icon: 'none' })
       }
     },
     async confirm() {
       const type = this.result
+      const deviceid = this.fakeDeviceId
+      const platform = this.platformInfo
       this.result = null
-      const dev = await this.$store.dispatch('addDevice', {
+      this.platformInfo = null
+
+      // 雷达款：先向对接后端注册（后端会再回平台核验一次），注册失败则不入库，避免出现"绑了但永远没数据"的僵尸设备
+      if (type.key === 'radar') {
+        uni.showLoading({ title: '正在绑定…', mask: true })
+        const rec = await bindRadarDevice(deviceid, type.name)
+        uni.hideLoading()
+        if (!rec) {
+          uni.showModal({
+            title: '绑定失败',
+            content: '云平台未能确认该设备（设备号 ' + deviceid + '）。请确认设备已在平台注册并联网后重试。',
+            showCancel: false
+          })
+          return
+        }
+      }
+
+      await this.$store.dispatch('addDevice', {
         typeKey: type.key,
         sn: this.fakeSn,
-        deviceid: this.fakeDeviceId
+        deviceid: deviceid,
+        // 平台回传的真实型号/安装位置优先于内置默认值
+        model: (platform && platform.model) || undefined,
+        site: (platform && platform.site) || undefined
       })
-      // 血压款手环：注册到对接后端，进入手环状态页
-      if (type.key === 'band-bp' && this.fakeDeviceId) {
-        bindBandDevice(this.fakeDeviceId, type.name)
+
+      // 血压款手环：注册到对接后端
+      if (type.key === 'band-bp' && deviceid) {
+        bindBandDevice(deviceid, type.name)
       }
+
       uni.showToast({ title: '设备添加成功', icon: 'success' })
       setTimeout(() => {
-        // 添加完成后回到设备列表 tab（多设备都在同一个入口），不再直接跳详情
+        // 从对话页等普通页面进来的，绑定完原路返回，保住用户此前的上下文；
+        // 从设备列表 tab 进来（或无来源标记）的，回设备列表查看新设备
+        if (this.from && this.from !== 'device') {
+          const pages = getCurrentPages ? getCurrentPages() : []
+          if (pages && pages.length > 1) {
+            uni.navigateBack({ delta: 1 })
+            return
+          }
+        }
         uni.switchTab({
           url: '/pages/device/device'
         })

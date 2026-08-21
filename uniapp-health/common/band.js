@@ -400,7 +400,8 @@ export function subscribeEvents({ deviceid, kinds, onOpen, onClose, onEvent, onE
         }
       }
       // 同时监听有名字的事件（后端 event: 对应事件名）
-      const KINDS_EXPECTED = ['pb','alarm','sos','calllog','deviceinfo','status','device_bind','device_unbind']
+      // radar：睡眠监测仪（毫米波雷达款）实时数据，由 band-server/radar.js 经 MQTT 归一化后广播
+      const KINDS_EXPECTED = ['pb','alarm','sos','calllog','deviceinfo','status','device_bind','device_unbind','radar']
       KINDS_EXPECTED.forEach((k) => {
         es.addEventListener(k, (ev) => {
           try {

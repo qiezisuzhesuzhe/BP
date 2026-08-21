@@ -32,7 +32,7 @@
       </view>
     </view>
 
-    <!-- 雷达款：五项核心指标，手环风格 vital 卡布局，每项带最新数据时间 -->
+    <!-- 雷达款：五项核心指标，手环风格 vital 卡布局 -->
     <block v-if="isRadar">
       <view class="wrap">
         <view class="vital">
@@ -59,8 +59,10 @@
             <text class="vital__sub">{{ latestTimeTip }}</text>
           </view>
         </view>
-        <view class="vital">
-          <view class="vital__card vital__card--presence">
+
+        <!-- 在床状态：左侧状态值 + 右侧在床/离床历史 -->
+        <view class="bed-card">
+          <view class="bed-card__left">
             <view class="vital__head">
               <text class="fa-solid fa-bed vital__icon vital__icon--presence"></text>
               <text class="vital__name">在床状态</text>
@@ -69,43 +71,16 @@
               <text class="vital__num" :style="{ color: inBedColor }">{{ inBedText }}</text>
             </view>
             <text class="vital__sub">{{ latestTimeTip }}</text>
-            <!-- 最近在床/离床时间列表 -->
+          </view>
+          <view class="bed-card__right">
+            <text v-if="bedHistory.length" class="bed-card__label">最近切换</text>
             <view v-if="bedHistory.length" class="bed-list">
               <view v-for="(b, i) in bedHistory" :key="i" class="bed-list__item">
                 <text class="bed-list__type" :class="{ 'bed-list__type--off': !b.inBed }">{{ b.inBed ? '在床' : '离床' }}</text>
                 <text class="bed-list__time">{{ fmtTs(b.ts) }}</text>
               </view>
             </view>
-          </view>
-        </view>
-
-        <!-- 睡眠：深睡/浅睡/清醒 + 进度条，手环风格 -->
-        <view class="wrap wrap--inner">
-          <view class="sec-head">
-            <text class="sec-title">睡眠</text>
-            <text class="sec-sub">{{ sleepTotalText }}</text>
-          </view>
-          <view class="sleep">
-            <view class="sleep__stats">
-              <view class="sleep__stat">
-                <text class="sleep__stat-num sleep__stat-num--deep">{{ fmtSleepMin(radarSleep.deep) }}</text>
-                <text class="sleep__stat-t">深睡</text>
-              </view>
-              <view class="sleep__stat">
-                <text class="sleep__stat-num sleep__stat-num--light">{{ fmtSleepMin(radarSleep.light) }}</text>
-                <text class="sleep__stat-t">浅睡</text>
-              </view>
-              <view class="sleep__stat">
-                <text class="sleep__stat-num sleep__stat-num--wake">{{ fmtSleepMin(radarSleep.wake) }}</text>
-                <text class="sleep__stat-t">清醒</text>
-              </view>
-            </view>
-            <view v-if="radarSleep.total" class="sleep__strip">
-              <view class="sleep__strip-seg sleep__strip-seg--deep" :style="{ width: radarSleepPct.deep + '%' }"></view>
-              <view class="sleep__strip-seg sleep__strip-seg--light" :style="{ width: radarSleepPct.light + '%' }"></view>
-              <view class="sleep__strip-seg sleep__strip-seg--wake" :style="{ width: radarSleepPct.wake + '%' }"></view>
-            </view>
-            <view v-else class="sleep__strip sleep__strip--empty"></view>
+            <text v-else class="bed-card__empty">--</text>
           </view>
         </view>
 
@@ -115,20 +90,49 @@
             <text class="vital__name" :style="{ color: struggleInfo.active ? '#f15533' : '' }">异常挣扎</text>
           </view>
           <view class="vital__value">
-            <text class="vital__num" :style="{ color: struggleInfo.active ? '#f15533' : '' }">{{ struggleInfo.active ? struggleInfo.count : '无' }}</text>
+            <text class="vital__num" :style="{ color: struggleInfo.active ? '#f15533' : '' }">{{ struggleInfo.active ? struggleInfo.count : '--' }}</text>
             <text class="vital__unit" v-if="struggleInfo.active">次</text>
             <text class="vital__unit" v-else>&nbsp;</text>
           </view>
           <text class="vital__sub" :class="{ 'vital__sub--alert': struggleInfo.active }">
             {{ struggleInfo.active ? struggleInfo.text + '，最近挣扎时间' : '状态正常' }}
           </text>
-          <!-- 最近三次挣扎时间 -->
           <view v-if="struggleHistory.length" class="struggle-list">
             <view v-for="(s, i) in struggleHistory" :key="i" class="struggle-list__item">
               <text class="struggle-list__time">{{ fmtTs(s.ts) }}</text>
               <text class="struggle-list__count">第{{ i + 1 }}次 · 共{{ s.count }}次</text>
             </view>
           </view>
+        </view>
+      </view>
+
+      <!-- 睡眠：独立卡片，与手环风格一致 -->
+      <view class="wrap">
+        <view class="sec-head">
+          <text class="sec-title">睡眠</text>
+          <text class="sec-sub">{{ sleepTotalText }}</text>
+        </view>
+        <view class="sleep">
+          <view class="sleep__stats">
+            <view class="sleep__stat">
+              <text class="sleep__stat-num sleep__stat-num--deep">{{ radarSleep.deep != null ? fmtSleepMin(radarSleep.deep) : '--' }}</text>
+              <text class="sleep__stat-t">深睡</text>
+            </view>
+            <view class="sleep__stat">
+              <text class="sleep__stat-num sleep__stat-num--light">{{ radarSleep.light != null ? fmtSleepMin(radarSleep.light) : '--' }}</text>
+              <text class="sleep__stat-t">浅睡</text>
+            </view>
+            <view class="sleep__stat">
+              <text class="sleep__stat-num sleep__stat-num--wake">{{ radarSleep.wake != null ? fmtSleepMin(radarSleep.wake) : '--' }}</text>
+              <text class="sleep__stat-t">清醒</text>
+            </view>
+          </view>
+          <view v-if="radarSleep.total" class="sleep__strip">
+            <view class="sleep__strip-seg sleep__strip-seg--deep" :style="{ width: radarSleepPct.deep + '%' }"></view>
+            <view class="sleep__strip-seg sleep__strip-seg--light" :style="{ width: radarSleepPct.light + '%' }"></view>
+            <view class="sleep__strip-seg sleep__strip-seg--wake" :style="{ width: radarSleepPct.wake + '%' }"></view>
+          </view>
+          <view v-else class="sleep__strip sleep__strip--empty"></view>
         </view>
       </view>
 
@@ -527,12 +531,6 @@ export default {
   padding-top: 0;
 }
 
-/* 嵌套在 wrap 内的子 wrap（如睡眠区块），去掉外层 padding 避免重复 */
-.wrap--inner {
-  padding: 0;
-  margin-top: $space-3;
-}
-
 /* ---------- 设备头卡 ---------- */
 .head {
   display: flex;
@@ -656,6 +654,75 @@ export default {
   margin-top: $space-3;
 }
 
+/* ---------- 在床状态卡片（左右布局） ---------- */
+.bed-card {
+  display: flex;
+  align-items: stretch;
+  margin-top: $space-3;
+  background: linear-gradient(145deg, #e8f3ef 0%, $bg-surface 75%);
+  border-radius: $radius-card-child;
+  box-shadow: $shadow-sm;
+  padding: $space-4;
+}
+
+.bed-card__left {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.bed-card__right {
+  flex: 1;
+  min-width: 0;
+  margin-left: $space-3;
+  padding-left: $space-3;
+  border-left: 1rpx solid $border-subtle;
+  display: flex;
+  flex-direction: column;
+}
+
+.bed-card__label {
+  font-size: $font-size-2xs;
+  font-weight: $font-weight-semibold;
+  color: $text-muted;
+  margin-bottom: $space-1;
+}
+
+.bed-card__empty {
+  font-size: $font-size-sm;
+  color: $text-muted;
+  font-family: $font-family-en;
+}
+
+.bed-list {
+  display: flex;
+  flex-direction: column;
+  gap: $space-1;
+}
+
+.bed-list__item {
+  display: flex;
+  align-items: center;
+  gap: $space-2;
+}
+
+.bed-list__type {
+  font-size: $font-size-2xs;
+  font-weight: $font-weight-semibold;
+  color: #389a82;
+  flex-shrink: 0;
+}
+
+.bed-list__type--off {
+  color: #f2994a;
+}
+
+.bed-list__time {
+  font-size: $font-size-2xs;
+  color: $text-muted;
+}
+
 /* 全宽卡片（如异常挣扎）在 wrap 内与上方 vital 行保持间距 */
 .wrap > .vital__card:not(:first-child) {
   margin-top: $space-3;
@@ -671,14 +738,6 @@ export default {
 
 .vital__card--resp {
   background: linear-gradient(145deg, #e8f4f6 0%, $bg-surface 75%);
-}
-
-.vital__card--sleep {
-  background: linear-gradient(145deg, #f0ecf7 0%, $bg-surface 75%);
-}
-
-.vital__card--presence {
-  background: linear-gradient(145deg, #e8f3ef 0%, $bg-surface 75%);
 }
 
 .vital__card--struggle {
@@ -730,7 +789,6 @@ export default {
 
 .vital__card--hr .vital__num { color: $brand-green; }
 .vital__card--resp .vital__num { color: #8dcdd8; }
-.vital__card--sleep .vital__num { color: #9b8fc9; }
 
 .vital__unit {
   margin-left: $space-1;
@@ -773,36 +831,6 @@ export default {
 }
 
 .struggle-list__count {
-  font-size: $font-size-2xs;
-  color: $text-muted;
-}
-
-/* ---------- 在床/离床历史列表 ---------- */
-.bed-list {
-  margin-top: $space-2;
-  display: flex;
-  flex-direction: column;
-  gap: $space-1;
-}
-
-.bed-list__item {
-  display: flex;
-  align-items: center;
-  gap: $space-2;
-}
-
-.bed-list__type {
-  font-size: $font-size-2xs;
-  font-weight: $font-weight-semibold;
-  color: #389a82;
-  flex-shrink: 0;
-}
-
-.bed-list__type--off {
-  color: #f2994a;
-}
-
-.bed-list__time {
   font-size: $font-size-2xs;
   color: $text-muted;
 }

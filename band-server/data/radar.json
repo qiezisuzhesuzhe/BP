@@ -8,10 +8,10 @@
       "firstSeen": 1787320921389,
       "latest": {
         "struggleAlert": 0,
-        "ts": 1787324778579,
-        "heartRate": 75,
+        "ts": 1787325353443,
+        "heartRate": 72,
         "respRate": 16,
-        "inBed": "有人",
+        "inBed": "无人",
         "stay": 7.5,
         "battery": 85,
         "signal": 31,
@@ -23,15 +23,9 @@
       "attrs": [
         {
           "name": "在床",
-          "value": "有人",
+          "value": "无人",
           "unit": "",
           "key": "inBed"
-        },
-        {
-          "name": "心率",
-          "value": "75",
-          "unit": "",
-          "key": "heartRate"
         }
       ],
       "history": [
@@ -198,9 +192,31 @@
             "inBed": "有人",
             "heartRate": 75
           }
+        },
+        {
+          "ts": 1787325352910,
+          "event": "",
+          "latest": {
+            "heartRate": 72,
+            "respRate": 16,
+            "inBed": "有人",
+            "deepSleep": 2.5,
+            "lightSleep": 3.5,
+            "awakeSleep": 1,
+            "sleepTotal": 7,
+            "struggleAlert": 0,
+            "battery": 85
+          }
+        },
+        {
+          "ts": 1787325353443,
+          "event": "",
+          "latest": {
+            "inBed": "无人"
+          }
         }
       ],
-      "lastSeen": 1787324778579,
+      "lastSeen": 1787325353443,
       "boundAt": 1787320921389,
       "struggleHistory": [
         {
@@ -220,8 +236,12 @@
       "stateText": "正常",
       "lastEvent": "心跳",
       "site": "未绑定安装点",
-      "_lastInBed": "有人",
+      "_lastInBed": "无人",
       "bedHistory": [
+        {
+          "inBed": false,
+          "ts": 1787325353443
+        },
         {
           "inBed": true,
           "ts": 1787324778579
@@ -229,10 +249,6 @@
         {
           "inBed": false,
           "ts": 1787324777535
-        },
-        {
-          "inBed": true,
-          "ts": 1787324680743
         }
       ]
     }

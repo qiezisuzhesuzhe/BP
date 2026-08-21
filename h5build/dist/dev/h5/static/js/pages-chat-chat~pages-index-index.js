@@ -418,8 +418,7 @@ var render = function () {
                             { staticClass: "tl__sent" },
                             [
                               _c("v-uni-text", {
-                                staticClass:
-                                  "tl__sent-icon fa-solid fa-bell",
+                                staticClass: "tl__sent-icon fa-solid fa-bell",
                               }),
                               _c("v-uni-text", { staticClass: "tl__sent-t" }, [
                                 _vm._v("已发手环"),

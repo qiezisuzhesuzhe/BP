@@ -49,7 +49,7 @@ __webpack_require__.r(__webpack_exports__);
 var ___CSS_LOADER_API_IMPORT___ = __webpack_require__(/*! ../../../node_modules/css-loader/dist/runtime/api.js */ "JPst");
 exports = ___CSS_LOADER_API_IMPORT___(false);
 // Module
-exports.push([module.i, "@charset \"UTF-8\";\n/* 安康健康管理 · 设计令牌\n   来源：/workspace/DESIGN.md\n   方案：rpx + SCSS 变量（1px = 2rpx，基于 750rpx 设计基准） */\n/* ---------- 品牌色 ---------- */\n/* ---------- 头像 ---------- */\n/* ---------- 语义状态色 ---------- */\n/* ---------- 金色（尊享装饰） ---------- */\n/* ---------- 背景 ---------- */\n/* 斜向两色渐变：左上(#ddf7ed) → 右下(#f3f3f3)，末端即底色；\n   配合 App.vue 中 background-attachment: fixed 铺满视口固定，不随页面滚动/变长 */\n/* ---------- 文字 ---------- */\n/* ---------- 描边 / 遮罩 ---------- */\n/* ---------- 字体 ---------- */\n/* 英文/数字优先匹配 DIN Pro（Mac 自带 DIN Alternate 作为备选），中文回退苹方/雅黑 */\n/* 移动端最小舒适字号（可读正文下限）：\n   说明/入口/数据标签等可读文字不得小于 12px(24rpx)；\n   $font-size-2xs(10px) 仅限角标、徽标、装饰性元素 */\n/* ---------- 语义排版 ---------- */\n/* ---------- 间距 ---------- */\n/* ---------- 区块标题 ---------- */\n/* 标题下间距 = 列表间距；上间距 = 下间距 × 2 */\n/* ---------- 尺寸 ---------- */\n/* ---------- 圆角（已减半，更克制干净） ---------- */\n/* ---------- 阴影 ---------- */\n/* ---------- 层级 ---------- */\n/* ---------- 动效 ---------- */\n.nav-fixed[data-v-3000c024] {\n  position: fixed;\n  top: 0;\n  left: 0;\n  right: 0;\n  z-index: 3000;\n}\n.hero[data-v-3000c024] {\n  position: relative;\n  background: #edf5f2;\n}\n.hero__img[data-v-3000c024] {\n  width: 100%;\n  height: %?420?%;\n  display: block;\n}\n.hero__mask[data-v-3000c024] {\n  position: absolute;\n  top: 0;\n  left: 0;\n  right: 0;\n  height: %?180?%;\n  background: linear-gradient(180deg, rgba(0, 0, 0, 0.38) 0%, rgba(0, 0, 0, 0) 100%);\n}\n.wrap[data-v-3000c024] {\n  padding: 0 %?32?%;\n}\n.card[data-v-3000c024] {\n  background: #ffffff;\n  border-radius: %?20?%;\n  box-shadow: 0 %?12?% %?48?% rgba(125, 212, 188, 0.18);\n}\n.intro[data-v-3000c024] {\n  padding: %?24?%;\n  margin-top: %?32?%;\n}\n.intro__tagline[data-v-3000c024] {\n  display: inline-block;\n  border-radius: %?999?%;\n  padding: %?8?% %?16?%;\n}\n.intro__tagline-t[data-v-3000c024] {\n  font-size: %?20?%;\n  font-weight: 600;\n}\n.intro__head[data-v-3000c024] {\n  display: flex;\n  align-items: center;\n  margin-top: %?16?%;\n}\n.intro__name[data-v-3000c024] {\n  flex: 1;\n  font-size: %?44?%;\n  font-weight: 700;\n  color: #1a2a3c;\n  letter-spacing: %?1?%;\n}\n.intro__dur[data-v-3000c024] {\n  font-size: %?20?%;\n  font-weight: 600;\n  padding: %?8?% %?16?%;\n  border-radius: %?999?%;\n  margin-left: %?16?%;\n}\n.intro__sub[data-v-3000c024] {\n  display: block;\n  font-size: %?24?%;\n  color: #64748b;\n  margin-top: %?16?%;\n  line-height: 1.6;\n}\n.intro__meta[data-v-3000c024] {\n  display: flex;\n  align-items: center;\n  flex-wrap: wrap;\n  margin-top: %?16?%;\n}\n.intro__meta-t[data-v-3000c024] {\n  font-size: %?20?%;\n  color: #94a3b8;\n}\n.intro__star[data-v-3000c024] {\n  color: #f2c94c;\n  margin-right: %?8?%;\n}\n.intro__meta-dot[data-v-3000c024] {\n  font-size: %?20?%;\n  color: #c6d2de;\n  margin: 0 %?8?%;\n}\n.intro__price[data-v-3000c024] {\n  display: flex;\n  align-items: baseline;\n  margin-top: %?24?%;\n  padding-top: %?24?%;\n  border-top: %?1?% solid rgba(15, 61, 53, 0.06);\n}\n.intro__cur[data-v-3000c024] {\n  font-size: %?28?%;\n  color: #f15533;\n  font-weight: 700;\n}\n.intro__now[data-v-3000c024] {\n  font-size: %?56?%;\n  line-height: %?56?%;\n  color: #f15533;\n  font-weight: 700;\n  margin-left: 0;\n}\n.intro__origin[data-v-3000c024] {\n  font-size: %?24?%;\n  color: #94a3b8;\n  text-decoration: line-through;\n  margin-left: %?16?%;\n}\n.intro__save[data-v-3000c024] {\n  font-size: %?20?%;\n  color: #f15533;\n  background: #fdf4ed;\n  padding: %?8?% %?16?%;\n  border-radius: %?999?%;\n  margin-left: %?16?%;\n}\n.intro__tags[data-v-3000c024] {\n  display: flex;\n  flex-wrap: wrap;\n  margin-top: %?24?%;\n}\n.intro__tag[data-v-3000c024] {\n  font-size: %?20?%;\n  color: #334155;\n  background: #edf5f2;\n  padding: %?8?% %?16?%;\n  border-radius: %?999?%;\n  margin: 0 %?16?% %?16?% 0;\n}\n.sec-head[data-v-3000c024] {\n  display: flex;\n  align-items: baseline;\n  justify-content: space-between;\n  margin-top: %?64?%;\n  margin-bottom: %?32?%;\n}\n.hl[data-v-3000c024] {\n  display: flex;\n  align-items: flex-start;\n  padding: %?24?%;\n  margin-bottom: %?16?%;\n}\n.hl__icon[data-v-3000c024] {\n  width: %?64?%;\n  height: %?64?%;\n  border-radius: %?20?%;\n  display: flex;\n  align-items: center;\n  justify-content: center;\n  flex-shrink: 0;\n}\n.hl__icon-t[data-v-3000c024] {\n  font-size: %?36?%;\n  color: rgba(0, 0, 0, 0.1);\n}\n.hl__main[data-v-3000c024] {\n  flex: 1;\n  padding-left: %?16?%;\n}\n.hl__t[data-v-3000c024] {\n  display: block;\n  font-size: %?28?%;\n  font-weight: 700;\n  color: #1a2a3c;\n}\n.hl__d[data-v-3000c024] {\n  display: block;\n  font-size: %?20?%;\n  color: #64748b;\n  margin-top: %?8?%;\n  line-height: 1.6;\n}\n.srv[data-v-3000c024] {\n  padding: %?8?% %?24?%;\n}\n.srv__row[data-v-3000c024] {\n  display: flex;\n  align-items: center;\n  padding: %?24?% 0;\n  border-bottom: %?1?% solid rgba(15, 61, 53, 0.06);\n}\n.srv__row[data-v-3000c024]:last-child {\n  border-bottom: none;\n}\n.srv__row--head[data-v-3000c024] {\n  border-bottom: %?1?% solid rgba(15, 61, 53, 0.06);\n}\n.srv__c1[data-v-3000c024] {\n  flex: 1;\n  display: flex;\n  align-items: center;\n  overflow: hidden;\n}\n.srv__c2[data-v-3000c024] {\n  width: %?180?%;\n  text-align: right;\n}\n.srv__th[data-v-3000c024] {\n  font-size: %?20?%;\n  color: #94a3b8;\n  font-weight: 600;\n}\n.srv__dot[data-v-3000c024] {\n  width: %?12?%;\n  height: %?12?%;\n  border-radius: %?999?%;\n  margin-right: %?16?%;\n  flex-shrink: 0;\n}\n.srv__name[data-v-3000c024] {\n  font-size: %?28?%;\n  color: #1a2a3c;\n}\n.srv__spec[data-v-3000c024] {\n  width: %?180?%;\n  text-align: right;\n  font-size: %?24?%;\n  color: #64748b;\n}\n.ds[data-v-3000c024] {\n  overflow: hidden;\n}\n.ds__img[data-v-3000c024] {\n  width: 100%;\n  height: %?320?%;\n  display: block;\n  border-radius: %?20?% %?20?% 0 0;\n}\n.ds__body[data-v-3000c024] {\n  padding: %?24?% %?24?% %?8?%;\n}\n.ds__point[data-v-3000c024] {\n  display: flex;\n  align-items: flex-start;\n  padding-bottom: %?16?%;\n}\n.ds__idx[data-v-3000c024] {\n  width: %?36?%;\n  height: %?36?%;\n  border-radius: %?999?%;\n  font-size: %?20?%;\n  font-weight: 700;\n  text-align: center;\n  line-height: %?36?%;\n  margin-right: %?16?%;\n  flex-shrink: 0;\n}\n.ds__p[data-v-3000c024] {\n  flex: 1;\n  font-size: %?24?%;\n  color: #334155;\n  line-height: 1.6;\n}\n.faq[data-v-3000c024] {\n  padding: %?8?% %?24?%;\n}\n.faq__item[data-v-3000c024] {\n  border-bottom: %?1?% solid rgba(15, 61, 53, 0.06);\n}\n.faq__item[data-v-3000c024]:last-child {\n  border-bottom: none;\n}\n.faq__q[data-v-3000c024] {\n  display: flex;\n  align-items: center;\n  padding: %?24?% 0;\n}\n.faq__q-t[data-v-3000c024] {\n  flex: 1;\n  font-size: %?28?%;\n  font-weight: 600;\n  color: #1a2a3c;\n}\n.faq__arrow[data-v-3000c024] {\n  font-size: %?32?%;\n  color: #94a3b8;\n  margin-left: %?16?%;\n  transition: -webkit-transform 0.2s;\n  transition: transform 0.2s;\n  transition: transform 0.2s, -webkit-transform 0.2s;\n}\n.faq__arrow--on[data-v-3000c024] {\n  -webkit-transform: rotate(180deg);\n          transform: rotate(180deg);\n  color: #389a82;\n}\n.faq__a[data-v-3000c024] {\n  padding: 0 0 %?24?%;\n}\n.faq__a-t[data-v-3000c024] {\n  font-size: %?24?%;\n  color: #64748b;\n  line-height: 1.6;\n}\n.foot-tip[data-v-3000c024] {\n  padding: %?40?% %?40?% %?16?%;\n  text-align: center;\n}\n.foot-tip__t[data-v-3000c024] {\n  display: block;\n  font-size: %?20?%;\n  color: #94a3b8;\n  line-height: 1.6;\n  margin-bottom: %?8?%;\n}\n.bar-holder[data-v-3000c024] {\n  height: calc(env(safe-area-inset-bottom) + %?144?%);\n}\n.buybar[data-v-3000c024] {\n  position: fixed;\n  left: 0;\n  right: 0;\n  bottom: 0;\n  z-index: 3000;\n  background: #ffffff;\n  box-shadow: 0 %?16?% %?96?% rgba(15, 61, 53, 0.1);\n  padding: %?16?% %?24?%;\n  padding-bottom: calc(env(safe-area-inset-bottom) + %?16?%);\n  display: flex;\n  align-items: center;\n}\n.buybar__price[data-v-3000c024] {\n  flex: 1;\n  overflow: hidden;\n}\n.buybar__row[data-v-3000c024] {\n  display: flex;\n  align-items: baseline;\n}\n.buybar__cur[data-v-3000c024] {\n  font-size: %?24?%;\n  color: #f15533;\n  font-weight: 700;\n}\n.buybar__now[data-v-3000c024] {\n  font-size: %?56?%;\n  line-height: %?56?%;\n  color: #f15533;\n  font-weight: 700;\n  margin-left: 0;\n}\n.buybar__origin[data-v-3000c024] {\n  font-size: %?20?%;\n  color: #94a3b8;\n  text-decoration: line-through;\n  margin-left: %?16?%;\n}\n.buybar__save[data-v-3000c024] {\n  display: inline-block;\n  font-size: %?20?%;\n  color: #f15533;\n  background: #fdf4ed;\n  padding: %?8?% %?16?%;\n  border-radius: %?999?%;\n  margin-top: %?8?%;\n}\n.buybar__btn[data-v-3000c024] {\n  min-width: %?307.2?%;\n  height: %?88?%;\n  border-radius: %?999?%;\n  display: flex;\n  align-items: center;\n  justify-content: center;\n  box-shadow: 0 %?4?% %?24?% rgba(15, 61, 53, 0.06);\n}\n.buybar__btn-t[data-v-3000c024] {\n  color: #ffffff;\n  font-size: %?32?%;\n  font-weight: 700;\n  letter-spacing: %?2?%;\n}", ""]);
+exports.push([module.i, "@charset \"UTF-8\";\n/* 安康健康管理 · 设计令牌\n   来源：/workspace/DESIGN.md\n   方案：rpx + SCSS 变量（1px = 2rpx，基于 750rpx 设计基准） */\n/* ---------- 品牌色 ---------- */\n/* ---------- 头像 ---------- */\n/* ---------- 语义状态色 ---------- */\n/* ---------- 金色（尊享装饰） ---------- */\n/* ---------- 背景 ---------- */\n/* 斜向两色渐变：左上(#ddf7ed) → 右下(#f3f3f3)，末端即底色；\n   配合 App.vue 中 background-attachment: fixed 铺满视口固定，不随页面滚动/变长 */\n/* ---------- 文字 ---------- */\n/* ---------- 描边 / 遮罩 ---------- */\n/* ---------- 字体 ---------- */\n/* 英文/数字优先匹配 DIN Pro（Mac 自带 DIN Alternate 作为备选），中文回退苹方/雅黑 */\n/* 移动端最小舒适字号（可读正文下限）：\n   说明/入口/数据标签等可读文字不得小于 12px(24rpx)；\n   $font-size-2xs(10px) 仅限角标、徽标、装饰性元素 */\n/* ---------- 语义排版 ---------- */\n/* ---------- 间距 ---------- */\n/* ---------- 区块标题 ---------- */\n/* 标题下间距 = 列表间距；上间距 = 下间距 × 2 */\n/* ---------- 尺寸 ---------- */\n/* ---------- 圆角（已减半，更克制干净） ---------- */\n/* ---------- 阴影 ---------- */\n/* ---------- 层级 ---------- */\n/* ---------- 动效 ---------- */\n.nav-fixed[data-v-3000c024] {\n  position: fixed;\n  top: 0;\n  left: 0;\n  right: 0;\n  z-index: 3000;\n}\n.hero[data-v-3000c024] {\n  position: relative;\n  background: #edf5f2;\n}\n.hero__img[data-v-3000c024] {\n  width: 100%;\n  height: %?420?%;\n  display: block;\n}\n.hero__mask[data-v-3000c024] {\n  position: absolute;\n  top: 0;\n  left: 0;\n  right: 0;\n  height: %?180?%;\n  background: linear-gradient(180deg, rgba(0, 0, 0, 0.38) 0%, rgba(0, 0, 0, 0) 100%);\n}\n.wrap[data-v-3000c024] {\n  padding: 0 %?32?%;\n}\n.empty[data-v-3000c024] {\n  padding: %?96?% %?48?% 0;\n  display: flex;\n  flex-direction: column;\n  align-items: center;\n}\n.empty__icon[data-v-3000c024] {\n  font-size: %?88?%;\n  color: #64748b;\n}\n.empty__t[data-v-3000c024] {\n  font-size: %?28?%;\n  color: #64748b;\n  margin-top: %?24?%;\n}\n.empty__d[data-v-3000c024] {\n  font-size: %?24?%;\n  color: #64748b;\n  margin-top: %?16?%;\n  text-align: center;\n}\n.empty__btn[data-v-3000c024] {\n  margin-top: %?40?%;\n  padding: %?16?% %?48?%;\n  border-radius: %?999?%;\n  background: #7dd4bc;\n}\n.empty__btn-t[data-v-3000c024] {\n  color: #ffffff;\n  font-size: %?28?%;\n  font-weight: 600;\n}\n.card[data-v-3000c024] {\n  background: #ffffff;\n  border-radius: %?20?%;\n  box-shadow: 0 %?12?% %?48?% rgba(125, 212, 188, 0.18);\n}\n.intro[data-v-3000c024] {\n  padding: %?24?%;\n  margin-top: %?32?%;\n}\n.intro__tagline[data-v-3000c024] {\n  display: inline-block;\n  border-radius: %?999?%;\n  padding: %?8?% %?16?%;\n}\n.intro__tagline-t[data-v-3000c024] {\n  font-size: %?20?%;\n  font-weight: 600;\n}\n.intro__head[data-v-3000c024] {\n  display: flex;\n  align-items: center;\n  margin-top: %?16?%;\n}\n.intro__name[data-v-3000c024] {\n  flex: 1;\n  font-size: %?44?%;\n  font-weight: 700;\n  color: #1a2a3c;\n  letter-spacing: %?1?%;\n}\n.intro__dur[data-v-3000c024] {\n  font-size: %?20?%;\n  font-weight: 600;\n  padding: %?8?% %?16?%;\n  border-radius: %?999?%;\n  margin-left: %?16?%;\n}\n.intro__sub[data-v-3000c024] {\n  display: block;\n  font-size: %?24?%;\n  color: #64748b;\n  margin-top: %?16?%;\n  line-height: 1.6;\n}\n.intro__meta[data-v-3000c024] {\n  display: flex;\n  align-items: center;\n  flex-wrap: wrap;\n  margin-top: %?16?%;\n}\n.intro__meta-t[data-v-3000c024] {\n  font-size: %?20?%;\n  color: #94a3b8;\n}\n.intro__star[data-v-3000c024] {\n  color: #f2c94c;\n  margin-right: %?8?%;\n}\n.intro__meta-dot[data-v-3000c024] {\n  font-size: %?20?%;\n  color: #c6d2de;\n  margin: 0 %?8?%;\n}\n.intro__price[data-v-3000c024] {\n  display: flex;\n  align-items: baseline;\n  margin-top: %?24?%;\n  padding-top: %?24?%;\n  border-top: %?1?% solid rgba(15, 61, 53, 0.06);\n}\n.intro__cur[data-v-3000c024] {\n  font-size: %?28?%;\n  color: #f15533;\n  font-weight: 700;\n}\n.intro__now[data-v-3000c024] {\n  font-size: %?56?%;\n  line-height: %?56?%;\n  color: #f15533;\n  font-weight: 700;\n  margin-left: 0;\n}\n.intro__origin[data-v-3000c024] {\n  font-size: %?24?%;\n  color: #94a3b8;\n  text-decoration: line-through;\n  margin-left: %?16?%;\n}\n.intro__save[data-v-3000c024] {\n  font-size: %?20?%;\n  color: #f15533;\n  background: #fdf4ed;\n  padding: %?8?% %?16?%;\n  border-radius: %?999?%;\n  margin-left: %?16?%;\n}\n.intro__tags[data-v-3000c024] {\n  display: flex;\n  flex-wrap: wrap;\n  margin-top: %?24?%;\n}\n.intro__tag[data-v-3000c024] {\n  font-size: %?20?%;\n  color: #334155;\n  background: #edf5f2;\n  padding: %?8?% %?16?%;\n  border-radius: %?999?%;\n  margin: 0 %?16?% %?16?% 0;\n}\n.sec-head[data-v-3000c024] {\n  display: flex;\n  align-items: baseline;\n  justify-content: space-between;\n  margin-top: %?64?%;\n  margin-bottom: %?32?%;\n}\n.hl[data-v-3000c024] {\n  display: flex;\n  align-items: flex-start;\n  padding: %?24?%;\n  margin-bottom: %?16?%;\n}\n.hl__icon[data-v-3000c024] {\n  width: %?64?%;\n  height: %?64?%;\n  border-radius: %?20?%;\n  display: flex;\n  align-items: center;\n  justify-content: center;\n  flex-shrink: 0;\n}\n.hl__icon-t[data-v-3000c024] {\n  font-size: %?36?%;\n  color: rgba(0, 0, 0, 0.1);\n}\n.hl__main[data-v-3000c024] {\n  flex: 1;\n  padding-left: %?16?%;\n}\n.hl__t[data-v-3000c024] {\n  display: block;\n  font-size: %?28?%;\n  font-weight: 700;\n  color: #1a2a3c;\n}\n.hl__d[data-v-3000c024] {\n  display: block;\n  font-size: %?20?%;\n  color: #64748b;\n  margin-top: %?8?%;\n  line-height: 1.6;\n}\n.srv[data-v-3000c024] {\n  padding: %?8?% %?24?%;\n}\n.srv__row[data-v-3000c024] {\n  display: flex;\n  align-items: center;\n  padding: %?24?% 0;\n  border-bottom: %?1?% solid rgba(15, 61, 53, 0.06);\n}\n.srv__row[data-v-3000c024]:last-child {\n  border-bottom: none;\n}\n.srv__row--head[data-v-3000c024] {\n  border-bottom: %?1?% solid rgba(15, 61, 53, 0.06);\n}\n.srv__c1[data-v-3000c024] {\n  flex: 1;\n  display: flex;\n  align-items: center;\n  overflow: hidden;\n}\n.srv__c2[data-v-3000c024] {\n  width: %?180?%;\n  text-align: right;\n}\n.srv__th[data-v-3000c024] {\n  font-size: %?20?%;\n  color: #94a3b8;\n  font-weight: 600;\n}\n.srv__dot[data-v-3000c024] {\n  width: %?12?%;\n  height: %?12?%;\n  border-radius: %?999?%;\n  margin-right: %?16?%;\n  flex-shrink: 0;\n}\n.srv__name[data-v-3000c024] {\n  font-size: %?28?%;\n  color: #1a2a3c;\n}\n.srv__spec[data-v-3000c024] {\n  width: %?180?%;\n  text-align: right;\n  font-size: %?24?%;\n  color: #64748b;\n}\n.ds[data-v-3000c024] {\n  overflow: hidden;\n}\n.ds__img[data-v-3000c024] {\n  width: 100%;\n  height: %?320?%;\n  display: block;\n  border-radius: %?20?% %?20?% 0 0;\n}\n.ds__body[data-v-3000c024] {\n  padding: %?24?% %?24?% %?8?%;\n}\n.ds__point[data-v-3000c024] {\n  display: flex;\n  align-items: flex-start;\n  padding-bottom: %?16?%;\n}\n.ds__idx[data-v-3000c024] {\n  width: %?36?%;\n  height: %?36?%;\n  border-radius: %?999?%;\n  font-size: %?20?%;\n  font-weight: 700;\n  text-align: center;\n  line-height: %?36?%;\n  margin-right: %?16?%;\n  flex-shrink: 0;\n}\n.ds__p[data-v-3000c024] {\n  flex: 1;\n  font-size: %?24?%;\n  color: #334155;\n  line-height: 1.6;\n}\n.faq[data-v-3000c024] {\n  padding: %?8?% %?24?%;\n}\n.faq__item[data-v-3000c024] {\n  border-bottom: %?1?% solid rgba(15, 61, 53, 0.06);\n}\n.faq__item[data-v-3000c024]:last-child {\n  border-bottom: none;\n}\n.faq__q[data-v-3000c024] {\n  display: flex;\n  align-items: center;\n  padding: %?24?% 0;\n}\n.faq__q-t[data-v-3000c024] {\n  flex: 1;\n  font-size: %?28?%;\n  font-weight: 600;\n  color: #1a2a3c;\n}\n.faq__arrow[data-v-3000c024] {\n  font-size: %?32?%;\n  color: #94a3b8;\n  margin-left: %?16?%;\n  transition: -webkit-transform 0.2s;\n  transition: transform 0.2s;\n  transition: transform 0.2s, -webkit-transform 0.2s;\n}\n.faq__arrow--on[data-v-3000c024] {\n  -webkit-transform: rotate(180deg);\n          transform: rotate(180deg);\n  color: #389a82;\n}\n.faq__a[data-v-3000c024] {\n  padding: 0 0 %?24?%;\n}\n.faq__a-t[data-v-3000c024] {\n  font-size: %?24?%;\n  color: #64748b;\n  line-height: 1.6;\n}\n.foot-tip[data-v-3000c024] {\n  padding: %?40?% %?40?% %?16?%;\n  text-align: center;\n}\n.foot-tip__t[data-v-3000c024] {\n  display: block;\n  font-size: %?20?%;\n  color: #94a3b8;\n  line-height: 1.6;\n  margin-bottom: %?8?%;\n}\n.bar-holder[data-v-3000c024] {\n  height: calc(env(safe-area-inset-bottom) + %?144?%);\n}\n.buybar[data-v-3000c024] {\n  position: fixed;\n  left: 0;\n  right: 0;\n  bottom: 0;\n  z-index: 3000;\n  background: #ffffff;\n  box-shadow: 0 %?16?% %?96?% rgba(15, 61, 53, 0.1);\n  padding: %?16?% %?24?%;\n  padding-bottom: calc(env(safe-area-inset-bottom) + %?16?%);\n  display: flex;\n  align-items: center;\n}\n.buybar__price[data-v-3000c024] {\n  flex: 1;\n  overflow: hidden;\n}\n.buybar__row[data-v-3000c024] {\n  display: flex;\n  align-items: baseline;\n}\n.buybar__cur[data-v-3000c024] {\n  font-size: %?24?%;\n  color: #f15533;\n  font-weight: 700;\n}\n.buybar__now[data-v-3000c024] {\n  font-size: %?56?%;\n  line-height: %?56?%;\n  color: #f15533;\n  font-weight: 700;\n  margin-left: 0;\n}\n.buybar__origin[data-v-3000c024] {\n  font-size: %?20?%;\n  color: #94a3b8;\n  text-decoration: line-through;\n  margin-left: %?16?%;\n}\n.buybar__save[data-v-3000c024] {\n  display: inline-block;\n  font-size: %?20?%;\n  color: #f15533;\n  background: #fdf4ed;\n  padding: %?8?% %?16?%;\n  border-radius: %?999?%;\n  margin-top: %?8?%;\n}\n.buybar__btn[data-v-3000c024] {\n  min-width: %?307.2?%;\n  height: %?88?%;\n  border-radius: %?999?%;\n  display: flex;\n  align-items: center;\n  justify-content: center;\n  box-shadow: 0 %?4?% %?24?% rgba(15, 61, 53, 0.06);\n}\n.buybar__btn-t[data-v-3000c024] {\n  color: #ffffff;\n  font-size: %?32?%;\n  font-weight: 700;\n  letter-spacing: %?2?%;\n}", ""]);
 // Exports
 module.exports = exports;
 
@@ -95,341 +95,155 @@ var render = function () {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _vm.pkg
-    ? _c(
-        "v-uni-view",
-        { staticClass: "hm-page" },
-        [
-          _c(
-            "v-uni-view",
-            { staticClass: "nav-fixed" },
-            [
-              _c("hm-navbar", {
-                attrs: {
-                  title: _vm.navSolid ? _vm.pkg.name : "",
-                  "bg-color": _vm.navSolid ? "#ffffff" : "transparent",
-                  "text-color": _vm.navSolid ? "#1a2a3c" : "#ffffff",
-                },
-              }),
-            ],
-            1
-          ),
-          _c(
-            "v-uni-view",
-            { staticClass: "hero" },
-            [
-              _c("v-uni-image", {
-                staticClass: "hero__img",
-                attrs: { src: _vm.pkg.heroImg, mode: "aspectFill" },
-                on: {
-                  error: function ($event) {
-                    arguments[0] = $event = _vm.$handleEvent($event)
-                    _vm.onHeroErr.apply(void 0, arguments)
+  return _c(
+    "v-uni-view",
+    { staticClass: "hm-page" },
+    [
+      _vm.pkg
+        ? [
+            _c(
+              "v-uni-view",
+              { staticClass: "nav-fixed" },
+              [
+                _c("hm-navbar", {
+                  attrs: {
+                    title: _vm.navSolid ? _vm.pkg.name : "",
+                    "bg-color": _vm.navSolid ? "#ffffff" : "transparent",
+                    "text-color": _vm.navSolid ? "#1a2a3c" : "#ffffff",
                   },
-                },
-              }),
-              _c("v-uni-view", { staticClass: "hero__mask" }),
-            ],
-            1
-          ),
-          _c(
-            "v-uni-view",
-            { staticClass: "wrap" },
-            [
-              _c(
-                "v-uni-view",
-                { staticClass: "card intro" },
-                [
-                  _c(
-                    "v-uni-view",
-                    {
-                      staticClass: "intro__tagline",
-                      style: {
-                        color: _vm.pkg.accent,
-                        background: _vm.pkg.accentSoft,
-                      },
+                }),
+              ],
+              1
+            ),
+            _c(
+              "v-uni-view",
+              { staticClass: "hero" },
+              [
+                _c("v-uni-image", {
+                  staticClass: "hero__img",
+                  attrs: { src: _vm.pkg.heroImg, mode: "aspectFill" },
+                  on: {
+                    error: function ($event) {
+                      arguments[0] = $event = _vm.$handleEvent($event)
+                      _vm.onHeroErr.apply(void 0, arguments)
                     },
-                    [
-                      _c("v-uni-text", { staticClass: "intro__tagline-t" }, [
-                        _vm._v(_vm._s(_vm.pkg.tagline)),
-                      ]),
-                    ],
-                    1
-                  ),
-                  _c(
-                    "v-uni-view",
-                    { staticClass: "intro__head" },
-                    [
-                      _c("v-uni-text", { staticClass: "intro__name" }, [
-                        _vm._v(_vm._s(_vm.pkg.name)),
-                      ]),
-                      _c(
-                        "v-uni-text",
-                        {
-                          staticClass: "intro__dur",
-                          style: {
-                            color: _vm.pkg.accent,
-                            background: _vm.pkg.accentSoft,
-                          },
-                        },
-                        [_vm._v(_vm._s(_vm.pkg.duration))]
-                      ),
-                    ],
-                    1
-                  ),
-                  _c("v-uni-text", { staticClass: "intro__sub" }, [
-                    _vm._v(_vm._s(_vm.pkg.subtitle)),
-                  ]),
-                  _c(
-                    "v-uni-view",
-                    { staticClass: "intro__meta" },
-                    [
-                      _c(
-                        "v-uni-text",
-                        { staticClass: "intro__meta-t" },
-                        [
-                          _c("v-uni-text", {
-                            staticClass: "fa-solid fa-star intro__star",
-                          }),
-                          _vm._v(" " + _vm._s(_vm.pkg.rating) + " 分"),
-                        ],
-                        1
-                      ),
-                      _c("v-uni-text", { staticClass: "intro__meta-dot" }, [
-                        _vm._v("·"),
-                      ]),
-                      _c("v-uni-text", { staticClass: "intro__meta-t" }, [
-                        _vm._v("已服务 " + _vm._s(_vm.pkg.sold) + " 人"),
-                      ]),
-                      _c("v-uni-text", { staticClass: "intro__meta-dot" }, [
-                        _vm._v("·"),
-                      ]),
-                      _c(
-                        "v-uni-text",
-                        { staticClass: "intro__meta-t" },
-                        [
-                          _c("v-uni-text", { class: _vm.pkg.icon }),
-                          _vm._v(" 医师团队审核"),
-                        ],
-                        1
-                      ),
-                    ],
-                    1
-                  ),
-                  _c(
-                    "v-uni-view",
-                    { staticClass: "intro__price" },
-                    [
-                      _c("v-uni-text", { staticClass: "intro__cur" }, [
-                        _vm._v("¥"),
-                      ]),
-                      _c("v-uni-text", { staticClass: "intro__now" }, [
-                        _vm._v(_vm._s(_vm.pkg.price)),
-                      ]),
-                      _c("v-uni-text", { staticClass: "intro__origin" }, [
-                        _vm._v("¥" + _vm._s(_vm.pkg.originPrice)),
-                      ]),
-                      _c("v-uni-text", { staticClass: "intro__save" }, [
-                        _vm._v("限时省 " + _vm._s(_vm.saved) + " 元"),
-                      ]),
-                    ],
-                    1
-                  ),
-                  _c(
-                    "v-uni-view",
-                    { staticClass: "intro__tags" },
-                    _vm._l(_vm.pkg.tags, function (t, i) {
-                      return _c(
-                        "v-uni-text",
-                        { key: i, staticClass: "intro__tag" },
-                        [_vm._v(_vm._s(t))]
-                      )
-                    }),
-                    1
-                  ),
-                ],
-                1
-              ),
-            ],
-            1
-          ),
-          _c(
-            "v-uni-view",
-            { staticClass: "wrap" },
-            [
-              _c(
-                "v-uni-view",
-                { staticClass: "sec-head" },
-                [
-                  _c("v-uni-text", { staticClass: "hm-sec-title" }, [
-                    _vm._v("服务亮点"),
-                  ]),
-                  _c("v-uni-text", { staticClass: "hm-sec-sub" }, [
-                    _vm._v(
-                      "共 " + _vm._s(_vm.pkg.highlights.length) + " 项核心能力"
-                    ),
-                  ]),
-                ],
-                1
-              ),
-              _vm._l(_vm.pkg.highlights, function (h, i) {
-                return _c(
+                  },
+                }),
+                _c("v-uni-view", { staticClass: "hero__mask" }),
+              ],
+              1
+            ),
+            _c(
+              "v-uni-view",
+              { staticClass: "wrap" },
+              [
+                _c(
                   "v-uni-view",
-                  { key: i, staticClass: "card hl" },
+                  { staticClass: "card intro" },
                   [
                     _c(
                       "v-uni-view",
                       {
-                        staticClass: "hl__icon",
-                        style: { background: _vm.pkg.accentSoft },
+                        staticClass: "intro__tagline",
+                        style: {
+                          color: _vm.pkg.accent,
+                          background: _vm.pkg.accentSoft,
+                        },
                       },
                       [
-                        _c("v-uni-text", {
-                          staticClass: "hl__icon-t",
-                          class: h.icon,
-                        }),
+                        _c("v-uni-text", { staticClass: "intro__tagline-t" }, [
+                          _vm._v(_vm._s(_vm.pkg.tagline)),
+                        ]),
                       ],
                       1
                     ),
                     _c(
                       "v-uni-view",
-                      { staticClass: "hl__main" },
+                      { staticClass: "intro__head" },
                       [
-                        _c("v-uni-text", { staticClass: "hl__t" }, [
-                          _vm._v(_vm._s(h.title)),
+                        _c("v-uni-text", { staticClass: "intro__name" }, [
+                          _vm._v(_vm._s(_vm.pkg.name)),
                         ]),
-                        _c("v-uni-text", { staticClass: "hl__d" }, [
-                          _vm._v(_vm._s(h.desc)),
-                        ]),
+                        _c(
+                          "v-uni-text",
+                          {
+                            staticClass: "intro__dur",
+                            style: {
+                              color: _vm.pkg.accent,
+                              background: _vm.pkg.accentSoft,
+                            },
+                          },
+                          [_vm._v(_vm._s(_vm.pkg.duration))]
+                        ),
                       ],
                       1
                     ),
-                  ],
-                  1
-                )
-              }),
-            ],
-            2
-          ),
-          _c(
-            "v-uni-view",
-            { staticClass: "wrap" },
-            [
-              _c(
-                "v-uni-view",
-                { staticClass: "sec-head" },
-                [
-                  _c("v-uni-text", { staticClass: "hm-sec-title" }, [
-                    _vm._v("服务内容清单"),
-                  ]),
-                  _c("v-uni-text", { staticClass: "hm-sec-sub" }, [
-                    _vm._v("开通后立即生效，服务期内有效"),
-                  ]),
-                ],
-                1
-              ),
-              _c(
-                "v-uni-view",
-                { staticClass: "card srv" },
-                [
-                  _c(
-                    "v-uni-view",
-                    { staticClass: "srv__row srv__row--head" },
-                    [
-                      _c("v-uni-text", { staticClass: "srv__c1 srv__th" }, [
-                        _vm._v("服务项目"),
-                      ]),
-                      _c("v-uni-text", { staticClass: "srv__c2 srv__th" }, [
-                        _vm._v("规格"),
-                      ]),
-                    ],
-                    1
-                  ),
-                  _vm._l(_vm.pkg.services, function (s, i) {
-                    return _c(
+                    _c("v-uni-text", { staticClass: "intro__sub" }, [
+                      _vm._v(_vm._s(_vm.pkg.subtitle)),
+                    ]),
+                    _c(
                       "v-uni-view",
-                      { key: i, staticClass: "srv__row" },
+                      { staticClass: "intro__meta" },
                       [
                         _c(
-                          "v-uni-view",
-                          { staticClass: "srv__c1" },
+                          "v-uni-text",
+                          { staticClass: "intro__meta-t" },
                           [
                             _c("v-uni-text", {
-                              staticClass: "srv__dot",
-                              style: { background: _vm.pkg.accent },
+                              staticClass: "fa-solid fa-star intro__star",
                             }),
-                            _c("v-uni-text", { staticClass: "srv__name" }, [
-                              _vm._v(_vm._s(s.name)),
-                            ]),
+                            _vm._v(" " + _vm._s(_vm.pkg.rating) + " 分"),
                           ],
                           1
                         ),
-                        _c("v-uni-text", { staticClass: "srv__spec" }, [
-                          _vm._v(_vm._s(s.spec)),
+                        _c("v-uni-text", { staticClass: "intro__meta-dot" }, [
+                          _vm._v("·"),
+                        ]),
+                        _c("v-uni-text", { staticClass: "intro__meta-t" }, [
+                          _vm._v("已服务 " + _vm._s(_vm.pkg.sold) + " 人"),
+                        ]),
+                        _c("v-uni-text", { staticClass: "intro__meta-dot" }, [
+                          _vm._v("·"),
+                        ]),
+                        _c(
+                          "v-uni-text",
+                          { staticClass: "intro__meta-t" },
+                          [
+                            _c("v-uni-text", { class: _vm.pkg.icon }),
+                            _vm._v(" 医师团队审核"),
+                          ],
+                          1
+                        ),
+                      ],
+                      1
+                    ),
+                    _c(
+                      "v-uni-view",
+                      { staticClass: "intro__price" },
+                      [
+                        _c("v-uni-text", { staticClass: "intro__cur" }, [
+                          _vm._v("¥"),
+                        ]),
+                        _c("v-uni-text", { staticClass: "intro__now" }, [
+                          _vm._v(_vm._s(_vm.pkg.price)),
+                        ]),
+                        _c("v-uni-text", { staticClass: "intro__origin" }, [
+                          _vm._v("¥" + _vm._s(_vm.pkg.originPrice)),
+                        ]),
+                        _c("v-uni-text", { staticClass: "intro__save" }, [
+                          _vm._v("限时省 " + _vm._s(_vm.saved) + " 元"),
                         ]),
                       ],
                       1
-                    )
-                  }),
-                ],
-                2
-              ),
-            ],
-            1
-          ),
-          _vm._l(_vm.pkg.detailSections, function (section, i) {
-            return _c(
-              "v-uni-view",
-              { key: "d" + i, staticClass: "wrap" },
-              [
-                _c(
-                  "v-uni-view",
-                  { staticClass: "sec-head" },
-                  [
-                    _c("v-uni-text", { staticClass: "hm-sec-title" }, [
-                      _vm._v(_vm._s(section.title)),
-                    ]),
-                  ],
-                  1
-                ),
-                _c(
-                  "v-uni-view",
-                  { staticClass: "card ds" },
-                  [
-                    _c("v-uni-image", {
-                      staticClass: "ds__img",
-                      attrs: { src: section.img, mode: "aspectFill" },
-                      on: {
-                        error: function ($event) {
-                          arguments[0] = $event = _vm.$handleEvent($event)
-                          _vm.onSectionErr(i)
-                        },
-                      },
-                    }),
+                    ),
                     _c(
                       "v-uni-view",
-                      { staticClass: "ds__body" },
-                      _vm._l(section.points, function (p, j) {
+                      { staticClass: "intro__tags" },
+                      _vm._l(_vm.pkg.tags, function (t, i) {
                         return _c(
-                          "v-uni-view",
-                          { key: j, staticClass: "ds__point" },
-                          [
-                            _c(
-                              "v-uni-text",
-                              {
-                                staticClass: "ds__idx",
-                                style: {
-                                  color: _vm.pkg.accent,
-                                  background: _vm.pkg.accentSoft,
-                                },
-                              },
-                              [_vm._v(_vm._s(j + 1))]
-                            ),
-                            _c("v-uni-text", { staticClass: "ds__p" }, [
-                              _vm._v(_vm._s(p)),
-                            ]),
-                          ],
-                          1
+                          "v-uni-text",
+                          { key: i, staticClass: "intro__tag" },
+                          [_vm._v(_vm._s(t))]
                         )
                       }),
                       1
@@ -439,152 +253,384 @@ var render = function () {
                 ),
               ],
               1
-            )
-          }),
-          _c(
-            "v-uni-view",
-            { staticClass: "wrap" },
-            [
-              _c(
-                "v-uni-view",
-                { staticClass: "sec-head" },
-                [
-                  _c("v-uni-text", { staticClass: "hm-sec-title" }, [
-                    _vm._v("常见问题"),
-                  ]),
-                  _c("v-uni-text", { staticClass: "hm-sec-sub" }, [
-                    _vm._v("点击查看解答"),
-                  ]),
-                ],
-                1
-              ),
-              _c(
-                "v-uni-view",
-                { staticClass: "card faq" },
-                _vm._l(_vm.pkg.faq, function (f, i) {
+            ),
+            _c(
+              "v-uni-view",
+              { staticClass: "wrap" },
+              [
+                _c(
+                  "v-uni-view",
+                  { staticClass: "sec-head" },
+                  [
+                    _c("v-uni-text", { staticClass: "hm-sec-title" }, [
+                      _vm._v("服务亮点"),
+                    ]),
+                    _c("v-uni-text", { staticClass: "hm-sec-sub" }, [
+                      _vm._v(
+                        "共 " +
+                          _vm._s(_vm.pkg.highlights.length) +
+                          " 项核心能力"
+                      ),
+                    ]),
+                  ],
+                  1
+                ),
+                _vm._l(_vm.pkg.highlights, function (h, i) {
                   return _c(
                     "v-uni-view",
-                    { key: i, staticClass: "faq__item" },
+                    { key: i, staticClass: "card hl" },
                     [
                       _c(
                         "v-uni-view",
                         {
-                          staticClass: "faq__q",
-                          on: {
-                            click: function ($event) {
-                              arguments[0] = $event = _vm.$handleEvent($event)
-                              _vm.toggleFaq(i)
-                            },
-                          },
+                          staticClass: "hl__icon",
+                          style: { background: _vm.pkg.accentSoft },
                         },
                         [
-                          _c("v-uni-text", { staticClass: "faq__q-t" }, [
-                            _vm._v(_vm._s(f.q)),
-                          ]),
-                          _c(
-                            "v-uni-text",
-                            {
-                              staticClass: "faq__arrow",
-                              class: { "faq__arrow--on": _vm.openFaq === i },
-                            },
-                            [_vm._v("⌄")]
-                          ),
+                          _c("v-uni-text", {
+                            staticClass: "hl__icon-t",
+                            class: h.icon,
+                          }),
                         ],
                         1
                       ),
-                      _vm.openFaq === i
-                        ? _c(
-                            "v-uni-view",
-                            { staticClass: "faq__a" },
-                            [
-                              _c("v-uni-text", { staticClass: "faq__a-t" }, [
-                                _vm._v(_vm._s(f.a)),
-                              ]),
-                            ],
-                            1
-                          )
-                        : _vm._e(),
+                      _c(
+                        "v-uni-view",
+                        { staticClass: "hl__main" },
+                        [
+                          _c("v-uni-text", { staticClass: "hl__t" }, [
+                            _vm._v(_vm._s(h.title)),
+                          ]),
+                          _c("v-uni-text", { staticClass: "hl__d" }, [
+                            _vm._v(_vm._s(h.desc)),
+                          ]),
+                        ],
+                        1
+                      ),
                     ],
                     1
                   )
                 }),
-                1
-              ),
-            ],
-            1
-          ),
-          _c(
-            "v-uni-view",
-            { staticClass: "foot-tip" },
-            [
-              _c("v-uni-text", { staticClass: "foot-tip__t" }, [
-                _vm._v(
-                  "本服务为健康管理与生活方式干预，不替代医疗诊断与处方。方案不含药品，用药调整请遵医嘱。"
+              ],
+              2
+            ),
+            _c(
+              "v-uni-view",
+              { staticClass: "wrap" },
+              [
+                _c(
+                  "v-uni-view",
+                  { staticClass: "sec-head" },
+                  [
+                    _c("v-uni-text", { staticClass: "hm-sec-title" }, [
+                      _vm._v("服务内容清单"),
+                    ]),
+                    _c("v-uni-text", { staticClass: "hm-sec-sub" }, [
+                      _vm._v("开通后立即生效，服务期内有效"),
+                    ]),
+                  ],
+                  1
                 ),
-              ]),
-              _c("v-uni-text", { staticClass: "foot-tip__t" }, [
-                _vm._v("虚拟服务一经开通不支持退款，开通前请确认服务内容。"),
-              ]),
-            ],
-            1
-          ),
-          _c("v-uni-view", { staticClass: "bar-holder" }),
-          _c(
-            "v-uni-view",
-            { staticClass: "buybar" },
-            [
-              _c(
+                _c(
+                  "v-uni-view",
+                  { staticClass: "card srv" },
+                  [
+                    _c(
+                      "v-uni-view",
+                      { staticClass: "srv__row srv__row--head" },
+                      [
+                        _c("v-uni-text", { staticClass: "srv__c1 srv__th" }, [
+                          _vm._v("服务项目"),
+                        ]),
+                        _c("v-uni-text", { staticClass: "srv__c2 srv__th" }, [
+                          _vm._v("规格"),
+                        ]),
+                      ],
+                      1
+                    ),
+                    _vm._l(_vm.pkg.services, function (s, i) {
+                      return _c(
+                        "v-uni-view",
+                        { key: i, staticClass: "srv__row" },
+                        [
+                          _c(
+                            "v-uni-view",
+                            { staticClass: "srv__c1" },
+                            [
+                              _c("v-uni-text", {
+                                staticClass: "srv__dot",
+                                style: { background: _vm.pkg.accent },
+                              }),
+                              _c("v-uni-text", { staticClass: "srv__name" }, [
+                                _vm._v(_vm._s(s.name)),
+                              ]),
+                            ],
+                            1
+                          ),
+                          _c("v-uni-text", { staticClass: "srv__spec" }, [
+                            _vm._v(_vm._s(s.spec)),
+                          ]),
+                        ],
+                        1
+                      )
+                    }),
+                  ],
+                  2
+                ),
+              ],
+              1
+            ),
+            _vm._l(_vm.pkg.detailSections, function (section, i) {
+              return _c(
                 "v-uni-view",
-                { staticClass: "buybar__price" },
+                { key: "d" + i, staticClass: "wrap" },
                 [
                   _c(
                     "v-uni-view",
-                    { staticClass: "buybar__row" },
+                    { staticClass: "sec-head" },
                     [
-                      _c("v-uni-text", { staticClass: "buybar__cur" }, [
-                        _vm._v("¥"),
-                      ]),
-                      _c("v-uni-text", { staticClass: "buybar__now" }, [
-                        _vm._v(_vm._s(_vm.pkg.price)),
-                      ]),
-                      _c("v-uni-text", { staticClass: "buybar__origin" }, [
-                        _vm._v("¥" + _vm._s(_vm.pkg.originPrice)),
+                      _c("v-uni-text", { staticClass: "hm-sec-title" }, [
+                        _vm._v(_vm._s(section.title)),
                       ]),
                     ],
                     1
                   ),
-                  _c("v-uni-text", { staticClass: "buybar__save" }, [
-                    _vm._v("限时省 " + _vm._s(_vm.saved) + " 元"),
-                  ]),
+                  _c(
+                    "v-uni-view",
+                    { staticClass: "card ds" },
+                    [
+                      _c("v-uni-image", {
+                        staticClass: "ds__img",
+                        attrs: { src: section.img, mode: "aspectFill" },
+                        on: {
+                          error: function ($event) {
+                            arguments[0] = $event = _vm.$handleEvent($event)
+                            _vm.onSectionErr(i)
+                          },
+                        },
+                      }),
+                      _c(
+                        "v-uni-view",
+                        { staticClass: "ds__body" },
+                        _vm._l(section.points, function (p, j) {
+                          return _c(
+                            "v-uni-view",
+                            { key: j, staticClass: "ds__point" },
+                            [
+                              _c(
+                                "v-uni-text",
+                                {
+                                  staticClass: "ds__idx",
+                                  style: {
+                                    color: _vm.pkg.accent,
+                                    background: _vm.pkg.accentSoft,
+                                  },
+                                },
+                                [_vm._v(_vm._s(j + 1))]
+                              ),
+                              _c("v-uni-text", { staticClass: "ds__p" }, [
+                                _vm._v(_vm._s(p)),
+                              ]),
+                            ],
+                            1
+                          )
+                        }),
+                        1
+                      ),
+                    ],
+                    1
+                  ),
                 ],
                 1
-              ),
-              _c(
-                "v-uni-view",
-                {
-                  staticClass: "buybar__btn",
-                  style: { background: _vm.pkg.accent },
-                  on: {
-                    click: function ($event) {
-                      arguments[0] = $event = _vm.$handleEvent($event)
-                      _vm.buy.apply(void 0, arguments)
+              )
+            }),
+            _c(
+              "v-uni-view",
+              { staticClass: "wrap" },
+              [
+                _c(
+                  "v-uni-view",
+                  { staticClass: "sec-head" },
+                  [
+                    _c("v-uni-text", { staticClass: "hm-sec-title" }, [
+                      _vm._v("常见问题"),
+                    ]),
+                    _c("v-uni-text", { staticClass: "hm-sec-sub" }, [
+                      _vm._v("点击查看解答"),
+                    ]),
+                  ],
+                  1
+                ),
+                _c(
+                  "v-uni-view",
+                  { staticClass: "card faq" },
+                  _vm._l(_vm.pkg.faq, function (f, i) {
+                    return _c(
+                      "v-uni-view",
+                      { key: i, staticClass: "faq__item" },
+                      [
+                        _c(
+                          "v-uni-view",
+                          {
+                            staticClass: "faq__q",
+                            on: {
+                              click: function ($event) {
+                                arguments[0] = $event = _vm.$handleEvent($event)
+                                _vm.toggleFaq(i)
+                              },
+                            },
+                          },
+                          [
+                            _c("v-uni-text", { staticClass: "faq__q-t" }, [
+                              _vm._v(_vm._s(f.q)),
+                            ]),
+                            _c(
+                              "v-uni-text",
+                              {
+                                staticClass: "faq__arrow",
+                                class: { "faq__arrow--on": _vm.openFaq === i },
+                              },
+                              [_vm._v("⌄")]
+                            ),
+                          ],
+                          1
+                        ),
+                        _vm.openFaq === i
+                          ? _c(
+                              "v-uni-view",
+                              { staticClass: "faq__a" },
+                              [
+                                _c("v-uni-text", { staticClass: "faq__a-t" }, [
+                                  _vm._v(_vm._s(f.a)),
+                                ]),
+                              ],
+                              1
+                            )
+                          : _vm._e(),
+                      ],
+                      1
+                    )
+                  }),
+                  1
+                ),
+              ],
+              1
+            ),
+            _c(
+              "v-uni-view",
+              { staticClass: "foot-tip" },
+              [
+                _c("v-uni-text", { staticClass: "foot-tip__t" }, [
+                  _vm._v(
+                    "本服务为健康管理与生活方式干预，不替代医疗诊断与处方。方案不含药品，用药调整请遵医嘱。"
+                  ),
+                ]),
+                _c("v-uni-text", { staticClass: "foot-tip__t" }, [
+                  _vm._v("虚拟服务一经开通不支持退款，开通前请确认服务内容。"),
+                ]),
+              ],
+              1
+            ),
+            _c("v-uni-view", { staticClass: "bar-holder" }),
+            _c(
+              "v-uni-view",
+              { staticClass: "buybar" },
+              [
+                _c(
+                  "v-uni-view",
+                  { staticClass: "buybar__price" },
+                  [
+                    _c(
+                      "v-uni-view",
+                      { staticClass: "buybar__row" },
+                      [
+                        _c("v-uni-text", { staticClass: "buybar__cur" }, [
+                          _vm._v("¥"),
+                        ]),
+                        _c("v-uni-text", { staticClass: "buybar__now" }, [
+                          _vm._v(_vm._s(_vm.pkg.price)),
+                        ]),
+                        _c("v-uni-text", { staticClass: "buybar__origin" }, [
+                          _vm._v("¥" + _vm._s(_vm.pkg.originPrice)),
+                        ]),
+                      ],
+                      1
+                    ),
+                    _c("v-uni-text", { staticClass: "buybar__save" }, [
+                      _vm._v("限时省 " + _vm._s(_vm.saved) + " 元"),
+                    ]),
+                  ],
+                  1
+                ),
+                _c(
+                  "v-uni-view",
+                  {
+                    staticClass: "buybar__btn",
+                    style: { background: _vm.pkg.accent },
+                    on: {
+                      click: function ($event) {
+                        arguments[0] = $event = _vm.$handleEvent($event)
+                        _vm.buy.apply(void 0, arguments)
+                      },
                     },
                   },
-                },
-                [
-                  _c("v-uni-text", { staticClass: "buybar__btn-t" }, [
-                    _vm._v("立即购买"),
-                  ]),
-                ],
-                1
-              ),
-            ],
-            1
-          ),
-        ],
-        2
-      )
-    : _vm._e()
+                  [
+                    _c("v-uni-text", { staticClass: "buybar__btn-t" }, [
+                      _vm._v("立即购买"),
+                    ]),
+                  ],
+                  1
+                ),
+              ],
+              1
+            ),
+          ]
+        : [
+            _c("hm-navbar", {
+              attrs: {
+                title: "服务包详情",
+                "bg-color": "#ffffff",
+                "text-color": "#1a2a3c",
+              },
+            }),
+            _c(
+              "v-uni-view",
+              { staticClass: "empty" },
+              [
+                _c("v-uni-text", {
+                  staticClass: "empty__icon fa-solid fa-box-open",
+                }),
+                _c("v-uni-text", { staticClass: "empty__t" }, [
+                  _vm._v("服务包不存在或已下架"),
+                ]),
+                _c("v-uni-text", { staticClass: "empty__d" }, [
+                  _vm._v("该服务包可能已调整，去看看其他健康管理方案吧"),
+                ]),
+                _c(
+                  "v-uni-view",
+                  {
+                    staticClass: "empty__btn",
+                    on: {
+                      click: function ($event) {
+                        arguments[0] = $event = _vm.$handleEvent($event)
+                        _vm.goHome.apply(void 0, arguments)
+                      },
+                    },
+                  },
+                  [
+                    _c("v-uni-text", { staticClass: "empty__btn-t" }, [
+                      _vm._v("返回首页"),
+                    ]),
+                  ],
+                  1
+                ),
+              ],
+              1
+            ),
+          ],
+    ],
+    2
+  )
 }
 var recyclableRender = false
 var staticRenderFns = []
@@ -755,6 +801,20 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 var FALLBACK_IMG = '/static/img/placeholder.png';
 /* harmony default export */ __webpack_exports__["default"] = ({
@@ -782,6 +842,7 @@ var FALLBACK_IMG = '/static/img/placeholder.png';
   },
   onLoad: function onLoad(options) {
     this.pkgId = options && options.id || '';
+    // 缺少 id 或 id 无效时不再白屏，模板会切到空态分支引导用户返回首页
     if (!this.pkg) {
       uni.showToast({
         title: '服务包不存在',
@@ -809,6 +870,7 @@ var FALLBACK_IMG = '/static/img/placeholder.png';
       }
     },
     buy: function buy() {
+      if (!this.pkg) return;
       this.$store.dispatch('createOrder', this.pkg.id).then(function (order) {
         if (!order) {
           uni.showToast({
@@ -820,6 +882,11 @@ var FALLBACK_IMG = '/static/img/placeholder.png';
         uni.navigateTo({
           url: '/pages/pay/pay?orderNo=' + order.orderNo
         });
+      });
+    },
+    goHome: function goHome() {
+      uni.reLaunch({
+        url: '/pages/index/index'
       });
     }
   }

@@ -1,5 +1,6 @@
 <template>
-  <view class="hm-page" v-if="pkg">
+  <view class="hm-page">
+    <block v-if="pkg">
     <view class="nav-fixed">
       <hm-navbar
         :title="navSolid ? pkg.name : ''"
@@ -135,6 +136,19 @@
         <text class="buybar__btn-t">立即购买</text>
       </view>
     </view>
+    </block>
+
+    <block v-else>
+      <hm-navbar title="服务包详情" bg-color="#ffffff" text-color="#1a2a3c" />
+      <view class="empty">
+        <text class="empty__icon fa-solid fa-box-open"></text>
+        <text class="empty__t">服务包不存在或已下架</text>
+        <text class="empty__d">该服务包可能已调整，去看看其他健康管理方案吧</text>
+        <view class="empty__btn" @tap="goHome">
+          <text class="empty__btn-t">返回首页</text>
+        </view>
+      </view>
+    </block>
   </view>
 </template>
 
@@ -163,6 +177,7 @@ export default {
   },
   onLoad(options) {
     this.pkgId = (options && options.id) || ''
+    // 缺少 id 或 id 无效时不再白屏，模板会切到空态分支引导用户返回首页
     if (!this.pkg) {
       uni.showToast({ title: '服务包不存在', icon: 'none' })
     }
@@ -187,6 +202,7 @@ export default {
       }
     },
     buy() {
+      if (!this.pkg) return
       this.$store.dispatch('createOrder', this.pkg.id).then((order) => {
         if (!order) {
           uni.showToast({ title: '下单失败，请重试', icon: 'none' })
@@ -194,6 +210,9 @@ export default {
         }
         uni.navigateTo({ url: '/pages/pay/pay?orderNo=' + order.orderNo })
       })
+    },
+    goHome() {
+      uni.reLaunch({ url: '/pages/index/index' })
     }
   }
 }
@@ -230,6 +249,44 @@ export default {
 
 .wrap {
   padding: 0 $space-4;
+}
+
+.empty {
+  padding: $space-12 $space-6 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.empty__icon {
+  font-size: $size-icon-xl;
+  color: $text-muted;
+}
+
+.empty__t {
+  font-size: $font-size-sm;
+  color: $text-muted;
+  margin-top: $space-3;
+}
+
+.empty__d {
+  font-size: $font-size-xs;
+  color: $text-muted;
+  margin-top: $space-2;
+  text-align: center;
+}
+
+.empty__btn {
+  margin-top: $space-5;
+  padding: $space-2 $space-6;
+  border-radius: $radius-full;
+  background: $brand-primary;
+}
+
+.empty__btn-t {
+  color: $text-inverse;
+  font-size: $font-size-sm;
+  font-weight: 600;
 }
 
 .card {

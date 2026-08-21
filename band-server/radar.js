@@ -176,6 +176,14 @@ function pickNumber(v) {
   return m ? Number(m[0]) : null
 }
 
+// 判断在床值是否为真值（兼容数字/字符串）
+function _isTruthy(v) {
+  if (v == null || v === '') return false
+  if (typeof v === 'number') return v > 0
+  const s = String(v)
+  return /^(1|true|yes)$/i.test(s) || s.indexOf('有人') >= 0 || s.indexOf('在床') >= 0
+}
+
 // 把一条推送报文归一化成 { imei, ts, latest, attrs, event, deviceState }
 function normalizePush(msg) {
   const imei = String(msg.imei || msg.deviceImei || (msg.body && msg.body.deviceImei) || '').trim()
@@ -380,6 +388,17 @@ function mount(app, broadcast) {
     const d = touchDev(n.imei)
     const prevStruggle = (d.latest && d.latest.struggleAlert) || 0
     d.latest = Object.assign({}, d.latest, n.latest, { ts: n.ts })
+
+    // 在床/离床切换历史：状态变化时记录时间戳，保留最近 3 次
+    const curInBed = d.latest.inBed
+    const prevInBed = d._lastInBed
+    if (curInBed != null && curInBed !== prevInBed && prevInBed != null) {
+      if (!d.bedHistory) d.bedHistory = []
+      d.bedHistory.unshift({ inBed: !!_isTruthy(curInBed), ts: n.ts })
+      if (d.bedHistory.length > 3) d.bedHistory.length = 3
+    }
+    if (curInBed != null) d._lastInBed = curInBed
+
     // 挣扎历史：struggleAlert 值增加时记录时间戳，保留最近 3 次
     const curStruggle = d.latest.struggleAlert || 0
     if (curStruggle > prevStruggle) {
@@ -406,7 +425,8 @@ function mount(app, broadcast) {
       state: n.deviceState,
       stateText: n.deviceState == null ? '' : STATE_TEXT[n.deviceState] || '',
       ts: n.ts,
-      struggleHistory: d.struggleHistory || []
+      struggleHistory: d.struggleHistory || [],
+      bedHistory: d.bedHistory || []
     })
   }
 

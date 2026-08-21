@@ -63,14 +63,52 @@
           <view class="vital__card vital__card--presence">
             <view class="vital__head">
               <text class="fa-solid fa-bed vital__icon vital__icon--presence"></text>
-              <text class="vital__name">存在状态</text>
+              <text class="vital__name">在床状态</text>
             </view>
             <view class="vital__value">
               <text class="vital__num" :style="{ color: inBedColor }">{{ inBedText }}</text>
             </view>
             <text class="vital__sub">{{ latestTimeTip }}</text>
+            <!-- 最近在床/离床时间列表 -->
+            <view v-if="bedHistory.length" class="bed-list">
+              <view v-for="(b, i) in bedHistory" :key="i" class="bed-list__item">
+                <text class="bed-list__type" :class="{ 'bed-list__type--off': !b.inBed }">{{ b.inBed ? '在床' : '离床' }}</text>
+                <text class="bed-list__time">{{ fmtTs(b.ts) }}</text>
+              </view>
+            </view>
           </view>
         </view>
+
+        <!-- 睡眠：深睡/浅睡/清醒 + 进度条，手环风格 -->
+        <view class="wrap wrap--inner">
+          <view class="sec-head">
+            <text class="sec-title">睡眠</text>
+            <text class="sec-sub">{{ sleepTotalText }}</text>
+          </view>
+          <view class="sleep">
+            <view class="sleep__stats">
+              <view class="sleep__stat">
+                <text class="sleep__stat-num sleep__stat-num--deep">{{ fmtSleepMin(radarSleep.deep) }}</text>
+                <text class="sleep__stat-t">深睡</text>
+              </view>
+              <view class="sleep__stat">
+                <text class="sleep__stat-num sleep__stat-num--light">{{ fmtSleepMin(radarSleep.light) }}</text>
+                <text class="sleep__stat-t">浅睡</text>
+              </view>
+              <view class="sleep__stat">
+                <text class="sleep__stat-num sleep__stat-num--wake">{{ fmtSleepMin(radarSleep.wake) }}</text>
+                <text class="sleep__stat-t">清醒</text>
+              </view>
+            </view>
+            <view v-if="radarSleep.total" class="sleep__strip">
+              <view class="sleep__strip-seg sleep__strip-seg--deep" :style="{ width: radarSleepPct.deep + '%' }"></view>
+              <view class="sleep__strip-seg sleep__strip-seg--light" :style="{ width: radarSleepPct.light + '%' }"></view>
+              <view class="sleep__strip-seg sleep__strip-seg--wake" :style="{ width: radarSleepPct.wake + '%' }"></view>
+            </view>
+            <view v-else class="sleep__strip sleep__strip--empty"></view>
+          </view>
+        </view>
+
         <view class="vital__card vital__card--struggle" :class="{ 'vital__card--alert': struggleInfo.active }">
           <view class="vital__head">
             <text class="fa-solid fa-triangle-exclamation vital__icon vital__icon--alert"></text>
@@ -91,36 +129,6 @@
               <text class="struggle-list__count">第{{ i + 1 }}次 · 共{{ s.count }}次</text>
             </view>
           </view>
-        </view>
-      </view>
-
-      <!-- 睡眠：深睡/浅睡/清醒 + 进度条，与手环风格一致 -->
-      <view class="wrap">
-        <view class="sec-head">
-          <text class="sec-title">睡眠</text>
-          <text class="sec-sub">{{ sleepTotalText }}</text>
-        </view>
-        <view class="sleep">
-          <view class="sleep__stats">
-            <view class="sleep__stat">
-              <text class="sleep__stat-num sleep__stat-num--deep">{{ fmtSleepMin(radarSleep.deep) }}</text>
-              <text class="sleep__stat-t">深睡</text>
-            </view>
-            <view class="sleep__stat">
-              <text class="sleep__stat-num sleep__stat-num--light">{{ fmtSleepMin(radarSleep.light) }}</text>
-              <text class="sleep__stat-t">浅睡</text>
-            </view>
-            <view class="sleep__stat">
-              <text class="sleep__stat-num sleep__stat-num--wake">{{ fmtSleepMin(radarSleep.wake) }}</text>
-              <text class="sleep__stat-t">清醒</text>
-            </view>
-          </view>
-          <view v-if="radarSleep.total" class="sleep__strip">
-            <view class="sleep__strip-seg sleep__strip-seg--deep" :style="{ width: radarSleepPct.deep + '%' }"></view>
-            <view class="sleep__strip-seg sleep__strip-seg--light" :style="{ width: radarSleepPct.light + '%' }"></view>
-            <view class="sleep__strip-seg sleep__strip-seg--wake" :style="{ width: radarSleepPct.wake + '%' }"></view>
-          </view>
-          <view v-else class="sleep__strip sleep__strip--empty"></view>
         </view>
       </view>
 
@@ -217,7 +225,7 @@ export default {
     // 最新数据时间提示：显示在每个 vital 卡片下方
     latestTimeTip() {
       const ts = this.radarLatest && this.radarLatest.ts
-      if (!ts) return '等待数据上报'
+      if (!ts) return '--'
       return '最新数据 ' + this.fmtTs(ts)
     },
     // 挣扎历史（最近 3 次）
@@ -233,13 +241,13 @@ export default {
         const base = '数据由睡眠监测仪经物联网云平台实时推送，非接触式采集'
         return site ? base + '，安装位置：' + site : base
       }
-      return '数据由设备同步上传，本页为演示数据，仅供界面预览'
+      return '数据由设备同步上传'
     },
     inBedText() {
       const v = radarInBed(this.radarLatest)
       if (v === true) return '在床'
       if (v === false) return '离床'
-      return '待上报'
+      return '--'
     },
     inBedColor() {
       const v = radarInBed(this.radarLatest)
@@ -247,7 +255,6 @@ export default {
       if (v === false) return '#f2994a'
       return '#94a3b8'
     },
-    // 雷达睡眠数据：从 latest 中取深睡/浅睡/清醒/总时长，兼容 stay 字段
     radarSleep() {
       const l = this.radarLatest || {}
       const deep = l.deepSleep != null ? Number(l.deepSleep) : null
@@ -265,11 +272,18 @@ export default {
     },
     sleepTotalText() {
       const s = this.radarSleep
-      if (!s || !s.total) return '暂无睡眠数据'
+      if (!s || !s.total) return '--'
       return '共 ' + this.fmtSleepMin(s.total)
     },
     struggleInfo() {
       return radarStruggleAlert(this.radarLatest)
+    },
+    // 最近在床/离床切换历史（最多 3 条）
+    bedHistory() {
+      if (!this.isRadar) return []
+      const rec = this.radarRec
+      if (!rec || !Array.isArray(rec.bedHistory)) return []
+      return rec.bedHistory.slice(0, 3)
     }
   },
   onLoad(options) {
@@ -513,6 +527,12 @@ export default {
   padding-top: 0;
 }
 
+/* 嵌套在 wrap 内的子 wrap（如睡眠区块），去掉外层 padding 避免重复 */
+.wrap--inner {
+  padding: 0;
+  margin-top: $space-3;
+}
+
 /* ---------- 设备头卡 ---------- */
 .head {
   display: flex;
@@ -753,6 +773,36 @@ export default {
 }
 
 .struggle-list__count {
+  font-size: $font-size-2xs;
+  color: $text-muted;
+}
+
+/* ---------- 在床/离床历史列表 ---------- */
+.bed-list {
+  margin-top: $space-2;
+  display: flex;
+  flex-direction: column;
+  gap: $space-1;
+}
+
+.bed-list__item {
+  display: flex;
+  align-items: center;
+  gap: $space-2;
+}
+
+.bed-list__type {
+  font-size: $font-size-2xs;
+  font-weight: $font-weight-semibold;
+  color: #389a82;
+  flex-shrink: 0;
+}
+
+.bed-list__type--off {
+  color: #f2994a;
+}
+
+.bed-list__time {
   font-size: $font-size-2xs;
   color: $text-muted;
 }

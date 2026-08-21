@@ -73,7 +73,7 @@
     <view class="wrap">
       <view v-if="activeRight" class="ongoing" @tap="goRightDetail(activeRight.id)">
         <view class="ongoing__icon" :style="{ background: activeRight.accentSoft }">
-          <text class="ongoing__icon-t">{{ activeRight.icon }}</text>
+          <text class="ongoing__icon-t" :class="activeRight.icon"></text>
         </view>
         <view class="ongoing__main">
           <text class="ongoing__name">{{ activeRight.name }}</text>

@@ -7,7 +7,7 @@
         <view class="card ord">
           <view class="ord__head">
             <view class="ord__icon" :style="{ background: iconBg }">
-              <text class="ord__icon-t">{{ order.icon }}</text>
+              <text class="ord__icon-t" :class="order.icon"></text>
             </view>
             <view class="ord__main">
               <text class="ord__name">{{ order.pkgName }}</text>
@@ -258,6 +258,7 @@ export default {
 
 .ord__icon-t {
   font-size: $size-icon-sm;
+  color: $icon-ink;
 }
 
 .ord__main {

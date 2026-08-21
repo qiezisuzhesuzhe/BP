@@ -14,7 +14,7 @@
         <hm-navbar title="权益详情" bg-color="transparent" />
         <view class="top__body">
           <view class="top__row">
-            <text class="top__emoji">{{ right.icon }}</text>
+            <text class="top__icon" :class="right.icon"></text>
             <view class="top__main">
               <text class="top__name">{{ right.name }}</text>
               <text class="top__sub">{{ right.subtitle }}</text>
@@ -357,7 +357,7 @@ export default {
   align-items: center;
 }
 
-.top__emoji {
+.top__icon {
   color: $icon-ink;
   width: $size-avatar-md;
   height: $size-avatar-md;

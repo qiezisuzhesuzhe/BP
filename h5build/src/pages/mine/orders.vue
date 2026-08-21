@@ -32,7 +32,7 @@
 
         <view class="ord__body">
           <view class="ord__icon" :style="{ background: softOf(o.pkgId) }">
-            <text class="ord__icon-t">{{ o.icon }}</text>
+            <text class="ord__icon-t" :class="o.icon"></text>
           </view>
           <view class="ord__main">
             <text class="ord__name">{{ o.pkgName }}</text>
@@ -267,6 +267,7 @@ export default {
 
 .ord__icon-t {
   font-size: $font-size-xl;
+  color: $icon-ink;
 }
 
 .ord__main {

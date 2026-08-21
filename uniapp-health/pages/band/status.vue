@@ -20,7 +20,7 @@
           <view class="head__sn">
             <text class="head__sn-t">{{ device ? device.model : '' }} · {{ deviceid || '未绑定' }}</text>
             <text class="head__sse" :class="{ 'head__sse--on': sseOpen }">
-              <text class="fa-solid" :class="sseOpen ? 'fa-signal' : 'fa-signal-slash'"></text>
+              <text class="fa-solid" :class="sseOpen ? 'fa-signal' : 'fa-link-slash'"></text>
               <text class="head__sse-t">{{ sseOpen ? '实时接收' : '等待连接' }}</text>
             </text>
           </view>

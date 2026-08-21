@@ -1139,9 +1139,10 @@ var render = function () {
                       style: { background: _vm.activeRight.accentSoft },
                     },
                     [
-                      _c("v-uni-text", { staticClass: "ongoing__icon-t" }, [
-                        _vm._v(_vm._s(_vm.activeRight.icon)),
-                      ]),
+                      _c("v-uni-text", {
+                        staticClass: "ongoing__icon-t",
+                        class: _vm.activeRight.icon,
+                      }),
                     ],
                     1
                   ),

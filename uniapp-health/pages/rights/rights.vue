@@ -25,7 +25,7 @@
             <text class="card__name">{{ r.name }}</text>
             <text class="card__sub">{{ r.subtitle }}</text>
           </view>
-          <text class="card__emoji">{{ r.icon }}</text>
+          <text class="card__icon" :class="r.icon"></text>
         </view>
 
         <view class="card__body">
@@ -319,9 +319,10 @@ export default {
   margin-top: $space-1;
 }
 
-.card__emoji {
+.card__icon {
   font-size: $size-icon-lg;
   margin-left: $space-2;
+  color: $icon-ink;
 }
 
 .card__body {

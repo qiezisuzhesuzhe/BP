@@ -40,7 +40,7 @@
 
     <view v-if="activeRight" class="hm-card cur" @tap="goRightDetail">
       <view class="cur__icon" :style="{ background: activeRight.accentSoft }">
-        <text class="cur__icon-t">{{ activeRight.icon }}</text>
+        <text class="cur__icon-t" :class="activeRight.icon"></text>
       </view>
       <view class="cur__main">
         <text class="cur__name">{{ activeRight.name }}</text>
@@ -336,6 +336,7 @@ export default {
 
 .cur__icon-t {
   font-size: $font-size-xl;
+  color: $icon-ink;
 }
 
 .cur__main {

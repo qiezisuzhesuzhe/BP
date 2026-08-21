@@ -172,6 +172,7 @@
             </view>
             <text class="plan__title">{{ it.title }}</text>
             <text class="plan__desc">{{ it.desc }}</text>
+            <text v-if="it.basis" class="plan__basis">{{ it.basis }}</text>
 
             <!-- 跟练视频 -->
             <view v-if="it.video" class="plan__video" @tap="playVideo(it.title)">
@@ -184,12 +185,15 @@
             </view>
 
             <!-- 关联商品 -->
-            <view v-if="it.goods && it.goods.length" class="plan__goods">
-              <view v-for="g in it.goods" :key="g.id" class="plan__good" @tap="goGood(g)">
-                <image class="plan__good-img" :src="g.img" mode="aspectFill"></image>
-                <view class="plan__good-info">
-                  <text class="plan__good-name">{{ g.name }}</text>
-                  <text class="plan__good-price">¥{{ g.price }}</text>
+            <view v-if="it.goods && it.goods.length" class="plan__goods-wrap">
+              <text class="plan__goods-label">推荐健康产品</text>
+              <view class="plan__goods">
+                <view v-for="g in it.goods" :key="g.id" class="plan__good" @tap="goGood(g)">
+                  <image class="plan__good-img" :src="g.img" mode="aspectFill"></image>
+                  <view class="plan__good-info">
+                    <text class="plan__good-name">{{ g.name }}</text>
+                    <text class="plan__good-price">¥{{ g.price }}</text>
+                  </view>
                 </view>
               </view>
             </view>
@@ -313,7 +317,8 @@ import {
   HEALTH_PLAN_META,
   HEALTH_RISK_FORECAST,
   HEALTH_DISEASE_RISK,
-  HEALTH_RECOMMEND
+  HEALTH_RECOMMEND,
+  buildDayPlan
 } from '@/common/mock.js'
 
 const VIDEO_COVER =
@@ -337,6 +342,7 @@ export default {
       focus: HEALTH_FOCUS,
       achieve: HEALTH_ACHIEVE,
       plan: HEALTH_PLAN,
+      planDoneCount: 4,
       forecast: HEALTH_RISK_FORECAST,
       disease: HEALTH_DISEASE_RISK,
       recommend: HEALTH_RECOMMEND,
@@ -383,6 +389,20 @@ export default {
     },
     achieveDone() {
       return this.achieve.filter((a) => a.done).length
+    },
+    // 动态生成今日健康计划（结合高血压指南 + 营养指南）
+    plan() {
+      const items = buildDayPlan('hbp', null, 0, 8)
+      // 保留已完成状态
+      const doneCount = Math.min(this.planDoneCount, items.length)
+      for (let i = 0; i < doneCount; i++) {
+        items[i].done = true
+      }
+      return {
+        done: doneCount,
+        total: items.length,
+        items: items
+      }
     }
   },
   methods: {
@@ -1015,6 +1035,17 @@ export default {
   line-height: $line-height-relaxed;
 }
 
+.plan__basis {
+  display: block;
+  font-size: $font-size-2xs;
+  color: $text-disabled;
+  line-height: $line-height-relaxed;
+  margin-top: $space-1;
+  padding: $space-1 $space-2;
+  background: $bg-subtle;
+  border-radius: $radius-xs;
+}
+
 .plan__video {
   position: relative;
   margin-top: $space-2;
@@ -1071,9 +1102,20 @@ export default {
   letter-spacing: 1rpx;
 }
 
+.plan__goods-wrap {
+  margin-top: $space-3;
+}
+
+.plan__goods-label {
+  display: block;
+  font-size: $font-size-2xs;
+  font-weight: $font-weight-semibold;
+  color: $brand-primary-active;
+  margin-bottom: $space-1;
+}
+
 .plan__goods {
   display: flex;
-  margin-top: $space-2;
 }
 
 .plan__good {

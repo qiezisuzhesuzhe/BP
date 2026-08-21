@@ -225,10 +225,19 @@ export const CAT_META = {
 
 var GUIDE_HBP = '《中国高血压防治指南 2024》'
 var GUIDE_DM = '《中国 2 型糖尿病防治指南 2024》'
+// 新合并的营养与生活方式管理指南
+var GUIDE_NUTRI = '《居民膳食营养与健康管理指南》'
 
 // 供界面文案引用，避免指南名称在多处硬编码
 export function guideName(pkgKey) {
   return pkgKey === 'dm' ? GUIDE_DM : GUIDE_HBP
+}
+
+// 合并知识引擎的指南引用（时间线basis字段按类目选择合适的指南）
+export function basisForCat(cat) {
+  if (cat === 'nutrition' || cat === 'diet' || cat === 'tea') return GUIDE_NUTRI
+  if (cat === 'medication' || cat === 'monitor' || cat === 'assessment') return GUIDE_HBP
+  return GUIDE_NUTRI
 }
 
 // 高血压评估判定
@@ -386,12 +395,12 @@ function planHbp(items, f) {
       out.push(
         withBasis(
           it,
-          GUIDE_HBP + '推荐限盐：每日食盐 <5g（钠 <2000mg），并增加富钾蔬果摄入',
+          GUIDE_HBP + '推荐限盐：每日食盐 <5g（钠 <2000mg），并增加富钾蔬果摄入；' + GUIDE_NUTRI + '建议食物多样、谷薯为主，多吃蔬果奶类豆类',
           f.heavySalt
-            ? { desc: it.desc + '；使用限盐勺定量，避免腌制品与加工肉' }
+            ? { desc: it.desc + '；使用限盐勺定量，避免腌制品与加工肉', goods: recommendGoodsForCat('nutrition') }
             : f.naiveSalt
-            ? { desc: it.desc + '；先学会看包装钠含量，把隐形盐找出来' }
-            : null
+            ? { desc: it.desc + '；先学会看包装钠含量，把隐形盐找出来', goods: recommendGoodsForCat('nutrition') }
+            : { goods: recommendGoodsForCat('nutrition') }
         )
       )
       continue
@@ -544,8 +553,10 @@ function planDm(items, f) {
       out.push(
         withBasis(
           it,
-          GUIDE_DM + '医学营养治疗：主食定量、优选低 GI 食物，先吃蔬菜与蛋白质再吃主食',
-          f.bigStaple ? { desc: it.desc + '；主食按生重 50-75g 定量，一半换成杂粮' } : null
+          GUIDE_DM + '医学营养治疗：主食定量、优选低 GI 食物，先吃蔬菜与蛋白质再吃主食；' + GUIDE_NUTRI + '建议食物多样、谷薯为主，多吃蔬果奶类豆类',
+          f.bigStaple
+            ? { desc: it.desc + '；主食按生重 50-75g 定量，一半换成杂粮', goods: recommendGoodsForCat('nutrition') }
+            : { goods: recommendGoodsForCat('nutrition') }
         )
       )
       continue
@@ -661,6 +672,41 @@ function trimPlan(items, limit) {
 }
 
 /**
+ * 根据计划类目推荐商城健康产品
+ * @param {String} cat 计划类目 (nutrition/diet/tea/medication/sleep/exercise)
+ * @returns {Array} 商城商品数组
+ */
+export function recommendGoodsForCat(cat) {
+  var map = {
+    nutrition: [
+      { id: 'g3', name: '低盐调味礼盒', price: 89, img: '/static/img/mall/g3.jpg' },
+      { id: 'g6', name: '智能恒温杯', price: 159, img: '/static/img/mall/g6.jpg' }
+    ],
+    diet: [
+      { id: 'g3', name: '低盐调味礼盒', price: 89, img: '/static/img/mall/g3.jpg' },
+      { id: 'g6', name: '智能恒温杯', price: 159, img: '/static/img/mall/g6.jpg' }
+    ],
+    tea: [
+      { id: 'g6', name: '智能恒温杯', price: 159, img: '/static/img/mall/g6.jpg' }
+    ],
+    medication: [
+      { id: 'g8', name: '一周分装药盒', price: 29, img: '/static/img/mall/g8.jpg' }
+    ],
+    sleep: [
+      { id: 'g4', name: '助眠香薰精油', price: 69, img: '/static/img/mall/g4.jpg' }
+    ],
+    exercise: [
+      { id: 'g7', name: '弹力带训练套装', price: 39, img: '/static/img/mall/g7.jpg' }
+    ],
+    monitor: [
+      { id: 'g1', name: '上臂式电子血压计', price: 299, img: '/static/img/mall/g1.jpg' },
+      { id: 'g2', name: '智能体脂秤', price: 199, img: '/static/img/mall/g2.jpg' }
+    ]
+  }
+  return map[cat] || []
+}
+
+/**
  * 生成个性化日程
  * @param {String} pkgKey  hbp | dm
  * @param {Object} answers 问卷答案；为空时退回通用模板
@@ -676,10 +722,25 @@ export function buildDayPlan(pkgKey, answers, dayIndex, limit) {
   if (!hasAnswers) {
     // 未评估时不编造依据，仅给通用模板
     planned = items.map(function (it) {
-      return Object.assign({}, it)
+      var item = Object.assign({}, it)
+      // 为营养/饮食/养生条目自动挂载商城商品推荐
+      var goodsCats = ['nutrition', 'diet', 'tea', 'sleep', 'exercise', 'medication', 'monitor']
+      if (goodsCats.indexOf(item.cat) >= 0) {
+        item.goods = recommendGoodsForCat(item.cat)
+      }
+      return item
     })
   } else {
     planned = key === 'dm' ? planDm(items, dmFlags(answers)) : planHbp(items, hbpFlags(answers))
+    // 评估后的条目也挂载商品推荐
+    for (var i = 0; i < planned.length; i++) {
+      var p = planned[i]
+      if (p.goods && p.goods.length) continue
+      var goodsCats = ['nutrition', 'diet', 'tea', 'sleep', 'exercise', 'medication', 'monitor']
+      if (goodsCats.indexOf(p.cat) >= 0) {
+        p.goods = recommendGoodsForCat(p.cat)
+      }
+    }
   }
 
   planned = trimPlan(planned, limit)
@@ -802,7 +863,14 @@ export const KNOWLEDGE = [
   { icon: 'fa-solid fa-book', title: '我国成人高血压患病率约 27.5%', desc: '有效控压可显著降低心脑血管并发症风险' },
   { icon: 'fa-solid fa-bullseye', title: '一般人群目标血压 <140/90 mmHg', desc: '能耐受者可进一步降至 <130/80 mmHg' },
   { icon: 'fa-solid fa-leaf', title: 'DASH 饮食原则', desc: '低盐（<5g/天）、高钾、低脂、多蔬果全谷物' },
-  { icon: 'fa-solid fa-person-running', title: '每周 3-5 次中等强度有氧运动', desc: '每次 30 分钟，快走、慢跑、太极拳、八段锦均可' }
+  { icon: 'fa-solid fa-person-running', title: '每周 3-5 次中等强度有氧运动', desc: '每次 30 分钟，快走、慢跑、太极拳、八段锦均可' },
+  // 《居民膳食营养与健康管理指南》合并内容
+  { icon: 'fa-solid fa-bowl-food', title: '每日膳食指南：食物多样、谷薯为主', desc: '每天摄入 12 种以上食物，每周 25 种以上' },
+  { icon: 'fa-solid fa-apple-whole', title: '多吃蔬果、奶类、豆类', desc: '蔬菜每天 300-500g，水果 200-350g' },
+  { icon: 'fa-solid fa-fish', title: '适量吃鱼、禽、蛋、瘦肉', desc: '每周至少吃 2 次鱼，优先选择鱼虾等水产品' },
+  { icon: 'fa-solid fa-droplet', title: '少盐少油、控糖限酒', desc: '每天食盐不超过 5g，烹调油 25-30g' },
+  { icon: 'fa-solid fa-moon', title: '规律作息、充足睡眠', desc: '成年人每天 7-8 小时，尽量固定作息时间' },
+  { icon: 'fa-solid fa-person-walking', title: '减少久坐、增加身体活动', desc: '每小时起身活动 5 分钟，每周累计 150 分钟以上' }
 ]
 
 // 首页"我的权益"入口（图标统一金色，与权益卡片金色装饰呼应）

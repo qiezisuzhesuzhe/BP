@@ -145,257 +145,57 @@ var render = function () {
                           _vm._s(dev.sn || dev.deviceid)
                       ),
                     ]),
-                    dev.typeKey === "band-bp" && _vm.bandLive[dev.deviceid]
-                      ? _c(
-                          "v-uni-view",
-                          { staticClass: "dev__live" },
-                          [
-                            _c(
+                    _c(
+                      "v-uni-view",
+                      { staticClass: "dev__info" },
+                      [
+                        _vm.devBattery(dev) != null
+                          ? _c(
                               "v-uni-view",
-                              { staticClass: "dev__chip" },
+                              { staticClass: "dev__info-item" },
                               [
                                 _c("v-uni-text", {
-                                  staticClass:
-                                    "dev__chip-icon fa-solid fa-heart-pulse",
-                                  staticStyle: { color: "#f15533" },
-                                }),
-                                _c(
-                                  "v-uni-text",
-                                  { staticClass: "dev__chip-n" },
-                                  [
-                                    _vm._v(
-                                      _vm._s(
-                                        _vm.bandLive[dev.deviceid].sbp != null
-                                          ? _vm.bandLive[dev.deviceid].sbp
-                                          : "--"
-                                      )
-                                    ),
-                                  ]
-                                ),
-                                _c(
-                                  "v-uni-text",
-                                  { staticClass: "dev__chip-sep" },
-                                  [_vm._v("/")]
-                                ),
-                                _c(
-                                  "v-uni-text",
-                                  {
-                                    staticClass: "dev__chip-n dev__chip-n--sub",
-                                  },
-                                  [
-                                    _vm._v(
-                                      _vm._s(
-                                        _vm.bandLive[dev.deviceid].dbp != null
-                                          ? _vm.bandLive[dev.deviceid].dbp
-                                          : "--"
-                                      )
-                                    ),
-                                  ]
-                                ),
-                                _c(
-                                  "v-uni-text",
-                                  { staticClass: "dev__chip-u" },
-                                  [_vm._v("mmHg")]
-                                ),
-                              ],
-                              1
-                            ),
-                            _c(
-                              "v-uni-view",
-                              { staticClass: "dev__chip" },
-                              [
-                                _c("v-uni-text", {
-                                  staticClass:
-                                    "dev__chip-icon fa-solid fa-heart",
-                                  staticStyle: { color: "#389a82" },
-                                }),
-                                _c(
-                                  "v-uni-text",
-                                  { staticClass: "dev__chip-n" },
-                                  [
-                                    _vm._v(
-                                      _vm._s(
-                                        _vm.bandLive[dev.deviceid].hr != null
-                                          ? _vm.bandLive[dev.deviceid].hr
-                                          : "--"
-                                      )
-                                    ),
-                                  ]
-                                ),
-                                _c(
-                                  "v-uni-text",
-                                  { staticClass: "dev__chip-u" },
-                                  [_vm._v("bpm")]
-                                ),
-                              ],
-                              1
-                            ),
-                            _vm.bandLive[dev.deviceid].battery != null
-                              ? _c(
-                                  "v-uni-view",
-                                  { staticClass: "dev__chip" },
-                                  [
-                                    _c("v-uni-text", {
-                                      staticClass: "dev__chip-icon",
-                                      class: _vm.batteryIcon(
-                                        _vm.bandLive[dev.deviceid].battery
-                                      ),
-                                      style: {
-                                        color: _vm.batteryColor(
-                                          _vm.bandLive[dev.deviceid].battery
-                                        ),
-                                      },
-                                    }),
-                                    _c(
-                                      "v-uni-text",
-                                      { staticClass: "dev__chip-n" },
-                                      [
-                                        _vm._v(
-                                          _vm._s(
-                                            _vm.bandLive[dev.deviceid].battery
-                                          )
-                                        ),
-                                      ]
-                                    ),
-                                    _c(
-                                      "v-uni-text",
-                                      { staticClass: "dev__chip-u" },
-                                      [_vm._v("%")]
-                                    ),
-                                  ],
-                                  1
-                                )
-                              : _vm._e(),
-                          ],
-                          1
-                        )
-                      : dev.typeKey === "radar" && _vm.radarLive[dev.deviceid]
-                      ? _c(
-                          "v-uni-view",
-                          { staticClass: "dev__live" },
-                          [
-                            _c(
-                              "v-uni-view",
-                              { staticClass: "dev__chip" },
-                              [
-                                _c("v-uni-text", {
-                                  staticClass: "dev__chip-icon",
-                                  class: _vm.inBedIcon(dev.deviceid),
+                                  staticClass: "dev__info-icon",
+                                  class: _vm.batteryIcon(_vm.devBattery(dev)),
                                   style: {
-                                    color: _vm.inBedColor(dev.deviceid),
+                                    color: _vm.batteryColor(
+                                      _vm.devBattery(dev)
+                                    ),
                                   },
                                 }),
                                 _c(
                                   "v-uni-text",
-                                  {
-                                    staticClass: "dev__chip-n dev__chip-n--txt",
-                                  },
-                                  [_vm._v(_vm._s(_vm.inBedText(dev.deviceid)))]
+                                  { staticClass: "dev__info-t" },
+                                  [_vm._v(_vm._s(_vm.devBattery(dev)) + "%")]
                                 ),
                               ],
                               1
-                            ),
-                            _vm.radarLive[dev.deviceid].heartRate != null
-                              ? _c(
-                                  "v-uni-view",
-                                  { staticClass: "dev__chip" },
-                                  [
-                                    _c("v-uni-text", {
-                                      staticClass:
-                                        "dev__chip-icon fa-solid fa-heart",
-                                      staticStyle: { color: "#e74c3c" },
-                                    }),
-                                    _c(
-                                      "v-uni-text",
-                                      { staticClass: "dev__chip-n" },
-                                      [
-                                        _vm._v(
-                                          _vm._s(
-                                            _vm.radarLive[dev.deviceid]
-                                              .heartRate
-                                          )
-                                        ),
-                                      ]
-                                    ),
-                                    _c(
-                                      "v-uni-text",
-                                      { staticClass: "dev__chip-u" },
-                                      [_vm._v("bpm")]
-                                    ),
-                                  ],
-                                  1
-                                )
-                              : _vm._e(),
-                            _vm.radarLive[dev.deviceid].respRate != null
-                              ? _c(
-                                  "v-uni-view",
-                                  { staticClass: "dev__chip" },
-                                  [
-                                    _c("v-uni-text", {
-                                      staticClass:
-                                        "dev__chip-icon fa-solid fa-wind",
-                                      staticStyle: { color: "#8dcdd8" },
-                                    }),
-                                    _c(
-                                      "v-uni-text",
-                                      { staticClass: "dev__chip-n" },
-                                      [
-                                        _vm._v(
-                                          _vm._s(
-                                            _vm.radarLive[dev.deviceid].respRate
-                                          )
-                                        ),
-                                      ]
-                                    ),
-                                    _c(
-                                      "v-uni-text",
-                                      { staticClass: "dev__chip-u" },
-                                      [_vm._v("次/分")]
-                                    ),
-                                  ],
-                                  1
-                                )
-                              : _vm._e(),
-                            _vm.radarLive[dev.deviceid].struggleAlert > 0
-                              ? _c(
-                                  "v-uni-view",
-                                  { staticClass: "dev__chip" },
-                                  [
-                                    _c("v-uni-text", {
-                                      staticClass:
-                                        "dev__chip-icon fa-solid fa-triangle-exclamation",
-                                      staticStyle: { color: "#f15533" },
-                                    }),
-                                    _c(
-                                      "v-uni-text",
-                                      {
-                                        staticClass: "dev__chip-n",
-                                        staticStyle: { color: "#f15533" },
-                                      },
-                                      [
-                                        _vm._v(
-                                          _vm._s(
-                                            _vm.radarLive[dev.deviceid]
-                                              .struggleAlert
-                                          )
-                                        ),
-                                      ]
-                                    ),
-                                    _c(
-                                      "v-uni-text",
-                                      { staticClass: "dev__chip-u" },
-                                      [_vm._v("次挣扎")]
-                                    ),
-                                  ],
-                                  1
-                                )
-                              : _vm._e(),
-                          ],
-                          1
-                        )
-                      : _c("v-uni-text", { staticClass: "dev__sync" }, [
-                          _vm._v("最近同步 " + _vm._s(dev.lastSync)),
-                        ]),
+                            )
+                          : _vm._e(),
+                        _vm.devSignal(dev) != null
+                          ? _c(
+                              "v-uni-view",
+                              { staticClass: "dev__info-item" },
+                              [
+                                _c("v-uni-text", {
+                                  staticClass:
+                                    "dev__info-icon fa-solid fa-signal",
+                                  style: {
+                                    color: _vm.signalColor(_vm.devSignal(dev)),
+                                  },
+                                }),
+                                _c(
+                                  "v-uni-text",
+                                  { staticClass: "dev__info-t" },
+                                  [_vm._v(_vm._s(_vm.devSignal(dev)))]
+                                ),
+                              ],
+                              1
+                            )
+                          : _vm._e(),
+                      ],
+                      1
+                    ),
                   ],
                   1
                 ),
@@ -479,7 +279,7 @@ render._withStripped = true
 var ___CSS_LOADER_API_IMPORT___ = __webpack_require__(/*! ../../../node_modules/css-loader/dist/runtime/api.js */ "JPst");
 exports = ___CSS_LOADER_API_IMPORT___(false);
 // Module
-exports.push([module.i, "@charset \"UTF-8\";\n/* 享相健康+ · 设计令牌\n   来源：/workspace/DESIGN.md\n   方案：rpx + SCSS 变量（1px = 2rpx，基于 750rpx 设计基准） */\n/* ---------- 品牌色 ---------- */\n/* ---------- 头像 ---------- */\n/* ---------- 语义状态色 ---------- */\n/* ---------- 金色（尊享装饰） ---------- */\n/* ---------- 背景 ---------- */\n/* 斜向两色渐变：左上(#ddf7ed) → 右下(#f3f3f3)，末端即底色；\n   配合 App.vue 中 background-attachment: fixed 铺满视口固定，不随页面滚动/变长 */\n/* ---------- 文字 ---------- */\n/* ---------- 描边 / 遮罩 ---------- */\n/* ---------- 字体 ---------- */\n/* 英文/数字优先匹配 DIN Pro（Mac 自带 DIN Alternate 作为备选），中文回退苹方/雅黑 */\n/* 移动端最小舒适字号（可读正文下限）：\n   说明/入口/数据标签等可读文字不得小于 12px(24rpx)；\n   $font-size-2xs(10px) 仅限角标、徽标、装饰性元素 */\n/* ---------- 语义排版 ---------- */\n/* ---------- 间距 ---------- */\n/* ---------- 区块标题 ---------- */\n/* 标题下间距 = 列表间距；上间距 = 下间距 × 2 */\n/* ---------- 尺寸 ---------- */\n/* ---------- 圆角（已减半，更克制干净） ---------- */\n/* ---------- 阴影 ---------- */\n/* ---------- 层级 ---------- */\n/* ---------- 动效 ---------- */\n.empty[data-v-43012106] {\n  padding: %?96?% %?48?% %?80?%;\n  display: flex;\n  flex-direction: column;\n  align-items: center;\n  text-align: center;\n}\n.empty__icon[data-v-43012106] {\n  width: %?128?%;\n  height: %?128?%;\n  border-radius: %?999?%;\n  background: #d4f5ee;\n  display: flex;\n  align-items: center;\n  justify-content: center;\n  box-shadow: 0 %?12?% %?48?% rgba(125, 212, 188, 0.18);\n  margin-bottom: %?32?%;\n}\n.empty__icon-t[data-v-43012106] {\n  font-size: %?64?%;\n  color: rgba(0, 0, 0, 0.1);\n}\n.empty__t[data-v-43012106] {\n  font-size: %?32?%;\n  font-weight: 800;\n  color: #1a2a3c;\n  line-height: 1.1;\n}\n.empty__d[data-v-43012106] {\n  display: block;\n  font-size: %?24?%;\n  color: #64748b;\n  line-height: 1.6;\n  margin-top: %?16?%;\n  max-width: %?480?%;\n}\n.empty__btn[data-v-43012106] {\n  margin-top: %?40?%;\n  display: flex;\n  align-items: center;\n  background: #389a82;\n  border-radius: %?999?%;\n  padding: %?24?% %?48?%;\n  box-shadow: 0 %?12?% %?48?% rgba(125, 212, 188, 0.18);\n}\n.empty__btn-icon[data-v-43012106] {\n  color: #ffffff;\n  font-size: %?28?%;\n  margin-right: %?16?%;\n}\n.empty__btn-t[data-v-43012106] {\n  color: #ffffff;\n  font-size: %?28?%;\n  font-weight: 600;\n}\n.dev[data-v-43012106] {\n  display: flex;\n  align-items: center;\n  background: #ffffff;\n  border-radius: %?20?%;\n  box-shadow: 0 %?4?% %?24?% rgba(15, 61, 53, 0.06);\n  padding: %?24?%;\n  margin-left: %?32?%;\n  margin-right: %?32?%;\n  margin-bottom: %?32?%;\n  transition: box-shadow 0.2s ease, -webkit-transform 0.1s ease;\n  transition: transform 0.1s ease, box-shadow 0.2s ease;\n  transition: transform 0.1s ease, box-shadow 0.2s ease, -webkit-transform 0.1s ease;\n}\n.dev[data-v-43012106]:active {\n  -webkit-transform: scale(0.99);\n          transform: scale(0.99);\n  box-shadow: 0 %?4?% %?24?% rgba(15, 61, 53, 0.06);\n}\n.dev__icon[data-v-43012106] {\n  width: %?88?%;\n  height: %?88?%;\n  border-radius: %?20?%;\n  display: flex;\n  align-items: center;\n  justify-content: center;\n  flex-shrink: 0;\n}\n.dev__icon-t[data-v-43012106] {\n  font-size: %?44?%;\n}\n.dev__main[data-v-43012106] {\n  flex: 1;\n  padding: 0 %?24?%;\n  overflow: hidden;\n  min-width: 0;\n}\n.dev__name[data-v-43012106] {\n  display: block;\n  font-size: %?32?%;\n  font-weight: 800;\n  color: #1a2a3c;\n  line-height: 1.1;\n  overflow: hidden;\n  text-overflow: ellipsis;\n  white-space: nowrap;\n}\n.dev__sn[data-v-43012106] {\n  display: block;\n  font-size: %?24?%;\n  color: #334155;\n  margin-top: %?8?%;\n  overflow: hidden;\n  text-overflow: ellipsis;\n  white-space: nowrap;\n}\n.dev__sync[data-v-43012106] {\n  display: block;\n  font-size: %?20?%;\n  color: #94a3b8;\n  margin-top: %?8?%;\n}\n/* 手环实时数据：指标 chip 行 */\n.dev__live[data-v-43012106] {\n  display: flex;\n  align-items: center;\n  flex-wrap: wrap;\n  gap: %?16?%;\n  margin-top: %?16?%;\n}\n.dev__chip[data-v-43012106] {\n  display: inline-flex;\n  align-items: baseline;\n  padding: %?8?% %?16?%;\n  border-radius: %?12?%;\n  background: #f2f7fa;\n}\n.dev__chip-icon[data-v-43012106] {\n  font-size: %?24?%;\n  margin-right: %?8?%;\n  opacity: 0.9;\n}\n.dev__chip-n[data-v-43012106] {\n  font-family: \"DIN Pro\", \"DIN Alternate\", \"Helvetica Neue\", Arial, sans-serif;\n  font-weight: 800;\n  color: #1a2a3c;\n  font-size: %?28?%;\n  line-height: 1;\n}\n.dev__chip-n--sub[data-v-43012106] {\n  color: #334155;\n}\n/* 中文短语（如\"在床/离床\"）不走英文数字字体，避免字形与字重错位 */\n.dev__chip-n--txt[data-v-43012106] {\n  font-family: inherit;\n  font-weight: 700;\n  font-size: %?24?%;\n}\n.dev__chip-sep[data-v-43012106] {\n  margin: 0 %?4?%;\n  color: #64748b;\n  font-size: %?24?%;\n}\n.dev__chip-u[data-v-43012106] {\n  margin-left: %?8?%;\n  font-size: %?20?%;\n  color: #64748b;\n}\n.dev__right[data-v-43012106] {\n  display: flex;\n  align-items: center;\n  gap: %?16?%;\n  flex-shrink: 0;\n}\n.dev__status[data-v-43012106] {\n  display: flex;\n  align-items: center;\n  flex-shrink: 0;\n  padding: %?8?% %?16?%;\n  border-radius: %?999?%;\n  background: #27ae60;\n}\n.dev__status--off[data-v-43012106] {\n  background: #f2f7fa;\n}\n.dev__status-dot[data-v-43012106] {\n  width: %?12?%;\n  height: %?12?%;\n  border-radius: 50%;\n  background: #ffffff;\n  margin-right: %?8?%;\n}\n.dev__status--off .dev__status-dot[data-v-43012106] {\n  background: #94a3b8;\n}\n.dev__status-t[data-v-43012106] {\n  font-size: %?20?%;\n  color: #ffffff;\n  font-weight: 600;\n}\n.dev__status--off .dev__status-t[data-v-43012106] {\n  color: #64748b;\n}\n.dev__arrow[data-v-43012106] {\n  font-size: %?24?%;\n  color: #94a3b8;\n}\n.add-bar[data-v-43012106] {\n  position: fixed;\n  left: %?32?%;\n  right: %?32?%;\n  /* 底部留出 tabBar(约54px) + 安全间距 */\n  bottom: 64px;\n  height: %?88?%;\n  border-radius: %?999?%;\n  background: #389a82;\n  box-shadow: 0 %?16?% %?96?% rgba(15, 61, 53, 0.1);\n  display: flex;\n  align-items: center;\n  justify-content: center;\n  transition: opacity 0.2s ease, -webkit-transform 0.1s ease;\n  transition: opacity 0.2s ease, transform 0.1s ease;\n  transition: opacity 0.2s ease, transform 0.1s ease, -webkit-transform 0.1s ease;\n}\n.add-bar[data-v-43012106]:active {\n  -webkit-transform: scale(0.99);\n          transform: scale(0.99);\n  opacity: 0.9;\n}\n.add-bar__icon[data-v-43012106] {\n  color: #ffffff;\n  font-size: %?32?%;\n  margin-right: %?16?%;\n}\n.add-bar__t[data-v-43012106] {\n  color: #ffffff;\n  font-size: %?28?%;\n  font-weight: 700;\n}", ""]);
+exports.push([module.i, "@charset \"UTF-8\";\n/* 享相健康+ · 设计令牌\n   来源：/workspace/DESIGN.md\n   方案：rpx + SCSS 变量（1px = 2rpx，基于 750rpx 设计基准） */\n/* ---------- 品牌色 ---------- */\n/* ---------- 头像 ---------- */\n/* ---------- 语义状态色 ---------- */\n/* ---------- 金色（尊享装饰） ---------- */\n/* ---------- 背景 ---------- */\n/* 斜向两色渐变：左上(#ddf7ed) → 右下(#f3f3f3)，末端即底色；\n   配合 App.vue 中 background-attachment: fixed 铺满视口固定，不随页面滚动/变长 */\n/* ---------- 文字 ---------- */\n/* ---------- 描边 / 遮罩 ---------- */\n/* ---------- 字体 ---------- */\n/* 英文/数字优先匹配 DIN Pro（Mac 自带 DIN Alternate 作为备选），中文回退苹方/雅黑 */\n/* 移动端最小舒适字号（可读正文下限）：\n   说明/入口/数据标签等可读文字不得小于 12px(24rpx)；\n   $font-size-2xs(10px) 仅限角标、徽标、装饰性元素 */\n/* ---------- 语义排版 ---------- */\n/* ---------- 间距 ---------- */\n/* ---------- 区块标题 ---------- */\n/* 标题下间距 = 列表间距；上间距 = 下间距 × 2 */\n/* ---------- 尺寸 ---------- */\n/* ---------- 圆角（已减半，更克制干净） ---------- */\n/* ---------- 阴影 ---------- */\n/* ---------- 层级 ---------- */\n/* ---------- 动效 ---------- */\n.empty[data-v-43012106] {\n  padding: %?96?% %?48?% %?80?%;\n  display: flex;\n  flex-direction: column;\n  align-items: center;\n  text-align: center;\n}\n.empty__icon[data-v-43012106] {\n  width: %?128?%;\n  height: %?128?%;\n  border-radius: %?999?%;\n  background: #d4f5ee;\n  display: flex;\n  align-items: center;\n  justify-content: center;\n  box-shadow: 0 %?12?% %?48?% rgba(125, 212, 188, 0.18);\n  margin-bottom: %?32?%;\n}\n.empty__icon-t[data-v-43012106] {\n  font-size: %?64?%;\n  color: rgba(0, 0, 0, 0.1);\n}\n.empty__t[data-v-43012106] {\n  font-size: %?32?%;\n  font-weight: 800;\n  color: #1a2a3c;\n  line-height: 1.1;\n}\n.empty__d[data-v-43012106] {\n  display: block;\n  font-size: %?24?%;\n  color: #64748b;\n  line-height: 1.6;\n  margin-top: %?16?%;\n  max-width: %?480?%;\n}\n.empty__btn[data-v-43012106] {\n  margin-top: %?40?%;\n  display: flex;\n  align-items: center;\n  background: #389a82;\n  border-radius: %?999?%;\n  padding: %?24?% %?48?%;\n  box-shadow: 0 %?12?% %?48?% rgba(125, 212, 188, 0.18);\n}\n.empty__btn-icon[data-v-43012106] {\n  color: #ffffff;\n  font-size: %?28?%;\n  margin-right: %?16?%;\n}\n.empty__btn-t[data-v-43012106] {\n  color: #ffffff;\n  font-size: %?28?%;\n  font-weight: 600;\n}\n.dev[data-v-43012106] {\n  display: flex;\n  align-items: center;\n  background: #ffffff;\n  border-radius: %?20?%;\n  box-shadow: 0 %?4?% %?24?% rgba(15, 61, 53, 0.06);\n  padding: %?24?%;\n  margin-left: %?32?%;\n  margin-right: %?32?%;\n  margin-bottom: %?32?%;\n  transition: box-shadow 0.2s ease, -webkit-transform 0.1s ease;\n  transition: transform 0.1s ease, box-shadow 0.2s ease;\n  transition: transform 0.1s ease, box-shadow 0.2s ease, -webkit-transform 0.1s ease;\n}\n.dev[data-v-43012106]:active {\n  -webkit-transform: scale(0.99);\n          transform: scale(0.99);\n  box-shadow: 0 %?4?% %?24?% rgba(15, 61, 53, 0.06);\n}\n.dev__icon[data-v-43012106] {\n  width: %?88?%;\n  height: %?88?%;\n  border-radius: %?20?%;\n  display: flex;\n  align-items: center;\n  justify-content: center;\n  flex-shrink: 0;\n}\n.dev__icon-t[data-v-43012106] {\n  font-size: %?44?%;\n}\n.dev__main[data-v-43012106] {\n  flex: 1;\n  padding: 0 %?24?%;\n  overflow: hidden;\n  min-width: 0;\n}\n.dev__name[data-v-43012106] {\n  display: block;\n  font-size: %?32?%;\n  font-weight: 800;\n  color: #1a2a3c;\n  line-height: 1.1;\n  overflow: hidden;\n  text-overflow: ellipsis;\n  white-space: nowrap;\n}\n.dev__sn[data-v-43012106] {\n  display: block;\n  font-size: %?24?%;\n  color: #334155;\n  margin-top: %?8?%;\n  overflow: hidden;\n  text-overflow: ellipsis;\n  white-space: nowrap;\n}\n.dev__sync[data-v-43012106] {\n  display: block;\n  font-size: %?20?%;\n  color: #94a3b8;\n  margin-top: %?8?%;\n}\n.dev__info[data-v-43012106] {\n  display: flex;\n  align-items: center;\n  gap: %?24?%;\n  margin-top: %?16?%;\n}\n.dev__info-item[data-v-43012106] {\n  display: inline-flex;\n  align-items: center;\n  padding: %?8?% %?16?%;\n  border-radius: %?12?%;\n  background: #f2f7fa;\n}\n.dev__info-icon[data-v-43012106] {\n  font-size: %?24?%;\n  margin-right: %?8?%;\n}\n.dev__info-t[data-v-43012106] {\n  font-family: \"DIN Pro\", \"DIN Alternate\", \"Helvetica Neue\", Arial, sans-serif;\n  font-weight: 600;\n  color: #334155;\n  font-size: %?20?%;\n  line-height: 1;\n}\n.dev__right[data-v-43012106] {\n  display: flex;\n  align-items: center;\n  gap: %?16?%;\n  flex-shrink: 0;\n}\n.dev__status[data-v-43012106] {\n  display: flex;\n  align-items: center;\n  flex-shrink: 0;\n  padding: %?8?% %?16?%;\n  border-radius: %?999?%;\n  background: #27ae60;\n}\n.dev__status--off[data-v-43012106] {\n  background: #f2f7fa;\n}\n.dev__status-dot[data-v-43012106] {\n  width: %?12?%;\n  height: %?12?%;\n  border-radius: 50%;\n  background: #ffffff;\n  margin-right: %?8?%;\n}\n.dev__status--off .dev__status-dot[data-v-43012106] {\n  background: #94a3b8;\n}\n.dev__status-t[data-v-43012106] {\n  font-size: %?20?%;\n  color: #ffffff;\n  font-weight: 600;\n}\n.dev__status--off .dev__status-t[data-v-43012106] {\n  color: #64748b;\n}\n.dev__arrow[data-v-43012106] {\n  font-size: %?24?%;\n  color: #94a3b8;\n}\n.add-bar[data-v-43012106] {\n  position: fixed;\n  left: %?32?%;\n  right: %?32?%;\n  /* 底部留出 tabBar(约54px) + 安全间距 */\n  bottom: 64px;\n  height: %?88?%;\n  border-radius: %?999?%;\n  background: #389a82;\n  box-shadow: 0 %?16?% %?96?% rgba(15, 61, 53, 0.1);\n  display: flex;\n  align-items: center;\n  justify-content: center;\n  transition: opacity 0.2s ease, -webkit-transform 0.1s ease;\n  transition: opacity 0.2s ease, transform 0.1s ease;\n  transition: opacity 0.2s ease, transform 0.1s ease, -webkit-transform 0.1s ease;\n}\n.add-bar[data-v-43012106]:active {\n  -webkit-transform: scale(0.99);\n          transform: scale(0.99);\n  opacity: 0.9;\n}\n.add-bar__icon[data-v-43012106] {\n  color: #ffffff;\n  font-size: %?32?%;\n  margin-right: %?16?%;\n}\n.add-bar__t[data-v-43012106] {\n  color: #ffffff;\n  font-size: %?28?%;\n  font-weight: 700;\n}", ""]);
 // Exports
 module.exports = exports;
 
@@ -614,39 +414,6 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
 //
 //
 //
@@ -862,25 +629,6 @@ var MERGE_MS = 800;
         }, _callee2);
       }))();
     },
-    // 在床状态：true 在床 / false 离床 / null 平台未上报该属性
-    inBedText: function inBedText(deviceid) {
-      var v = Object(_common_radar_js__WEBPACK_IMPORTED_MODULE_17__["radarInBed"])(this.radarLive[deviceid]);
-      if (v === true) return '在床';
-      if (v === false) return '离床';
-      return '待上报';
-    },
-    inBedIcon: function inBedIcon(deviceid) {
-      var v = Object(_common_radar_js__WEBPACK_IMPORTED_MODULE_17__["radarInBed"])(this.radarLive[deviceid]);
-      if (v === true) return 'fa-solid fa-bed';
-      if (v === false) return 'fa-solid fa-person-walking-arrow-right';
-      return 'fa-solid fa-satellite-dish';
-    },
-    inBedColor: function inBedColor(deviceid) {
-      var v = Object(_common_radar_js__WEBPACK_IMPORTED_MODULE_17__["radarInBed"])(this.radarLive[deviceid]);
-      if (v === true) return '#389a82';
-      if (v === false) return '#f2994a';
-      return '#94a3b8';
-    },
     meta: function meta(dev) {
       return _common_mock_js__WEBPACK_IMPORTED_MODULE_15__["DEVICE_TYPES"].find(function (t) {
         return t.key === dev.typeKey;
@@ -923,6 +671,37 @@ var MERGE_MS = 800;
       if (isNaN(v)) return '#94a3b8';
       if (v >= 50) return '#27ae60';
       if (v >= 20) return '#f2994a';
+      return '#f15533';
+    },
+    // 获取设备电量（兼容手环与雷达数据结构）
+    devBattery: function devBattery(dev) {
+      if (dev.typeKey === 'band-bp' && dev.deviceid && this.bandLive[dev.deviceid]) {
+        var b = this.bandLive[dev.deviceid].battery;
+        return b != null ? b : null;
+      }
+      if (dev.typeKey === 'radar' && dev.deviceid && this.radarLive[dev.deviceid]) {
+        var _b = this.radarLive[dev.deviceid].battery;
+        return _b != null ? _b : null;
+      }
+      return dev.battery != null ? dev.battery : null;
+    },
+    // 获取设备信号强度
+    devSignal: function devSignal(dev) {
+      if (dev.typeKey === 'band-bp' && dev.deviceid && this.bandLive[dev.deviceid]) {
+        var s = this.bandLive[dev.deviceid].signal;
+        return s != null ? s : null;
+      }
+      if (dev.typeKey === 'radar' && dev.deviceid && this.radarLive[dev.deviceid]) {
+        var _s = this.radarLive[dev.deviceid].signal;
+        return _s != null ? _s : null;
+      }
+      return dev.signal != null ? dev.signal : null;
+    },
+    signalColor: function signalColor(s) {
+      var v = Number(s);
+      if (isNaN(v)) return '#94a3b8';
+      if (v >= 3) return '#27ae60';
+      if (v >= 2) return '#f2994a';
       return '#f15533';
     },
     goDetail: function goDetail(id) {

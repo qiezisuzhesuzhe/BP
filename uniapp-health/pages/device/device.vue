@@ -24,50 +24,17 @@
         <view class="dev__main">
           <text class="dev__name">{{ dev.name }}</text>
           <text class="dev__sn">{{ dev.model }} · {{ dev.sn || dev.deviceid }}</text>
-          <!-- 血压款手环：展示实时血压 + 心率 + 电量 -->
-          <view v-if="dev.typeKey === 'band-bp' && bandLive[dev.deviceid]" class="dev__live">
-            <view class="dev__chip">
-              <text class="dev__chip-icon fa-solid fa-heart-pulse" style="color:#f15533"></text>
-              <text class="dev__chip-n">{{ bandLive[dev.deviceid].sbp != null ? bandLive[dev.deviceid].sbp : '--' }}</text>
-              <text class="dev__chip-sep">/</text>
-              <text class="dev__chip-n dev__chip-n--sub">{{ bandLive[dev.deviceid].dbp != null ? bandLive[dev.deviceid].dbp : '--' }}</text>
-              <text class="dev__chip-u">mmHg</text>
+          <!-- 设备附加信息：电量 + 信号强度 -->
+          <view class="dev__info">
+            <view v-if="devBattery(dev) != null" class="dev__info-item">
+              <text class="dev__info-icon" :class="batteryIcon(devBattery(dev))" :style="{ color: batteryColor(devBattery(dev)) }"></text>
+              <text class="dev__info-t">{{ devBattery(dev) }}%</text>
             </view>
-            <view class="dev__chip">
-              <text class="dev__chip-icon fa-solid fa-heart" style="color:#389a82"></text>
-              <text class="dev__chip-n">{{ bandLive[dev.deviceid].hr != null ? bandLive[dev.deviceid].hr : '--' }}</text>
-              <text class="dev__chip-u">bpm</text>
-            </view>
-            <view class="dev__chip" v-if="bandLive[dev.deviceid].battery != null">
-              <text class="dev__chip-icon" :class="batteryIcon(bandLive[dev.deviceid].battery)" :style="{ color: batteryColor(bandLive[dev.deviceid].battery) }"></text>
-              <text class="dev__chip-n">{{ bandLive[dev.deviceid].battery }}</text>
-              <text class="dev__chip-u">%</text>
+            <view v-if="devSignal(dev) != null" class="dev__info-item">
+              <text class="dev__info-icon fa-solid fa-signal" :style="{ color: signalColor(devSignal(dev)) }"></text>
+              <text class="dev__info-t">{{ devSignal(dev) }}</text>
             </view>
           </view>
-          <!-- 睡眠监测仪（毫米波雷达款）：心率 + 呼吸 + 睡眠 + 存在 + 挣扎预警 -->
-          <view v-else-if="dev.typeKey === 'radar' && radarLive[dev.deviceid]" class="dev__live">
-            <view class="dev__chip">
-              <text class="dev__chip-icon" :class="inBedIcon(dev.deviceid)" :style="{ color: inBedColor(dev.deviceid) }"></text>
-              <text class="dev__chip-n dev__chip-n--txt">{{ inBedText(dev.deviceid) }}</text>
-            </view>
-            <view class="dev__chip" v-if="radarLive[dev.deviceid].heartRate != null">
-              <text class="dev__chip-icon fa-solid fa-heart" style="color:#e74c3c"></text>
-              <text class="dev__chip-n">{{ radarLive[dev.deviceid].heartRate }}</text>
-              <text class="dev__chip-u">bpm</text>
-            </view>
-            <view class="dev__chip" v-if="radarLive[dev.deviceid].respRate != null">
-              <text class="dev__chip-icon fa-solid fa-wind" style="color:#8dcdd8"></text>
-              <text class="dev__chip-n">{{ radarLive[dev.deviceid].respRate }}</text>
-              <text class="dev__chip-u">次/分</text>
-            </view>
-            <view class="dev__chip" v-if="radarLive[dev.deviceid].struggleAlert > 0">
-              <text class="dev__chip-icon fa-solid fa-triangle-exclamation" style="color:#f15533"></text>
-              <text class="dev__chip-n" style="color:#f15533">{{ radarLive[dev.deviceid].struggleAlert }}</text>
-              <text class="dev__chip-u">次挣扎</text>
-            </view>
-          </view>
-          <!-- 其他设备：展示最近同步 -->
-          <text v-else class="dev__sync">最近同步 {{ dev.lastSync }}</text>
         </view>
         <view class="dev__right">
           <view class="dev__status" :class="{ 'dev__status--off': !isOnline(dev) }">
@@ -90,7 +57,7 @@
 <script>
 import { DEVICE_TYPES } from '@/common/mock.js'
 import { fetchBandLatestBatch, subscribeEvents } from '@/common/band.js'
-import { fetchRadarLatestBatch, radarInBed } from '@/common/radar.js'
+import { fetchRadarLatestBatch } from '@/common/radar.js'
 
 // SSE 事件 800ms 内批量合并，避免 pb 高频上报触发多次 pull
 const MERGE_MS = 800
@@ -194,25 +161,6 @@ export default {
       const data = await fetchRadarLatestBatch(ids)
       if (data) this.radarLive = data
     },
-    // 在床状态：true 在床 / false 离床 / null 平台未上报该属性
-    inBedText(deviceid) {
-      const v = radarInBed(this.radarLive[deviceid])
-      if (v === true) return '在床'
-      if (v === false) return '离床'
-      return '待上报'
-    },
-    inBedIcon(deviceid) {
-      const v = radarInBed(this.radarLive[deviceid])
-      if (v === true) return 'fa-solid fa-bed'
-      if (v === false) return 'fa-solid fa-person-walking-arrow-right'
-      return 'fa-solid fa-satellite-dish'
-    },
-    inBedColor(deviceid) {
-      const v = radarInBed(this.radarLive[deviceid])
-      if (v === true) return '#389a82'
-      if (v === false) return '#f2994a'
-      return '#94a3b8'
-    },
     meta(dev) {
       return DEVICE_TYPES.find((t) => t.key === dev.typeKey) || DEVICE_TYPES[0]
     },
@@ -253,6 +201,37 @@ export default {
       if (isNaN(v)) return '#94a3b8'
       if (v >= 50) return '#27ae60'
       if (v >= 20) return '#f2994a'
+      return '#f15533'
+    },
+    // 获取设备电量（兼容手环与雷达数据结构）
+    devBattery(dev) {
+      if (dev.typeKey === 'band-bp' && dev.deviceid && this.bandLive[dev.deviceid]) {
+        const b = this.bandLive[dev.deviceid].battery
+        return b != null ? b : null
+      }
+      if (dev.typeKey === 'radar' && dev.deviceid && this.radarLive[dev.deviceid]) {
+        const b = this.radarLive[dev.deviceid].battery
+        return b != null ? b : null
+      }
+      return dev.battery != null ? dev.battery : null
+    },
+    // 获取设备信号强度
+    devSignal(dev) {
+      if (dev.typeKey === 'band-bp' && dev.deviceid && this.bandLive[dev.deviceid]) {
+        const s = this.bandLive[dev.deviceid].signal
+        return s != null ? s : null
+      }
+      if (dev.typeKey === 'radar' && dev.deviceid && this.radarLive[dev.deviceid]) {
+        const s = this.radarLive[dev.deviceid].signal
+        return s != null ? s : null
+      }
+      return dev.signal != null ? dev.signal : null
+    },
+    signalColor(s) {
+      const v = Number(s)
+      if (isNaN(v)) return '#94a3b8'
+      if (v >= 3) return '#27ae60'
+      if (v >= 2) return '#f2994a'
       return '#f15533'
     },
     goDetail(id) {
@@ -402,58 +381,32 @@ export default {
   margin-top: $space-1;
 }
 
-/* 手环实时数据：指标 chip 行 */
-.dev__live {
+.dev__info {
   display: flex;
   align-items: center;
-  flex-wrap: wrap;
-  gap: $space-2;
+  gap: $space-3;
   margin-top: $space-2;
 }
 
-.dev__chip {
+.dev__info-item {
   display: inline-flex;
-  align-items: baseline;
+  align-items: center;
   padding: $space-1 $space-2;
   border-radius: $radius-sm;
   background: $bg-section;
 }
 
-.dev__chip-icon {
+.dev__info-icon {
   font-size: $font-size-xs;
   margin-right: $space-1;
-  opacity: 0.9;
 }
 
-.dev__chip-n {
+.dev__info-t {
   font-family: $font-family-en;
-  font-weight: $font-weight-heavy;
-  color: $text-primary;
-  font-size: $font-size-sm;
-  line-height: 1;
-}
-
-.dev__chip-n--sub {
+  font-weight: $font-weight-semibold;
   color: $text-secondary;
-}
-
-/* 中文短语（如"在床/离床"）不走英文数字字体，避免字形与字重错位 */
-.dev__chip-n--txt {
-  font-family: inherit;
-  font-weight: $font-weight-bold;
-  font-size: $font-size-xs;
-}
-
-.dev__chip-sep {
-  margin: 0 4rpx;
-  color: $text-muted;
-  font-size: $font-size-xs;
-}
-
-.dev__chip-u {
-  margin-left: $space-1;
   font-size: $font-size-2xs;
-  color: $text-muted;
+  line-height: 1;
 }
 
 .dev__right {

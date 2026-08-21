@@ -3598,47 +3598,171 @@ var CAT_META = {
     bg: '#fdf4ed'
   }
 };
+
+// 问卷选项统一结构：{ v: 稳定值码, label: 展示文案 }
+// v 用于报告生成的逻辑判定，label 仅用于界面展示与对话气泡。
+// 改文案只需改 label，不会影响危险分层逻辑；v 一经确定不要随意变更。
 var QUESTIONS = [{
   id: 'bp_grade',
   text: '您好！我是健康小助手。为了按《中国高血压防治指南 2024》为您做危险分层，先了解 5 项必要信息。第一个问题：近 1 个月您在家中测到的最高血压，落在哪一档？',
-  options: ['1级：140-159 / 90-99 mmHg', '2级：160-179 / 100-109 mmHg', '3级：≥180 / ≥110 mmHg', '未规律测量，不清楚']
+  options: [{
+    v: 'grade1',
+    label: '1级：140-159 / 90-99 mmHg'
+  }, {
+    v: 'grade2',
+    label: '2级：160-179 / 100-109 mmHg'
+  }, {
+    v: 'grade3',
+    label: '3级：≥180 / ≥110 mmHg'
+  }, {
+    v: 'unknown',
+    label: '未规律测量，不清楚'
+  }]
 }, {
   id: 'medication',
   text: '好的。降压药的服用情况直接影响血压达标率，请问您目前属于哪一种？',
-  options: ['每天按时按量服用', '经常漏服或自行减量', '血压降下来就停药', '尚未开始药物治疗']
+  options: [{
+    v: 'adherent',
+    label: '每天按时按量服用'
+  }, {
+    v: 'irregular',
+    label: '经常漏服或自行减量'
+  }, {
+    v: 'self_stop',
+    label: '血压降下来就停药'
+  }, {
+    v: 'none',
+    label: '尚未开始药物治疗'
+  }]
 }, {
   id: 'comorbidity',
   text: '了解了。以下这些情况会明显改变您的降压目标值，请问您是否有医生确诊过？',
-  options: ['冠心病、心衰或脑卒中病史', '糖尿病或慢性肾病', '仅血脂异常、高尿酸或吸烟', '以上都没有']
+  options: [{
+    v: 'cvd',
+    label: '冠心病、心衰或脑卒中病史'
+  }, {
+    v: 'dm_ckd',
+    label: '糖尿病或慢性肾病'
+  }, {
+    v: 'risk_factor',
+    label: '仅血脂异常、高尿酸或吸烟'
+  }, {
+    v: 'none',
+    label: '以上都没有'
+  }]
 }, {
   id: 'salt_intake',
   text: '限钠是指南推荐的首要生活方式干预。您平时的口味和加工食品摄入更接近哪种？',
-  options: ['清淡，每日食盐基本 <5g', '适中，每日食盐 5-10g', '偏重，>10g 或常吃腌制加工食品', '从未留意过']
+  options: [{
+    v: 'low',
+    label: '清淡，每日食盐基本 <5g'
+  }, {
+    v: 'medium',
+    label: '适中，每日食盐 5-10g'
+  }, {
+    v: 'high',
+    label: '偏重，>10g 或常吃腌制加工食品'
+  }, {
+    v: 'unaware',
+    label: '从未留意过'
+  }]
 }, {
   id: 'exercise',
   text: '最后一个问题：指南建议每周至少 150 分钟中等强度有氧运动。您目前的运动量大概是？',
-  options: ['基本不运动', '每周 1-2 次', '每周 3-4 次，每次约 30 分钟', '每周 5 次以上']
+  options: [{
+    v: 'none',
+    label: '基本不运动'
+  }, {
+    v: 'low',
+    label: '每周 1-2 次'
+  }, {
+    v: 'medium',
+    label: '每周 3-4 次，每次约 30 分钟'
+  }, {
+    v: 'high',
+    label: '每周 5 次以上'
+  }]
 }];
 var QUESTIONS_DM = [{
   id: 'dm_med',
   text: '您好！我是安康，您的AI控糖助手。先了解基本情况：您目前是否在使用降糖药物或胰岛素？',
-  options: ['口服降糖药', '注射胰岛素', '两者都有', '暂未用药']
+  options: [{
+    v: 'oral',
+    label: '口服降糖药'
+  }, {
+    v: 'insulin',
+    label: '注射胰岛素'
+  }, {
+    v: 'both',
+    label: '两者都有'
+  }, {
+    v: 'none',
+    label: '暂未用药'
+  }]
 }, {
   id: 'fpg',
   text: '好的。您最近的空腹血糖大概在什么范围？',
-  options: ['正常 (<6.1)', '偏高 (6.1-7.0)', '较高 (>7.0)', '不太清楚']
+  options: [{
+    v: 'normal',
+    label: '正常 (<6.1)'
+  }, {
+    v: 'mid',
+    label: '偏高 (6.1-7.0)'
+  }, {
+    v: 'high',
+    label: '较高 (>7.0)'
+  }, {
+    v: 'unknown',
+    label: '不太清楚'
+  }]
 }, {
   id: 'hba1c',
   text: '了解。您最近一次糖化血红蛋白（HbA1c）是多少？',
-  options: ['<6.5%', '6.5-7.0%', '7.0-8.0%', '>8% 或未测']
+  options: [{
+    v: 'lt65',
+    label: '<6.5%'
+  }, {
+    v: 'r65_70',
+    label: '6.5-7.0%'
+  }, {
+    v: 'r70_80',
+    label: '7.0-8.0%'
+  }, {
+    v: 'gt80',
+    label: '>8% 或未测'
+  }]
 }, {
   id: 'staple',
   text: '饮食方面：您每餐主食（米饭/面食）的量大概是多少？',
-  options: ['少于一小碗', '一小碗', '一大碗以上', '不固定']
+  options: [{
+    v: 'small',
+    label: '少于一小碗'
+  }, {
+    v: 'normal',
+    label: '一小碗'
+  }, {
+    v: 'large',
+    label: '一大碗以上'
+  }, {
+    v: 'varies',
+    label: '不固定'
+  }]
 }, {
   id: 'dm_exercise',
   text: '最后一个问题：您餐后有运动的习惯吗？',
-  options: ['餐后必走', '偶尔走走', '基本不动', '饭后就躺']
+  options: [{
+    v: 'always',
+    label: '餐后必走'
+  }, {
+    v: 'sometimes',
+    label: '偶尔走走'
+  }, {
+    v: 'rarely',
+    label: '基本不动'
+  }, {
+    v: 'never',
+    label: '饭后就躺'
+  }]
 }];
 var KNOWLEDGE = [{
   icon: 'fa-solid fa-book',

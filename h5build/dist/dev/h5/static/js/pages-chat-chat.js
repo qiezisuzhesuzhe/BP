@@ -549,14 +549,15 @@ __webpack_require__.r(__webpack_exports__);
       if (!this.awaiting) return;
       var q = this.currentQuestion;
       if (!q) return;
-      var text = q.options[oi];
+      var o = q.options[oi];
+      if (!o) return;
       this.pickedIndex = oi;
       this.awaiting = false;
-      this.answers = Object.assign({}, this.answers, Object(_workspace_h5build_node_modules_babel_runtime_helpers_esm_defineProperty_js__WEBPACK_IMPORTED_MODULE_0__["default"])({}, q.id, text));
+      this.answers = Object.assign({}, this.answers, Object(_workspace_h5build_node_modules_babel_runtime_helpers_esm_defineProperty_js__WEBPACK_IMPORTED_MODULE_0__["default"])({}, q.id, o.v));
       this.push({
         role: 'user',
         kind: 'text',
-        text: text
+        text: o.label
       });
       var next = this.step + 1;
       if (next < this.questions.length) {
@@ -641,24 +642,24 @@ __webpack_require__.r(__webpack_exports__);
       var a = this.answers;
 
       // 血压分级（《中国高血压防治指南 2024》）
-      var g1 = a.bp_grade === '1级：140-159 / 90-99 mmHg';
-      var g2 = a.bp_grade === '2级：160-179 / 100-109 mmHg';
-      var g3 = a.bp_grade === '3级：≥180 / ≥110 mmHg';
-      var gUnknown = a.bp_grade === '未规律测量，不清楚';
+      var g1 = a.bp_grade === 'grade1';
+      var g2 = a.bp_grade === 'grade2';
+      var g3 = a.bp_grade === 'grade3';
+      var gUnknown = a.bp_grade === 'unknown';
 
       // 临床合并症与心血管危险因素
-      var cvd = a.comorbidity === '冠心病、心衰或脑卒中病史';
-      var dmCkd = a.comorbidity === '糖尿病或慢性肾病';
-      var riskFactor = a.comorbidity === '仅血脂异常、高尿酸或吸烟';
+      var cvd = a.comorbidity === 'cvd';
+      var dmCkd = a.comorbidity === 'dm_ckd';
+      var riskFactor = a.comorbidity === 'risk_factor';
 
       // 用药依从性
-      var badMed = a.medication === '经常漏服或自行减量' || a.medication === '血压降下来就停药';
-      var noMed = a.medication === '尚未开始药物治疗';
+      var badMed = a.medication === 'irregular' || a.medication === 'self_stop';
+      var noMed = a.medication === 'none';
 
       // 生活方式（不参与危险分层，仅驱动干预建议）
-      var heavySalt = a.salt_intake === '偏重，>10g 或常吃腌制加工食品';
-      var naiveSalt = a.salt_intake === '从未留意过';
-      var lowMove = a.exercise === '基本不运动' || a.exercise === '每周 1-2 次';
+      var heavySalt = a.salt_intake === 'high';
+      var naiveSalt = a.salt_intake === 'unaware';
+      var lowMove = a.exercise === 'none' || a.exercise === 'low';
 
       // 危险分层：血压分级 × 合并症/危险因素
       var tier = 1;
@@ -789,11 +790,11 @@ __webpack_require__.r(__webpack_exports__);
     },
     buildDmReport: function buildDmReport() {
       var a = this.answers;
-      var highA1c = a.hba1c === '7.0-8.0%' || a.hba1c === '>8% 或未测';
-      var highFpg = a.fpg === '较高 (>7.0)';
-      var bigStaple = a.staple === '一大碗以上' || a.staple === '不固定';
-      var noMove = a.dm_exercise === '基本不动' || a.dm_exercise === '饭后就躺';
-      var onInsulin = a.dm_med === '注射胰岛素' || a.dm_med === '两者都有';
+      var highA1c = a.hba1c === 'r70_80' || a.hba1c === 'gt80';
+      var highFpg = a.fpg === 'high';
+      var bigStaple = a.staple === 'large' || a.staple === 'varies';
+      var noMove = a.dm_exercise === 'rarely' || a.dm_exercise === 'never';
+      var onInsulin = a.dm_med === 'insulin' || a.dm_med === 'both';
       var midHigh = highA1c || highFpg;
       var points = [];
       points.push({
@@ -805,7 +806,7 @@ __webpack_require__.r(__webpack_exports__);
           title: '用药安全与低血糖防范',
           desc: '注射部位轮换，随身携带糖块；出现心慌出汗手抖立即检测并补糖，记录发生时间供医生调整剂量。'
         });
-      } else if (a.dm_med === '暂未用药') {
+      } else if (a.dm_med === 'none') {
         points.push({
           title: '强化生活方式并评估是否需起始药物',
           desc: '先以饮食运动干预 3 个月观察 HbA1c 变化，若仍未达标需及时就诊评估起始降糖药物。'
@@ -1571,7 +1572,7 @@ var render = function () {
                         return _c(
                           "v-uni-view",
                           {
-                            key: oi,
+                            key: o.v,
                             staticClass: "opts__item",
                             class: { "opts__item--on": _vm.pickedIndex === oi },
                             on: {
@@ -1590,7 +1591,7 @@ var render = function () {
                                   "opts__t--on": _vm.pickedIndex === oi,
                                 },
                               },
-                              [_vm._v(_vm._s(o))]
+                              [_vm._v(_vm._s(o.label))]
                             ),
                           ],
                           1

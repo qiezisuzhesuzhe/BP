@@ -147,12 +147,12 @@
           <text class="opts__hint">请选择最接近您情况的一项</text>
           <view
             v-for="(o, oi) in currentQuestion.options"
-            :key="oi"
+            :key="o.v"
             class="opts__item"
             :class="{ 'opts__item--on': pickedIndex === oi }"
             @tap="chooseOption(oi)"
           >
-            <text class="opts__t" :class="{ 'opts__t--on': pickedIndex === oi }">{{ o }}</text>
+            <text class="opts__t" :class="{ 'opts__t--on': pickedIndex === oi }">{{ o.label }}</text>
           </view>
         </view>
 
@@ -375,11 +375,12 @@ export default {
       if (!this.awaiting) return
       const q = this.currentQuestion
       if (!q) return
-      const text = q.options[oi]
+      const o = q.options[oi]
+      if (!o) return
       this.pickedIndex = oi
       this.awaiting = false
-      this.answers = Object.assign({}, this.answers, { [q.id]: text })
-      this.push({ role: 'user', kind: 'text', text: text })
+      this.answers = Object.assign({}, this.answers, { [q.id]: o.v })
+      this.push({ role: 'user', kind: 'text', text: o.label })
 
       const next = this.step + 1
       if (next < this.questions.length) {
@@ -439,24 +440,24 @@ export default {
       const a = this.answers
 
       // 血压分级（《中国高血压防治指南 2024》）
-      const g1 = a.bp_grade === '1级：140-159 / 90-99 mmHg'
-      const g2 = a.bp_grade === '2级：160-179 / 100-109 mmHg'
-      const g3 = a.bp_grade === '3级：≥180 / ≥110 mmHg'
-      const gUnknown = a.bp_grade === '未规律测量，不清楚'
+      const g1 = a.bp_grade === 'grade1'
+      const g2 = a.bp_grade === 'grade2'
+      const g3 = a.bp_grade === 'grade3'
+      const gUnknown = a.bp_grade === 'unknown'
 
       // 临床合并症与心血管危险因素
-      const cvd = a.comorbidity === '冠心病、心衰或脑卒中病史'
-      const dmCkd = a.comorbidity === '糖尿病或慢性肾病'
-      const riskFactor = a.comorbidity === '仅血脂异常、高尿酸或吸烟'
+      const cvd = a.comorbidity === 'cvd'
+      const dmCkd = a.comorbidity === 'dm_ckd'
+      const riskFactor = a.comorbidity === 'risk_factor'
 
       // 用药依从性
-      const badMed = a.medication === '经常漏服或自行减量' || a.medication === '血压降下来就停药'
-      const noMed = a.medication === '尚未开始药物治疗'
+      const badMed = a.medication === 'irregular' || a.medication === 'self_stop'
+      const noMed = a.medication === 'none'
 
       // 生活方式（不参与危险分层，仅驱动干预建议）
-      const heavySalt = a.salt_intake === '偏重，>10g 或常吃腌制加工食品'
-      const naiveSalt = a.salt_intake === '从未留意过'
-      const lowMove = a.exercise === '基本不运动' || a.exercise === '每周 1-2 次'
+      const heavySalt = a.salt_intake === 'high'
+      const naiveSalt = a.salt_intake === 'unaware'
+      const lowMove = a.exercise === 'none' || a.exercise === 'low'
 
       // 危险分层：血压分级 × 合并症/危险因素
       let tier = 1
@@ -590,11 +591,11 @@ export default {
     },
     buildDmReport() {
       const a = this.answers
-      const highA1c = a.hba1c === '7.0-8.0%' || a.hba1c === '>8% 或未测'
-      const highFpg = a.fpg === '较高 (>7.0)'
-      const bigStaple = a.staple === '一大碗以上' || a.staple === '不固定'
-      const noMove = a.dm_exercise === '基本不动' || a.dm_exercise === '饭后就躺'
-      const onInsulin = a.dm_med === '注射胰岛素' || a.dm_med === '两者都有'
+      const highA1c = a.hba1c === 'r70_80' || a.hba1c === 'gt80'
+      const highFpg = a.fpg === 'high'
+      const bigStaple = a.staple === 'large' || a.staple === 'varies'
+      const noMove = a.dm_exercise === 'rarely' || a.dm_exercise === 'never'
+      const onInsulin = a.dm_med === 'insulin' || a.dm_med === 'both'
       const midHigh = highA1c || highFpg
 
       const points = []
@@ -607,7 +608,7 @@ export default {
           title: '用药安全与低血糖防范',
           desc: '注射部位轮换，随身携带糖块；出现心慌出汗手抖立即检测并补糖，记录发生时间供医生调整剂量。'
         })
-      } else if (a.dm_med === '暂未用药') {
+      } else if (a.dm_med === 'none') {
         points.push({
           title: '强化生活方式并评估是否需起始药物',
           desc: '先以饮食运动干预 3 个月观察 HbA1c 变化，若仍未达标需及时就诊评估起始降糖药物。'

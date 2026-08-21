@@ -437,66 +437,153 @@ export default {
     },
     buildHbpReport() {
       const a = this.answers
-      const highBp = a.bp_range === '较高 (>140/90)'
-      const heavySalt = a.salt_intake === '口味偏重 (>10g/天)'
-      const badMed = a.medication === '没有服药' || a.medication === '偶尔服用' || a.medication === '记不清了'
-      const lowMove = a.exercise === '从不运动' || a.exercise === '每周1-2次'
-      const badSleep = a.sleep === '经常失眠' || a.sleep === '严重睡眠问题'
-      const midHigh = highBp && heavySalt
+
+      // 血压分级（《中国高血压防治指南 2024》）
+      const g1 = a.bp_grade === '1级：140-159 / 90-99 mmHg'
+      const g2 = a.bp_grade === '2级：160-179 / 100-109 mmHg'
+      const g3 = a.bp_grade === '3级：≥180 / ≥110 mmHg'
+      const gUnknown = a.bp_grade === '未规律测量，不清楚'
+
+      // 临床合并症与心血管危险因素
+      const cvd = a.comorbidity === '冠心病、心衰或脑卒中病史'
+      const dmCkd = a.comorbidity === '糖尿病或慢性肾病'
+      const riskFactor = a.comorbidity === '仅血脂异常、高尿酸或吸烟'
+
+      // 用药依从性
+      const badMed = a.medication === '经常漏服或自行减量' || a.medication === '血压降下来就停药'
+      const noMed = a.medication === '尚未开始药物治疗'
+
+      // 生活方式（不参与危险分层，仅驱动干预建议）
+      const heavySalt = a.salt_intake === '偏重，>10g 或常吃腌制加工食品'
+      const naiveSalt = a.salt_intake === '从未留意过'
+      const lowMove = a.exercise === '基本不运动' || a.exercise === '每周 1-2 次'
+
+      // 危险分层：血压分级 × 合并症/危险因素
+      let tier = 1
+      if (cvd) tier = 4
+      else if (dmCkd) tier = g2 || g3 ? 4 : 3
+      else if (g3) tier = riskFactor ? 4 : 3
+      else if (g2) tier = riskFactor ? 3 : 2
+      else if (g1) tier = riskFactor ? 2 : 1
+      else tier = 0
+
+      const RISK = {
+        0: { risk: '待评估（需先完成血压分级）', color: '#64748b', bg: '#f2f7fa' },
+        1: { risk: '低危（以生活方式干预为主）', color: '#6ba584', bg: '#e8f4ec' },
+        2: { risk: '中危（生活方式干预 + 规范随访）', color: '#f2c94c', bg: '#fdf4ed' },
+        3: { risk: '高危（需药物强化干预）', color: '#e07a5f', bg: '#fde8e3' },
+        4: { risk: '很高危（需尽早达标并保护靶器官）', color: '#d14b3d', bg: '#fde8e3' }
+      }
+
+      const gradeLabel = g3 ? '3 级' : g2 ? '2 级' : g1 ? '1 级' : '分级待确认'
+      const withLabel = cvd
+        ? '伴临床合并症'
+        : dmCkd
+        ? '伴糖尿病/慢性肾病'
+        : riskFactor
+        ? '伴心血管危险因素'
+        : '无合并症'
+
+      const target =
+        cvd || dmCkd
+          ? '目标 <130/80 mmHg（合并症人群更严格），避免舒张压低于 60 mmHg'
+          : g3
+          ? '先在 2-4 周内降至 <140/90 mmHg，稳定后能耐受者进一步降至 <130/80 mmHg'
+          : '一般目标 <140/90 mmHg，能耐受者可降至 <130/80 mmHg'
 
       const points = []
-      if (badMed) {
+
+      // 1. 分级对应的首要动作
+      if (g3) {
         points.push({
-          title: '规范用药，避免自行停药',
-          desc: '降压治疗需长期坚持。请与医生确认方案后固定时间服药，血压下降也不可自行减停。'
+          title: '尽快就诊评估，勿自行调药',
+          desc: '3 级高血压建议 1 周内到心内科或高血压门诊复评，多数需要两种及以上药物联合治疗；若出现头痛、胸痛、视物模糊、肢体无力请立即就医。'
+        })
+      } else if (gUnknown) {
+        points.push({
+          title: '先用 7 天家庭血压监测确定分级',
+          desc: '连续 7 天、每天晨起服药前和睡前各测 2 次，取后 6 天平均值。分级明确后才能准确判断危险等级与用药强度。'
         })
       } else {
         points.push({
-          title: '维持现有用药并记录反应',
-          desc: '继续按医嘱服药，记录是否出现头晕、干咳、下肢水肿等情况，复诊时反馈给医生。'
+          title: '家庭血压监测（晨晚各一次）',
+          desc: '晨起服药前与睡前静坐 5 分钟后测量，连续记录 7 天，用于判断达标情况与昼夜节律，比单次诊室血压更可靠。'
         })
       }
-      points.push({
-        title: '家庭血压监测（晨晚各一次）',
-        desc: '晨起服药前与睡前静坐 5 分钟后测量，连续记录 7 天，用于判断达标情况和昼夜节律。'
-      })
-      if (heavySalt || a.salt_intake === '不太注意') {
+
+      // 2. 用药依从性
+      if (noMed) {
+        points.push({
+          title: '尽快明确是否需要启动药物治疗',
+          desc: g1 && !riskFactor && !dmCkd && !cvd
+            ? '1 级且无合并症者可先强化生活方式 1-3 个月；若仍未达标，应在医生指导下启动降压药。'
+            : '您的分层已达到药物治疗指征，建议尽早由医生评估后启动降压方案，不宜仅靠生活方式调整。'
+        })
+      } else if (badMed) {
+        points.push({
+          title: '规范用药，血压正常也不可停药',
+          desc: '漏服与自行减停是血压波动和心脑事件的主要诱因。建议固定服药时间、使用分药盒或手机提醒，需调整方案时先与医生沟通。'
+        })
+      } else {
+        points.push({
+          title: '维持现有方案并记录药物反应',
+          desc: '继续按医嘱服药，记录是否出现头晕、干咳、下肢水肿、心率过缓等反应，复诊时一并反馈供医生调整。'
+        })
+      }
+
+      // 3. 合并症/危险因素管理
+      if (cvd) {
+        points.push({
+          title: '兼顾靶器官保护与平稳降压',
+          desc: '既有心脑血管病史者降压需平稳、避免过快过低。请遵医嘱坚持抗血小板与降脂治疗，并定期复查心功能、颈动脉与肾功能。'
+        })
+      } else if (dmCkd) {
+        points.push({
+          title: '同步管理血糖/肾功能',
+          desc: '建议每 3-6 个月复查糖化血红蛋白、尿微量白蛋白与血肌酐；此类人群优选 ACEI/ARB 类降压药，具体由医生决定。'
+        })
+      } else if (riskFactor) {
+        points.push({
+          title: '控制可改变的心血管危险因素',
+          desc: '戒烟并避免二手烟，复查血脂与尿酸并按医嘱干预。多重危险因素叠加会把总体风险抬升一个等级。'
+        })
+      } else if (heavySalt || naiveSalt) {
         points.push({
           title: '限盐减钠为首要生活方式干预',
-          desc: '每日食盐控制在 5g 以内，使用限盐勺，减少腌制品、酱料与加工肉，同时增加新鲜蔬果摄入。'
+          desc: '每日食盐控制在 5g 以内，使用限盐勺，减少腌制品、酱料与加工肉，同时增加新鲜蔬果与富钾食物。'
         })
       } else {
         points.push({
-          title: '巩固低盐饮食结构',
-          desc: '保持每日食盐 5g 以内，增加钾丰富的蔬菜水果，采用得舒（DASH）式膳食模式。'
+          title: '巩固低盐富钾的膳食结构',
+          desc: '保持每日食盐 5g 以内，采用得舒（DASH）式膳食，增加深色蔬菜、低糖水果与全谷物比例。'
         })
       }
-      if (lowMove) {
+
+      // 4. 剩余的生活方式短板
+      if ((heavySalt || naiveSalt) && (cvd || dmCkd || riskFactor)) {
         points.push({
-          title: '循序渐进增加有氧运动',
-          desc: '从每周 3 次、每次 20 分钟快走或太极拳起步，逐步达到每周 150 分钟中等强度运动。'
+          title: '每日食盐降至 5g 以内',
+          desc: '限钠是降压效果最明确的生活方式措施，减少腌制品、酱料与加工肉，烹饪末期再放盐更易减量。'
         })
-      } else if (badSleep) {
+      } else if (lowMove) {
         points.push({
-          title: '改善睡眠以稳定血压节律',
-          desc: '固定作息、睡前 1 小时远离手机，配合呼吸放松训练；若长期打鼾憋气，建议筛查睡眠呼吸暂停。'
+          title: '循序渐进达到每周 150 分钟',
+          desc: '从每周 3 次、每次 20 分钟快走或太极拳起步，逐步达到每周 150 分钟中等强度有氧运动；血压未控制稳定前避免憋气式力量训练。'
         })
       } else {
         points.push({
           title: '保持运动与情绪管理节奏',
-          desc: '每周累计 150 分钟中等强度有氧运动，配合正念呼吸缓解紧张，避免血压情绪性波动。'
+          desc: '维持每周 150 分钟以上中等强度有氧运动，配合呼吸放松训练缓解紧张，避免血压情绪性波动。'
         })
       }
 
       return {
         pkgName: (this.right && this.right.name) || '高血压健康管理',
-        type: midHigh ? '高血压 · 生活方式高危型' : '高血压 · 生活方式可控型',
-        risk: midHigh ? '中高危（需强化干预）' : '低中危（以生活方式干预为主）',
-        riskColor: midHigh ? '#e07a5f' : '#6ba584',
-        riskBg: midHigh ? '#fde8e3' : '#e8f4ec',
-        target: midHigh
-          ? '先降至 <140/90 mmHg，能耐受者进一步降至 <130/80 mmHg'
-          : '血压稳定维持 <140/90 mmHg，可耐受者争取 <130/80 mmHg',
+        type: '高血压 ' + gradeLabel + ' · ' + withLabel,
+        risk: RISK[tier].risk,
+        riskColor: RISK[tier].color,
+        riskBg: RISK[tier].bg,
+        target: target,
         points: points.slice(0, 4),
         guide: '《中国高血压防治指南 2024》'
       }

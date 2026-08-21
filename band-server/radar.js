@@ -31,7 +31,10 @@ const CFG = {
   mqPass: process.env.RADAR_MQ_PASS || '',
   // 设备型号名称：平台侧 deviceModelName，用于查属性表 / 过滤设备列表。
   // 目前未知，留空则不做型号过滤，属性走通用映射。
-  modelName: process.env.RADAR_MODEL_NAME || ''
+  modelName: process.env.RADAR_MODEL_NAME || '',
+  // HTTP 回调 token：平台配置推送 URL 时会用此 token 做签名校验（MD5 排序拼接）
+  // 留空则跳过校验，返回 nonce 即可
+  httpPushToken: process.env.RADAR_HTTP_TOKEN || ''
 }
 
 const DATA_DIR = path.join(__dirname, 'data')
@@ -327,6 +330,23 @@ function startMqtt(onMessage) {
   })
 }
 
+/* ---------------- HTTP 回调接收 ---------------- */
+const HTTP_PUSH = {
+  count: 0,
+  lastMsgAt: null
+}
+
+// 平台配置推送 URL 时的签名校验：MD5(token + timestamp + nonce) 排序拼接后与 signature 对比
+// 若 token 为空则跳过校验直接返回 nonce
+function checkHttpSignature(signature, timestamp, nonce) {
+  if (!CFG.httpPushToken) return true
+  if (!signature || !timestamp || !nonce) return false
+  const params = [CFG.httpPushToken, String(timestamp), String(nonce)].sort()
+  const content = params[0] + params[1] + params[2]
+  const expected = crypto.createHash('md5').update(content).digest('hex')
+  return expected === String(signature)
+}
+
 /* ---------------- 挂载路由 ---------------- */
 /**
  * @param app       express app
@@ -395,6 +415,12 @@ function mount(app, broadcast) {
           connectedAt: MQ.connectedAt,
           msgCount: MQ.msgCount,
           lastMsgAt: MQ.lastMsgAt
+        },
+        http: {
+          path: '/api/radar/push',
+          token: CFG.httpPushToken ? '已配置' : null,
+          msgCount: HTTP_PUSH.count,
+          lastMsgAt: HTTP_PUSH.lastMsgAt
         },
         devices: Object.keys(rdb.devices).length
       }
@@ -549,8 +575,39 @@ function mount(app, broadcast) {
     res.json({ code: 0, data: { deviceid: imei } })
   })
 
+  /* ---------------- HTTP 回调接收端点 ---------------- */
+
+  // URL 验证：平台在后台配置推送 URL 时会先发 GET 请求验证
+  // 成功返回 nonce（text/plain），失败返回 "error"
+  app.get('/api/radar/push', (req, res) => {
+    const { nonce, signature, timestamp } = req.query
+    if (!nonce) return res.type('text').send('error')
+    if (!checkHttpSignature(signature, timestamp, nonce)) {
+      console.log('[radar][http] URL 验证签名失败')
+      return res.type('text').send('error')
+    }
+    console.log('[radar][http] URL 验证成功 nonce=' + nonce)
+    res.type('text').send(String(nonce))
+  })
+
+  // 数据接收：平台推送设备数据到此 URL
+  // 平台要求 200 响应，任何非 200 或超时都会被视为推送失败并限流
+  app.post('/api/radar/push', (req, res) => {
+    const body = req.body
+    if (!body || typeof body !== 'object') {
+      return res.send('ok') // 空报文也返回 200，避免被平台限流
+    }
+    HTTP_PUSH.count++
+    HTTP_PUSH.lastMsgAt = Date.now()
+    console.log('[radar][http] 收到推送 #' + HTTP_PUSH.count + ' keys=' + Object.keys(body).join(','))
+    // 走与 MQTT 完全相同的处理链路：归一化 → 落库 → SSE 广播
+    handlePush(body)
+    // 平台只要求 200 响应即可，body 任意
+    res.send('ok')
+  })
+
   startMqtt(handlePush)
-  console.log('[radar] 路由已挂载：/api/radar/status /ping /verify/:imei /devices /attributes')
+  console.log('[radar] 路由已挂载：/api/radar/status /ping /verify/:imei /devices /attributes /push')
 }
 
 module.exports = { mount, CFG, normalizePush, matchAttrKey, STATE_TEXT }

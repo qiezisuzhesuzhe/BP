@@ -363,7 +363,7 @@ app.use('/alarm/upload', express.raw({ type: '*/*', limit: '5mb' }))
 app.use('/call_log/upload', express.raw({ type: '*/*', limit: '5mb' }))
 app.use('/deviceinfo/upload', express.raw({ type: '*/*', limit: '5mb' }))
 app.use('/status/notify', express.raw({ type: '*/*', limit: '5mb' }))
-app.use(express.json({ limit: '1mb' }))
+app.use(express.json({ limit: '2mb' }))
 
 // 设备健康数据上报（必选）—— 成功返回单字节 0x00
 app.post('/pb/upload', (req, res) => {

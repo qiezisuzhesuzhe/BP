@@ -356,6 +356,9 @@ var MERGE_MS = 1000;
     activeRight: function activeRight() {
       return this.$store.getters.activeRight;
     },
+    activatedRight: function activatedRight() {
+      return this.$store.getters.activatedRight;
+    },
     rightEntries: function rightEntries() {
       return this.$store.getters.rightEntries;
     },
@@ -1288,7 +1291,7 @@ var render = function () {
         ],
         1
       ),
-      _vm.activeRight
+      _vm.activatedRight
         ? _c(
             "v-uni-view",
             { staticClass: "wrap" },

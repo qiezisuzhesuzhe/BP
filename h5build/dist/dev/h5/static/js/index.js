@@ -558,6 +558,12 @@ var store = new vuex__WEBPACK_IMPORTED_MODULE_22___default.a.Store({
         return r.status === 'active';
       }) || null;
     },
+    // 已激活权益：已购买 + 首次对话完成问询（chatStarted），首页今日健康指导以此为显示条件
+    activatedRight: function activatedRight(state) {
+      return state.rights.find(function (r) {
+        return r.status === 'active' && r.chatStarted;
+      }) || null;
+    },
     rightById: function rightById(state) {
       return function (id) {
         return state.rights.find(function (r) {

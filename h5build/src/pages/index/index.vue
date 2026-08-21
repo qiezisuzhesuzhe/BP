@@ -121,8 +121,8 @@
       </view>
     </view>
 
-    <!-- 今日健康指导（仅成功购买服务包后显示） -->
-    <view v-if="activeRight" class="wrap">
+    <!-- 今日健康指导（仅首次对话确认激活并完成问询后显示） -->
+    <view v-if="activatedRight" class="wrap">
       <view class="sec-head">
         <text class="hm-sec-title">今日健康指导</text>
         <view class="sec-head__side">
@@ -220,6 +220,9 @@ export default {
     },
     activeRight() {
       return this.$store.getters.activeRight
+    },
+    activatedRight() {
+      return this.$store.getters.activatedRight
     },
     rightEntries() {
       return this.$store.getters.rightEntries

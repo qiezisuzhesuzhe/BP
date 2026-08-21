@@ -34,7 +34,7 @@ const CFG = {
   modelName: process.env.RADAR_MODEL_NAME || '',
   // HTTP 回调 token：平台配置推送 URL 时会用此 token 做签名校验（MD5 排序拼接）
   // 留空则跳过校验，返回 nonce 即可
-  httpPushToken: process.env.RADAR_HTTP_TOKEN || ''
+  httpPushToken: process.env.RADAR_HTTP_TOKEN || 'yguvogy8g976t79gy9'
 }
 
 const DATA_DIR = path.join(__dirname, 'data')

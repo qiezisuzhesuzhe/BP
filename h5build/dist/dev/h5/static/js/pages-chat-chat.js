@@ -63,7 +63,7 @@ __webpack_require__.r(__webpack_exports__);
 var ___CSS_LOADER_API_IMPORT___ = __webpack_require__(/*! ../../../node_modules/css-loader/dist/runtime/api.js */ "JPst");
 exports = ___CSS_LOADER_API_IMPORT___(false);
 // Module
-exports.push([module.i, "@charset \"UTF-8\";\n/* 享相健康+ · 设计令牌\n   来源：/workspace/DESIGN.md\n   方案：rpx + SCSS 变量（1px = 2rpx，基于 750rpx 设计基准） */\n/* ---------- 品牌色 ---------- */\n/* ---------- 头像 ---------- */\n/* ---------- 语义状态色 ---------- */\n/* ---------- 金色（尊享装饰） ---------- */\n/* ---------- 背景 ---------- */\n/* 斜向两色渐变：左上(#ddf7ed) → 右下(#f3f3f3)，末端即底色；\n   配合 App.vue 中 background-attachment: fixed 铺满视口固定，不随页面滚动/变长 */\n/* ---------- 文字 ---------- */\n/* ---------- 描边 / 遮罩 ---------- */\n/* ---------- 字体 ---------- */\n/* 英文/数字优先匹配 DIN Pro（Mac 自带 DIN Alternate 作为备选），中文回退苹方/雅黑 */\n/* 移动端最小舒适字号（可读正文下限）：\n   说明/入口/数据标签等可读文字不得小于 12px(24rpx)；\n   $font-size-2xs(10px) 仅限角标、徽标、装饰性元素 */\n/* ---------- 语义排版 ---------- */\n/* ---------- 间距 ---------- */\n/* ---------- 区块标题 ---------- */\n/* 标题下间距 = 列表间距；上间距 = 下间距 × 2 */\n/* ---------- 尺寸 ---------- */\n/* ---------- 圆角（已减半，更克制干净） ---------- */\n/* ---------- 阴影 ---------- */\n/* ---------- 层级 ---------- */\n/* ---------- 动效 ---------- */\n.chat[data-v-bf16e7f4] {\n  height: 100vh;\n  display: flex;\n  flex-direction: column;\n  background: #f3f3f3;\n}\n.chat__voice[data-v-bf16e7f4] {\n  height: %?64?%;\n  padding: 0 %?16?%;\n  border-radius: %?999?%;\n  background: #d4f5ee;\n  display: flex;\n  align-items: center;\n}\n.chat__voice--off[data-v-bf16e7f4] {\n  background: linear-gradient(135deg, #ddf7ed, #f3f3f3);\n}\n.chat__voice-icon[data-v-bf16e7f4] {\n  font-size: %?28?%;\n  color: #389a82;\n  margin-right: %?6?%;\n}\n.chat__voice--off .chat__voice-icon[data-v-bf16e7f4] {\n  color: #c6d2de;\n}\n.chat__voice-t[data-v-bf16e7f4] {\n  font-size: %?24?%;\n  color: #389a82;\n  white-space: nowrap;\n}\n.chat__voice--off .chat__voice-t[data-v-bf16e7f4] {\n  color: #c6d2de;\n}\n.chat__head[data-v-bf16e7f4] {\n  background: #ffffff;\n  padding: %?8?% %?24?% %?24?%;\n  display: flex;\n  align-items: center;\n  box-shadow: 0 %?4?% %?24?% rgba(15, 61, 53, 0.06);\n  z-index: 20;\n}\n.chat__head-avatar[data-v-bf16e7f4] {\n  width: %?64?%;\n  height: %?64?%;\n  border-radius: 50%;\n  background: linear-gradient(140deg, #7dd4bc 0%, #389a82 100%);\n  display: flex;\n  align-items: center;\n  justify-content: center;\n}\n.chat__head-emoji[data-v-bf16e7f4] {\n  font-size: %?32?%;\n  color: #ffffff;\n}\n.chat__head-main[data-v-bf16e7f4] {\n  flex: 1;\n  padding-left: %?16?%;\n}\n.chat__head-name[data-v-bf16e7f4] {\n  display: block;\n  font-size: %?32?%;\n  font-weight: 700;\n  color: #1a2a3c;\n  letter-spacing: %?1?%;\n}\n.chat__head-state[data-v-bf16e7f4] {\n  display: flex;\n  align-items: center;\n  margin-top: %?8?%;\n}\n.chat__dot-live[data-v-bf16e7f4] {\n  width: %?12?%;\n  height: %?12?%;\n  border-radius: 50%;\n  background: #27ae60;\n  margin-right: %?8?%;\n  -webkit-animation: live-data-v-bf16e7f4 1.6s ease-in-out infinite;\n          animation: live-data-v-bf16e7f4 1.6s ease-in-out infinite;\n}\n@-webkit-keyframes live-data-v-bf16e7f4 {\n0%, 100% {\n    opacity: 1;\n    -webkit-transform: scale(1);\n            transform: scale(1);\n}\n50% {\n    opacity: 0.45;\n    -webkit-transform: scale(0.7);\n            transform: scale(0.7);\n}\n}\n@keyframes live-data-v-bf16e7f4 {\n0%, 100% {\n    opacity: 1;\n    -webkit-transform: scale(1);\n            transform: scale(1);\n}\n50% {\n    opacity: 0.45;\n    -webkit-transform: scale(0.7);\n            transform: scale(0.7);\n}\n}\n.chat__head-status[data-v-bf16e7f4] {\n  font-size: %?20?%;\n  color: #64748b;\n}\n.chat__scroll[data-v-bf16e7f4] {\n  flex: 1;\n  height: 0;\n}\n.chat__list[data-v-bf16e7f4] {\n  padding: %?24?% %?24?% %?16?%;\n}\n.chat__notice[data-v-bf16e7f4] {\n  text-align: center;\n  padding: 0 %?40?% %?24?%;\n}\n.chat__notice-t[data-v-bf16e7f4] {\n  font-size: %?20?%;\n  color: #94a3b8;\n  background: #edf5f2;\n  padding: %?8?% %?16?%;\n  border-radius: %?999?%;\n  line-height: 1.6;\n}\n.chat__anchor[data-v-bf16e7f4] {\n  height: %?8?%;\n}\n.msg[data-v-bf16e7f4] {\n  display: flex;\n  align-items: flex-start;\n  margin-bottom: %?24?%;\n}\n.msg--user[data-v-bf16e7f4] {\n  justify-content: flex-end;\n}\n.msg__avatar[data-v-bf16e7f4] {\n  width: %?64?%;\n  height: %?64?%;\n  border-radius: 50%;\n  background: linear-gradient(140deg, #7dd4bc 0%, #389a82 100%);\n  display: flex;\n  align-items: center;\n  justify-content: center;\n  flex-shrink: 0;\n  box-shadow: 0 %?4?% %?24?% rgba(15, 61, 53, 0.06);\n}\n.msg__avatar-t[data-v-bf16e7f4] {\n  font-size: %?32?%;\n  color: #ffffff;\n}\n.msg__body[data-v-bf16e7f4] {\n  max-width: 78%;\n  padding-left: %?16?%;\n}\n.msg--user .msg__body[data-v-bf16e7f4] {\n  padding-left: 0;\n}\n.bubble[data-v-bf16e7f4] {\n  padding: %?24?%;\n  border-radius: %?6?% %?20?% %?20?% %?20?%;\n}\n.bubble--ai[data-v-bf16e7f4] {\n  background: #ffffff;\n  box-shadow: 0 %?4?% %?24?% rgba(15, 61, 53, 0.06);\n}\n.bubble--user[data-v-bf16e7f4] {\n  background: #7dd4bc;\n  border-radius: %?20?% %?6?% %?20?% %?20?%;\n}\n.bubble__t[data-v-bf16e7f4] {\n  font-size: %?28?%;\n  line-height: 1.6;\n}\n.bubble__t--ai[data-v-bf16e7f4] {\n  color: #1a2a3c;\n}\n.bubble__t--user[data-v-bf16e7f4] {\n  color: #ffffff;\n}\n.typing[data-v-bf16e7f4] {\n  display: flex;\n  align-items: center;\n  padding: %?24?%;\n}\n.typing__dot[data-v-bf16e7f4] {\n  width: %?12?%;\n  height: %?12?%;\n  border-radius: 50%;\n  background: #c6d2de;\n  margin-right: %?8?%;\n  -webkit-animation: bounce-data-v-bf16e7f4 1.2s ease-in-out infinite;\n          animation: bounce-data-v-bf16e7f4 1.2s ease-in-out infinite;\n}\n.typing__dot[data-v-bf16e7f4]:last-child {\n  margin-right: 0;\n}\n.typing__dot--2[data-v-bf16e7f4] {\n  -webkit-animation-delay: 0.18s;\n          animation-delay: 0.18s;\n}\n.typing__dot--3[data-v-bf16e7f4] {\n  -webkit-animation-delay: 0.36s;\n          animation-delay: 0.36s;\n}\n@-webkit-keyframes bounce-data-v-bf16e7f4 {\n0%, 60%, 100% {\n    -webkit-transform: translateY(0);\n            transform: translateY(0);\n    opacity: 0.45;\n}\n30% {\n    -webkit-transform: translateY(%?-10?%);\n            transform: translateY(%?-10?%);\n    opacity: 1;\n}\n}\n@keyframes bounce-data-v-bf16e7f4 {\n0%, 60%, 100% {\n    -webkit-transform: translateY(0);\n            transform: translateY(0);\n    opacity: 0.45;\n}\n30% {\n    -webkit-transform: translateY(%?-10?%);\n            transform: translateY(%?-10?%);\n    opacity: 1;\n}\n}\n.gen[data-v-bf16e7f4] {\n  background: #ffffff;\n  border-radius: %?6?% %?20?% %?20?% %?20?%;\n  box-shadow: 0 %?4?% %?24?% rgba(15, 61, 53, 0.06);\n  padding: %?24?%;\n  width: %?460.8?%;\n}\n.gen__head[data-v-bf16e7f4] {\n  display: flex;\n  align-items: center;\n  margin-bottom: %?16?%;\n}\n.gen__ring[data-v-bf16e7f4] {\n  width: %?32?%;\n  height: %?32?%;\n  border-radius: 50%;\n  border: %?2?% solid #d4f5ee;\n  border-top-color: #389a82;\n  margin-right: %?16?%;\n  -webkit-animation: spin-data-v-bf16e7f4 0.9s linear infinite;\n          animation: spin-data-v-bf16e7f4 0.9s linear infinite;\n}\n@-webkit-keyframes spin-data-v-bf16e7f4 {\n0% {\n    -webkit-transform: rotate(0deg);\n            transform: rotate(0deg);\n}\n100% {\n    -webkit-transform: rotate(360deg);\n            transform: rotate(360deg);\n}\n}\n@keyframes spin-data-v-bf16e7f4 {\n0% {\n    -webkit-transform: rotate(0deg);\n            transform: rotate(0deg);\n}\n100% {\n    -webkit-transform: rotate(360deg);\n            transform: rotate(360deg);\n}\n}\n.gen__title[data-v-bf16e7f4] {\n  font-size: %?28?%;\n  font-weight: 700;\n  color: #1a2a3c;\n}\n.gen__step[data-v-bf16e7f4] {\n  display: flex;\n  align-items: center;\n  margin-bottom: %?8?%;\n}\n.gen__step-mark[data-v-bf16e7f4] {\n  width: %?32?%;\n  font-size: %?20?%;\n  color: #c6d2de;\n  text-align: center;\n}\n.gen__step-mark--on[data-v-bf16e7f4] {\n  color: #389a82;\n}\n.gen__step-t[data-v-bf16e7f4] {\n  font-size: %?24?%;\n  color: #94a3b8;\n}\n.gen__step-t--on[data-v-bf16e7f4] {\n  color: #334155;\n  font-weight: 600;\n}\n.gen__bar[data-v-bf16e7f4] {\n  height: %?8?%;\n  border-radius: %?999?%;\n  background: #f2f7fa;\n  margin-top: %?16?%;\n  overflow: hidden;\n}\n.gen__bar-in[data-v-bf16e7f4] {\n  height: 100%;\n  border-radius: %?999?%;\n  background: linear-gradient(90deg, #7dd4bc 0%, #389a82 100%);\n  transition: width 0.6s ease;\n}\n.report[data-v-bf16e7f4] {\n  background: #ffffff;\n  border-radius: %?6?% %?20?% %?20?% %?20?%;\n  box-shadow: 0 %?12?% %?48?% rgba(125, 212, 188, 0.18);\n  padding: %?24?%;\n  width: %?518.4?%;\n}\n.report__head[data-v-bf16e7f4] {\n  display: flex;\n  align-items: center;\n  padding-bottom: %?16?%;\n}\n.report__icon[data-v-bf16e7f4] {\n  font-size: %?36?%;\n  margin-right: %?16?%;\n  color: rgba(0, 0, 0, 0.1);\n}\n.report__head-main[data-v-bf16e7f4] {\n  flex: 1;\n}\n.report__title[data-v-bf16e7f4] {\n  display: block;\n  font-size: %?32?%;\n  font-weight: 700;\n  color: #1a2a3c;\n}\n.report__sub[data-v-bf16e7f4] {\n  display: block;\n  font-size: %?20?%;\n  color: #64748b;\n  margin-top: %?8?%;\n}\n.report__row[data-v-bf16e7f4] {\n  display: flex;\n  align-items: flex-start;\n  margin-bottom: %?16?%;\n}\n.report__label[data-v-bf16e7f4] {\n  width: %?128?%;\n  font-size: %?24?%;\n  color: #94a3b8;\n  flex-shrink: 0;\n  line-height: 1.6;\n}\n.report__value[data-v-bf16e7f4] {\n  flex: 1;\n  font-size: %?24?%;\n  color: #1a2a3c;\n  font-weight: 600;\n  line-height: 1.6;\n}\n.report__risk[data-v-bf16e7f4] {\n  font-size: %?20?%;\n  font-weight: 700;\n  padding: %?8?% %?16?%;\n  border-radius: %?999?%;\n}\n.report__line[data-v-bf16e7f4] {\n  height: %?1?%;\n  background: #f2f7fa;\n  margin: %?8?% 0 %?16?%;\n}\n.report__focus-title[data-v-bf16e7f4] {\n  display: block;\n  font-size: %?24?%;\n  font-weight: 700;\n  color: #389a82;\n  margin-bottom: %?16?%;\n}\n.report__point[data-v-bf16e7f4] {\n  display: flex;\n  align-items: flex-start;\n  margin-bottom: %?16?%;\n}\n.report__point-idx[data-v-bf16e7f4] {\n  width: %?32?%;\n  height: %?32?%;\n  border-radius: 50%;\n  background: #d4f5ee;\n  color: #389a82;\n  font-size: %?20?%;\n  font-weight: 700;\n  text-align: center;\n  line-height: %?32?%;\n  flex-shrink: 0;\n  margin-right: %?16?%;\n}\n.report__point-main[data-v-bf16e7f4] {\n  flex: 1;\n}\n.report__point-t[data-v-bf16e7f4] {\n  display: block;\n  font-size: %?24?%;\n  font-weight: 600;\n  color: #1a2a3c;\n}\n.report__point-d[data-v-bf16e7f4] {\n  display: block;\n  font-size: %?20?%;\n  color: #64748b;\n  line-height: 1.6;\n  margin-top: %?8?%;\n}\n.report__ref[data-v-bf16e7f4] {\n  display: block;\n  font-size: %?20?%;\n  color: #94a3b8;\n  margin-top: %?8?%;\n}\n.plan[data-v-bf16e7f4] {\n  background: #edf5f2;\n  border-radius: %?6?% %?20?% %?20?% %?20?%;\n  padding: %?24?% %?16?% %?8?%;\n  width: %?556.8?%;\n}\n.plan__head[data-v-bf16e7f4] {\n  display: flex;\n  align-items: baseline;\n  justify-content: space-between;\n  padding: 0 %?8?% %?16?%;\n}\n.plan__title[data-v-bf16e7f4] {\n  font-size: %?28?%;\n  font-weight: 700;\n  color: #1a2a3c;\n}\n.plan__count[data-v-bf16e7f4] {\n  font-size: %?20?%;\n  color: #64748b;\n}\n.opts[data-v-bf16e7f4] {\n  padding: %?8?% 0 %?8?% %?80?%;\n}\n.opts__hint[data-v-bf16e7f4] {\n  display: block;\n  font-size: %?20?%;\n  color: #94a3b8;\n  margin-bottom: %?16?%;\n}\n.opts__item[data-v-bf16e7f4] {\n  background: #ffffff;\n  border: %?1?% solid #d4f5ee;\n  border-radius: %?999?%;\n  padding: %?16?% %?24?%;\n  margin-bottom: %?16?%;\n  box-shadow: 0 %?4?% %?24?% rgba(15, 61, 53, 0.06);\n}\n.opts__item--on[data-v-bf16e7f4] {\n  background: #7dd4bc;\n  border-color: #389a82;\n}\n.opts__t[data-v-bf16e7f4] {\n  font-size: %?28?%;\n  color: #389a82;\n  font-weight: 600;\n}\n.opts__t--on[data-v-bf16e7f4] {\n  color: #ffffff;\n}\n.cta[data-v-bf16e7f4] {\n  margin: %?16?% 0 %?8?% %?80?%;\n  background: #7dd4bc;\n  border-radius: %?999?%;\n  padding: %?24?% 0;\n  text-align: center;\n  box-shadow: 0 %?12?% %?48?% rgba(125, 212, 188, 0.18);\n}\n.cta__t[data-v-bf16e7f4] {\n  color: #ffffff;\n  font-size: %?28?%;\n  font-weight: 700;\n  letter-spacing: %?1?%;\n}\n.bar[data-v-bf16e7f4] {\n  background: #ffffff;\n  box-shadow: 0 %?16?% %?96?% rgba(15, 61, 53, 0.1);\n}\n.bar__inner[data-v-bf16e7f4] {\n  display: flex;\n  align-items: center;\n  padding: %?16?% %?24?%;\n}\n.bar__input[data-v-bf16e7f4] {\n  flex: 1;\n  height: %?64?%;\n  background: #edf5f2;\n  border-radius: %?999?%;\n  padding: 0 %?24?%;\n  font-size: %?28?%;\n  color: #1a2a3c;\n}\n.bar__input--off[data-v-bf16e7f4] {\n  background: #f2f7fa;\n  color: #94a3b8;\n}\n.bar__ph[data-v-bf16e7f4] {\n  color: #94a3b8;\n  font-size: %?24?%;\n}\n.bar__mic[data-v-bf16e7f4] {\n  width: %?64?%;\n  height: %?64?%;\n  border-radius: 50%;\n  background: #edf5f2;\n  display: flex;\n  align-items: center;\n  justify-content: center;\n  margin-left: %?16?%;\n  flex-shrink: 0;\n}\n.bar__mic-t[data-v-bf16e7f4] {\n  font-size: %?32?%;\n  color: rgba(0, 0, 0, 0.1);\n}\n.bar__send[data-v-bf16e7f4] {\n  background: #7dd4bc;\n  border-radius: %?999?%;\n  padding: %?16?% %?32?%;\n  margin-left: %?16?%;\n  flex-shrink: 0;\n}\n.bar__send--off[data-v-bf16e7f4] {\n  background: #c6d2de;\n}\n.bar__send-t[data-v-bf16e7f4] {\n  color: #ffffff;\n  font-size: %?24?%;\n  font-weight: 700;\n}\n.bar__safe[data-v-bf16e7f4] {\n  height: env(safe-area-inset-bottom);\n}\n/* 服务包激活引导卡 */\n.activate[data-v-bf16e7f4] {\n  margin: %?32?% %?32?% %?16?%;\n  padding: %?32?%;\n  background: #ffffff;\n  border-radius: %?20?%;\n  box-shadow: 0 %?12?% %?48?% rgba(125, 212, 188, 0.18);\n  border: %?1?% solid rgba(15, 61, 53, 0.06);\n}\n.activate--lite[data-v-bf16e7f4] {\n  margin-top: %?16?%;\n  padding: %?24?%;\n  box-shadow: none;\n  background: #d4f5ee;\n  border-color: transparent;\n  display: flex;\n  align-items: center;\n  gap: %?24?%;\n}\n.activate--lite .activate__t[data-v-bf16e7f4] {\n  flex: 1;\n  margin: 0;\n  font-size: %?24?%;\n}\n.activate__head[data-v-bf16e7f4] {\n  display: flex;\n  align-items: center;\n  justify-content: space-between;\n  margin-bottom: %?16?%;\n}\n.activate__badge[data-v-bf16e7f4] {\n  font-size: %?20?%;\n  font-weight: 600;\n  color: #389a82;\n  background: #d4f5ee;\n  padding: %?8?% %?16?%;\n  border-radius: %?999?%;\n}\n.activate__status[data-v-bf16e7f4] {\n  font-size: %?20?%;\n  color: #334155;\n}\n.activate__t[data-v-bf16e7f4] {\n  display: block;\n  font-size: %?32?%;\n  font-weight: 700;\n  color: #1a2a3c;\n  margin-bottom: %?16?%;\n}\n.activate__d[data-v-bf16e7f4] {\n  display: block;\n  font-size: %?24?%;\n  color: #64748b;\n  line-height: 1.6;\n  margin-bottom: %?32?%;\n}\n.activate__row[data-v-bf16e7f4] {\n  display: flex;\n  gap: %?16?%;\n}\n.activate__btn[data-v-bf16e7f4] {\n  flex: 1;\n  padding: %?24?% 0;\n  border-radius: %?999?%;\n  background: #7dd4bc;\n  text-align: center;\n  box-shadow: 0 %?4?% %?24?% rgba(15, 61, 53, 0.06);\n}\n.activate__btn--sm[data-v-bf16e7f4] {\n  flex: 0 0 auto;\n  padding: %?16?% %?32?%;\n  margin-left: auto;\n}\n.activate__btn--ghost[data-v-bf16e7f4] {\n  background: transparent;\n  border: %?1?% solid #c6d2de;\n  box-shadow: none;\n}\n.activate__btn-t[data-v-bf16e7f4] {\n  color: #ffffff;\n  font-size: %?28?%;\n  font-weight: 700;\n}\n.activate__btn-t--ghost[data-v-bf16e7f4] {\n  color: #334155;\n}", ""]);
+exports.push([module.i, "@charset \"UTF-8\";\n/* 享相健康+ · 设计令牌\n   来源：/workspace/DESIGN.md\n   方案：rpx + SCSS 变量（1px = 2rpx，基于 750rpx 设计基准） */\n/* ---------- 品牌色 ---------- */\n/* ---------- 头像 ---------- */\n/* ---------- 语义状态色 ---------- */\n/* ---------- 金色（尊享装饰） ---------- */\n/* ---------- 背景 ---------- */\n/* 斜向两色渐变：左上(#ddf7ed) → 右下(#f3f3f3)，末端即底色；\n   配合 App.vue 中 background-attachment: fixed 铺满视口固定，不随页面滚动/变长 */\n/* ---------- 文字 ---------- */\n/* ---------- 描边 / 遮罩 ---------- */\n/* ---------- 字体 ---------- */\n/* 英文/数字优先匹配 DIN Pro（Mac 自带 DIN Alternate 作为备选），中文回退苹方/雅黑 */\n/* 移动端最小舒适字号（可读正文下限）：\n   说明/入口/数据标签等可读文字不得小于 12px(24rpx)；\n   $font-size-2xs(10px) 仅限角标、徽标、装饰性元素 */\n/* ---------- 语义排版 ---------- */\n/* ---------- 间距 ---------- */\n/* ---------- 区块标题 ---------- */\n/* 标题下间距 = 列表间距；上间距 = 下间距 × 2 */\n/* ---------- 尺寸 ---------- */\n/* ---------- 圆角（已减半，更克制干净） ---------- */\n/* ---------- 阴影 ---------- */\n/* ---------- 层级 ---------- */\n/* ---------- 动效 ---------- */\n.chat[data-v-bf16e7f4] {\n  height: 100vh;\n  display: flex;\n  flex-direction: column;\n  background: #f3f3f3;\n}\n.chat__voice[data-v-bf16e7f4] {\n  height: %?64?%;\n  padding: 0 %?16?%;\n  border-radius: %?999?%;\n  background: #d4f5ee;\n  display: flex;\n  align-items: center;\n}\n.chat__voice--off[data-v-bf16e7f4] {\n  background: linear-gradient(135deg, #ddf7ed, #f3f3f3);\n}\n.chat__voice-icon[data-v-bf16e7f4] {\n  font-size: %?28?%;\n  color: #389a82;\n  margin-right: %?6?%;\n}\n.chat__voice--off .chat__voice-icon[data-v-bf16e7f4] {\n  color: #c6d2de;\n}\n.chat__voice-t[data-v-bf16e7f4] {\n  font-size: %?24?%;\n  color: #389a82;\n  white-space: nowrap;\n}\n.chat__voice--off .chat__voice-t[data-v-bf16e7f4] {\n  color: #c6d2de;\n}\n.chat__head[data-v-bf16e7f4] {\n  background: #ffffff;\n  padding: %?8?% %?24?% %?24?%;\n  display: flex;\n  align-items: center;\n  box-shadow: 0 %?4?% %?24?% rgba(15, 61, 53, 0.06);\n  z-index: 20;\n}\n.chat__head-avatar[data-v-bf16e7f4] {\n  width: %?64?%;\n  height: %?64?%;\n  border-radius: 50%;\n  background: linear-gradient(140deg, #7dd4bc 0%, #389a82 100%);\n  display: flex;\n  align-items: center;\n  justify-content: center;\n}\n.chat__head-emoji[data-v-bf16e7f4] {\n  font-size: %?32?%;\n  color: #ffffff;\n}\n.chat__head-main[data-v-bf16e7f4] {\n  flex: 1;\n  padding-left: %?16?%;\n}\n.chat__head-name[data-v-bf16e7f4] {\n  display: block;\n  font-size: %?32?%;\n  font-weight: 700;\n  color: #1a2a3c;\n  letter-spacing: %?1?%;\n}\n.chat__head-state[data-v-bf16e7f4] {\n  display: flex;\n  align-items: center;\n  margin-top: %?8?%;\n}\n.chat__dot-live[data-v-bf16e7f4] {\n  width: %?12?%;\n  height: %?12?%;\n  border-radius: 50%;\n  background: #27ae60;\n  margin-right: %?8?%;\n  -webkit-animation: live-data-v-bf16e7f4 1.6s ease-in-out infinite;\n          animation: live-data-v-bf16e7f4 1.6s ease-in-out infinite;\n}\n@-webkit-keyframes live-data-v-bf16e7f4 {\n0%, 100% {\n    opacity: 1;\n    -webkit-transform: scale(1);\n            transform: scale(1);\n}\n50% {\n    opacity: 0.45;\n    -webkit-transform: scale(0.7);\n            transform: scale(0.7);\n}\n}\n@keyframes live-data-v-bf16e7f4 {\n0%, 100% {\n    opacity: 1;\n    -webkit-transform: scale(1);\n            transform: scale(1);\n}\n50% {\n    opacity: 0.45;\n    -webkit-transform: scale(0.7);\n            transform: scale(0.7);\n}\n}\n.chat__head-status[data-v-bf16e7f4] {\n  font-size: %?20?%;\n  color: #64748b;\n}\n.chat__scroll[data-v-bf16e7f4] {\n  flex: 1;\n  height: 0;\n}\n.chat__list[data-v-bf16e7f4] {\n  padding: %?24?% %?24?% %?16?%;\n}\n.chat__notice[data-v-bf16e7f4] {\n  text-align: center;\n  padding: 0 %?40?% %?24?%;\n}\n.chat__notice-t[data-v-bf16e7f4] {\n  font-size: %?20?%;\n  color: #94a3b8;\n  background: #edf5f2;\n  padding: %?8?% %?16?%;\n  border-radius: %?999?%;\n  line-height: 1.6;\n}\n.chat__anchor[data-v-bf16e7f4] {\n  height: %?8?%;\n}\n.msg[data-v-bf16e7f4] {\n  display: flex;\n  align-items: flex-start;\n  margin-bottom: %?24?%;\n}\n.msg--user[data-v-bf16e7f4] {\n  justify-content: flex-end;\n}\n.msg__avatar[data-v-bf16e7f4] {\n  width: %?64?%;\n  height: %?64?%;\n  border-radius: 50%;\n  background: linear-gradient(140deg, #7dd4bc 0%, #389a82 100%);\n  display: flex;\n  align-items: center;\n  justify-content: center;\n  flex-shrink: 0;\n  box-shadow: 0 %?4?% %?24?% rgba(15, 61, 53, 0.06);\n}\n.msg__avatar-t[data-v-bf16e7f4] {\n  font-size: %?32?%;\n  color: #ffffff;\n}\n.msg__body[data-v-bf16e7f4] {\n  max-width: 78%;\n  padding-left: %?16?%;\n}\n.msg--user .msg__body[data-v-bf16e7f4] {\n  padding-left: 0;\n}\n.bubble[data-v-bf16e7f4] {\n  padding: %?24?%;\n  border-radius: %?6?% %?20?% %?20?% %?20?%;\n}\n.bubble--ai[data-v-bf16e7f4] {\n  background: #ffffff;\n  box-shadow: 0 %?4?% %?24?% rgba(15, 61, 53, 0.06);\n}\n.bubble--user[data-v-bf16e7f4] {\n  background: #7dd4bc;\n  border-radius: %?20?% %?6?% %?20?% %?20?%;\n}\n.bubble__t[data-v-bf16e7f4] {\n  font-size: %?28?%;\n  line-height: 1.6;\n}\n.bubble__t--ai[data-v-bf16e7f4] {\n  color: #1a2a3c;\n}\n.bubble__t--user[data-v-bf16e7f4] {\n  color: #ffffff;\n}\n.bindtip[data-v-bf16e7f4] {\n  margin-top: %?24?%;\n  padding-top: %?24?%;\n  border-top: %?1?% solid rgba(15, 61, 53, 0.06);\n  display: flex;\n  flex-direction: column;\n  align-items: flex-start;\n}\n.bindtip__t[data-v-bf16e7f4] {\n  font-size: %?24?%;\n  line-height: 1.6;\n  color: #64748b;\n}\n.bindtip__btn[data-v-bf16e7f4] {\n  margin-top: %?16?%;\n  padding: %?16?% %?32?%;\n  border-radius: %?999?%;\n  background: #f15533;\n  display: flex;\n  flex-direction: row;\n  align-items: center;\n}\n.bindtip__btn-icon[data-v-bf16e7f4] {\n  font-size: %?24?%;\n  color: #ffffff;\n  margin-right: %?8?%;\n}\n.bindtip__btn-t[data-v-bf16e7f4] {\n  font-size: %?24?%;\n  font-weight: 600;\n  color: #ffffff;\n}\n.typing[data-v-bf16e7f4] {\n  display: flex;\n  align-items: center;\n  padding: %?24?%;\n}\n.typing__dot[data-v-bf16e7f4] {\n  width: %?12?%;\n  height: %?12?%;\n  border-radius: 50%;\n  background: #c6d2de;\n  margin-right: %?8?%;\n  -webkit-animation: bounce-data-v-bf16e7f4 1.2s ease-in-out infinite;\n          animation: bounce-data-v-bf16e7f4 1.2s ease-in-out infinite;\n}\n.typing__dot[data-v-bf16e7f4]:last-child {\n  margin-right: 0;\n}\n.typing__dot--2[data-v-bf16e7f4] {\n  -webkit-animation-delay: 0.18s;\n          animation-delay: 0.18s;\n}\n.typing__dot--3[data-v-bf16e7f4] {\n  -webkit-animation-delay: 0.36s;\n          animation-delay: 0.36s;\n}\n@-webkit-keyframes bounce-data-v-bf16e7f4 {\n0%, 60%, 100% {\n    -webkit-transform: translateY(0);\n            transform: translateY(0);\n    opacity: 0.45;\n}\n30% {\n    -webkit-transform: translateY(%?-10?%);\n            transform: translateY(%?-10?%);\n    opacity: 1;\n}\n}\n@keyframes bounce-data-v-bf16e7f4 {\n0%, 60%, 100% {\n    -webkit-transform: translateY(0);\n            transform: translateY(0);\n    opacity: 0.45;\n}\n30% {\n    -webkit-transform: translateY(%?-10?%);\n            transform: translateY(%?-10?%);\n    opacity: 1;\n}\n}\n.gen[data-v-bf16e7f4] {\n  background: #ffffff;\n  border-radius: %?6?% %?20?% %?20?% %?20?%;\n  box-shadow: 0 %?4?% %?24?% rgba(15, 61, 53, 0.06);\n  padding: %?24?%;\n  width: %?460.8?%;\n}\n.gen__head[data-v-bf16e7f4] {\n  display: flex;\n  align-items: center;\n  margin-bottom: %?16?%;\n}\n.gen__ring[data-v-bf16e7f4] {\n  width: %?32?%;\n  height: %?32?%;\n  border-radius: 50%;\n  border: %?2?% solid #d4f5ee;\n  border-top-color: #389a82;\n  margin-right: %?16?%;\n  -webkit-animation: spin-data-v-bf16e7f4 0.9s linear infinite;\n          animation: spin-data-v-bf16e7f4 0.9s linear infinite;\n}\n@-webkit-keyframes spin-data-v-bf16e7f4 {\n0% {\n    -webkit-transform: rotate(0deg);\n            transform: rotate(0deg);\n}\n100% {\n    -webkit-transform: rotate(360deg);\n            transform: rotate(360deg);\n}\n}\n@keyframes spin-data-v-bf16e7f4 {\n0% {\n    -webkit-transform: rotate(0deg);\n            transform: rotate(0deg);\n}\n100% {\n    -webkit-transform: rotate(360deg);\n            transform: rotate(360deg);\n}\n}\n.gen__title[data-v-bf16e7f4] {\n  font-size: %?28?%;\n  font-weight: 700;\n  color: #1a2a3c;\n}\n.gen__step[data-v-bf16e7f4] {\n  display: flex;\n  align-items: center;\n  margin-bottom: %?8?%;\n}\n.gen__step-mark[data-v-bf16e7f4] {\n  width: %?32?%;\n  font-size: %?20?%;\n  color: #c6d2de;\n  text-align: center;\n}\n.gen__step-mark--on[data-v-bf16e7f4] {\n  color: #389a82;\n}\n.gen__step-t[data-v-bf16e7f4] {\n  font-size: %?24?%;\n  color: #94a3b8;\n}\n.gen__step-t--on[data-v-bf16e7f4] {\n  color: #334155;\n  font-weight: 600;\n}\n.gen__bar[data-v-bf16e7f4] {\n  height: %?8?%;\n  border-radius: %?999?%;\n  background: #f2f7fa;\n  margin-top: %?16?%;\n  overflow: hidden;\n}\n.gen__bar-in[data-v-bf16e7f4] {\n  height: 100%;\n  border-radius: %?999?%;\n  background: linear-gradient(90deg, #7dd4bc 0%, #389a82 100%);\n  transition: width 0.6s ease;\n}\n.report[data-v-bf16e7f4] {\n  background: #ffffff;\n  border-radius: %?6?% %?20?% %?20?% %?20?%;\n  box-shadow: 0 %?12?% %?48?% rgba(125, 212, 188, 0.18);\n  padding: %?24?%;\n  width: %?518.4?%;\n}\n.report__head[data-v-bf16e7f4] {\n  display: flex;\n  align-items: center;\n  padding-bottom: %?16?%;\n}\n.report__icon[data-v-bf16e7f4] {\n  font-size: %?36?%;\n  margin-right: %?16?%;\n  color: rgba(0, 0, 0, 0.1);\n}\n.report__head-main[data-v-bf16e7f4] {\n  flex: 1;\n}\n.report__title[data-v-bf16e7f4] {\n  display: block;\n  font-size: %?32?%;\n  font-weight: 700;\n  color: #1a2a3c;\n}\n.report__sub[data-v-bf16e7f4] {\n  display: block;\n  font-size: %?20?%;\n  color: #64748b;\n  margin-top: %?8?%;\n}\n.report__row[data-v-bf16e7f4] {\n  display: flex;\n  align-items: flex-start;\n  margin-bottom: %?16?%;\n}\n.report__label[data-v-bf16e7f4] {\n  width: %?128?%;\n  font-size: %?24?%;\n  color: #94a3b8;\n  flex-shrink: 0;\n  line-height: 1.6;\n}\n.report__value[data-v-bf16e7f4] {\n  flex: 1;\n  font-size: %?24?%;\n  color: #1a2a3c;\n  font-weight: 600;\n  line-height: 1.6;\n}\n.report__risk[data-v-bf16e7f4] {\n  font-size: %?20?%;\n  font-weight: 700;\n  padding: %?8?% %?16?%;\n  border-radius: %?999?%;\n}\n.report__line[data-v-bf16e7f4] {\n  height: %?1?%;\n  background: #f2f7fa;\n  margin: %?8?% 0 %?16?%;\n}\n.report__focus-title[data-v-bf16e7f4] {\n  display: block;\n  font-size: %?24?%;\n  font-weight: 700;\n  color: #389a82;\n  margin-bottom: %?16?%;\n}\n.report__point[data-v-bf16e7f4] {\n  display: flex;\n  align-items: flex-start;\n  margin-bottom: %?16?%;\n}\n.report__point-idx[data-v-bf16e7f4] {\n  width: %?32?%;\n  height: %?32?%;\n  border-radius: 50%;\n  background: #d4f5ee;\n  color: #389a82;\n  font-size: %?20?%;\n  font-weight: 700;\n  text-align: center;\n  line-height: %?32?%;\n  flex-shrink: 0;\n  margin-right: %?16?%;\n}\n.report__point-main[data-v-bf16e7f4] {\n  flex: 1;\n}\n.report__point-t[data-v-bf16e7f4] {\n  display: block;\n  font-size: %?24?%;\n  font-weight: 600;\n  color: #1a2a3c;\n}\n.report__point-d[data-v-bf16e7f4] {\n  display: block;\n  font-size: %?20?%;\n  color: #64748b;\n  line-height: 1.6;\n  margin-top: %?8?%;\n}\n.report__ref[data-v-bf16e7f4] {\n  display: block;\n  font-size: %?20?%;\n  color: #94a3b8;\n  margin-top: %?8?%;\n}\n.plan[data-v-bf16e7f4] {\n  background: #edf5f2;\n  border-radius: %?6?% %?20?% %?20?% %?20?%;\n  padding: %?24?% %?16?% %?8?%;\n  width: %?556.8?%;\n}\n.plan__head[data-v-bf16e7f4] {\n  display: flex;\n  align-items: baseline;\n  justify-content: space-between;\n  padding: 0 %?8?% %?16?%;\n}\n.plan__title[data-v-bf16e7f4] {\n  font-size: %?28?%;\n  font-weight: 700;\n  color: #1a2a3c;\n}\n.plan__count[data-v-bf16e7f4] {\n  font-size: %?20?%;\n  color: #64748b;\n}\n.opts[data-v-bf16e7f4] {\n  padding: %?8?% 0 %?8?% %?80?%;\n}\n.opts__hint[data-v-bf16e7f4] {\n  display: block;\n  font-size: %?20?%;\n  color: #94a3b8;\n  margin-bottom: %?16?%;\n}\n.opts__item[data-v-bf16e7f4] {\n  background: #ffffff;\n  border: %?1?% solid #d4f5ee;\n  border-radius: %?999?%;\n  padding: %?16?% %?24?%;\n  margin-bottom: %?16?%;\n  box-shadow: 0 %?4?% %?24?% rgba(15, 61, 53, 0.06);\n}\n.opts__item--on[data-v-bf16e7f4] {\n  background: #7dd4bc;\n  border-color: #389a82;\n}\n.opts__t[data-v-bf16e7f4] {\n  font-size: %?28?%;\n  color: #389a82;\n  font-weight: 600;\n}\n.opts__t--on[data-v-bf16e7f4] {\n  color: #ffffff;\n}\n.cta[data-v-bf16e7f4] {\n  margin: %?16?% 0 %?8?% %?80?%;\n  background: #7dd4bc;\n  border-radius: %?999?%;\n  padding: %?24?% 0;\n  text-align: center;\n  box-shadow: 0 %?12?% %?48?% rgba(125, 212, 188, 0.18);\n}\n.cta__t[data-v-bf16e7f4] {\n  color: #ffffff;\n  font-size: %?28?%;\n  font-weight: 700;\n  letter-spacing: %?1?%;\n}\n.bar[data-v-bf16e7f4] {\n  background: #ffffff;\n  box-shadow: 0 %?16?% %?96?% rgba(15, 61, 53, 0.1);\n}\n.bar__inner[data-v-bf16e7f4] {\n  display: flex;\n  align-items: center;\n  padding: %?16?% %?24?%;\n}\n.bar__input[data-v-bf16e7f4] {\n  flex: 1;\n  height: %?64?%;\n  background: #edf5f2;\n  border-radius: %?999?%;\n  padding: 0 %?24?%;\n  font-size: %?28?%;\n  color: #1a2a3c;\n}\n.bar__input--off[data-v-bf16e7f4] {\n  background: #f2f7fa;\n  color: #94a3b8;\n}\n.bar__ph[data-v-bf16e7f4] {\n  color: #94a3b8;\n  font-size: %?24?%;\n}\n.bar__mic[data-v-bf16e7f4] {\n  width: %?64?%;\n  height: %?64?%;\n  border-radius: 50%;\n  background: #edf5f2;\n  display: flex;\n  align-items: center;\n  justify-content: center;\n  margin-left: %?16?%;\n  flex-shrink: 0;\n}\n.bar__mic-t[data-v-bf16e7f4] {\n  font-size: %?32?%;\n  color: rgba(0, 0, 0, 0.1);\n}\n.bar__send[data-v-bf16e7f4] {\n  background: #7dd4bc;\n  border-radius: %?999?%;\n  padding: %?16?% %?32?%;\n  margin-left: %?16?%;\n  flex-shrink: 0;\n}\n.bar__send--off[data-v-bf16e7f4] {\n  background: #c6d2de;\n}\n.bar__send-t[data-v-bf16e7f4] {\n  color: #ffffff;\n  font-size: %?24?%;\n  font-weight: 700;\n}\n.bar__safe[data-v-bf16e7f4] {\n  height: env(safe-area-inset-bottom);\n}\n/* 服务包激活引导卡 */\n.activate[data-v-bf16e7f4] {\n  margin: %?32?% %?32?% %?16?%;\n  padding: %?32?%;\n  background: #ffffff;\n  border-radius: %?20?%;\n  box-shadow: 0 %?12?% %?48?% rgba(125, 212, 188, 0.18);\n  border: %?1?% solid rgba(15, 61, 53, 0.06);\n}\n.activate--lite[data-v-bf16e7f4] {\n  margin-top: %?16?%;\n  padding: %?24?%;\n  box-shadow: none;\n  background: #d4f5ee;\n  border-color: transparent;\n  display: flex;\n  align-items: center;\n  gap: %?24?%;\n}\n.activate--lite .activate__t[data-v-bf16e7f4] {\n  flex: 1;\n  margin: 0;\n  font-size: %?24?%;\n}\n.activate__head[data-v-bf16e7f4] {\n  display: flex;\n  align-items: center;\n  justify-content: space-between;\n  margin-bottom: %?16?%;\n}\n.activate__badge[data-v-bf16e7f4] {\n  font-size: %?20?%;\n  font-weight: 600;\n  color: #389a82;\n  background: #d4f5ee;\n  padding: %?8?% %?16?%;\n  border-radius: %?999?%;\n}\n.activate__status[data-v-bf16e7f4] {\n  font-size: %?20?%;\n  color: #334155;\n}\n.activate__t[data-v-bf16e7f4] {\n  display: block;\n  font-size: %?32?%;\n  font-weight: 700;\n  color: #1a2a3c;\n  margin-bottom: %?16?%;\n}\n.activate__d[data-v-bf16e7f4] {\n  display: block;\n  font-size: %?24?%;\n  color: #64748b;\n  line-height: 1.6;\n  margin-bottom: %?32?%;\n}\n.activate__row[data-v-bf16e7f4] {\n  display: flex;\n  gap: %?16?%;\n}\n.activate__btn[data-v-bf16e7f4] {\n  flex: 1;\n  padding: %?24?% 0;\n  border-radius: %?999?%;\n  background: #7dd4bc;\n  text-align: center;\n  box-shadow: 0 %?4?% %?24?% rgba(15, 61, 53, 0.06);\n}\n.activate__btn--sm[data-v-bf16e7f4] {\n  flex: 0 0 auto;\n  padding: %?16?% %?32?%;\n  margin-left: auto;\n}\n.activate__btn--ghost[data-v-bf16e7f4] {\n  background: transparent;\n  border: %?1?% solid #c6d2de;\n  box-shadow: none;\n}\n.activate__btn-t[data-v-bf16e7f4] {\n  color: #ffffff;\n  font-size: %?28?%;\n  font-weight: 700;\n}\n.activate__btn-t--ghost[data-v-bf16e7f4] {\n  color: #334155;\n}", ""]);
 // Exports
 module.exports = exports;
 
@@ -136,22 +136,24 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var core_js_modules_es_array_push_js__WEBPACK_IMPORTED_MODULE_7___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_array_push_js__WEBPACK_IMPORTED_MODULE_7__);
 /* harmony import */ var core_js_modules_es_array_slice_js__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! core-js/modules/es.array.slice.js */ "+2oP");
 /* harmony import */ var core_js_modules_es_array_slice_js__WEBPACK_IMPORTED_MODULE_8___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_array_slice_js__WEBPACK_IMPORTED_MODULE_8__);
-/* harmony import */ var core_js_modules_es_iterator_constructor_js__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! core-js/modules/es.iterator.constructor.js */ "6fVz");
-/* harmony import */ var core_js_modules_es_iterator_constructor_js__WEBPACK_IMPORTED_MODULE_9___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_iterator_constructor_js__WEBPACK_IMPORTED_MODULE_9__);
-/* harmony import */ var core_js_modules_es_iterator_for_each_js__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! core-js/modules/es.iterator.for-each.js */ "fVRX");
-/* harmony import */ var core_js_modules_es_iterator_for_each_js__WEBPACK_IMPORTED_MODULE_10___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_iterator_for_each_js__WEBPACK_IMPORTED_MODULE_10__);
-/* harmony import */ var core_js_modules_es_iterator_map_js__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! core-js/modules/es.iterator.map.js */ "q0NK");
-/* harmony import */ var core_js_modules_es_iterator_map_js__WEBPACK_IMPORTED_MODULE_11___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_iterator_map_js__WEBPACK_IMPORTED_MODULE_11__);
-/* harmony import */ var core_js_modules_es_object_to_string_js__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! core-js/modules/es.object.to-string.js */ "07d7");
-/* harmony import */ var core_js_modules_es_object_to_string_js__WEBPACK_IMPORTED_MODULE_12___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_object_to_string_js__WEBPACK_IMPORTED_MODULE_12__);
-/* harmony import */ var core_js_modules_es_regexp_to_string_js__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(/*! core-js/modules/es.regexp.to-string.js */ "JfAA");
-/* harmony import */ var core_js_modules_es_regexp_to_string_js__WEBPACK_IMPORTED_MODULE_13___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_regexp_to_string_js__WEBPACK_IMPORTED_MODULE_13__);
-/* harmony import */ var core_js_modules_es_string_trim_js__WEBPACK_IMPORTED_MODULE_14__ = __webpack_require__(/*! core-js/modules/es.string.trim.js */ "SYor");
-/* harmony import */ var core_js_modules_es_string_trim_js__WEBPACK_IMPORTED_MODULE_14___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_string_trim_js__WEBPACK_IMPORTED_MODULE_14__);
-/* harmony import */ var core_js_modules_web_dom_collections_for_each_js__WEBPACK_IMPORTED_MODULE_15__ = __webpack_require__(/*! core-js/modules/web.dom-collections.for-each.js */ "FZtP");
-/* harmony import */ var core_js_modules_web_dom_collections_for_each_js__WEBPACK_IMPORTED_MODULE_15___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_web_dom_collections_for_each_js__WEBPACK_IMPORTED_MODULE_15__);
-/* harmony import */ var _common_mock_js__WEBPACK_IMPORTED_MODULE_16__ = __webpack_require__(/*! @/common/mock.js */ "rfkh");
-/* harmony import */ var _common_tts_js__WEBPACK_IMPORTED_MODULE_17__ = __webpack_require__(/*! @/common/tts.js */ "jd/3");
+/* harmony import */ var core_js_modules_es_array_splice_js__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! core-js/modules/es.array.splice.js */ "pDQq");
+/* harmony import */ var core_js_modules_es_array_splice_js__WEBPACK_IMPORTED_MODULE_9___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_array_splice_js__WEBPACK_IMPORTED_MODULE_9__);
+/* harmony import */ var core_js_modules_es_iterator_constructor_js__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! core-js/modules/es.iterator.constructor.js */ "6fVz");
+/* harmony import */ var core_js_modules_es_iterator_constructor_js__WEBPACK_IMPORTED_MODULE_10___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_iterator_constructor_js__WEBPACK_IMPORTED_MODULE_10__);
+/* harmony import */ var core_js_modules_es_iterator_for_each_js__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! core-js/modules/es.iterator.for-each.js */ "fVRX");
+/* harmony import */ var core_js_modules_es_iterator_for_each_js__WEBPACK_IMPORTED_MODULE_11___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_iterator_for_each_js__WEBPACK_IMPORTED_MODULE_11__);
+/* harmony import */ var core_js_modules_es_iterator_map_js__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! core-js/modules/es.iterator.map.js */ "q0NK");
+/* harmony import */ var core_js_modules_es_iterator_map_js__WEBPACK_IMPORTED_MODULE_12___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_iterator_map_js__WEBPACK_IMPORTED_MODULE_12__);
+/* harmony import */ var core_js_modules_es_object_to_string_js__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(/*! core-js/modules/es.object.to-string.js */ "07d7");
+/* harmony import */ var core_js_modules_es_object_to_string_js__WEBPACK_IMPORTED_MODULE_13___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_object_to_string_js__WEBPACK_IMPORTED_MODULE_13__);
+/* harmony import */ var core_js_modules_es_regexp_to_string_js__WEBPACK_IMPORTED_MODULE_14__ = __webpack_require__(/*! core-js/modules/es.regexp.to-string.js */ "JfAA");
+/* harmony import */ var core_js_modules_es_regexp_to_string_js__WEBPACK_IMPORTED_MODULE_14___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_regexp_to_string_js__WEBPACK_IMPORTED_MODULE_14__);
+/* harmony import */ var core_js_modules_es_string_trim_js__WEBPACK_IMPORTED_MODULE_15__ = __webpack_require__(/*! core-js/modules/es.string.trim.js */ "SYor");
+/* harmony import */ var core_js_modules_es_string_trim_js__WEBPACK_IMPORTED_MODULE_15___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_string_trim_js__WEBPACK_IMPORTED_MODULE_15__);
+/* harmony import */ var core_js_modules_web_dom_collections_for_each_js__WEBPACK_IMPORTED_MODULE_16__ = __webpack_require__(/*! core-js/modules/web.dom-collections.for-each.js */ "FZtP");
+/* harmony import */ var core_js_modules_web_dom_collections_for_each_js__WEBPACK_IMPORTED_MODULE_16___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_web_dom_collections_for_each_js__WEBPACK_IMPORTED_MODULE_16__);
+/* harmony import */ var _common_mock_js__WEBPACK_IMPORTED_MODULE_17__ = __webpack_require__(/*! @/common/mock.js */ "rfkh");
+/* harmony import */ var _common_tts_js__WEBPACK_IMPORTED_MODULE_18__ = __webpack_require__(/*! @/common/tts.js */ "jd/3");
 
 
 
@@ -168,6 +170,14 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
+
+//
+//
+//
+//
+//
+//
+//
 //
 //
 //
@@ -394,7 +404,7 @@ __webpack_require__.r(__webpack_exports__);
       return r && r.pkgKey === 'dm' ? 'dm' : 'hbp';
     },
     questions: function questions() {
-      return this.pkgKey === 'dm' ? _common_mock_js__WEBPACK_IMPORTED_MODULE_16__["QUESTIONS_DM"] : _common_mock_js__WEBPACK_IMPORTED_MODULE_16__["QUESTIONS"];
+      return this.pkgKey === 'dm' ? _common_mock_js__WEBPACK_IMPORTED_MODULE_17__["QUESTIONS_DM"] : _common_mock_js__WEBPACK_IMPORTED_MODULE_17__["QUESTIONS"];
     },
     currentQuestion: function currentQuestion() {
       return this.questions[this.step] || null;
@@ -411,6 +421,9 @@ __webpack_require__.r(__webpack_exports__);
     },
     anchorId: function anchorId() {
       return 'anchor-' + this.tick;
+    },
+    noDevice: function noDevice() {
+      return this.$store.getters.devices.length === 0;
     }
   },
   watch: {
@@ -426,14 +439,15 @@ __webpack_require__.r(__webpack_exports__);
   },
   onLoad: function onLoad(options) {
     var _this = this;
-    this.voiceOn = _common_tts_js__WEBPACK_IMPORTED_MODULE_17__["isEnabled"]();
-    _common_tts_js__WEBPACK_IMPORTED_MODULE_17__["warmup"]();
+    this.voiceOn = _common_tts_js__WEBPACK_IMPORTED_MODULE_18__["isEnabled"]();
+    _common_tts_js__WEBPACK_IMPORTED_MODULE_18__["warmup"]();
     this.rightId = options && options.rightId || '';
     var r = this.right;
     if (r) this.rightId = r.id;
     var history = this.$store.state.chats[this.rightId];
     if (history && history.messages && history.messages.length) {
       this.messages = history.messages.slice();
+      this.markBindHint();
       this.answers = Object.assign({}, history.answers || {});
       this.phase = 'done';
       this.assessDone = !!history.done;
@@ -472,7 +486,7 @@ __webpack_require__.r(__webpack_exports__);
       return clearTimeout(t);
     });
     this.timers = [];
-    _common_tts_js__WEBPACK_IMPORTED_MODULE_17__["stop"]();
+    _common_tts_js__WEBPACK_IMPORTED_MODULE_18__["stop"]();
     this.speakingId = '';
   },
   methods: {
@@ -519,7 +533,7 @@ __webpack_require__.r(__webpack_exports__);
               _this3.speakingId = m.id;
               _context.p = 2;
               _context.n = 3;
-              return _common_tts_js__WEBPACK_IMPORTED_MODULE_17__["speak"](m.text, {
+              return _common_tts_js__WEBPACK_IMPORTED_MODULE_18__["speak"](m.text, {
                 force: !!force
               });
             case 3:
@@ -550,7 +564,7 @@ __webpack_require__.r(__webpack_exports__);
     },
     toggleVoice: function toggleVoice() {
       this.voiceOn = !this.voiceOn;
-      _common_tts_js__WEBPACK_IMPORTED_MODULE_17__["setEnabled"](this.voiceOn);
+      _common_tts_js__WEBPACK_IMPORTED_MODULE_18__["setEnabled"](this.voiceOn);
       if (!this.voiceOn) this.speakingId = '';
       uni.showToast({
         title: this.voiceOn ? '已开启自动朗读，长按可换音色' : '已关闭自动朗读',
@@ -560,8 +574,8 @@ __webpack_require__.r(__webpack_exports__);
     // 长按导航栏喇叭：切换播报音色
     pickVoice: function pickVoice() {
       var _this4 = this;
-      var list = _common_tts_js__WEBPACK_IMPORTED_MODULE_17__["VOICES"];
-      var current = _common_tts_js__WEBPACK_IMPORTED_MODULE_17__["getVoiceKey"]();
+      var list = _common_tts_js__WEBPACK_IMPORTED_MODULE_18__["VOICES"];
+      var current = _common_tts_js__WEBPACK_IMPORTED_MODULE_18__["getVoiceKey"]();
       uni.showActionSheet({
         itemList: list.map(function (v) {
           return v.key === current ? '✓ ' + v.label : v.label;
@@ -569,13 +583,13 @@ __webpack_require__.r(__webpack_exports__);
         success: function success(res) {
           var picked = list[res.tapIndex];
           if (!picked) return;
-          _common_tts_js__WEBPACK_IMPORTED_MODULE_17__["setVoiceKey"](picked.key);
+          _common_tts_js__WEBPACK_IMPORTED_MODULE_18__["setVoiceKey"](picked.key);
           _this4.speakingId = '';
           if (!_this4.voiceOn) {
             _this4.voiceOn = true;
-            _common_tts_js__WEBPACK_IMPORTED_MODULE_17__["setEnabled"](true);
+            _common_tts_js__WEBPACK_IMPORTED_MODULE_18__["setEnabled"](true);
           }
-          _common_tts_js__WEBPACK_IMPORTED_MODULE_17__["speak"]('您好，以后由我为您播报健康建议。', {
+          _common_tts_js__WEBPACK_IMPORTED_MODULE_18__["speak"]('您好，以后由我为您播报健康建议。', {
             force: true
           });
         }
@@ -696,7 +710,8 @@ __webpack_require__.r(__webpack_exports__);
         _this9.push({
           role: 'ai',
           kind: 'text',
-          text: '这是根据您本次评估结论、依据' + Object(_common_mock_js__WEBPACK_IMPORTED_MODULE_16__["guideName"])(_this9.pkgKey) + '为您安排的第一天日程。每条都标注了对应的指南依据。在APP的首页、微信消息或智能手环上，也将为您发送提醒。按时间点执行即可，完成后我会陪您复盘。'
+          bindHint: true,
+          text: '这是根据您本次评估结论、依据' + Object(_common_mock_js__WEBPACK_IMPORTED_MODULE_17__["guideName"])(_this9.pkgKey) + '为您安排的第一天日程。每条都标注了对应的指南依据。在APP的首页、微信消息或智能手环上，也将为您发送提醒。按时间点执行即可，完成后我会陪您复盘。'
         });
         _this9.push({
           role: 'ai',
@@ -713,18 +728,35 @@ __webpack_require__.r(__webpack_exports__);
         _this9.save();
       });
     },
+    // 历史会话是在 bindHint 字段之前落盘的，按“紧邻日程卡片的上一条 AI 文本”回填标记
+    markBindHint: function markBindHint() {
+      for (var i = 1; i < this.messages.length; i++) {
+        var cur = this.messages[i];
+        var prev = this.messages[i - 1];
+        if (cur.kind === 'timeline' && prev.role === 'ai' && prev.kind === 'text') {
+          this.messages.splice(i - 1, 1, Object.assign({}, prev, {
+            bindHint: true
+          }));
+        }
+      }
+    },
+    goBindDevice: function goBindDevice() {
+      uni.navigateTo({
+        url: '/pages/device/scan'
+      });
+    },
     firstDayItems: function firstDayItems() {
-      return Object(_common_mock_js__WEBPACK_IMPORTED_MODULE_16__["buildDayPlan"])(this.pkgKey, this.answers, 0, 7);
+      return Object(_common_mock_js__WEBPACK_IMPORTED_MODULE_17__["buildDayPlan"])(this.pkgKey, this.answers, 0, 7);
     },
     buildReport: function buildReport() {
       return this.pkgKey === 'dm' ? this.buildDmReport() : this.buildHbpReport();
     },
     // 判定逻辑统一在 mock.js，报告与日程（对话页/首页/消息中心）共用同一套结论
     hbpFlags: function hbpFlags() {
-      return Object(_common_mock_js__WEBPACK_IMPORTED_MODULE_16__["hbpFlags"])(this.answers);
+      return Object(_common_mock_js__WEBPACK_IMPORTED_MODULE_17__["hbpFlags"])(this.answers);
     },
     dmFlags: function dmFlags() {
-      return Object(_common_mock_js__WEBPACK_IMPORTED_MODULE_16__["dmFlags"])(this.answers);
+      return Object(_common_mock_js__WEBPACK_IMPORTED_MODULE_17__["dmFlags"])(this.answers);
     },
     buildHbpReport: function buildHbpReport() {
       var f = this.hbpFlags();
@@ -1872,6 +1904,52 @@ var render = function () {
                                   },
                                   [_vm._v(_vm._s(m.text))]
                                 ),
+                                m.bindHint && _vm.noDevice
+                                  ? _c(
+                                      "v-uni-view",
+                                      { staticClass: "bindtip" },
+                                      [
+                                        _c(
+                                          "v-uni-text",
+                                          { staticClass: "bindtip__t" },
+                                          [
+                                            _vm._v(
+                                              "您还没有绑定健康设备，绑定后可接收手环提醒"
+                                            ),
+                                          ]
+                                        ),
+                                        _c(
+                                          "v-uni-view",
+                                          {
+                                            staticClass: "bindtip__btn",
+                                            on: {
+                                              click: function ($event) {
+                                                arguments[0] = $event =
+                                                  _vm.$handleEvent($event)
+                                                _vm.goBindDevice.apply(
+                                                  void 0,
+                                                  arguments
+                                                )
+                                              },
+                                            },
+                                          },
+                                          [
+                                            _c("v-uni-text", {
+                                              staticClass:
+                                                "bindtip__btn-icon fa-solid fa-qrcode",
+                                            }),
+                                            _c(
+                                              "v-uni-text",
+                                              { staticClass: "bindtip__btn-t" },
+                                              [_vm._v("立即绑定")]
+                                            ),
+                                          ],
+                                          1
+                                        ),
+                                      ],
+                                      1
+                                    )
+                                  : _vm._e(),
                               ],
                               1
                             )

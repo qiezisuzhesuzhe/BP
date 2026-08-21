@@ -36,6 +36,13 @@
           <view class="msg__body">
             <view v-if="m.kind === 'text'" class="bubble" :class="'bubble--' + m.role">
               <text class="bubble__t" :class="'bubble__t--' + m.role">{{ m.text }}</text>
+              <view v-if="m.bindHint && noDevice" class="bindtip">
+                <text class="bindtip__t">您还没有绑定健康设备，绑定后可接收手环提醒</text>
+                <view class="bindtip__btn" @tap="goBindDevice">
+                  <text class="bindtip__btn-icon fa-solid fa-qrcode"></text>
+                  <text class="bindtip__btn-t">立即绑定</text>
+                </view>
+              </view>
             </view>
 
             <view v-else-if="m.kind === 'report'" class="report">
@@ -242,6 +249,9 @@ export default {
     },
     anchorId() {
       return 'anchor-' + this.tick
+    },
+    noDevice() {
+      return this.$store.getters.devices.length === 0
     }
   },
   watch: {
@@ -264,6 +274,7 @@ export default {
     const history = this.$store.state.chats[this.rightId]
     if (history && history.messages && history.messages.length) {
       this.messages = history.messages.slice()
+      this.markBindHint()
       this.answers = Object.assign({}, history.answers || {})
       this.phase = 'done'
       this.assessDone = !!history.done
@@ -466,7 +477,7 @@ export default {
       this.push({ role: 'ai', kind: 'text', text: '方案已生成，下面是您的首次评估结论，请先看一下关键判断与目标值。' })
       this.push({ role: 'ai', kind: 'report', report: report })
       this.delay(700, () => {
-        this.push({ role: 'ai', kind: 'text', text: '这是根据您本次评估结论、依据' + guideName(this.pkgKey) + '为您安排的第一天日程。每条都标注了对应的指南依据。在APP的首页、微信消息或智能手环上，也将为您发送提醒。按时间点执行即可，完成后我会陪您复盘。' })
+        this.push({ role: 'ai', kind: 'text', bindHint: true, text: '这是根据您本次评估结论、依据' + guideName(this.pkgKey) + '为您安排的第一天日程。每条都标注了对应的指南依据。在APP的首页、微信消息或智能手环上，也将为您发送提醒。按时间点执行即可，完成后我会陪您复盘。' })
         this.push({ role: 'ai', kind: 'timeline', items: this.firstDayItems() })
         this.assessDone = true
         if (this.rightId) {
@@ -474,6 +485,19 @@ export default {
         }
         this.save()
       })
+    },
+    // 历史会话是在 bindHint 字段之前落盘的，按“紧邻日程卡片的上一条 AI 文本”回填标记
+    markBindHint() {
+      for (let i = 1; i < this.messages.length; i++) {
+        const cur = this.messages[i]
+        const prev = this.messages[i - 1]
+        if (cur.kind === 'timeline' && prev.role === 'ai' && prev.kind === 'text') {
+          this.messages.splice(i - 1, 1, Object.assign({}, prev, { bindHint: true }))
+        }
+      }
+    },
+    goBindDevice() {
+      uni.navigateTo({ url: '/pages/device/scan' })
     },
     firstDayItems() {
       return buildDayPlan(this.pkgKey, this.answers, 0, 7)
@@ -928,6 +952,43 @@ export default {
 }
 
 .bubble__t--user {
+  color: $text-inverse;
+}
+
+.bindtip {
+  margin-top: $space-3;
+  padding-top: $space-3;
+  border-top: 1rpx solid $border-subtle;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+.bindtip__t {
+  font-size: $font-size-xs;
+  line-height: $line-height-relaxed;
+  color: $text-muted;
+}
+
+.bindtip__btn {
+  margin-top: $space-2;
+  padding: $space-2 $space-4;
+  border-radius: $radius-full;
+  background: $badge;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+
+.bindtip__btn-icon {
+  font-size: $font-size-xs;
+  color: $text-inverse;
+  margin-right: $space-1;
+}
+
+.bindtip__btn-t {
+  font-size: $font-size-xs;
+  font-weight: 600;
   color: $text-inverse;
 }
 

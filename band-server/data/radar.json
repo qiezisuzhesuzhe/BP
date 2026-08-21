@@ -8,14 +8,56 @@
       "firstSeen": 1787320921389,
       "latest": {
         "struggleAlert": 3,
-        "ts": 1787320010000
+        "ts": 1787322054646,
+        "heartRate": 72,
+        "respRate": 16,
+        "inBed": "有人",
+        "stay": 6.5,
+        "battery": 85,
+        "signal": "强"
       },
       "attrs": [
+        {
+          "name": "心率",
+          "value": "72",
+          "unit": "",
+          "key": "heartRate"
+        },
+        {
+          "name": "呼吸",
+          "value": "16",
+          "unit": "",
+          "key": "respRate"
+        },
+        {
+          "name": "在床",
+          "value": "有人",
+          "unit": "",
+          "key": "inBed"
+        },
+        {
+          "name": "床内时长",
+          "value": "6.5",
+          "unit": "",
+          "key": "stay"
+        },
         {
           "name": "异常挣扎",
           "value": "3",
           "unit": "",
           "key": "struggleAlert"
+        },
+        {
+          "name": "电量",
+          "value": "85",
+          "unit": "",
+          "key": "battery"
+        },
+        {
+          "name": "信号",
+          "value": "强",
+          "unit": "",
+          "key": "signal"
         }
       ],
       "history": [
@@ -39,9 +81,22 @@
           "latest": {
             "struggleAlert": 3
           }
+        },
+        {
+          "ts": 1787322054646,
+          "event": "",
+          "latest": {
+            "heartRate": 72,
+            "respRate": 16,
+            "inBed": "有人",
+            "stay": 6.5,
+            "struggleAlert": 3,
+            "battery": 85,
+            "signal": "强"
+          }
         }
       ],
-      "lastSeen": 1787320922544,
+      "lastSeen": 1787322054646,
       "boundAt": 1787320921389,
       "struggleHistory": [
         {

@@ -1,30 +1,44 @@
 <template>
   <view class="hm-page">
-    <hm-navbar title="设备详情" bg-color="transparent"></hm-navbar>
-
-    <view class="wrap" v-if="dev">
-      <!-- 设备信息 -->
-      <view class="dev-head">
-        <view class="dev-head__icon" :style="{ background: type.accentSoft }">
-          <text class="dev-head__icon-t" :class="type.icon" :style="{ color: type.color }"></text>
+    <hm-navbar title="设备详情" bg-color="transparent">
+      <view slot="right" class="nav-actions" v-if="isRadar">
+        <view class="nav-sub-btn" @tap="onUnbind">
+          <text class="fa-solid fa-link-slash nav-sub-btn__icon"></text>
+          <text class="nav-sub-btn__t">解绑</text>
         </view>
-        <view class="dev-head__main">
-          <text class="dev-head__name">{{ dev.name }}</text>
-          <text class="dev-head__model">{{ shownModel }} · {{ dev.sn }}</text>
-          <text class="dev-head__sync">{{ syncTip }}</text>
-        </view>
-        <view class="dev-head__status" :style="{ background: liveColor }">
-          <text class="dev-head__dot"></text>
-          <text class="dev-head__status-t">{{ liveLabel }}</text>
+        <view class="nav-refresh" :class="{ 'nav-refresh--busy': refreshing }" @tap="doRefresh">
+          <text class="fa-solid fa-rotate nav-refresh__icon" :class="{ 'nav-refresh__icon--spin': refreshing }"></text>
         </view>
       </view>
+    </hm-navbar>
 
-      <!-- 雷达款：五项核心指标，手环风格 vital 卡布局，每项带最新数据时间 -->
-      <block v-if="isRadar">
+    <view class="wrap wrap--first" v-if="dev">
+      <!-- 设备头卡 -->
+      <view class="head">
+        <view class="head__main">
+          <text class="head__name">{{ dev.name }}</text>
+          <view class="head__sn">
+            <text class="head__sn-t">{{ shownModel }} · {{ dev.sn }}</text>
+            <text class="head__sse" :class="{ 'head__sse--on': radarOnline }">
+              <text class="fa-solid" :class="radarOnline ? 'fa-signal' : 'fa-link-slash'"></text>
+              <text class="head__sse-t">{{ radarOnline ? '实时接收' : '等待连接' }}</text>
+            </text>
+          </view>
+        </view>
+        <view class="head__status" :class="{ 'head__status--off': !radarOnline }">
+          <view class="head__dot"></view>
+          <text class="head__status-t">{{ liveLabel }}</text>
+        </view>
+      </view>
+    </view>
+
+    <!-- 雷达款：五项核心指标，手环风格 vital 卡布局，每项带最新数据时间 -->
+    <block v-if="isRadar">
+      <view class="wrap">
         <view class="vital">
           <view class="vital__card vital__card--hr">
             <view class="vital__head">
-              <text class="fa-solid fa-heart-pulse vital__icon"></text>
+              <text class="fa-solid fa-heart-pulse vital__icon vital__icon--hr"></text>
               <text class="vital__name">心率</text>
             </view>
             <view class="vital__value">
@@ -35,7 +49,7 @@
           </view>
           <view class="vital__card vital__card--resp">
             <view class="vital__head">
-              <text class="fa-solid fa-wind vital__icon"></text>
+              <text class="fa-solid fa-wind vital__icon vital__icon--resp"></text>
               <text class="vital__name">呼吸</text>
             </view>
             <view class="vital__value">
@@ -48,7 +62,7 @@
         <view class="vital">
           <view class="vital__card vital__card--sleep">
             <view class="vital__head">
-              <text class="fa-solid fa-moon vital__icon"></text>
+              <text class="fa-solid fa-moon vital__icon vital__icon--sleep"></text>
               <text class="vital__name">睡眠时长</text>
             </view>
             <view class="vital__value">
@@ -59,7 +73,7 @@
           </view>
           <view class="vital__card vital__card--presence">
             <view class="vital__head">
-              <text class="fa-solid fa-bed vital__icon"></text>
+              <text class="fa-solid fa-bed vital__icon vital__icon--presence"></text>
               <text class="vital__name">存在状态</text>
             </view>
             <view class="vital__value">
@@ -68,33 +82,54 @@
             <text class="vital__sub">{{ latestTimeTip }}</text>
           </view>
         </view>
-        <view class="wrap--single">
-          <view class="vital__card vital__card--struggle" :class="{ 'vital__card--alert': struggleInfo.active }">
-            <view class="vital__head">
-              <text class="fa-solid fa-triangle-exclamation vital__icon vital__icon--alert"></text>
-              <text class="vital__name" :style="{ color: struggleInfo.active ? '#f15533' : '' }">异常挣扎</text>
-            </view>
-            <view class="vital__value">
-              <text class="vital__num" :style="{ color: struggleInfo.active ? '#f15533' : '' }">{{ struggleInfo.active ? struggleInfo.count : '无' }}</text>
-              <text class="vital__unit" v-if="struggleInfo.active">次</text>
-              <text class="vital__unit" v-else>&nbsp;</text>
-            </view>
-            <text class="vital__sub" :class="{ 'vital__sub--alert': struggleInfo.active }">
-              {{ struggleInfo.active ? struggleInfo.text + '，最近挣扎时间' : '状态正常' }}
-            </text>
-            <!-- 最近三次挣扎时间 -->
-            <view v-if="struggleHistory.length" class="struggle-list">
-              <view v-for="(s, i) in struggleHistory" :key="i" class="struggle-list__item">
-                <text class="struggle-list__time">{{ fmtTs(s.ts) }}</text>
-                <text class="struggle-list__count">第{{ i + 1 }}次 · 共{{ s.count }}次</text>
-              </view>
+        <view class="vital__card vital__card--struggle" :class="{ 'vital__card--alert': struggleInfo.active }">
+          <view class="vital__head">
+            <text class="fa-solid fa-triangle-exclamation vital__icon vital__icon--alert"></text>
+            <text class="vital__name" :style="{ color: struggleInfo.active ? '#f15533' : '' }">异常挣扎</text>
+          </view>
+          <view class="vital__value">
+            <text class="vital__num" :style="{ color: struggleInfo.active ? '#f15533' : '' }">{{ struggleInfo.active ? struggleInfo.count : '无' }}</text>
+            <text class="vital__unit" v-if="struggleInfo.active">次</text>
+            <text class="vital__unit" v-else>&nbsp;</text>
+          </view>
+          <text class="vital__sub" :class="{ 'vital__sub--alert': struggleInfo.active }">
+            {{ struggleInfo.active ? struggleInfo.text + '，最近挣扎时间' : '状态正常' }}
+          </text>
+          <!-- 最近三次挣扎时间 -->
+          <view v-if="struggleHistory.length" class="struggle-list">
+            <view v-for="(s, i) in struggleHistory" :key="i" class="struggle-list__item">
+              <text class="struggle-list__time">{{ fmtTs(s.ts) }}</text>
+              <text class="struggle-list__count">第{{ i + 1 }}次 · 共{{ s.count }}次</text>
             </view>
           </view>
         </view>
-      </block>
+      </view>
+      <!-- 平台透传的其他属性 -->
+      <view v-if="extraAttrs.length" class="wrap">
+        <view class="extra">
+          <text class="extra__title">设备上报的其他属性</text>
+          <view v-for="(a, i) in extraAttrs" :key="i" class="extra__row">
+            <text class="extra__k">{{ a.name }}</text>
+            <text class="extra__v">{{ a.value }}{{ a.unit }}</text>
+          </view>
+        </view>
+      </view>
+      <view class="wrap">
+        <view class="foot-tip">
+          <text class="foot-tip__t">{{ footTip }}</text>
+        </view>
+      </view>
+      <view class="wrap">
+        <view class="unbind" @tap="onUnbind">
+          <text class="unbind__t">解绑设备</text>
+        </view>
+      </view>
+      <view class="hm-safe-bottom"></view>
+    </block>
 
-      <!-- 非雷达设备：保留原有网格布局 -->
-      <view v-else class="grid">
+    <!-- 非雷达设备：保留原有网格布局 -->
+    <view v-else class="wrap">
+      <view class="grid">
         <view v-for="(f, i) in type.fields" :key="f.key" class="cell" :class="{ 'cell--pulse': pulsing[i] }">
           <view class="cell__icon" :style="{ background: type.accentSoft }">
             <text class="cell__icon-t" :class="f.icon" :style="{ color: type.color }"></text>
@@ -106,16 +141,6 @@
           <text class="cell__label">{{ f.label }}</text>
         </view>
       </view>
-
-      <!-- 平台透传的其他属性：型号未知时，未命中内置映射的属性原样展示，避免丢数据 -->
-      <view v-if="extraAttrs.length" class="extra">
-        <text class="extra__title">设备上报的其他属性</text>
-        <view v-for="(a, i) in extraAttrs" :key="i" class="extra__row">
-          <text class="extra__k">{{ a.name }}</text>
-          <text class="extra__v">{{ a.value }}{{ a.unit }}</text>
-        </view>
-      </view>
-
       <view class="foot-tip">
         <text class="foot-tip__t">{{ footTip }}</text>
       </view>
@@ -144,7 +169,8 @@ export default {
       timer: null,
       pulsing: [false, false, false, false],
       radarRec: null, // 雷达后端完整记录 { latest, attrs, state, stateText, site, ... }
-      _sub: null
+      _sub: null,
+      refreshing: false
     }
   },
   computed: {
@@ -166,14 +192,6 @@ export default {
       if (this.radarRec && this.radarRec.model) return this.radarRec.model
       return (this.dev && this.dev.model) || ''
     },
-    syncTip() {
-      if (this.isRadar) {
-        const ts = this.radarLatest && this.radarLatest.ts
-        if (!ts) return '等待设备首次上报'
-        return '最近上报 ' + this.fmtTs(ts)
-      }
-      return '最近同步 ' + (this.dev ? this.dev.lastSync : '')
-    },
     // 雷达在线以最近上报时间为准（与设备列表页判定口径保持一致）
     radarOnline() {
       const ts = this.radarLatest && this.radarLatest.ts
@@ -181,19 +199,13 @@ export default {
       return Date.now() - ts < 20 * 60 * 1000
     },
     liveLabel() {
-      if (!this.isRadar) return '实时'
-      return this.radarOnline ? '实时' : '待上报'
+      return this.radarOnline ? '在线' : '离线'
     },
     liveColor() {
-      if (!this.isRadar) return '#389a82'
       return this.radarOnline ? '#389a82' : '#94a3b8'
-    },
-    refreshTip() {
-      return ''  // 已移除"云平台实时推送"提示，时间信息移至每个卡片下方
     },
     // 最新数据时间提示：显示在每个 vital 卡片下方
     latestTimeTip() {
-      if (!this.isRadar) return ''
       const ts = this.radarLatest && this.radarLatest.ts
       if (!ts) return '等待数据上报'
       return '最新数据 ' + this.fmtTs(ts)
@@ -217,7 +229,7 @@ export default {
       const v = radarInBed(this.radarLatest)
       if (v === true) return '在床'
       if (v === false) return '离床'
-      return '在床状态待上报'
+      return '待上报'
     },
     inBedColor() {
       const v = radarInBed(this.radarLatest)
@@ -228,10 +240,10 @@ export default {
     // 平台上报但未命中内置字段映射的属性，原样列出（型号未知时兜住全部数据）
     extraAttrs() {
       if (!this.isRadar) return []
-      const list = (this.radarRec && this.radarRec.attrs) || []
-      return list.filter((a) => a && !a.key && a.name != null && a.value != null && a.value !== '')
+      const rec = this.radarRec
+      if (!rec || !Array.isArray(rec.attrs)) return []
+      return rec.attrs.filter((a) => !a.key)
     },
-    // 异常挣扎状态
     struggleInfo() {
       return radarStruggleAlert(this.radarLatest)
     }
@@ -259,7 +271,19 @@ export default {
         this.timer = null
       }
     },
-    // 雷达走 SSE 实时接收平台推送，收到本机设备号的事件才刷新
+    fmtTs(ts) {
+      if (!ts) return ''
+      const d = new Date(ts)
+      const pad = (n) => String(n).padStart(2, '0')
+      return `${pad(d.getMonth() + 1)}-${pad(d.getDate())} ${pad(d.getHours())}:${pad(d.getMinutes())}:${pad(d.getSeconds())}`
+    },
+    fmt(f) {
+      const d = this.dev
+      if (!d || !d.latest) return '--'
+      const v = d.latest[f.key]
+      if (v == null) return '--'
+      return f.unit ? (v + f.unit) : v
+    },
     startSse() {
       this.stopSse()
       const deviceid = (this.dev && this.dev.deviceid) || ''
@@ -310,13 +334,34 @@ export default {
         })
       }
     },
-    fmtTs(ts) {
-      const d = new Date(Number(ts))
-      if (isNaN(d.getTime())) return '--'
-      const p = (n) => (n < 10 ? '0' + n : String(n))
-      return p(d.getMonth() + 1) + '-' + p(d.getDate()) + ' ' + p(d.getHours()) + ':' + p(d.getMinutes())
+    // 手动刷新（与手环详情页一致）
+    async doRefresh() {
+      if (this.refreshing) return
+      this.refreshing = true
+      const deviceid = (this.dev && this.dev.deviceid) || ''
+      if (!deviceid) {
+        uni.showToast({ title: '未绑定设备号', icon: 'none' })
+        this.refreshing = false
+        return
+      }
+      const beforeTs = (this.radarLatest && this.radarLatest.ts) || 0
+      await this.pullRadar()
+      this.refreshing = false
+      const afterTs = (this.radarLatest && this.radarLatest.ts) || 0
+      const hasData = !!(this.radarLatest && (this.radarLatest.heartRate != null || this.radarLatest.respRate != null))
+      if (afterTs !== beforeTs) {
+        uni.showToast({ title: '已刷新，数据已更新', icon: 'none', duration: 1600 })
+      } else if (hasData) {
+        uni.showToast({ title: '已刷新，暂无新数据', icon: 'none', duration: 1600 })
+      } else {
+        uni.showToast({ title: '暂无数据，设备尚未上报', icon: 'none', duration: 1600 })
+      }
+    },
+    onUnbind() {
+      this.unbind()
     },
     unbind() {
+      if (!this.dev) return
       uni.showModal({
         title: '解绑设备',
         content: '解绑后该设备将停止向本账号同步数据，确定解绑「' + this.dev.name + '」吗？',
@@ -352,109 +397,187 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.dev-head {
+/* ---------- 导航栏右侧按钮（仅雷达款显示） ---------- */
+.nav-actions {
   display: flex;
   align-items: center;
-  background: $bg-surface;
-  border-radius: $radius-card;
-  box-shadow: $shadow-sm;
-  padding: $space-4 $space-3;
+  gap: $space-2;
 }
 
-.dev-head__icon {
-  width: $size-icon-xl;
-  height: $size-icon-xl;
-  border-radius: $radius-card-child;
+.nav-sub-btn {
+  height: 60rpx;
+  padding: 0 $space-3;
+  border-radius: $radius-full;
+  background: rgba(255, 255, 255, 0.7);
+  border: 1rpx solid rgba(148, 163, 184, 0.35);
+  display: inline-flex;
+  align-items: center;
+  gap: $space-1;
+  flex-shrink: 0;
+  white-space: nowrap;
+  backdrop-filter: blur(6px);
+  transition: opacity 0.15s ease, transform 0.1s ease;
+}
+
+.nav-sub-btn:active {
+  transform: scale(0.97);
+  opacity: 0.8;
+}
+
+.nav-sub-btn__icon {
+  font-size: $font-size-xs;
+  color: #64748b;
+}
+
+.nav-sub-btn__t {
+  font-size: $font-size-xs;
+  font-weight: $font-weight-semibold;
+  color: #475569;
+}
+
+.nav-refresh {
+  width: 60rpx;
+  height: 60rpx;
+  border-radius: $radius-full;
+  background: $brand-primary-active;
+  box-shadow: $shadow-sm;
   display: flex;
   align-items: center;
   justify-content: center;
-  flex-shrink: 0;
-  box-shadow: $shadow-md;
 }
 
-.dev-head__icon-t {
-  font-size: $font-size-xl;
+.nav-refresh--busy {
+  opacity: 0.7;
 }
 
-.dev-head__main {
+.nav-refresh__icon {
+  color: $text-inverse;
+  font-size: $font-size-xs;
+}
+
+.nav-refresh__icon--spin {
+  animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+/* ---------- 页面容器 ---------- */
+.wrap {
+  height: auto;
+  padding: $space-4 $space-4 0;
+}
+
+.wrap:not(.wrap--first) {
+  padding-top: 0;
+}
+
+/* ---------- 设备头卡 ---------- */
+.head {
+  display: flex;
+  align-items: center;
+  background: $bg-surface;
+  border-radius: $radius-card-child;
+  box-shadow: $shadow-sm;
+  padding: $space-4;
+}
+
+.head__main {
   flex: 1;
   padding: 0 $space-3;
   overflow: hidden;
 }
 
-.dev-head__name {
+.head__name {
   display: block;
-  font-size: $font-size-lg;
+  font-size: $font-size-md;
   font-weight: $font-weight-heavy;
   color: $text-primary;
   line-height: $line-height-tight;
 }
 
-.dev-head__model {
-  display: block;
-  font-size: $font-size-xs;
-  color: $text-secondary;
+.head__sn {
+  display: flex;
+  align-items: center;
+  min-width: 0;
   margin-top: $space-1;
 }
 
-.dev-head__sync {
-  display: block;
+.head__sn-t {
+  flex: 0 1 auto;
+  min-width: 0;
   font-size: $font-size-2xs;
-  color: $text-disabled;
-  margin-top: $space-1;
+  color: $text-muted;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
-.dev-head__status {
+.head__sse {
+  display: inline-flex;
+  align-items: center;
+  gap: $space-1;
+  flex-shrink: 0;
+  margin-left: $space-2;
+  padding: $space-1 $space-2;
+  border-radius: $radius-full;
+  background: $bg-section;
+  color: $text-hint;
+  font-size: $font-size-2xs;
+  line-height: 1;
+}
+
+.head__sse .fa-solid {
+  font-size: $font-size-2xs;
+}
+
+.head__sse--on {
+  background: rgba(56, 154, 130, 0.15);
+  color: #2b7e6a;
+  font-weight: $font-weight-semibold;
+}
+
+.head__status {
   display: flex;
   align-items: center;
   flex-shrink: 0;
-  background: $success;
-  border-radius: $radius-full;
   padding: $space-1 $space-2;
+  border-radius: $radius-full;
+  background: $success;
 }
 
-.dev-head__dot {
+.head__status--off {
+  background: $bg-section;
+}
+
+.head__dot {
   width: $size-badge-sm;
   height: $size-badge-sm;
   border-radius: 50%;
   background: $text-inverse;
   margin-right: $space-1;
-  animation: dot-blink 1.6s ease-in-out infinite;
 }
 
-@keyframes dot-blink {
-  0%,
-  100% {
-    opacity: 1;
-  }
-  50% {
-    opacity: 0.35;
-  }
+.head__status--off .head__dot {
+  background: $text-disabled;
 }
 
-.dev-head__status-t {
+.head__status-t {
   font-size: $font-size-2xs;
   color: $text-inverse;
   font-weight: $font-weight-semibold;
 }
 
-.rstat {
-  display: none;
+.head__status--off .head__status-t {
+  color: $text-muted;
 }
 
-/* Vital 卡片：手环风格布局，雷达详情用 */
+/* ---------- Vital 卡片 ---------- */
 .vital {
   display: flex;
-  margin-top: $space-3;
-}
-
-.wrap--single {
-  padding: $space-4 $space-4 0;
-  margin-top: $space-3;
-}
-
-.wrap--single .vital__card {
-  width: 100%;
+  margin-top: $space-8;
 }
 
 .vital__card {
@@ -470,12 +593,33 @@ export default {
   margin-left: $space-3;
 }
 
+.vital:not(:first-child) {
+  margin-top: $space-3;
+}
+
+/* 全宽卡片（如异常挣扎）在 wrap 内与上方 vital 行保持间距 */
+.wrap > .vital__card:not(:first-child) {
+  margin-top: $space-3;
+}
+
 .vital__card--alert {
   border: 2rpx solid rgba(241, 85, 51, 0.4);
 }
 
 .vital__card--hr {
   background: linear-gradient(145deg, #e8f8f0 0%, $bg-surface 75%);
+}
+
+.vital__card--resp {
+  background: linear-gradient(145deg, #e8f4f6 0%, $bg-surface 75%);
+}
+
+.vital__card--sleep {
+  background: linear-gradient(145deg, #f0ecf7 0%, $bg-surface 75%);
+}
+
+.vital__card--presence {
+  background: linear-gradient(145deg, #e8f3ef 0%, $bg-surface 75%);
 }
 
 .vital__card--struggle {
@@ -494,17 +638,13 @@ export default {
 .vital__icon {
   font-size: $font-size-md;
   margin-right: $space-2;
-  color: $brand-green;
 }
 
-.vital__icon--alert {
-  color: #f15533;
-}
-
-.vital__card--resp .vital__icon { color: #8dcdd8; }
-.vital__card--sleep .vital__icon { color: #9b8fc9; }
-.vital__card--presence .vital__icon { color: #389a82; }
-.vital__card--struggle .vital__icon { color: #f15533; }
+.vital__icon--hr { color: $brand-green; }
+.vital__icon--resp { color: #8dcdd8; }
+.vital__icon--sleep { color: #9b8fc9; }
+.vital__icon--presence { color: #389a82; }
+.vital__icon--alert { color: #f15533; }
 
 .vital__name {
   font-size: $font-size-sm;
@@ -543,7 +683,7 @@ export default {
   display: block;
   margin-top: $space-2;
   font-size: $font-size-2xs;
-  color: $text-muted;
+  color: $text-hint;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -578,6 +718,7 @@ export default {
   color: $text-muted;
 }
 
+/* ---------- 非雷达设备网格 ---------- */
 .grid {
   display: flex;
   flex-wrap: wrap;
@@ -636,6 +777,7 @@ export default {
   margin-top: $space-1;
 }
 
+/* ---------- 其他属性 / 底部提示 ---------- */
 .extra {
   background: $bg-surface;
   border-radius: $radius-card-child;

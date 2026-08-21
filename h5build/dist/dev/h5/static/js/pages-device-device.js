@@ -886,19 +886,24 @@ var MERGE_MS = 800;
         return t.key === dev.typeKey;
       }) || _common_mock_js__WEBPACK_IMPORTED_MODULE_15__["DEVICE_TYPES"][0];
     },
-    // 在线判断：血压款以后端 latest 更新时间 + 电量为准，其他设备走 store
+    // 在线判断：与详情页口径保持一致——有数据即视为在线，无数据再看时间窗口
     isOnline: function isOnline(dev) {
       if (dev.typeKey === 'band-bp' && dev.deviceid) {
         var l = this.bandLive[dev.deviceid];
         if (!l) return dev.online === true;
-        // updatedAt 20 分钟内视为在线
+        // 与详情页一致：有 hr/sbp/battery/steps 数据即视为在线
+        if (l.hr != null || l.sbp != null || l.dbp != null || l.steps != null || l.battery != null) return true;
+        // 无测量数据时，按 updatedAt 时间窗口判定
         if (l.updatedAt) return Date.now() - l.updatedAt < 20 * 60 * 1000;
-        return l.hr != null || l.sbp != null || l.battery != null;
+        return false;
       }
-      // 雷达款：以平台推送的最近上报时间为准（雷达常驻供电，上报间隔通常在分钟级）
+      // 雷达款：与详情页一致——有生命体征数据即视为在线，无数据再看时间窗口
       if (dev.typeKey === 'radar' && dev.deviceid) {
         var _l = this.radarLive[dev.deviceid];
         if (!_l) return dev.online === true;
+        // 有心率/呼吸/在床数据即视为在线
+        if (_l.heartRate != null || _l.breathRate != null || _l.inBed != null) return true;
+        // 无测量数据时，按 ts 时间窗口判定
         if (_l.ts) return Date.now() - _l.ts < 20 * 60 * 1000;
         return false;
       }

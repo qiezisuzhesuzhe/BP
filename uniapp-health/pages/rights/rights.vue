@@ -80,16 +80,6 @@
           <text class="sheet__t">添加您的专属健康管理师</text>
           <text class="sheet__d">添加企业微信后，管理师将协助您完成首次健康问询，并全程跟踪服务方案</text>
 
-          <view class="qr">
-            <view class="qr__box">
-              <view v-for="n in 9" :key="n" class="qr__cell" :class="{ 'qr__cell--on': qrOn(n) }"></view>
-              <view class="qr__logo">
-                <text class="qr__logo-t">企</text>
-              </view>
-            </view>
-            <text class="qr__hint">长按识别二维码 · 企业微信认证</text>
-          </view>
-
           <view class="who">
             <view class="who__avatar">
               <text class="who__avatar-t">李</text>
@@ -104,7 +94,7 @@
           </view>
 
           <view class="sheet__btn" @tap="stepAdd">
-            <text class="sheet__btn-t">已保存二维码，添加好友</text>
+            <text class="sheet__btn-t">添加企业微信</text>
           </view>
           <text class="sheet__cancel" @tap="closeWecom">稍后再说</text>
         </view>
@@ -165,9 +155,6 @@ export default {
       if (!r.totalDays) return 0
       const p = Math.round((r.usedDays / r.totalDays) * 100)
       return Math.min(100, Math.max(2, p))
-    },
-    qrOn(n) {
-      return [1, 2, 3, 4, 6, 7, 9].indexOf(n) > -1
     },
     onUse(r) {
       if (r.chatStarted || r.wecomAdded) {
@@ -487,65 +474,6 @@ export default {
   line-height: $line-height-relaxed;
 }
 
-.qr {
-  margin-top: $space-4;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-}
-
-.qr__box {
-  width: 300rpx;
-  height: 300rpx;
-  background: $bg-page-base;
-  border: 1rpx solid $border-subtle;
-  border-radius: $radius-card-child;
-  padding: $space-2;
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: space-between;
-  align-content: space-between;
-  position: relative;
-}
-
-.qr__cell {
-  width: 78rpx;
-  height: 78rpx;
-  border-radius: 10rpx;
-  background: $bg-subtle;
-}
-
-.qr__cell--on {
-  background: $brand-primary;
-}
-
-.qr__logo {
-  position: absolute;
-  left: 50%;
-  top: 50%;
-  width: 78rpx;
-  height: 78rpx;
-  margin: -39rpx 0 0 -39rpx;
-  border-radius: 14rpx;
-  background: $bg-surface;
-  border: 4rpx solid $brand-primary;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.qr__logo-t {
-  font-size: $font-size-lg;
-  font-weight: 700;
-  color: $brand-primary-active;
-}
-
-.qr__hint {
-  font-size: $font-size-2xs;
-  color: $text-disabled;
-  margin-top: $space-2;
-}
-
 .who {
   margin-top: $space-4;
   background: $brand-soft;
@@ -604,7 +532,7 @@ export default {
 
 .sheet__btn {
   margin-top: $space-4;
-  background: $brand-primary;
+  background: $badge;
   border-radius: $radius-full;
   padding: $space-3 0;
   text-align: center;

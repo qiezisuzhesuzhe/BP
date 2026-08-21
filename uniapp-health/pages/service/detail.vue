@@ -132,7 +132,7 @@
         </view>
         <text class="buybar__save">限时省 {{ saved }} 元</text>
       </view>
-      <view class="buybar__btn" :style="{ background: pkg.accent }" @tap="buy">
+      <view class="buybar__btn" @tap="buy">
         <text class="buybar__btn-t">立即购买</text>
       </view>
     </view>
@@ -687,6 +687,7 @@ export default {
   min-width: $size-page-max-width * 0.32;
   height: $size-input-height;
   border-radius: $radius-full;
+  background: $badge;
   display: flex;
   align-items: center;
   justify-content: center;

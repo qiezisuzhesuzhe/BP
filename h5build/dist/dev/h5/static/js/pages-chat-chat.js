@@ -1761,7 +1761,9 @@ var render = function () {
                         : "fa-solid fa-volume-xmark",
                     }),
                     _c("v-uni-text", { staticClass: "chat__voice-t" }, [
-                      _vm._v(_vm._s(_vm.voiceOn ? "自动朗读" : "已静音")),
+                      _vm._v(
+                        _vm._s(_vm.voiceOn ? "朗读 - 已开启" : "朗读 - 已关闭")
+                      ),
                     ]),
                   ],
                   1

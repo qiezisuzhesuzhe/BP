@@ -4,7 +4,7 @@
       <template #right>
         <view class="chat__voice" :class="{ 'chat__voice--off': !voiceOn }" @tap="toggleVoice" @longpress="pickVoice">
           <text class="chat__voice-icon" :class="voiceOn ? 'fa-solid fa-volume-high' : 'fa-solid fa-volume-xmark'"></text>
-          <text class="chat__voice-t">{{ voiceOn ? '自动朗读' : '已静音' }}</text>
+          <text class="chat__voice-t">{{ voiceOn ? '朗读 - 已开启' : '朗读 - 已关闭' }}</text>
         </view>
       </template>
     </hm-navbar>

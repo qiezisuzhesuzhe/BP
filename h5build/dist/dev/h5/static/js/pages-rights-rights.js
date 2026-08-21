@@ -300,9 +300,7 @@ var render = function () {
             "v-uni-view",
             { staticClass: "top__body" },
             [
-              _c("v-uni-text", { staticClass: "top__t" }, [
-                _vm._v("我的健康管理权益"),
-              ]),
+              _c("v-uni-text", { staticClass: "top__t" }, [_vm._v("我的权益")]),
               _c("v-uni-text", { staticClass: "top__d" }, [
                 _vm._v(
                   "共 " +

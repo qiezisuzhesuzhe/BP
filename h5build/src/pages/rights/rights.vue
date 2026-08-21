@@ -3,7 +3,7 @@
     <view class="top">
       <hm-navbar title="我的权益" back-to="/pages/index/index" bg-color="transparent" />
       <view class="top__body">
-        <text class="top__t">我的健康管理权益</text>
+        <text class="top__t">我的权益</text>
         <text class="top__d">共 {{ rights.length }} 项服务 · {{ activeCount }} 项使用中</text>
       </view>
     </view>

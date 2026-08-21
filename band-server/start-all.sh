@@ -11,12 +11,21 @@ cd /workspace/band-server
 
 PORT=8091
 
-echo "=== 1/3 启动 serveo 隧道守护 ==="
+echo "=== 1/4 检查 node 依赖 ==="
+# 沙盒重启会保留 /workspace 源码但清空 node_modules，不装依赖 server.js 会直接 MODULE_NOT_FOUND
+if [ ! -d node_modules ] || [ -z "$(ls -A node_modules 2>/dev/null)" ]; then
+  echo "node_modules 缺失，正在安装依赖..."
+  npm install --no-audit --no-fund 2>&1 | tail -3
+else
+  echo "依赖已就绪，跳过"
+fi
+
+echo "=== 2/4 启动 serveo 隧道守护 ==="
 # tunnel.sh 内置 lock 单实例保护 + 从 /workspace/band-server/.ssh 恢复已注册密钥
 nohup bash /workspace/band-server/tunnel.sh > /dev/null 2>&1 &
 sleep 1
 
-echo "=== 2/3 启动 band-server ==="
+echo "=== 3/4 启动 band-server ==="
 RUNNING=$(ss -ltnp 2>/dev/null | grep ":$PORT" | grep -oP 'pid=\K[0-9]+' | head -1)
 if [ -n "$RUNNING" ]; then
   echo "band-server 已在运行 (pid=$RUNNING)，跳过"
@@ -25,7 +34,7 @@ else
   echo "band-server 已启动 pid=$!"
 fi
 
-echo "=== 3/3 等待隧道就绪并自检 ==="
+echo "=== 4/4 等待隧道就绪并自检 ==="
 sleep 14
 
 echo "--- 本地 /api/address ---"

@@ -11,11 +11,13 @@ if (typeof document !== 'undefined') {
   base.href = './static/index.css'
   document.head.appendChild(base)
 
-  // H5：加载国内可达 CDN（BootCDN）托管的 Font Awesome 6 图标字体，
+  // H5：加载随产物发布的本地 Font Awesome 6 图标字体，
   // 避免 emoji 在部分系统（如 Windows）渲染为方框。
+  // 曾用外网 CDN（BootCDN），但 CDN 不可达时 fa-* 类名会裸奔成可见文字
+  // （如页面直接显示 "fa-solid fa-stethoscope"），故改为本地引用，不依赖外网。
   const fa = document.createElement('link')
   fa.rel = 'stylesheet'
-  fa.href = 'https://cdn.bootcdn.net/ajax/libs/font-awesome/6.4.2/css/all.min.css'
+  fa.href = './static/fontawesome/css/all.min.css'
   document.head.appendChild(fa)
 
   // H5：加载本地 jsQR 扫码库（设备页真实相机扫码使用），

@@ -144,7 +144,7 @@ export const TIMELINE = {
     1: [
       { time: '07:00', cat: 'monitor', title: '晨起血压监测', desc: '晨起静坐5分钟后测量血压，记录数值', tag: '每日监测', icon: 'fa-solid fa-stethoscope' },
       { time: '07:30', cat: 'medication', title: '降压药物服用', desc: '按时服用降压药，注意药物副作用', tag: '用药提醒', icon: 'fa-solid fa-pills' },
-      { time: '08:00', cat: 'nutrition', title: '营养早餐', desc: '全麦面包+无糖豆浆+水煮蛋，健康开启新一天', tag: '饮食管理', icon: 'fa-solid fa-croissant' },
+      { time: '08:00', cat: 'nutrition', title: '营养早餐', desc: '全麦面包+无糖豆浆+水煮蛋，健康开启新一天', tag: '饮食管理', icon: 'fa-solid fa-bread-slice' },
       { time: '09:30', cat: 'exercise', title: '八段锦练习', desc: '传统养生功法八段锦全套，强身健体', tag: '运动处方', icon: 'fa-solid fa-spa' },
       { time: '12:30', cat: 'nutrition', title: '午餐营养搭配', desc: '杂粮饭+番茄牛腩+清炒芦笋，营养均衡', tag: '饮食管理', icon: 'fa-solid fa-bowl-food' },
       { time: '14:30', cat: 'psychology', title: '渐进式肌肉放松', desc: '从头到脚逐段绷紧再放松，释放身心压力', tag: '心理调适', icon: 'fa-solid fa-seedling' },
@@ -184,7 +184,7 @@ export const TIMELINE = {
     1: [
       { time: '06:50', cat: 'monitor', title: '空腹血糖监测', desc: '连续记录第2天，观察空腹血糖趋势', tag: '每日监测', icon: 'fa-solid fa-droplet' },
       { time: '07:30', cat: 'medication', title: '降糖药提醒', desc: '按医嘱服药，如有低血糖症状及时记录', tag: '用药提醒', icon: 'fa-solid fa-pills' },
-      { time: '08:00', cat: 'nutrition', title: '低GI 早餐', desc: '燕麦（非速溶）+鸡蛋+一小把坚果', tag: '饮食管理', icon: 'fa-solid fa-croissant' },
+      { time: '08:00', cat: 'nutrition', title: '低GI 早餐', desc: '燕麦（非速溶）+鸡蛋+一小把坚果', tag: '饮食管理', icon: 'fa-solid fa-bread-slice' },
       { time: '09:30', cat: 'exercise', title: '抗阻训练', desc: '弹力带上肢+靠墙静蹲，提升肌肉葡萄糖摄取', tag: '运动处方', icon: 'fa-solid fa-dumbbell' },
       { time: '12:30', cat: 'nutrition', title: '控糖午餐', desc: '藜麦饭+鸡胸肉+凉拌木耳，控制精制碳水', tag: '饮食管理', icon: 'fa-solid fa-bowl-food' },
       { time: '14:30', cat: 'monitor', title: '餐后2h 血糖', desc: '目标 <10.0 mmol/L，理想 <7.8', tag: '每日监测', icon: 'fa-solid fa-arrow-trend-up' },

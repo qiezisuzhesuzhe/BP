@@ -18,7 +18,7 @@
           </view>
           <view class="tl__head-r">
             <view v-if="sent(idx)" class="tl__sent">
-              <text class="tl__sent-icon fa-solid fa-bell-ring-check"></text>
+              <text class="tl__sent-icon fa-solid fa-bell"></text>
               <text class="tl__sent-t">已发手环</text>
             </view>
             <view v-else class="tl__send-hint">

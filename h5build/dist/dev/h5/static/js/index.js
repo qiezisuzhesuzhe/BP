@@ -771,7 +771,7 @@ var store = new vuex__WEBPACK_IMPORTED_MODULE_22___default.a.Store({
       }, {
         id: uid('m'),
         type: 'service',
-        icon: 'fa-solid fa-hand-wave',
+        icon: 'fa-solid fa-hand',
         color: '#389a82',
         title: '专属健康管理师已就位',
         content: '请到「我的权益」点击立即使用，添加企业微信后即可开始首次健康问询。',
@@ -1130,7 +1130,7 @@ if (typeof document !== 'undefined') {
   // 避免 emoji 在部分系统（如 Windows）渲染为方框。
   var fa = document.createElement('link');
   fa.rel = 'stylesheet';
-  fa.href = 'https://cdn.bootcdn.net/ajax/libs/font-awesome/6.4.2/css/all.min.css';
+  fa.href = './static/fontawesome/css/all.min.css';
   document.head.appendChild(fa);
 
   // H5：加载本地 jsQR 扫码库（设备页真实相机扫码使用），
@@ -3200,7 +3200,7 @@ var TIMELINE = {
       title: '营养早餐',
       desc: '全麦面包+无糖豆浆+水煮蛋，健康开启新一天',
       tag: '饮食管理',
-      icon: 'fa-solid fa-croissant'
+      icon: 'fa-solid fa-bread-slice'
     }, {
       time: '09:30',
       cat: 'exercise',
@@ -3429,7 +3429,7 @@ var TIMELINE = {
       title: '低GI 早餐',
       desc: '燕麦（非速溶）+鸡蛋+一小把坚果',
       tag: '饮食管理',
-      icon: 'fa-solid fa-croissant'
+      icon: 'fa-solid fa-bread-slice'
     }, {
       time: '09:30',
       cat: 'exercise',

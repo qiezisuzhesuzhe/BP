@@ -302,7 +302,7 @@ const store = new Vuex.Store({
         {
           id: uid('m'),
           type: 'service',
-          icon: 'fa-solid fa-hand-wave',
+          icon: 'fa-solid fa-hand',
           color: '#389a82',
           title: '专属健康管理师已就位',
           content: '请到「我的权益」点击立即使用，添加企业微信后即可开始首次健康问询。',

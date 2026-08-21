@@ -84,6 +84,36 @@
           </view>
         </view>
 
+        <!-- 睡眠：独立卡片，位于在床状态与异常挣扎之间 -->
+        <view class="sleep-card">
+          <view class="sec-head">
+            <text class="sec-title">睡眠</text>
+            <text class="sec-sub">{{ sleepTotalText }}</text>
+          </view>
+          <view class="sleep">
+            <view class="sleep__stats">
+              <view class="sleep__stat">
+                <text class="sleep__stat-num sleep__stat-num--deep">{{ radarSleep.deep != null ? fmtSleepMin(radarSleep.deep) : '--' }}</text>
+                <text class="sleep__stat-t">深睡</text>
+              </view>
+              <view class="sleep__stat">
+                <text class="sleep__stat-num sleep__stat-num--light">{{ radarSleep.light != null ? fmtSleepMin(radarSleep.light) : '--' }}</text>
+                <text class="sleep__stat-t">浅睡</text>
+              </view>
+              <view class="sleep__stat">
+                <text class="sleep__stat-num sleep__stat-num--wake">{{ radarSleep.wake != null ? fmtSleepMin(radarSleep.wake) : '--' }}</text>
+                <text class="sleep__stat-t">清醒</text>
+              </view>
+            </view>
+            <view v-if="radarSleep.total" class="sleep__strip">
+              <view class="sleep__strip-seg sleep__strip-seg--deep" :style="{ width: radarSleepPct.deep + '%' }"></view>
+              <view class="sleep__strip-seg sleep__strip-seg--light" :style="{ width: radarSleepPct.light + '%' }"></view>
+              <view class="sleep__strip-seg sleep__strip-seg--wake" :style="{ width: radarSleepPct.wake + '%' }"></view>
+            </view>
+            <view v-else class="sleep__strip sleep__strip--empty"></view>
+          </view>
+        </view>
+
         <view class="vital__card vital__card--struggle" :class="{ 'vital__card--alert': struggleInfo.active }">
           <view class="vital__head">
             <text class="fa-solid fa-triangle-exclamation vital__icon vital__icon--alert"></text>
@@ -103,36 +133,6 @@
               <text class="struggle-list__count">第{{ i + 1 }}次 · 共{{ s.count }}次</text>
             </view>
           </view>
-        </view>
-      </view>
-
-      <!-- 睡眠：独立卡片，与手环风格一致 -->
-      <view class="wrap">
-        <view class="sec-head">
-          <text class="sec-title">睡眠</text>
-          <text class="sec-sub">{{ sleepTotalText }}</text>
-        </view>
-        <view class="sleep">
-          <view class="sleep__stats">
-            <view class="sleep__stat">
-              <text class="sleep__stat-num sleep__stat-num--deep">{{ radarSleep.deep != null ? fmtSleepMin(radarSleep.deep) : '--' }}</text>
-              <text class="sleep__stat-t">深睡</text>
-            </view>
-            <view class="sleep__stat">
-              <text class="sleep__stat-num sleep__stat-num--light">{{ radarSleep.light != null ? fmtSleepMin(radarSleep.light) : '--' }}</text>
-              <text class="sleep__stat-t">浅睡</text>
-            </view>
-            <view class="sleep__stat">
-              <text class="sleep__stat-num sleep__stat-num--wake">{{ radarSleep.wake != null ? fmtSleepMin(radarSleep.wake) : '--' }}</text>
-              <text class="sleep__stat-t">清醒</text>
-            </view>
-          </view>
-          <view v-if="radarSleep.total" class="sleep__strip">
-            <view class="sleep__strip-seg sleep__strip-seg--deep" :style="{ width: radarSleepPct.deep + '%' }"></view>
-            <view class="sleep__strip-seg sleep__strip-seg--light" :style="{ width: radarSleepPct.light + '%' }"></view>
-            <view class="sleep__strip-seg sleep__strip-seg--wake" :style="{ width: radarSleepPct.wake + '%' }"></view>
-          </view>
-          <view v-else class="sleep__strip sleep__strip--empty"></view>
         </view>
       </view>
 
@@ -721,6 +721,19 @@ export default {
 .bed-list__time {
   font-size: $font-size-2xs;
   color: $text-muted;
+}
+
+/* ---------- 睡眠卡片（独立卡片，与 bed-card 风格一致） ---------- */
+.sleep-card {
+  margin-top: $space-3;
+  background: linear-gradient(145deg, #f0edf8 0%, $bg-surface 75%);
+  border-radius: $radius-card-child;
+  box-shadow: $shadow-sm;
+  padding: $space-4;
+}
+
+.sleep-card .sec-head {
+  margin-top: 0;
 }
 
 /* 全宽卡片（如异常挣扎）在 wrap 内与上方 vital 行保持间距 */

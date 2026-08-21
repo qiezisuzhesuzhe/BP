@@ -419,6 +419,158 @@ var render = function () {
                 ),
                 _c(
                   "v-uni-view",
+                  { staticClass: "sleep-card" },
+                  [
+                    _c(
+                      "v-uni-view",
+                      { staticClass: "sec-head" },
+                      [
+                        _c("v-uni-text", { staticClass: "sec-title" }, [
+                          _vm._v("睡眠"),
+                        ]),
+                        _c("v-uni-text", { staticClass: "sec-sub" }, [
+                          _vm._v(_vm._s(_vm.sleepTotalText)),
+                        ]),
+                      ],
+                      1
+                    ),
+                    _c(
+                      "v-uni-view",
+                      { staticClass: "sleep" },
+                      [
+                        _c(
+                          "v-uni-view",
+                          { staticClass: "sleep__stats" },
+                          [
+                            _c(
+                              "v-uni-view",
+                              { staticClass: "sleep__stat" },
+                              [
+                                _c(
+                                  "v-uni-text",
+                                  {
+                                    staticClass:
+                                      "sleep__stat-num sleep__stat-num--deep",
+                                  },
+                                  [
+                                    _vm._v(
+                                      _vm._s(
+                                        _vm.radarSleep.deep != null
+                                          ? _vm.fmtSleepMin(_vm.radarSleep.deep)
+                                          : "--"
+                                      )
+                                    ),
+                                  ]
+                                ),
+                                _c(
+                                  "v-uni-text",
+                                  { staticClass: "sleep__stat-t" },
+                                  [_vm._v("深睡")]
+                                ),
+                              ],
+                              1
+                            ),
+                            _c(
+                              "v-uni-view",
+                              { staticClass: "sleep__stat" },
+                              [
+                                _c(
+                                  "v-uni-text",
+                                  {
+                                    staticClass:
+                                      "sleep__stat-num sleep__stat-num--light",
+                                  },
+                                  [
+                                    _vm._v(
+                                      _vm._s(
+                                        _vm.radarSleep.light != null
+                                          ? _vm.fmtSleepMin(
+                                              _vm.radarSleep.light
+                                            )
+                                          : "--"
+                                      )
+                                    ),
+                                  ]
+                                ),
+                                _c(
+                                  "v-uni-text",
+                                  { staticClass: "sleep__stat-t" },
+                                  [_vm._v("浅睡")]
+                                ),
+                              ],
+                              1
+                            ),
+                            _c(
+                              "v-uni-view",
+                              { staticClass: "sleep__stat" },
+                              [
+                                _c(
+                                  "v-uni-text",
+                                  {
+                                    staticClass:
+                                      "sleep__stat-num sleep__stat-num--wake",
+                                  },
+                                  [
+                                    _vm._v(
+                                      _vm._s(
+                                        _vm.radarSleep.wake != null
+                                          ? _vm.fmtSleepMin(_vm.radarSleep.wake)
+                                          : "--"
+                                      )
+                                    ),
+                                  ]
+                                ),
+                                _c(
+                                  "v-uni-text",
+                                  { staticClass: "sleep__stat-t" },
+                                  [_vm._v("清醒")]
+                                ),
+                              ],
+                              1
+                            ),
+                          ],
+                          1
+                        ),
+                        _vm.radarSleep.total
+                          ? _c(
+                              "v-uni-view",
+                              { staticClass: "sleep__strip" },
+                              [
+                                _c("v-uni-view", {
+                                  staticClass:
+                                    "sleep__strip-seg sleep__strip-seg--deep",
+                                  style: {
+                                    width: _vm.radarSleepPct.deep + "%",
+                                  },
+                                }),
+                                _c("v-uni-view", {
+                                  staticClass:
+                                    "sleep__strip-seg sleep__strip-seg--light",
+                                  style: {
+                                    width: _vm.radarSleepPct.light + "%",
+                                  },
+                                }),
+                                _c("v-uni-view", {
+                                  staticClass:
+                                    "sleep__strip-seg sleep__strip-seg--wake",
+                                  style: {
+                                    width: _vm.radarSleepPct.wake + "%",
+                                  },
+                                }),
+                              ],
+                              1
+                            )
+                          : _c("v-uni-view", {
+                              staticClass: "sleep__strip sleep__strip--empty",
+                            }),
+                      ],
+                      1
+                    ),
+                  ],
+                  1
+                ),
+                _c(
+                  "v-uni-view",
                   {
                     staticClass: "vital__card vital__card--struggle",
                     class: { "vital__card--alert": _vm.struggleInfo.active },
@@ -529,144 +681,6 @@ var render = function () {
                           1
                         )
                       : _vm._e(),
-                  ],
-                  1
-                ),
-              ],
-              1
-            ),
-            _c(
-              "v-uni-view",
-              { staticClass: "wrap" },
-              [
-                _c(
-                  "v-uni-view",
-                  { staticClass: "sec-head" },
-                  [
-                    _c("v-uni-text", { staticClass: "sec-title" }, [
-                      _vm._v("睡眠"),
-                    ]),
-                    _c("v-uni-text", { staticClass: "sec-sub" }, [
-                      _vm._v(_vm._s(_vm.sleepTotalText)),
-                    ]),
-                  ],
-                  1
-                ),
-                _c(
-                  "v-uni-view",
-                  { staticClass: "sleep" },
-                  [
-                    _c(
-                      "v-uni-view",
-                      { staticClass: "sleep__stats" },
-                      [
-                        _c(
-                          "v-uni-view",
-                          { staticClass: "sleep__stat" },
-                          [
-                            _c(
-                              "v-uni-text",
-                              {
-                                staticClass:
-                                  "sleep__stat-num sleep__stat-num--deep",
-                              },
-                              [
-                                _vm._v(
-                                  _vm._s(
-                                    _vm.radarSleep.deep != null
-                                      ? _vm.fmtSleepMin(_vm.radarSleep.deep)
-                                      : "--"
-                                  )
-                                ),
-                              ]
-                            ),
-                            _c("v-uni-text", { staticClass: "sleep__stat-t" }, [
-                              _vm._v("深睡"),
-                            ]),
-                          ],
-                          1
-                        ),
-                        _c(
-                          "v-uni-view",
-                          { staticClass: "sleep__stat" },
-                          [
-                            _c(
-                              "v-uni-text",
-                              {
-                                staticClass:
-                                  "sleep__stat-num sleep__stat-num--light",
-                              },
-                              [
-                                _vm._v(
-                                  _vm._s(
-                                    _vm.radarSleep.light != null
-                                      ? _vm.fmtSleepMin(_vm.radarSleep.light)
-                                      : "--"
-                                  )
-                                ),
-                              ]
-                            ),
-                            _c("v-uni-text", { staticClass: "sleep__stat-t" }, [
-                              _vm._v("浅睡"),
-                            ]),
-                          ],
-                          1
-                        ),
-                        _c(
-                          "v-uni-view",
-                          { staticClass: "sleep__stat" },
-                          [
-                            _c(
-                              "v-uni-text",
-                              {
-                                staticClass:
-                                  "sleep__stat-num sleep__stat-num--wake",
-                              },
-                              [
-                                _vm._v(
-                                  _vm._s(
-                                    _vm.radarSleep.wake != null
-                                      ? _vm.fmtSleepMin(_vm.radarSleep.wake)
-                                      : "--"
-                                  )
-                                ),
-                              ]
-                            ),
-                            _c("v-uni-text", { staticClass: "sleep__stat-t" }, [
-                              _vm._v("清醒"),
-                            ]),
-                          ],
-                          1
-                        ),
-                      ],
-                      1
-                    ),
-                    _vm.radarSleep.total
-                      ? _c(
-                          "v-uni-view",
-                          { staticClass: "sleep__strip" },
-                          [
-                            _c("v-uni-view", {
-                              staticClass:
-                                "sleep__strip-seg sleep__strip-seg--deep",
-                              style: { width: _vm.radarSleepPct.deep + "%" },
-                            }),
-                            _c("v-uni-view", {
-                              staticClass:
-                                "sleep__strip-seg sleep__strip-seg--light",
-                              style: { width: _vm.radarSleepPct.light + "%" },
-                            }),
-                            _c("v-uni-view", {
-                              staticClass:
-                                "sleep__strip-seg sleep__strip-seg--wake",
-                              style: { width: _vm.radarSleepPct.wake + "%" },
-                            }),
-                          ],
-                          1
-                        )
-                      : _c("v-uni-view", {
-                          staticClass: "sleep__strip sleep__strip--empty",
-                        }),
                   ],
                   1
                 ),
@@ -1551,7 +1565,7 @@ __webpack_require__.r(__webpack_exports__);
 var ___CSS_LOADER_API_IMPORT___ = __webpack_require__(/*! ../../../node_modules/css-loader/dist/runtime/api.js */ "JPst");
 exports = ___CSS_LOADER_API_IMPORT___(false);
 // Module
-exports.push([module.i, "@charset \"UTF-8\";\n/* 享相健康+ · 设计令牌\n   来源：/workspace/DESIGN.md\n   方案：rpx + SCSS 变量（1px = 2rpx，基于 750rpx 设计基准） */\n/* ---------- 品牌色 ---------- */\n/* ---------- 头像 ---------- */\n/* ---------- 语义状态色 ---------- */\n/* ---------- 金色（尊享装饰） ---------- */\n/* ---------- 背景 ---------- */\n/* 斜向两色渐变：左上(#ddf7ed) → 右下(#f3f3f3)，末端即底色；\n   配合 App.vue 中 background-attachment: fixed 铺满视口固定，不随页面滚动/变长 */\n/* ---------- 文字 ---------- */\n/* ---------- 描边 / 遮罩 ---------- */\n/* ---------- 字体 ---------- */\n/* 英文/数字优先匹配 DIN Pro（Mac 自带 DIN Alternate 作为备选），中文回退苹方/雅黑 */\n/* 移动端最小舒适字号（可读正文下限）：\n   说明/入口/数据标签等可读文字不得小于 12px(24rpx)；\n   $font-size-2xs(10px) 仅限角标、徽标、装饰性元素 */\n/* ---------- 语义排版 ---------- */\n/* ---------- 间距 ---------- */\n/* ---------- 区块标题 ---------- */\n/* 标题下间距 = 列表间距；上间距 = 下间距 × 2 */\n/* ---------- 尺寸 ---------- */\n/* ---------- 圆角（已减半，更克制干净） ---------- */\n/* ---------- 阴影 ---------- */\n/* ---------- 层级 ---------- */\n/* ---------- 动效 ---------- */\n/* ---------- 导航栏右侧按钮（仅雷达款显示） ---------- */\n.nav-actions[data-v-52a6b4fe] {\n  display: flex;\n  align-items: center;\n  gap: %?16?%;\n}\n.nav-sub-btn[data-v-52a6b4fe] {\n  height: %?60?%;\n  padding: 0 %?24?%;\n  border-radius: %?999?%;\n  background: rgba(255, 255, 255, 0.7);\n  border: %?1?% solid rgba(148, 163, 184, 0.35);\n  display: inline-flex;\n  align-items: center;\n  gap: %?8?%;\n  flex-shrink: 0;\n  white-space: nowrap;\n  -webkit-backdrop-filter: blur(6px);\n          backdrop-filter: blur(6px);\n  transition: opacity 0.15s ease, -webkit-transform 0.1s ease;\n  transition: opacity 0.15s ease, transform 0.1s ease;\n  transition: opacity 0.15s ease, transform 0.1s ease, -webkit-transform 0.1s ease;\n}\n.nav-sub-btn[data-v-52a6b4fe]:active {\n  -webkit-transform: scale(0.97);\n          transform: scale(0.97);\n  opacity: 0.8;\n}\n.nav-sub-btn__icon[data-v-52a6b4fe] {\n  font-size: %?24?%;\n  color: #64748b;\n}\n.nav-sub-btn__t[data-v-52a6b4fe] {\n  font-size: %?24?%;\n  font-weight: 600;\n  color: #475569;\n}\n.nav-refresh[data-v-52a6b4fe] {\n  width: %?60?%;\n  height: %?60?%;\n  border-radius: %?999?%;\n  background: #389a82;\n  box-shadow: 0 %?4?% %?24?% rgba(15, 61, 53, 0.06);\n  display: flex;\n  align-items: center;\n  justify-content: center;\n}\n.nav-refresh--busy[data-v-52a6b4fe] {\n  opacity: 0.7;\n}\n.nav-refresh__icon[data-v-52a6b4fe] {\n  color: #ffffff;\n  font-size: %?24?%;\n}\n.nav-refresh__icon--spin[data-v-52a6b4fe] {\n  -webkit-animation: spin-data-v-52a6b4fe 0.8s linear infinite;\n          animation: spin-data-v-52a6b4fe 0.8s linear infinite;\n}\n@-webkit-keyframes spin-data-v-52a6b4fe {\nfrom {\n    -webkit-transform: rotate(0deg);\n            transform: rotate(0deg);\n}\nto {\n    -webkit-transform: rotate(360deg);\n            transform: rotate(360deg);\n}\n}\n@keyframes spin-data-v-52a6b4fe {\nfrom {\n    -webkit-transform: rotate(0deg);\n            transform: rotate(0deg);\n}\nto {\n    -webkit-transform: rotate(360deg);\n            transform: rotate(360deg);\n}\n}\n/* ---------- 页面容器 ---------- */\n.wrap[data-v-52a6b4fe] {\n  height: auto;\n  padding: %?32?% %?32?% 0;\n}\n.wrap[data-v-52a6b4fe]:not(.wrap--first) {\n  padding-top: 0;\n}\n/* ---------- 设备头卡 ---------- */\n.head[data-v-52a6b4fe] {\n  display: flex;\n  align-items: center;\n  background: #ffffff;\n  border-radius: %?20?%;\n  box-shadow: 0 %?4?% %?24?% rgba(15, 61, 53, 0.06);\n  padding: %?32?%;\n}\n.head__main[data-v-52a6b4fe] {\n  flex: 1;\n  padding: 0 %?24?%;\n  overflow: hidden;\n}\n.head__name[data-v-52a6b4fe] {\n  display: block;\n  font-size: %?32?%;\n  font-weight: 800;\n  color: #1a2a3c;\n  line-height: 1.1;\n}\n.head__sn[data-v-52a6b4fe] {\n  display: flex;\n  align-items: center;\n  min-width: 0;\n  margin-top: %?8?%;\n}\n.head__sn-t[data-v-52a6b4fe] {\n  flex: 0 1 auto;\n  min-width: 0;\n  font-size: %?20?%;\n  color: #64748b;\n  white-space: nowrap;\n  overflow: hidden;\n  text-overflow: ellipsis;\n}\n.head__sse[data-v-52a6b4fe] {\n  display: inline-flex;\n  align-items: center;\n  gap: %?8?%;\n  flex-shrink: 0;\n  margin-left: %?16?%;\n  padding: %?8?% %?16?%;\n  border-radius: %?999?%;\n  background: #f2f7fa;\n  color: #c6d2de;\n  font-size: %?20?%;\n  line-height: 1;\n}\n.head__sse .fa-solid[data-v-52a6b4fe] {\n  font-size: %?20?%;\n}\n.head__sse--on[data-v-52a6b4fe] {\n  background: rgba(56, 154, 130, 0.15);\n  color: #2b7e6a;\n  font-weight: 600;\n}\n.head__status[data-v-52a6b4fe] {\n  display: flex;\n  align-items: center;\n  flex-shrink: 0;\n  padding: %?8?% %?16?%;\n  border-radius: %?999?%;\n  background: #27ae60;\n}\n.head__status--off[data-v-52a6b4fe] {\n  background: #f2f7fa;\n}\n.head__dot[data-v-52a6b4fe] {\n  width: %?12?%;\n  height: %?12?%;\n  border-radius: 50%;\n  background: #ffffff;\n  margin-right: %?8?%;\n}\n.head__status--off .head__dot[data-v-52a6b4fe] {\n  background: #94a3b8;\n}\n.head__status-t[data-v-52a6b4fe] {\n  font-size: %?20?%;\n  color: #ffffff;\n  font-weight: 600;\n}\n.head__status--off .head__status-t[data-v-52a6b4fe] {\n  color: #64748b;\n}\n/* ---------- Vital 卡片 ---------- */\n.vital[data-v-52a6b4fe] {\n  display: flex;\n  margin-top: %?64?%;\n}\n.vital__card[data-v-52a6b4fe] {\n  flex: 1;\n  min-width: 0;\n  background: #ffffff;\n  border-radius: %?20?%;\n  box-shadow: 0 %?4?% %?24?% rgba(15, 61, 53, 0.06);\n  padding: %?32?%;\n}\n.vital__card + .vital__card[data-v-52a6b4fe] {\n  margin-left: %?24?%;\n}\n.vital[data-v-52a6b4fe]:not(:first-child) {\n  margin-top: %?24?%;\n}\n/* ---------- 在床状态卡片（左右布局） ---------- */\n.bed-card[data-v-52a6b4fe] {\n  display: flex;\n  align-items: stretch;\n  margin-top: %?24?%;\n  background: linear-gradient(145deg, #e8f3ef 0%, #ffffff 75%);\n  border-radius: %?20?%;\n  box-shadow: 0 %?4?% %?24?% rgba(15, 61, 53, 0.06);\n  padding: %?32?%;\n}\n.bed-card__left[data-v-52a6b4fe] {\n  flex: 1;\n  min-width: 0;\n  display: flex;\n  flex-direction: column;\n}\n.bed-card__right[data-v-52a6b4fe] {\n  flex: 1;\n  min-width: 0;\n  margin-left: %?24?%;\n  padding-left: %?24?%;\n  border-left: %?1?% solid rgba(15, 61, 53, 0.06);\n  display: flex;\n  flex-direction: column;\n}\n.bed-card__label[data-v-52a6b4fe] {\n  font-size: %?20?%;\n  font-weight: 600;\n  color: #64748b;\n  margin-bottom: %?8?%;\n}\n.bed-card__empty[data-v-52a6b4fe] {\n  font-size: %?28?%;\n  color: #64748b;\n  font-family: \"DIN Pro\", \"DIN Alternate\", \"Helvetica Neue\", Arial, sans-serif;\n}\n.bed-list[data-v-52a6b4fe] {\n  display: flex;\n  flex-direction: column;\n  gap: %?8?%;\n}\n.bed-list__item[data-v-52a6b4fe] {\n  display: flex;\n  align-items: center;\n  gap: %?16?%;\n}\n.bed-list__type[data-v-52a6b4fe] {\n  font-size: %?20?%;\n  font-weight: 600;\n  color: #389a82;\n  flex-shrink: 0;\n}\n.bed-list__type--off[data-v-52a6b4fe] {\n  color: #f2994a;\n}\n.bed-list__time[data-v-52a6b4fe] {\n  font-size: %?20?%;\n  color: #64748b;\n}\n/* 全宽卡片（如异常挣扎）在 wrap 内与上方 vital 行保持间距 */\n.wrap > .vital__card[data-v-52a6b4fe]:not(:first-child) {\n  margin-top: %?24?%;\n}\n.vital__card--alert[data-v-52a6b4fe] {\n  border: %?2?% solid rgba(241, 85, 51, 0.4);\n}\n.vital__card--hr[data-v-52a6b4fe] {\n  background: linear-gradient(145deg, #e8f8f0 0%, #ffffff 75%);\n}\n.vital__card--resp[data-v-52a6b4fe] {\n  background: linear-gradient(145deg, #e8f4f6 0%, #ffffff 75%);\n}\n.vital__card--struggle[data-v-52a6b4fe] {\n  background: linear-gradient(145deg, #fff5f3 0%, #ffffff 75%);\n}\n.vital__card--struggle.vital__card--alert[data-v-52a6b4fe] {\n  background: linear-gradient(145deg, #fdeeee 0%, #ffffff 75%);\n}\n.vital__head[data-v-52a6b4fe] {\n  display: flex;\n  align-items: center;\n}\n.vital__icon[data-v-52a6b4fe] {\n  font-size: %?32?%;\n  margin-right: %?16?%;\n}\n.vital__icon--hr[data-v-52a6b4fe] {\n  color: #84e8c2;\n}\n.vital__icon--resp[data-v-52a6b4fe] {\n  color: #8dcdd8;\n}\n.vital__icon--sleep[data-v-52a6b4fe] {\n  color: #9b8fc9;\n}\n.vital__icon--presence[data-v-52a6b4fe] {\n  color: #389a82;\n}\n.vital__icon--alert[data-v-52a6b4fe] {\n  color: #f15533;\n}\n.vital__name[data-v-52a6b4fe] {\n  font-size: %?28?%;\n  font-weight: 600;\n  color: #334155;\n  white-space: nowrap;\n  overflow: hidden;\n  text-overflow: ellipsis;\n}\n.vital__value[data-v-52a6b4fe] {\n  display: flex;\n  align-items: baseline;\n  margin-top: %?24?%;\n}\n.vital__num[data-v-52a6b4fe] {\n  font-size: %?56?%;\n  font-weight: 800;\n  font-family: \"DIN Pro\", \"DIN Alternate\", \"Helvetica Neue\", Arial, sans-serif;\n  line-height: 1;\n  color: #1a2a3c;\n}\n.vital__card--hr .vital__num[data-v-52a6b4fe] {\n  color: #84e8c2;\n}\n.vital__card--resp .vital__num[data-v-52a6b4fe] {\n  color: #8dcdd8;\n}\n.vital__unit[data-v-52a6b4fe] {\n  margin-left: %?8?%;\n  font-size: %?20?%;\n  color: #64748b;\n}\n.vital__sub[data-v-52a6b4fe] {\n  display: block;\n  margin-top: %?16?%;\n  font-size: %?20?%;\n  color: #c6d2de;\n  white-space: nowrap;\n  overflow: hidden;\n  text-overflow: ellipsis;\n}\n.vital__sub--alert[data-v-52a6b4fe] {\n  color: #f15533;\n}\n/* 挣扎历史列表 */\n.struggle-list[data-v-52a6b4fe] {\n  margin-top: %?24?%;\n  padding-top: %?16?%;\n  border-top: %?1?% solid #f2f7fa;\n}\n.struggle-list__item[data-v-52a6b4fe] {\n  display: flex;\n  justify-content: space-between;\n  align-items: center;\n  padding: %?8?% 0;\n}\n.struggle-list__time[data-v-52a6b4fe] {\n  font-size: %?24?%;\n  color: #1a2a3c;\n  font-weight: 600;\n}\n.struggle-list__count[data-v-52a6b4fe] {\n  font-size: %?20?%;\n  color: #64748b;\n}\n/* ---------- 非雷达设备网格 ---------- */\n.grid[data-v-52a6b4fe] {\n  display: flex;\n  flex-wrap: wrap;\n  justify-content: space-between;\n}\n.cell[data-v-52a6b4fe] {\n  width: 49%;\n  background: #ffffff;\n  border-radius: %?20?%;\n  box-shadow: 0 %?4?% %?24?% rgba(15, 61, 53, 0.06);\n  padding: %?24?%;\n  margin-bottom: %?32?%;\n  transition: box-shadow 200ms cubic-bezier(0.2, 0, 0, 1);\n}\n.cell--pulse[data-v-52a6b4fe] {\n  box-shadow: 0 0 0 %?2?% rgba(56, 154, 130, 0.35);\n}\n.cell__icon[data-v-52a6b4fe] {\n  width: %?48?%;\n  height: %?48?%;\n  border-radius: %?12?%;\n  display: flex;\n  align-items: center;\n  justify-content: center;\n}\n.cell__icon-t[data-v-52a6b4fe] {\n  font-size: %?28?%;\n}\n.cell__val[data-v-52a6b4fe] {\n  margin-top: %?16?%;\n  display: flex;\n  align-items: baseline;\n}\n.cell__num[data-v-52a6b4fe] {\n  font-size: %?56?%;\n  font-weight: 800;\n  line-height: 1.1;\n}\n.cell__unit[data-v-52a6b4fe] {\n  font-size: %?20?%;\n  color: #64748b;\n  margin-left: %?8?%;\n}\n.cell__label[data-v-52a6b4fe] {\n  display: block;\n  font-size: %?24?%;\n  color: #64748b;\n  margin-top: %?8?%;\n}\n/* ---------- 分区标题（与手环一致） ---------- */\n.sec-head[data-v-52a6b4fe] {\n  display: flex;\n  align-items: flex-end;\n  justify-content: space-between;\n  margin-top: %?32?%;\n  margin-bottom: %?24?%;\n}\n.sec-title[data-v-52a6b4fe] {\n  font-size: %?36?%;\n  font-weight: 800;\n  line-height: 1.1;\n  color: #1a2a3c;\n  letter-spacing: %?1?%;\n}\n.sec-sub[data-v-52a6b4fe] {\n  font-size: %?24?%;\n  color: #64748b;\n  margin-top: %?16?%;\n}\n/* ---------- 睡眠（与手环风格一致） ---------- */\n.sleep__stats[data-v-52a6b4fe] {\n  display: flex;\n}\n.sleep__stat[data-v-52a6b4fe] {\n  flex: 1;\n  display: flex;\n  flex-direction: column;\n  align-items: center;\n}\n.sleep__stat-num[data-v-52a6b4fe] {\n  font-size: %?36?%;\n  font-weight: 800;\n  font-family: \"DIN Pro\", \"DIN Alternate\", \"Helvetica Neue\", Arial, sans-serif;\n  line-height: 1.1;\n}\n.sleep__stat-num--deep[data-v-52a6b4fe] {\n  color: #1e6f5c;\n}\n.sleep__stat-num--light[data-v-52a6b4fe] {\n  color: #3eb98f;\n}\n.sleep__stat-num--wake[data-v-52a6b4fe] {\n  color: #94a3b8;\n}\n.sleep__stat-t[data-v-52a6b4fe] {\n  margin-top: %?8?%;\n  font-size: %?20?%;\n  color: #64748b;\n}\n.sleep__strip[data-v-52a6b4fe] {\n  margin-top: %?24?%;\n  height: %?24?%;\n  border-radius: %?999?%;\n  overflow: hidden;\n  display: flex;\n}\n.sleep__strip-seg[data-v-52a6b4fe] {\n  height: 100%;\n  transition: width 0.6s ease;\n}\n.sleep__strip-seg--deep[data-v-52a6b4fe] {\n  background: #1e6f5c;\n}\n.sleep__strip-seg--light[data-v-52a6b4fe] {\n  background: #7dd4bc;\n}\n.sleep__strip-seg--wake[data-v-52a6b4fe] {\n  background: #c8d5df;\n}\n.sleep__strip--empty[data-v-52a6b4fe] {\n  background: #f2f7fa;\n}\n.foot-tip[data-v-52a6b4fe] {\n  padding: %?32?% %?48?% %?24?%;\n  text-align: center;\n}\n.foot-tip__t[data-v-52a6b4fe] {\n  font-size: %?20?%;\n  color: #94a3b8;\n  line-height: 1.6;\n}\n.unbind[data-v-52a6b4fe] {\n  margin-top: %?16?%;\n  background: #ffffff;\n  border-radius: %?20?%;\n  box-shadow: 0 %?4?% %?24?% rgba(15, 61, 53, 0.06);\n  height: %?88?%;\n  display: flex;\n  align-items: center;\n  justify-content: center;\n}\n.unbind__t[data-v-52a6b4fe] {\n  font-size: %?28?%;\n  color: #eb5757;\n  font-weight: 600;\n}", ""]);
+exports.push([module.i, "@charset \"UTF-8\";\n/* 享相健康+ · 设计令牌\n   来源：/workspace/DESIGN.md\n   方案：rpx + SCSS 变量（1px = 2rpx，基于 750rpx 设计基准） */\n/* ---------- 品牌色 ---------- */\n/* ---------- 头像 ---------- */\n/* ---------- 语义状态色 ---------- */\n/* ---------- 金色（尊享装饰） ---------- */\n/* ---------- 背景 ---------- */\n/* 斜向两色渐变：左上(#ddf7ed) → 右下(#f3f3f3)，末端即底色；\n   配合 App.vue 中 background-attachment: fixed 铺满视口固定，不随页面滚动/变长 */\n/* ---------- 文字 ---------- */\n/* ---------- 描边 / 遮罩 ---------- */\n/* ---------- 字体 ---------- */\n/* 英文/数字优先匹配 DIN Pro（Mac 自带 DIN Alternate 作为备选），中文回退苹方/雅黑 */\n/* 移动端最小舒适字号（可读正文下限）：\n   说明/入口/数据标签等可读文字不得小于 12px(24rpx)；\n   $font-size-2xs(10px) 仅限角标、徽标、装饰性元素 */\n/* ---------- 语义排版 ---------- */\n/* ---------- 间距 ---------- */\n/* ---------- 区块标题 ---------- */\n/* 标题下间距 = 列表间距；上间距 = 下间距 × 2 */\n/* ---------- 尺寸 ---------- */\n/* ---------- 圆角（已减半，更克制干净） ---------- */\n/* ---------- 阴影 ---------- */\n/* ---------- 层级 ---------- */\n/* ---------- 动效 ---------- */\n/* ---------- 导航栏右侧按钮（仅雷达款显示） ---------- */\n.nav-actions[data-v-52a6b4fe] {\n  display: flex;\n  align-items: center;\n  gap: %?16?%;\n}\n.nav-sub-btn[data-v-52a6b4fe] {\n  height: %?60?%;\n  padding: 0 %?24?%;\n  border-radius: %?999?%;\n  background: rgba(255, 255, 255, 0.7);\n  border: %?1?% solid rgba(148, 163, 184, 0.35);\n  display: inline-flex;\n  align-items: center;\n  gap: %?8?%;\n  flex-shrink: 0;\n  white-space: nowrap;\n  -webkit-backdrop-filter: blur(6px);\n          backdrop-filter: blur(6px);\n  transition: opacity 0.15s ease, -webkit-transform 0.1s ease;\n  transition: opacity 0.15s ease, transform 0.1s ease;\n  transition: opacity 0.15s ease, transform 0.1s ease, -webkit-transform 0.1s ease;\n}\n.nav-sub-btn[data-v-52a6b4fe]:active {\n  -webkit-transform: scale(0.97);\n          transform: scale(0.97);\n  opacity: 0.8;\n}\n.nav-sub-btn__icon[data-v-52a6b4fe] {\n  font-size: %?24?%;\n  color: #64748b;\n}\n.nav-sub-btn__t[data-v-52a6b4fe] {\n  font-size: %?24?%;\n  font-weight: 600;\n  color: #475569;\n}\n.nav-refresh[data-v-52a6b4fe] {\n  width: %?60?%;\n  height: %?60?%;\n  border-radius: %?999?%;\n  background: #389a82;\n  box-shadow: 0 %?4?% %?24?% rgba(15, 61, 53, 0.06);\n  display: flex;\n  align-items: center;\n  justify-content: center;\n}\n.nav-refresh--busy[data-v-52a6b4fe] {\n  opacity: 0.7;\n}\n.nav-refresh__icon[data-v-52a6b4fe] {\n  color: #ffffff;\n  font-size: %?24?%;\n}\n.nav-refresh__icon--spin[data-v-52a6b4fe] {\n  -webkit-animation: spin-data-v-52a6b4fe 0.8s linear infinite;\n          animation: spin-data-v-52a6b4fe 0.8s linear infinite;\n}\n@-webkit-keyframes spin-data-v-52a6b4fe {\nfrom {\n    -webkit-transform: rotate(0deg);\n            transform: rotate(0deg);\n}\nto {\n    -webkit-transform: rotate(360deg);\n            transform: rotate(360deg);\n}\n}\n@keyframes spin-data-v-52a6b4fe {\nfrom {\n    -webkit-transform: rotate(0deg);\n            transform: rotate(0deg);\n}\nto {\n    -webkit-transform: rotate(360deg);\n            transform: rotate(360deg);\n}\n}\n/* ---------- 页面容器 ---------- */\n.wrap[data-v-52a6b4fe] {\n  height: auto;\n  padding: %?32?% %?32?% 0;\n}\n.wrap[data-v-52a6b4fe]:not(.wrap--first) {\n  padding-top: 0;\n}\n/* ---------- 设备头卡 ---------- */\n.head[data-v-52a6b4fe] {\n  display: flex;\n  align-items: center;\n  background: #ffffff;\n  border-radius: %?20?%;\n  box-shadow: 0 %?4?% %?24?% rgba(15, 61, 53, 0.06);\n  padding: %?32?%;\n}\n.head__main[data-v-52a6b4fe] {\n  flex: 1;\n  padding: 0 %?24?%;\n  overflow: hidden;\n}\n.head__name[data-v-52a6b4fe] {\n  display: block;\n  font-size: %?32?%;\n  font-weight: 800;\n  color: #1a2a3c;\n  line-height: 1.1;\n}\n.head__sn[data-v-52a6b4fe] {\n  display: flex;\n  align-items: center;\n  min-width: 0;\n  margin-top: %?8?%;\n}\n.head__sn-t[data-v-52a6b4fe] {\n  flex: 0 1 auto;\n  min-width: 0;\n  font-size: %?20?%;\n  color: #64748b;\n  white-space: nowrap;\n  overflow: hidden;\n  text-overflow: ellipsis;\n}\n.head__sse[data-v-52a6b4fe] {\n  display: inline-flex;\n  align-items: center;\n  gap: %?8?%;\n  flex-shrink: 0;\n  margin-left: %?16?%;\n  padding: %?8?% %?16?%;\n  border-radius: %?999?%;\n  background: #f2f7fa;\n  color: #c6d2de;\n  font-size: %?20?%;\n  line-height: 1;\n}\n.head__sse .fa-solid[data-v-52a6b4fe] {\n  font-size: %?20?%;\n}\n.head__sse--on[data-v-52a6b4fe] {\n  background: rgba(56, 154, 130, 0.15);\n  color: #2b7e6a;\n  font-weight: 600;\n}\n.head__status[data-v-52a6b4fe] {\n  display: flex;\n  align-items: center;\n  flex-shrink: 0;\n  padding: %?8?% %?16?%;\n  border-radius: %?999?%;\n  background: #27ae60;\n}\n.head__status--off[data-v-52a6b4fe] {\n  background: #f2f7fa;\n}\n.head__dot[data-v-52a6b4fe] {\n  width: %?12?%;\n  height: %?12?%;\n  border-radius: 50%;\n  background: #ffffff;\n  margin-right: %?8?%;\n}\n.head__status--off .head__dot[data-v-52a6b4fe] {\n  background: #94a3b8;\n}\n.head__status-t[data-v-52a6b4fe] {\n  font-size: %?20?%;\n  color: #ffffff;\n  font-weight: 600;\n}\n.head__status--off .head__status-t[data-v-52a6b4fe] {\n  color: #64748b;\n}\n/* ---------- Vital 卡片 ---------- */\n.vital[data-v-52a6b4fe] {\n  display: flex;\n  margin-top: %?64?%;\n}\n.vital__card[data-v-52a6b4fe] {\n  flex: 1;\n  min-width: 0;\n  background: #ffffff;\n  border-radius: %?20?%;\n  box-shadow: 0 %?4?% %?24?% rgba(15, 61, 53, 0.06);\n  padding: %?32?%;\n}\n.vital__card + .vital__card[data-v-52a6b4fe] {\n  margin-left: %?24?%;\n}\n.vital[data-v-52a6b4fe]:not(:first-child) {\n  margin-top: %?24?%;\n}\n/* ---------- 在床状态卡片（左右布局） ---------- */\n.bed-card[data-v-52a6b4fe] {\n  display: flex;\n  align-items: stretch;\n  margin-top: %?24?%;\n  background: linear-gradient(145deg, #e8f3ef 0%, #ffffff 75%);\n  border-radius: %?20?%;\n  box-shadow: 0 %?4?% %?24?% rgba(15, 61, 53, 0.06);\n  padding: %?32?%;\n}\n.bed-card__left[data-v-52a6b4fe] {\n  flex: 1;\n  min-width: 0;\n  display: flex;\n  flex-direction: column;\n}\n.bed-card__right[data-v-52a6b4fe] {\n  flex: 1;\n  min-width: 0;\n  margin-left: %?24?%;\n  padding-left: %?24?%;\n  border-left: %?1?% solid rgba(15, 61, 53, 0.06);\n  display: flex;\n  flex-direction: column;\n}\n.bed-card__label[data-v-52a6b4fe] {\n  font-size: %?20?%;\n  font-weight: 600;\n  color: #64748b;\n  margin-bottom: %?8?%;\n}\n.bed-card__empty[data-v-52a6b4fe] {\n  font-size: %?28?%;\n  color: #64748b;\n  font-family: \"DIN Pro\", \"DIN Alternate\", \"Helvetica Neue\", Arial, sans-serif;\n}\n.bed-list[data-v-52a6b4fe] {\n  display: flex;\n  flex-direction: column;\n  gap: %?8?%;\n}\n.bed-list__item[data-v-52a6b4fe] {\n  display: flex;\n  align-items: center;\n  gap: %?16?%;\n}\n.bed-list__type[data-v-52a6b4fe] {\n  font-size: %?20?%;\n  font-weight: 600;\n  color: #389a82;\n  flex-shrink: 0;\n}\n.bed-list__type--off[data-v-52a6b4fe] {\n  color: #f2994a;\n}\n.bed-list__time[data-v-52a6b4fe] {\n  font-size: %?20?%;\n  color: #64748b;\n}\n/* ---------- 睡眠卡片（独立卡片，与 bed-card 风格一致） ---------- */\n.sleep-card[data-v-52a6b4fe] {\n  margin-top: %?24?%;\n  background: linear-gradient(145deg, #f0edf8 0%, #ffffff 75%);\n  border-radius: %?20?%;\n  box-shadow: 0 %?4?% %?24?% rgba(15, 61, 53, 0.06);\n  padding: %?32?%;\n}\n.sleep-card .sec-head[data-v-52a6b4fe] {\n  margin-top: 0;\n}\n/* 全宽卡片（如异常挣扎）在 wrap 内与上方 vital 行保持间距 */\n.wrap > .vital__card[data-v-52a6b4fe]:not(:first-child) {\n  margin-top: %?24?%;\n}\n.vital__card--alert[data-v-52a6b4fe] {\n  border: %?2?% solid rgba(241, 85, 51, 0.4);\n}\n.vital__card--hr[data-v-52a6b4fe] {\n  background: linear-gradient(145deg, #e8f8f0 0%, #ffffff 75%);\n}\n.vital__card--resp[data-v-52a6b4fe] {\n  background: linear-gradient(145deg, #e8f4f6 0%, #ffffff 75%);\n}\n.vital__card--struggle[data-v-52a6b4fe] {\n  background: linear-gradient(145deg, #fff5f3 0%, #ffffff 75%);\n}\n.vital__card--struggle.vital__card--alert[data-v-52a6b4fe] {\n  background: linear-gradient(145deg, #fdeeee 0%, #ffffff 75%);\n}\n.vital__head[data-v-52a6b4fe] {\n  display: flex;\n  align-items: center;\n}\n.vital__icon[data-v-52a6b4fe] {\n  font-size: %?32?%;\n  margin-right: %?16?%;\n}\n.vital__icon--hr[data-v-52a6b4fe] {\n  color: #84e8c2;\n}\n.vital__icon--resp[data-v-52a6b4fe] {\n  color: #8dcdd8;\n}\n.vital__icon--sleep[data-v-52a6b4fe] {\n  color: #9b8fc9;\n}\n.vital__icon--presence[data-v-52a6b4fe] {\n  color: #389a82;\n}\n.vital__icon--alert[data-v-52a6b4fe] {\n  color: #f15533;\n}\n.vital__name[data-v-52a6b4fe] {\n  font-size: %?28?%;\n  font-weight: 600;\n  color: #334155;\n  white-space: nowrap;\n  overflow: hidden;\n  text-overflow: ellipsis;\n}\n.vital__value[data-v-52a6b4fe] {\n  display: flex;\n  align-items: baseline;\n  margin-top: %?24?%;\n}\n.vital__num[data-v-52a6b4fe] {\n  font-size: %?56?%;\n  font-weight: 800;\n  font-family: \"DIN Pro\", \"DIN Alternate\", \"Helvetica Neue\", Arial, sans-serif;\n  line-height: 1;\n  color: #1a2a3c;\n}\n.vital__card--hr .vital__num[data-v-52a6b4fe] {\n  color: #84e8c2;\n}\n.vital__card--resp .vital__num[data-v-52a6b4fe] {\n  color: #8dcdd8;\n}\n.vital__unit[data-v-52a6b4fe] {\n  margin-left: %?8?%;\n  font-size: %?20?%;\n  color: #64748b;\n}\n.vital__sub[data-v-52a6b4fe] {\n  display: block;\n  margin-top: %?16?%;\n  font-size: %?20?%;\n  color: #c6d2de;\n  white-space: nowrap;\n  overflow: hidden;\n  text-overflow: ellipsis;\n}\n.vital__sub--alert[data-v-52a6b4fe] {\n  color: #f15533;\n}\n/* 挣扎历史列表 */\n.struggle-list[data-v-52a6b4fe] {\n  margin-top: %?24?%;\n  padding-top: %?16?%;\n  border-top: %?1?% solid #f2f7fa;\n}\n.struggle-list__item[data-v-52a6b4fe] {\n  display: flex;\n  justify-content: space-between;\n  align-items: center;\n  padding: %?8?% 0;\n}\n.struggle-list__time[data-v-52a6b4fe] {\n  font-size: %?24?%;\n  color: #1a2a3c;\n  font-weight: 600;\n}\n.struggle-list__count[data-v-52a6b4fe] {\n  font-size: %?20?%;\n  color: #64748b;\n}\n/* ---------- 非雷达设备网格 ---------- */\n.grid[data-v-52a6b4fe] {\n  display: flex;\n  flex-wrap: wrap;\n  justify-content: space-between;\n}\n.cell[data-v-52a6b4fe] {\n  width: 49%;\n  background: #ffffff;\n  border-radius: %?20?%;\n  box-shadow: 0 %?4?% %?24?% rgba(15, 61, 53, 0.06);\n  padding: %?24?%;\n  margin-bottom: %?32?%;\n  transition: box-shadow 200ms cubic-bezier(0.2, 0, 0, 1);\n}\n.cell--pulse[data-v-52a6b4fe] {\n  box-shadow: 0 0 0 %?2?% rgba(56, 154, 130, 0.35);\n}\n.cell__icon[data-v-52a6b4fe] {\n  width: %?48?%;\n  height: %?48?%;\n  border-radius: %?12?%;\n  display: flex;\n  align-items: center;\n  justify-content: center;\n}\n.cell__icon-t[data-v-52a6b4fe] {\n  font-size: %?28?%;\n}\n.cell__val[data-v-52a6b4fe] {\n  margin-top: %?16?%;\n  display: flex;\n  align-items: baseline;\n}\n.cell__num[data-v-52a6b4fe] {\n  font-size: %?56?%;\n  font-weight: 800;\n  line-height: 1.1;\n}\n.cell__unit[data-v-52a6b4fe] {\n  font-size: %?20?%;\n  color: #64748b;\n  margin-left: %?8?%;\n}\n.cell__label[data-v-52a6b4fe] {\n  display: block;\n  font-size: %?24?%;\n  color: #64748b;\n  margin-top: %?8?%;\n}\n/* ---------- 分区标题（与手环一致） ---------- */\n.sec-head[data-v-52a6b4fe] {\n  display: flex;\n  align-items: flex-end;\n  justify-content: space-between;\n  margin-top: %?32?%;\n  margin-bottom: %?24?%;\n}\n.sec-title[data-v-52a6b4fe] {\n  font-size: %?36?%;\n  font-weight: 800;\n  line-height: 1.1;\n  color: #1a2a3c;\n  letter-spacing: %?1?%;\n}\n.sec-sub[data-v-52a6b4fe] {\n  font-size: %?24?%;\n  color: #64748b;\n  margin-top: %?16?%;\n}\n/* ---------- 睡眠（与手环风格一致） ---------- */\n.sleep__stats[data-v-52a6b4fe] {\n  display: flex;\n}\n.sleep__stat[data-v-52a6b4fe] {\n  flex: 1;\n  display: flex;\n  flex-direction: column;\n  align-items: center;\n}\n.sleep__stat-num[data-v-52a6b4fe] {\n  font-size: %?36?%;\n  font-weight: 800;\n  font-family: \"DIN Pro\", \"DIN Alternate\", \"Helvetica Neue\", Arial, sans-serif;\n  line-height: 1.1;\n}\n.sleep__stat-num--deep[data-v-52a6b4fe] {\n  color: #1e6f5c;\n}\n.sleep__stat-num--light[data-v-52a6b4fe] {\n  color: #3eb98f;\n}\n.sleep__stat-num--wake[data-v-52a6b4fe] {\n  color: #94a3b8;\n}\n.sleep__stat-t[data-v-52a6b4fe] {\n  margin-top: %?8?%;\n  font-size: %?20?%;\n  color: #64748b;\n}\n.sleep__strip[data-v-52a6b4fe] {\n  margin-top: %?24?%;\n  height: %?24?%;\n  border-radius: %?999?%;\n  overflow: hidden;\n  display: flex;\n}\n.sleep__strip-seg[data-v-52a6b4fe] {\n  height: 100%;\n  transition: width 0.6s ease;\n}\n.sleep__strip-seg--deep[data-v-52a6b4fe] {\n  background: #1e6f5c;\n}\n.sleep__strip-seg--light[data-v-52a6b4fe] {\n  background: #7dd4bc;\n}\n.sleep__strip-seg--wake[data-v-52a6b4fe] {\n  background: #c8d5df;\n}\n.sleep__strip--empty[data-v-52a6b4fe] {\n  background: #f2f7fa;\n}\n.foot-tip[data-v-52a6b4fe] {\n  padding: %?32?% %?48?% %?24?%;\n  text-align: center;\n}\n.foot-tip__t[data-v-52a6b4fe] {\n  font-size: %?20?%;\n  color: #94a3b8;\n  line-height: 1.6;\n}\n.unbind[data-v-52a6b4fe] {\n  margin-top: %?16?%;\n  background: #ffffff;\n  border-radius: %?20?%;\n  box-shadow: 0 %?4?% %?24?% rgba(15, 61, 53, 0.06);\n  height: %?88?%;\n  display: flex;\n  align-items: center;\n  justify-content: center;\n}\n.unbind__t[data-v-52a6b4fe] {\n  font-size: %?28?%;\n  color: #eb5757;\n  font-weight: 600;\n}", ""]);
 // Exports
 module.exports = exports;
 

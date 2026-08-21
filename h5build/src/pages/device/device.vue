@@ -271,6 +271,8 @@ export default {
   border-radius: $radius-card-child;
   box-shadow: $shadow-sm;
   padding: $space-3;
+  margin-left: $space-4;
+  margin-right: $space-4;
   margin-bottom: $space-data-list-gap;
   transition: transform 0.1s ease, box-shadow 0.2s ease;
 }

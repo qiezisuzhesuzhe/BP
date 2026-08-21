@@ -2,7 +2,7 @@
   <view class="chat">
     <hm-navbar title="" bg-color="transparent">
       <template #right>
-        <view class="chat__voice" @tap="toggleVoice">
+        <view class="chat__voice" @tap="toggleVoice" @longpress="pickVoice">
           <text class="chat__voice-icon" :class="voiceOn ? 'fa-solid fa-volume-high' : 'fa-solid fa-volume-xmark'"></text>
         </view>
       </template>
@@ -79,6 +79,21 @@
                 <text class="plan__count">共 {{ m.items.length }} 项</text>
               </view>
               <hm-timeline :items="m.items" />
+            </view>
+
+            <!-- AI 文本气泡下方的重听按钮：点击重新播报该条内容 -->
+            <view
+              v-if="m.role === 'ai' && m.kind === 'text'"
+              class="replay"
+              :class="{ 'replay--on': speakingId === m.id }"
+              @tap="replay(m)"
+            >
+              <view class="replay__wave">
+                <view class="replay__bar replay__bar--1"></view>
+                <view class="replay__bar replay__bar--2"></view>
+                <view class="replay__bar replay__bar--3"></view>
+              </view>
+              <text class="replay__t">{{ speakingId === m.id ? '播放中' : '朗读' }}</text>
             </view>
           </view>
         </view>
@@ -190,12 +205,14 @@
 
 <script>
 import { QUESTIONS, QUESTIONS_DM, TIMELINE } from '@/common/mock.js'
+import * as tts from '@/common/tts.js'
 
 export default {
   data() {
     return {
       rightId: '',
       voiceOn: true,
+      speakingId: '',
       messages: [],
       answers: {},
       phase: 'idle',
@@ -253,6 +270,8 @@ export default {
     }
   },
   onLoad(options) {
+    this.voiceOn = tts.isEnabled()
+    tts.warmup()
     this.rightId = (options && options.rightId) || ''
     const r = this.right
     if (r) this.rightId = r.id
@@ -295,6 +314,8 @@ export default {
   onUnload() {
     this.timers.forEach((t) => clearTimeout(t))
     this.timers = []
+    tts.stop()
+    this.speakingId = ''
   },
   methods: {
     delay(ms, fn) {
@@ -312,8 +333,33 @@ export default {
       })
     },
     push(msg) {
-      this.messages = this.messages.concat([Object.assign({ id: this.uid() }, msg)])
+      const item = Object.assign({ id: this.uid() }, msg)
+      this.messages = this.messages.concat([item])
       this.save()
+      // 所有 AI 消息都经过 push，这里是自动播报的唯一切点
+      if (item.role === 'ai' && item.kind === 'text' && this.voiceOn) {
+        this.speakMessage(item)
+      }
+      return item
+    },
+    async speakMessage(m, force) {
+      if (!m || !m.text) return
+      this.speakingId = m.id
+      try {
+        await tts.speak(m.text, { force: !!force })
+      } catch (e) {
+        // 发音失败不影响对话流程
+      }
+      if (this.speakingId === m.id) this.speakingId = ''
+    },
+    // 点击气泡下方的"朗读"：正在播的再点一次为停止，否则强制重听
+    replay(m) {
+      if (this.speakingId === m.id) {
+        tts.stop()
+        this.speakingId = ''
+        return
+      }
+      this.speakMessage(m, true)
     },
     save() {
       if (!this.rightId) return
@@ -329,7 +375,31 @@ export default {
     },
     toggleVoice() {
       this.voiceOn = !this.voiceOn
-      uni.showToast({ title: this.voiceOn ? '语音播报已开启' : '语音播报已关闭', icon: 'none' })
+      tts.setEnabled(this.voiceOn)
+      if (!this.voiceOn) this.speakingId = ''
+      uni.showToast({
+        title: this.voiceOn ? '语音播报已开启，长按可换音色' : '语音播报已关闭',
+        icon: 'none'
+      })
+    },
+    // 长按导航栏喇叭：切换播报音色
+    pickVoice() {
+      const list = tts.VOICES
+      const current = tts.getVoiceKey()
+      uni.showActionSheet({
+        itemList: list.map((v) => (v.key === current ? '✓ ' + v.label : v.label)),
+        success: (res) => {
+          const picked = list[res.tapIndex]
+          if (!picked) return
+          tts.setVoiceKey(picked.key)
+          this.speakingId = ''
+          if (!this.voiceOn) {
+            this.voiceOn = true
+            tts.setEnabled(true)
+          }
+          tts.speak('您好，以后由我为您播报健康建议。', { force: true })
+        }
+      })
     },
     // 用户在欢迎态点击"立即激活"：AI 响应一句确认 → 开始问卷
     confirmActivate() {
@@ -850,6 +920,8 @@ export default {
 .msg__body {
   max-width: 78%;
   padding-left: $space-2;
+  display: flex;
+  flex-direction: column;
 }
 
 .msg--user .msg__body {
@@ -882,6 +954,75 @@ export default {
 
 .bubble__t--user {
   color: $text-inverse;
+}
+
+.replay {
+  display: flex;
+  align-items: center;
+  align-self: flex-start;
+  margin-top: $space-1;
+  padding: $space-1 $space-2;
+  background: $brand-soft;
+  border-radius: $radius-full;
+}
+
+.replay--on {
+  background: $brand-primary;
+}
+
+.replay__wave {
+  display: flex;
+  align-items: center;
+  margin-right: $space-1;
+}
+
+.replay__bar {
+  width: 4rpx;
+  height: 16rpx;
+  margin-right: 3rpx;
+  border-radius: 2rpx;
+  background: $brand-primary-active;
+}
+
+.replay__bar--2 {
+  height: 24rpx;
+}
+
+.replay__bar--3 {
+  height: 12rpx;
+  margin-right: 0;
+}
+
+.replay--on .replay__bar {
+  background: $text-inverse;
+  animation: voiceBar 0.8s ease-in-out infinite;
+}
+
+.replay--on .replay__bar--2 {
+  animation-delay: 0.1s;
+}
+
+.replay--on .replay__bar--3 {
+  animation-delay: 0.2s;
+}
+
+.replay__t {
+  font-size: $font-size-xs;
+  color: $brand-primary-active;
+}
+
+.replay--on .replay__t {
+  color: $text-inverse;
+}
+
+@keyframes voiceBar {
+  0%,
+  100% {
+    transform: scaleY(0.4);
+  }
+  50% {
+    transform: scaleY(1);
+  }
 }
 
 .typing {

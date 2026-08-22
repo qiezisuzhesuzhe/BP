@@ -452,7 +452,7 @@ export default {
       this.typing = true
       this.delay(800, () => {
         this.typing = false
-        this.push({ role: 'ai', kind: 'text', text: '感谢您的配合，5 个问题都已完成。我正在结合权威指南为您做危险分层与方案匹配，请稍等片刻。' })
+        this.push({ role: 'ai', kind: 'text', text: '感谢您的配合，' + this.questions.length + ' 个问题都已完成。我正在结合权威指南与中医辨证结论为您做危险分层与方案匹配，请稍等片刻。' })
         this.startGenerating()
       })
     },
@@ -501,7 +501,8 @@ export default {
       uni.navigateTo({ url: '/pages/device/scan?from=chat' })
     },
     firstDayItems() {
-      return buildDayPlan(this.pkgKey, this.answers, 0, 7)
+      // 高血压包含「辨病 + 辨证」双轨条目，放宽到 9 条以便中药、代茶饮、居家外治同屏可见
+      return buildDayPlan(this.pkgKey, this.answers, 0, this.pkgKey === 'dm' ? 7 : 9)
     },
     buildReport() {
       return this.pkgKey === 'dm' ? this.buildDmReport() : this.buildHbpReport()
@@ -633,14 +634,23 @@ export default {
         })
       }
 
+      // 5. 中医辨证结论（辨病 + 辨证双轨，证候初筛完成后追加）
+      if (f.patternKnown) {
+        points.push({
+          title: '中医辨证：' + f.patternLabel,
+          desc: '按「辨病 + 辨证」双轨方案，您的证型判定为' + f.syndromeName +
+            '，治法以平肝潜阳、清热降压为则。日程中已为您安排辨证中药、代茶饮与居家外治，并按兼症细化了取穴。'
+        })
+      }
+
       return {
         pkgName: (this.right && this.right.name) || '高血压健康管理',
-        type: '高血压 ' + gradeLabel + ' · ' + withLabel,
+        type: '高血压 ' + gradeLabel + ' · ' + withLabel + (f.patternKnown ? ' · ' + f.syndromeName : ''),
         risk: RISK[tier].risk,
         riskColor: RISK[tier].color,
         riskBg: RISK[tier].bg,
         target: target,
-        points: points.slice(0, 4),
+        points: points.slice(0, 5),
         guide: '《中国高血压防治指南 2024》'
       }
     },

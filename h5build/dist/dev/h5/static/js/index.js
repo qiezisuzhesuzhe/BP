@@ -2922,7 +2922,7 @@ global.UniApp && new global.UniApp();
 /*!****************************!*\
   !*** ./src/common/mock.js ***!
   \****************************/
-/*! exports provided: PACKAGES, TIMELINE, CAT_META, guideName, basisForCat, hbpFlags, dmFlags, recommendGoodsForCat, buildDayPlan, QUESTIONS, QUESTIONS_DM, KNOWLEDGE, RIGHT_ENTRIES, SHOP_GOODS, makeOrderNo, DEVICE_TYPES, deviceType, makeDeviceSnapshot, HEALTH_MEMBERS, HEALTH_QUICK, HEALTH_SCORE, HEALTH_FOCUS, HEALTH_ACHIEVE, HEALTH_PLAN, HEALTH_PLAN_META, HEALTH_RISK_FORECAST, HEALTH_DISEASE_RISK, HEALTH_RECOMMEND */
+/*! exports provided: PACKAGES, TIMELINE, CAT_META, guideName, basisForCat, PROFILE_DOMAINS, PLAN_ENGINE_STEPS, TCM_SYNDROMES, TCM_ADDONS, HBP_TARGETS, HBP_ALERTS, HBP_FOLLOWUP, HBP_LABS, MISSED_DOSE_RULES, DRUG_SIDE_EFFECTS, SYMPTOM_SCALE, CONSULT_SERVICE, DIET_TARGETS, EXERCISE_PLAN, MOOD_SCALES, LIFESTYLE_RULES, tcmSyndrome, tcmAddon, hbpFlags, dmFlags, recommendGoodsForCat, buildDayPlan, QUESTIONS, QUESTIONS_DM, KNOWLEDGE, RIGHT_ENTRIES, SHOP_GOODS, makeOrderNo, DEVICE_TYPES, deviceType, makeDeviceSnapshot, HEALTH_MEMBERS, HEALTH_QUICK, HEALTH_SCORE, HEALTH_FOCUS, HEALTH_ACHIEVE, HEALTH_PLAN, HEALTH_PLAN_META, HEALTH_RISK_FORECAST, HEALTH_DISEASE_RISK, HEALTH_RECOMMEND */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -2932,6 +2932,24 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "CAT_META", function() { return CAT_META; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "guideName", function() { return guideName; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "basisForCat", function() { return basisForCat; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "PROFILE_DOMAINS", function() { return PROFILE_DOMAINS; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "PLAN_ENGINE_STEPS", function() { return PLAN_ENGINE_STEPS; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "TCM_SYNDROMES", function() { return TCM_SYNDROMES; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "TCM_ADDONS", function() { return TCM_ADDONS; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "HBP_TARGETS", function() { return HBP_TARGETS; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "HBP_ALERTS", function() { return HBP_ALERTS; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "HBP_FOLLOWUP", function() { return HBP_FOLLOWUP; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "HBP_LABS", function() { return HBP_LABS; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "MISSED_DOSE_RULES", function() { return MISSED_DOSE_RULES; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "DRUG_SIDE_EFFECTS", function() { return DRUG_SIDE_EFFECTS; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "SYMPTOM_SCALE", function() { return SYMPTOM_SCALE; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "CONSULT_SERVICE", function() { return CONSULT_SERVICE; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "DIET_TARGETS", function() { return DIET_TARGETS; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "EXERCISE_PLAN", function() { return EXERCISE_PLAN; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "MOOD_SCALES", function() { return MOOD_SCALES; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "LIFESTYLE_RULES", function() { return LIFESTYLE_RULES; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "tcmSyndrome", function() { return tcmSyndrome; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "tcmAddon", function() { return tcmAddon; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "hbpFlags", function() { return hbpFlags; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "dmFlags", function() { return dmFlags; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "recommendGoodsForCat", function() { return recommendGoodsForCat; });
@@ -2955,24 +2973,33 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "HEALTH_RISK_FORECAST", function() { return HEALTH_RISK_FORECAST; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "HEALTH_DISEASE_RISK", function() { return HEALTH_DISEASE_RISK; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "HEALTH_RECOMMEND", function() { return HEALTH_RECOMMEND; });
-/* harmony import */ var core_js_modules_es_array_find_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! core-js/modules/es.array.find.js */ "fbCW");
-/* harmony import */ var core_js_modules_es_array_find_js__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_array_find_js__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var core_js_modules_es_array_index_of_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! core-js/modules/es.array.index-of.js */ "yXV3");
-/* harmony import */ var core_js_modules_es_array_index_of_js__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_array_index_of_js__WEBPACK_IMPORTED_MODULE_1__);
-/* harmony import */ var core_js_modules_es_array_map_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! core-js/modules/es.array.map.js */ "2B1R");
-/* harmony import */ var core_js_modules_es_array_map_js__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_array_map_js__WEBPACK_IMPORTED_MODULE_2__);
-/* harmony import */ var core_js_modules_es_array_push_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! core-js/modules/es.array.push.js */ "FNk8");
-/* harmony import */ var core_js_modules_es_array_push_js__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_array_push_js__WEBPACK_IMPORTED_MODULE_3__);
-/* harmony import */ var core_js_modules_es_array_sort_js__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! core-js/modules/es.array.sort.js */ "ToJy");
-/* harmony import */ var core_js_modules_es_array_sort_js__WEBPACK_IMPORTED_MODULE_4___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_array_sort_js__WEBPACK_IMPORTED_MODULE_4__);
-/* harmony import */ var core_js_modules_es_iterator_constructor_js__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! core-js/modules/es.iterator.constructor.js */ "6fVz");
-/* harmony import */ var core_js_modules_es_iterator_constructor_js__WEBPACK_IMPORTED_MODULE_5___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_iterator_constructor_js__WEBPACK_IMPORTED_MODULE_5__);
-/* harmony import */ var core_js_modules_es_iterator_map_js__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! core-js/modules/es.iterator.map.js */ "q0NK");
-/* harmony import */ var core_js_modules_es_iterator_map_js__WEBPACK_IMPORTED_MODULE_6___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_iterator_map_js__WEBPACK_IMPORTED_MODULE_6__);
-/* harmony import */ var core_js_modules_es_object_keys_js__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! core-js/modules/es.object.keys.js */ "tkto");
-/* harmony import */ var core_js_modules_es_object_keys_js__WEBPACK_IMPORTED_MODULE_7___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_object_keys_js__WEBPACK_IMPORTED_MODULE_7__);
-/* harmony import */ var core_js_modules_es_object_to_string_js__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! core-js/modules/es.object.to-string.js */ "07d7");
-/* harmony import */ var core_js_modules_es_object_to_string_js__WEBPACK_IMPORTED_MODULE_8___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_object_to_string_js__WEBPACK_IMPORTED_MODULE_8__);
+/* harmony import */ var core_js_modules_es_array_concat_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! core-js/modules/es.array.concat.js */ "ma9I");
+/* harmony import */ var core_js_modules_es_array_concat_js__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_array_concat_js__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var core_js_modules_es_array_filter_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! core-js/modules/es.array.filter.js */ "TeQF");
+/* harmony import */ var core_js_modules_es_array_filter_js__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_array_filter_js__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var core_js_modules_es_array_find_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! core-js/modules/es.array.find.js */ "fbCW");
+/* harmony import */ var core_js_modules_es_array_find_js__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_array_find_js__WEBPACK_IMPORTED_MODULE_2__);
+/* harmony import */ var core_js_modules_es_array_index_of_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! core-js/modules/es.array.index-of.js */ "yXV3");
+/* harmony import */ var core_js_modules_es_array_index_of_js__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_array_index_of_js__WEBPACK_IMPORTED_MODULE_3__);
+/* harmony import */ var core_js_modules_es_array_map_js__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! core-js/modules/es.array.map.js */ "2B1R");
+/* harmony import */ var core_js_modules_es_array_map_js__WEBPACK_IMPORTED_MODULE_4___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_array_map_js__WEBPACK_IMPORTED_MODULE_4__);
+/* harmony import */ var core_js_modules_es_array_push_js__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! core-js/modules/es.array.push.js */ "FNk8");
+/* harmony import */ var core_js_modules_es_array_push_js__WEBPACK_IMPORTED_MODULE_5___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_array_push_js__WEBPACK_IMPORTED_MODULE_5__);
+/* harmony import */ var core_js_modules_es_array_sort_js__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! core-js/modules/es.array.sort.js */ "ToJy");
+/* harmony import */ var core_js_modules_es_array_sort_js__WEBPACK_IMPORTED_MODULE_6___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_array_sort_js__WEBPACK_IMPORTED_MODULE_6__);
+/* harmony import */ var core_js_modules_es_iterator_constructor_js__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! core-js/modules/es.iterator.constructor.js */ "6fVz");
+/* harmony import */ var core_js_modules_es_iterator_constructor_js__WEBPACK_IMPORTED_MODULE_7___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_iterator_constructor_js__WEBPACK_IMPORTED_MODULE_7__);
+/* harmony import */ var core_js_modules_es_iterator_filter_js__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! core-js/modules/es.iterator.filter.js */ "kQ2C");
+/* harmony import */ var core_js_modules_es_iterator_filter_js__WEBPACK_IMPORTED_MODULE_8___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_iterator_filter_js__WEBPACK_IMPORTED_MODULE_8__);
+/* harmony import */ var core_js_modules_es_iterator_map_js__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! core-js/modules/es.iterator.map.js */ "q0NK");
+/* harmony import */ var core_js_modules_es_iterator_map_js__WEBPACK_IMPORTED_MODULE_9___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_iterator_map_js__WEBPACK_IMPORTED_MODULE_9__);
+/* harmony import */ var core_js_modules_es_object_keys_js__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! core-js/modules/es.object.keys.js */ "tkto");
+/* harmony import */ var core_js_modules_es_object_keys_js__WEBPACK_IMPORTED_MODULE_10___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_object_keys_js__WEBPACK_IMPORTED_MODULE_10__);
+/* harmony import */ var core_js_modules_es_object_to_string_js__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! core-js/modules/es.object.to-string.js */ "07d7");
+/* harmony import */ var core_js_modules_es_object_to_string_js__WEBPACK_IMPORTED_MODULE_11___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_object_to_string_js__WEBPACK_IMPORTED_MODULE_11__);
+
+
+
 
 
 
@@ -3639,6 +3666,32 @@ var CAT_META = {
     label: '评估',
     color: '#f2c94c',
     bg: '#fdf4ed'
+  },
+  // 调理服务包新增类目：中医方案与生活方式管理
+  tcm: {
+    label: '中药',
+    color: '#a1673f',
+    bg: '#f7ede4'
+  },
+  external: {
+    label: '外治',
+    color: '#c0763a',
+    bg: '#fbf0e5'
+  },
+  tea: {
+    label: '代茶饮',
+    color: '#8a9a3b',
+    bg: '#f1f5e2'
+  },
+  lifestyle: {
+    label: '起居',
+    color: '#7b8ab8',
+    bg: '#eef1f9'
+  },
+  consult: {
+    label: '问诊',
+    color: '#3f7fbf',
+    bg: '#e8f1fb'
   }
 };
 
@@ -3652,16 +3705,601 @@ var GUIDE_DM = '《中国 2 型糖尿病防治指南 2024》';
 // 新合并的营养与生活方式管理指南
 var GUIDE_NUTRI = '《居民膳食营养与健康管理指南》';
 
+// 《慢病管理综合服务包解决方案（原发性高血压示例）》合并进知识引擎的循证来源。
+// 该方案采用「辨证 + 辨病」双重适配，中西医结合、康养结合，
+// 因此依据来源需要按「医疗服务包 / 调理服务包」两条线分别溯源。
+var GUIDE_BASE = '《中国基层高血压防治管理指南 2025》';
+var GUIDE_HBP23 = '《中国高血压防治指南 2023》';
+var GUIDE_TCM_INTERNAL = '《中医内科学（第十版）》';
+var GUIDE_TCM_HBP = '《高血压中医诊疗指南（2020 版）》';
+var GUIDE_TCM_EXTERNAL = '《中医外治疗法规范》《中医适宜技术操作指南》';
+var GUIDE_TCM_DIET = '《中医食疗学（第十版）》《药食同源食材使用规范》';
+var GUIDE_TCM_LIFE = '《中医养生学（第九版）》';
+var GUIDE_TCM_MOOD = '《中医情志养生指南》《音乐疗法临床应用规范》';
+var GUIDE_DIET_2022 = '《中国居民膳食指南（2022 版）》《高血压患者膳食指导》GB/T 29922-2013';
+var GUIDE_SPORT_2024 = '《高血压等慢性病营养和运动指导原则（2024 年版）》';
+var GUIDE_SPORT_RX = '《运动处方指南》（中国体育科学学会）';
+var GUIDE_PSY = '《高血压患者心理干预指南》《心理评估量表应用规范》';
+var GUIDE_LIFE = '《健康生活方式指南》《中医环境养生指南》';
+
 // 供界面文案引用，避免指南名称在多处硬编码
 function guideName(pkgKey) {
   return pkgKey === 'dm' ? GUIDE_DM : GUIDE_HBP;
 }
 
 // 合并知识引擎的指南引用（时间线basis字段按类目选择合适的指南）
+var BASIS_MAP = {
+  nutrition: GUIDE_DIET_2022 + '、' + GUIDE_TCM_DIET,
+  diet: GUIDE_DIET_2022 + '、' + GUIDE_TCM_DIET,
+  tea: GUIDE_TCM_DIET,
+  tcm: GUIDE_TCM_INTERNAL + '、' + GUIDE_TCM_HBP,
+  external: GUIDE_TCM_EXTERNAL,
+  medication: GUIDE_HBP,
+  monitor: GUIDE_HBP + '、' + GUIDE_BASE,
+  assessment: GUIDE_HBP23,
+  exercise: GUIDE_SPORT_2024 + '、' + GUIDE_SPORT_RX,
+  psychology: GUIDE_PSY + '、' + GUIDE_TCM_MOOD,
+  sleep: GUIDE_TCM_LIFE + '、' + GUIDE_LIFE,
+  lifestyle: GUIDE_LIFE + '、' + GUIDE_TCM_LIFE,
+  consult: GUIDE_BASE
+};
 function basisForCat(cat) {
-  if (cat === 'nutrition' || cat === 'diet' || cat === 'tea') return GUIDE_NUTRI;
-  if (cat === 'medication' || cat === 'monitor' || cat === 'assessment') return GUIDE_HBP;
-  return GUIDE_NUTRI;
+  return BASIS_MAP[cat] || GUIDE_NUTRI;
+}
+
+// ===== 健康档案数据底座 =====
+// 方案生产引擎以「健康档案字段」为数据底座，缺失字段会触发对应采集任务。
+// 所有数据均需标记「采集时间」与「数据来源」，以支持时效性判断与可信度权重计算。
+var PROFILE_DOMAINS = [{
+  key: 'demographic',
+  name: '身份与人口学',
+  fields: ['用户ID', '性别', '出生日期', '常住地省市区', '民族'],
+  source: '用户注册、手机号归属地'
+}, {
+  key: 'diagnosis',
+  name: '西医诊断与评估',
+  fields: ['主要诊断（ICD 编码/标准化疾病名）', '确诊日期', '疾病分期分级分型', '并发症记录', '危险分层（低/中/高/很高）'],
+  source: '就诊后手动添加、医生填写'
+}, {
+  key: 'syndrome',
+  name: '中医疾病与证型',
+  fields: ['中医疾病名（眩晕/头痛/消渴等）', '当前证型（支持多证型标签）', '证型确定日期'],
+  source: 'AI 辨证、中医在线问诊确认'
+}, {
+  key: 'metrics',
+  name: '关键医学指标',
+  fields: ['收缩压/舒张压', '心率', '身高/体重/BMI', '腰围', '血糖相关指标', '血脂四项', '肾功能指标', '电解质'],
+  source: '智能设备、可穿戴设备、报告 OCR'
+}, {
+  key: 'medication',
+  name: '用药记录',
+  fields: ['药物通用名/商品名', '剂型', '单次剂量', '用药频次', '开始日期', '用药目的（降压/降糖等）'],
+  source: '初次健康问卷、医生填写'
+}, {
+  key: 'symptom',
+  name: '症状标签',
+  fields: ['结构化症状列表（多选标签）', '严重程度', '持续时间', '发作频率'],
+  source: '医生填写、定期问卷'
+}, {
+  key: 'lifestyle',
+  name: '生活方式',
+  fields: ['吸烟（支/天、烟龄）', '饮酒（类型/频次/量）', '饮食习惯（口味偏好、蔬果肉摄入）', '运动习惯（类型/频率/时长）', '睡眠习惯（入睡时间/时长/质量）', '心理压力评分'],
+  source: '初次健康问卷、可穿戴设备'
+}, {
+  key: 'constitution',
+  name: '体质与调理基础',
+  fields: ['中医体质分类（平和质/气虚质/阳虚质等）', '舌象脉象描述', '过敏史', '既往不良反应史'],
+  source: '舌象分析模型、中医问诊'
+}, {
+  key: 'context',
+  name: '时间与环境',
+  fields: ['当前日期（系统获取）', '用户所在时区', '季节节气（自动计算）'],
+  source: '系统自动获取'
+}, {
+  key: 'demand',
+  name: '健康关联需求',
+  fields: ['慢病管理', '亚健康管理', '疾病预防', '家庭共管'],
+  source: '用户手动选择'
+}];
+
+// ===== 方案生产引擎总逻辑 =====
+// 「生成方案」事件被触发（新用户注册、定期更新、数据变更）时按五步执行。
+var PLAN_ENGINE_STEPS = [{
+  step: 1,
+  name: '数据准备与校验',
+  desc: '读取健康档案所有必要字段，检查必填项；缺失项触发对应采集任务（问卷、设备连接引导、AI 辨证等）'
+}, {
+  step: 2,
+  name: '健康评价',
+  desc: '运行西医风险分层算法与中医证型映射，生成当前健康状态标签集'
+}, {
+  step: 3,
+  name: '方案生成',
+  desc: '将「用户标签集 + 数据集」输入规则引擎与 AI 生成模型：规则引擎确保安全底线与循证框架，AI 负责个性化填充与文案撰写'
+}, {
+  step: 4,
+  name: '冲突解决与合并',
+  desc: '检测中西医方案是否存在安全冲突（中药与西药相互作用、食疗与疾病饮食相悖），自动剔除或降级风险建议，并标记提交人工审核'
+}, {
+  step: 5,
+  name: '方案渲染与推送',
+  desc: '以服务包形式在前端渲染，包含每日可执行任务、图文视频内容、问诊与打卡入口'
+}];
+
+// ===== 中医证型知识库 =====
+// 中医方案的核心输入是「中医证型」：若档案无证型，必须先触发辨证流程
+// （中西医结合症状问卷 → 舌苔照片调用舌象分析模型 → AI 辨证输出 1~3 个证型及概率
+// → 置信度不足则生成中医在线问诊任务，由医师确认）。
+var TCM_SYNDROMES = {
+  // 原发性高血压示例用户：男 41 岁，178cm / 90kg，BMI 28.4（肥胖），
+  // 缺乏运动，高血压病史 5 年，用药卡托普利，中医辨证为肝阳上亢证。
+  gan_yang: {
+    key: 'gan_yang',
+    name: '肝阳上亢证',
+    disease: '眩晕、头痛',
+    principle: '平肝潜阳、清热降压，兼顾调理肝脾',
+    note: '适配肝阳上亢兼肥胖（痰湿内蕴）体质，避免寒凉伤脾，兼顾降压与减重辅助',
+    // 2.1.1 中药方案（证型-方剂映射库）
+    formula: {
+      name: '天麻钩藤饮加减',
+      herbs: ['天麻 10g', '钩藤 15g（后下）', '石决明 30g（先煎）', '栀子 10g', '黄芩 10g', '牛膝 12g', '杜仲 15g', '桑寄生 15g', '益母草 15g', '茯神 12g', '夜交藤 15g'],
+      usage: '每日 1 剂，水煎 400ml，分早晚两次温服，连服 1 周；7 天后根据症状调整方药',
+      basis: GUIDE_TCM_INTERNAL + '、' + GUIDE_TCM_HBP
+    },
+    // 2.1.2 中医外治方案（证型-疗法规则表，3 种交替，每日 1 次，每次 15-20 分钟，每周休息 1 天）
+    external: [{
+      name: '穴位按摩',
+      points: '百会（头顶正中）1-2 分钟、风池（后颈部）2 分钟、太冲（足背第一二跖骨间）3 分钟、合谷（手背虎口）2 分钟、涌泉（足底前 1/3 处）3 分钟',
+      effect: '平肝潜阳、镇静降压',
+      tip: '力度以酸胀感为宜'
+    }, {
+      name: '耳穴压豆',
+      points: '耳穴肝、肾、心、降压沟、神门',
+      effect: '平肝降压、宁心安神',
+      tip: '王不留行籽贴压，每次按压 1 分钟，每日 3-4 次，每 3 天更换 1 次'
+    }, {
+      name: '头部刮痧',
+      points: '沿头顶至后颈部（督脉、膀胱经循行部位）轻刮',
+      effect: '疏通经络、平肝降压',
+      tip: '以皮肤微红为度，每周 2 次'
+    }],
+    // 2.2.4 中医外治居家自我调理（4 种每日 1 种循环，每次 15-20 分钟，每周休息 1 天）
+    homeCare: [{
+      name: '头部按摩',
+      freq: '每日',
+      detail: '食指中指无名指指腹从百会向两侧太阳穴、后颈风池方向按摩至头皮发热，共 15 分钟；重点百会、太阳、风池各 3 分钟',
+      effect: '平肝潜阳、舒缓头痛头晕',
+      caution: '头部有伤口、皮疹时暂停'
+    }, {
+      name: '足底按摩',
+      freq: '每晚睡前',
+      detail: '40-45℃ 温水泡脚 10 分钟，拇指指腹按摩涌泉穴 10 分钟 + 足底肝反射区（足底内侧距足跟 1/3 处）5 分钟',
+      effect: '平肝潜阳、补肾益肝、改善睡眠',
+      caution: '水温不宜过高，泡脚不超过 15 分钟；足底有伤口、脚气时暂停'
+    }, {
+      name: '刮痧',
+      freq: '每周 2 次',
+      detail: '牛角或玉石刮痧板配刮痧油，颈部背部膀胱经从上至下轻刮 15 分钟；重点颈部两侧、肝俞（第 9 胸椎棘突下旁开 1.5 寸）、肾俞（第 2 腰椎棘突下旁开 1.5 寸）',
+      effect: '疏通经络、平肝降压',
+      caution: '以皮肤微红无疼痛为宜；刮痧后 4 小时内避免洗澡受凉'
+    }, {
+      name: '艾灸',
+      freq: '每周 2 次',
+      detail: '家用艾条距穴位 3-5cm 温和灸，每穴 5 分钟，每日 2 穴交替；重点太冲、涌泉、肝俞',
+      effect: '温通经络、引火下行',
+      caution: '室内通风避免烫伤；肝阳上亢者艾灸时间不宜过长'
+    }],
+    // 2.2.3 代茶饮（证型-配方映射库，2 种交替，每周更换 1 次避免单一食材耐受）
+    teas: [{
+      name: '天麻菊花枸杞茶',
+      herbs: ['天麻 5g', '菊花 6g', '枸杞 10g', '决明子 5g（炒）', '冰糖 3g（可选少量）'],
+      method: '500ml 清水煮沸后转小火 10 分钟，关火焖 5 分钟，可反复冲泡',
+      usage: '每日 1 剂，分 2-3 次饮用（上午 9:00、下午 15:00、晚上 19:00）',
+      cautions: ['决明子性寒，脾胃虚寒者慎用，腹泻则减至 3g 或停用', '枸杞含糖，血糖异常者避免加冰糖且减至 8g', '不可替代药物治疗', '孕妇哺乳期慎用天麻']
+    }, {
+      name: '芹菜红枣茶',
+      herbs: ['新鲜芹菜 100g', '红枣 5 颗（去核）', '荷叶 3g'],
+      method: '500ml 清水煮沸后转小火 15 分钟',
+      usage: '每日 1 剂，分 2 次饮用（上午 10:00、下午 16:00）',
+      cautions: ['芹菜性凉，脾胃虚寒者可加 1 片生姜', '红枣含糖，血糖异常者慎用', '荷叶清热利湿，腹泻者慎用']
+    }],
+    // 2.2.2 中医功法（证型-功法映射表）
+    exercises: ['八段锦（简化版）', '太极拳 24 式（简化版）'],
+    // 2.1.3 中医医嘱（证型-医嘱知识库，分段输出）
+    advice: {
+      emotion: '忌暴怒、焦虑、抑郁。肝主疏泄，情绪失调会加重肝阳上亢，可听舒缓音乐调节',
+      diet: '忌辛辣刺激、油腻厚味、生冷寒凉，忌浓茶咖啡烈酒；宜清淡，多吃平肝潜阳食物如芹菜、菊花、枸杞、桑葚',
+      living: '避免熬夜，每晚 22:00 前入睡，保证 7-8 小时睡眠（熬夜耗伤肝阴）；晨起避免突然起身，缓慢起床防体位性血压波动',
+      medication: '中药与西药（卡托普利）间隔 1 小时服用，不可擅自停用或减量西药；服中药期间出现腹泻、恶心应及时联系医生调整方药'
+    },
+    // 五音疗法：五脏-五音对应
+    music: ['《高山流水》', '《平沙落雁》', '《渔舟唱晚》']
+  }
+};
+
+// ===== 兼症加减规则库（2.1.1 中药方案）=====
+// 证型定基础方，兼症标签在基础方上加减；外治方案按兼症细化取穴
+// （如伴失眠加神门、伴头痛加太阳）。证候量表初筛结果即映射到本表。
+var TCM_ADDONS = {
+  yang_up: {
+    key: 'yang_up',
+    label: '肝阳上亢本证',
+    syndrome: 'gan_yang',
+    symptoms: '头晕头痛、面红目赤、急躁易怒、口苦口干',
+    herbs: [],
+    points: '',
+    note: '证候典型，用基础方原方，暂不需加减'
+  },
+  insomnia: {
+    key: 'insomnia',
+    label: '肝阳上亢兼不寐',
+    syndrome: 'gan_yang',
+    symptoms: '入睡困难、多梦易醒、心烦耳鸣',
+    herbs: ['酸枣仁 15g', '煅龙骨 30g（先煎）', '煅牡蛎 30g（先煎）'],
+    points: '外治加神门穴（腕横纹尺侧端）按揉 2 分钟',
+    note: '重镇安神、平肝潜阳并行'
+  },
+  phlegm: {
+    key: 'phlegm',
+    label: '肝阳上亢兼痰湿',
+    syndrome: 'gan_yang',
+    symptoms: '头重如裹、胸闷痰多、身体沉重、舌苔厚腻',
+    herbs: ['法半夏 9g', '陈皮 10g', '茯苓 15g'],
+    points: '外治加丰隆（小腿外侧）、中脘（脐上 4 寸）各 2 分钟',
+    note: '化痰祛湿，兼顾肥胖体质减重辅助'
+  },
+  yin_def: {
+    key: 'yin_def',
+    label: '肝阳上亢兼肝肾阴虚',
+    syndrome: 'gan_yang',
+    symptoms: '腰膝酸软、乏力、夜尿增多、五心烦热',
+    herbs: ['枸杞子 15g', '女贞子 12g', '山茱萸 10g'],
+    points: '外治加太溪（内踝后方）、三阴交（内踝上 3 寸）各 2 分钟',
+    note: '滋补肝肾之阴以制阳亢，标本兼治'
+  }
+};
+
+// ===== 西医量化知识库（医疗服务包）=====
+// 2.2.2 核心指标检测与提醒：目标值 + 监测频率
+var HBP_TARGETS = {
+  bpHome: {
+    label: '家庭自测血压',
+    target: '<135/85 mmHg',
+    freq: '每日早晚各 1 次（晨起空腹服药前、睡前）'
+  },
+  bpIdeal: {
+    label: '理想目标（80 岁以下）',
+    target: '<130/80 mmHg',
+    freq: '同上'
+  },
+  hr: {
+    label: '静息心率',
+    target: '60-80 次/分（正常 60-100）',
+    freq: '与血压同步测量'
+  },
+  bmi: {
+    label: 'BMI',
+    target: '18.5-23.9 kg/m²',
+    freq: '每周 1 次（固定每周一晨起空腹）'
+  },
+  waist: {
+    label: '腰围',
+    target: '男 <90cm，女 <85cm',
+    freq: '每月 1 次（晨起空腹排便后）'
+  }
+};
+
+// 危急值预警阈值：命中即触发强提醒并通知紧急联系人与医生端
+var HBP_ALERTS = [{
+  key: 'severe',
+  label: '血压重度升高',
+  rule: '收缩压 ≥180 和/或 舒张压 ≥110 mmHg',
+  action: '立即强提醒，联系线上医生'
+}, {
+  key: 'emergency',
+  label: '高血压急症征象',
+  rule: '血压显著升高，且伴剧烈头痛 / 视物模糊 / 胸闷胸痛 / 呼吸困难 / 意识改变任一项',
+  action: '立即平卧并拨打急救电话，同时通知紧急联系人'
+}, {
+  key: 'hypo',
+  label: '低血压',
+  rule: '收缩压 <90 mmHg 且伴头晕、乏力、黑矇',
+  action: '暂停降压药并联系医生'
+}, {
+  key: 'hr',
+  label: '心率异常',
+  rule: '静息心率 >120 次/分 或 <45 次/分，且伴不适',
+  action: '联系医生评估'
+}];
+
+// 复诊随访频率
+var HBP_FOLLOWUP = [{
+  cond: '血压达标且稳定',
+  freq: '每 3 个月 1 次'
+}, {
+  cond: '血压未达标或不稳定',
+  freq: '每 2-4 周 1 次'
+}, {
+  cond: '起始治疗或调整药物',
+  freq: '每 2-4 周 1 次，直至达标'
+}, {
+  cond: '血压 ≥180/110 mmHg 或高危/很高危',
+  freq: '建议立即就诊'
+}];
+
+// 2.2.3 复诊检验检查项目（报告 OCR 识别 → AI 初步解读 → 线上医生专业解读 → 归档趋势图）
+var HBP_LABS = [{
+  name: '血常规',
+  freq: '每年 1 次'
+}, {
+  name: '血脂四项（TC/TG/LDL-C/HDL-C）',
+  freq: '每 3-12 个月 1 次（视达标情况）'
+}, {
+  name: '空腹血糖 + HbA1c',
+  freq: '每年 1 次（无糖尿病者）'
+}, {
+  name: '肾功能（血肌酐/eGFR）',
+  freq: '每年至少 1 次'
+}, {
+  name: '电解质（血钾、血钠）',
+  freq: '每 3-6 个月 1 次（服利尿剂/RAAS 抑制剂者）'
+}, {
+  name: '尿常规 + 尿微量白蛋白/肌酐比',
+  freq: '每年 1 次'
+}, {
+  name: '心电图',
+  freq: '每年 1 次'
+}, {
+  name: '心脏超声',
+  freq: '每 1-2 年 1 次'
+}, {
+  name: '颈动脉超声',
+  freq: '每 1-2 年 1 次'
+}, {
+  name: '24 小时动态血压',
+  freq: '视情况（诊室与家庭血压差异大、怀疑隐蔽性或白大衣性高血压）'
+}, {
+  name: '眼底检查',
+  freq: '每年 1 次（2 级以上高血压或合并糖尿病者）'
+}];
+
+// 2.2.4 用药管理：漏服处理原则（按药物半衰期规则）
+var MISSED_DOSE_RULES = {
+  ccb: {
+    label: 'CCB 类（氨氯地平、硝苯地平）',
+    rule: '距下次服药 >12 小时可补服，<12 小时则跳过'
+  },
+  acei_arb: {
+    label: 'ACEI / ARB 类',
+    rule: '想起时立即补服；已接近下次服药时间则跳过'
+  },
+  diuretic: {
+    label: '利尿剂',
+    rule: '若下午或晚间才记起，建议跳过（避免夜尿影响睡眠），次日正常服用'
+  },
+  spiro: {
+    label: '螺内酯',
+    rule: '想起时立即补服；距下次服药 <4 小时则跳过'
+  }
+};
+
+// 2.2.4 副作用及不良反应提醒表
+var DRUG_SIDE_EFFECTS = {
+  acei_arb: {
+    label: 'ACEI（普利类）/ ARB（沙坦类）',
+    effects: '普利类可见干咳、血钾升高、血管性水肿（罕见）；沙坦类较少，偶有头晕、血钾升高',
+    tip: '出现持续性干咳时联系医生，可换用 ARB（沙坦类干咳发生率显著更低）'
+  },
+  ccb: {
+    label: 'CCB（地平类）',
+    effects: '头痛、面部潮红、踝部水肿、心悸',
+    tip: '踝部水肿明显者可联合 ACEI/ARB'
+  },
+  diuretic: {
+    label: '利尿剂（氢氯噻嗪、呋塞米）',
+    effects: '血钾降低、尿酸升高、血糖升高',
+    tip: '需定期复查电解质、尿酸与血糖'
+  },
+  beta: {
+    label: 'β 受体阻滞剂（洛尔类）',
+    effects: '心动过缓、乏力、肢冷',
+    tip: '自测心率 <55 次/分需报告医生'
+  },
+  spiro: {
+    label: '螺内酯',
+    effects: '血钾升高、男性乳房发育',
+    tip: '监测血钾，避免与 ACEI/ARB 联用'
+  },
+  compound: {
+    label: '单片复方制剂（SPC）',
+    effects: '各成分副作用可能叠加',
+    tip: '关注各成分叠加反应；新型降压药如沙库巴曲缬沙坦（ARNI 类）需遵医嘱'
+  }
+};
+
+// 2.2.1 症状评估与管理：高血压症状评分量表（0-10 分，每日睡前评分）
+var SYMPTOM_SCALE = {
+  items: ['头痛', '头晕', '头胀', '烦躁', '乏力', '胸闷'],
+  record: '记录出现时间、持续时长、诱发因素（情绪/劳累/饮食）',
+  levels: [{
+    range: '轻度（<3 分）',
+    action: '卧床休息保持安静，避免活动，可按摩头部'
+  }, {
+    range: '中度（4-6 分）',
+    action: '除休息外需监测血压；若 >160/100 mmHg 及时联系线上医生'
+  }, {
+    range: '重度（≥7 分）',
+    action: '或伴胸闷、视物模糊、肢体麻木；若血压 ≥180/110 mmHg 立即平卧拨打急救电话，同时联系线上医生'
+  }],
+  summary: '每周汇总 1 次症状评分'
+};
+
+// 2.2.5 线上医生问诊服务
+var CONSULT_SERVICE = {
+  general: '全科/心内科问诊每周 1 次，每次 15 分钟（视频或图文）',
+  tcm: '中医问诊每月 1 次，调整中药方剂与外治方案',
+  urgent: '标记「紧急」的留言 2 小时内响应',
+  daily: '日常留言随时文字/语音提交，24 小时内回复',
+  extra: '血压波动期可申请增加临时随访，每周 2-3 次',
+  scope: '血压变化评估、药物调整、化验报告解读、症状咨询、生活方式指导、中医辨证调方',
+  time: '固定每周六上午 9:00-10:00，可提前预约；无法参与可调整至当周其他时间（需提前 24 小时告知）',
+  agenda: ['回顾本周血压监测数据与症状变化', '解答用药、饮食、运动疑问', '评估本周干预方案效果', '调整下周医疗服务方案', '提醒下周检验检查事宜'],
+  report: '问诊后 24 小时内推送问诊总结报告'
+};
+
+// ===== 调理服务包量化知识库 =====
+// 2.2.1 饮食方案：能量与营养素目标（适配减重，2000-2200 → 1800-2000 kcal）
+var DIET_TARGETS = {
+  energy: '2000-2200 kcal 起步，逐步降至 1800-2000 kcal（适配减重）',
+  macros: [{
+    name: '蛋白质',
+    ratio: '15-20%',
+    amount: '75-110g',
+    tip: '优选鱼虾、瘦肉、豆制品'
+  }, {
+    name: '脂肪',
+    ratio: '20-25%',
+    amount: '44-61g',
+    tip: '优选橄榄油、亚麻籽油等不饱和脂肪酸'
+  }, {
+    name: '碳水化合物',
+    ratio: '55-65%',
+    amount: '275-357g',
+    tip: '优选杂粮杂豆全谷物，避免精制碳水'
+  }],
+  micros: ['膳食纤维 25-30g', '钾 ≥2000mg', '钙 800-1000mg', '钠 ≤5g/日（约 1 小勺盐）', '添加糖 ≤25g'],
+  tcm: '平肝潜阳、清热利湿、健脾化痰，优选凉性平性食材（芹菜、菊花、枸杞、冬瓜、苦瓜）',
+  principle: '低盐低脂低糖、高纤维高蛋白，清淡易消化；规律三餐定时定量，烹饪以蒸煮炖凉拌为主，避免煎炸红烧',
+  avoid: '辨证施食，避免温热性食材（羊肉、辣椒、花椒）；兼顾时令（春季疏肝、夏季清热、秋季润燥、冬季温补）',
+  schedule: '早餐 7:00-7:30、午餐 12:00-12:30、晚餐 18:00-18:30；加餐可选上午 10:00 苹果 1 个、下午 15:00 酸奶 1 杯（100g）',
+  sampleDay: {
+    breakfast: '杂粮粥（小米/燕麦/糙米各 20g）+ 水煮蛋 1 个 + 凉拌芹菜 100g + 全麦面包 1 片（30g）',
+    lunch: '清蒸鲈鱼 100g + 清炒西兰花 150g + 杂粮饭（大米 50g + 杂豆 20g）+ 冬瓜汤 100g',
+    dinner: '瘦肉炒苦瓜（瘦肉 50g + 苦瓜 150g）+ 清炒菠菜 150g + 小米粥 50g'
+  },
+  adjust: ['食材不适应则替换功效相似食材（菊花菜替换芹菜、冬瓜替换苦瓜）', '体重下降不明显则减少 50-100 kcal 并增加膳食纤维', '血压控制不佳则钠降至 ≤4g 并增加钾（香蕉、菠菜）', '调整烹饪方式，减少油盐', '兼顾时令节气动态调整'],
+  review: '每周日晚推送周饮食评价量表（满意度 1-5 分、有无不适、体重变化、血压变化、执行情况、下周需求）；目标每月减重 1-2kg，血压 <130/80 mmHg'
+};
+
+// 2.2.2 运动方案：分期目标与安全原则
+var EXERCISE_PLAN = {
+  level: '初级水平，心肺功能与肌肉耐力较弱，无关节及心肺疾病禁忌',
+  benefit: '中等强度运动可使收缩压下降 5-10 mmHg、舒张压下降 3-5 mmHg',
+  stages: [{
+    stage: '短期（1-4 周）',
+    goal: '每周 5 次、每次 30 分钟低强度有氧；血压 <140/90 mmHg，体重降 0.5-1kg'
+  }, {
+    stage: '中期（1-3 个月）',
+    goal: '每周 5-6 次、每次 40-50 分钟中等强度；血压 <130/80 mmHg，体重降 3-6kg'
+  }, {
+    stage: '长期（3-6 个月）',
+    goal: '每周 6 次、每次 50-60 分钟；体重降至 80kg 以下（BMI <25），血压稳定达标'
+  }],
+  principles: ['循序渐进', '安全第一（运动前热身、后放松；运动中头晕胸闷心慌立即停止并复测血压）', '个体化', '中西医结合', '规律坚持'],
+  timing: '每日固定 17:00-18:00（避开晨起血压高峰，避免夜间影响睡眠），运动前热身 5 分钟、后放松 5 分钟，每周休息 2 天',
+  week: [{
+    day: '周一',
+    item: '快走（4km/h，30 分钟）',
+    tip: '配合深呼吸，吸气 4 秒呼气 6 秒，意念集中足底涌泉穴'
+  }, {
+    day: '周二',
+    item: '八段锦简化版 30 分钟',
+    tip: '重点「两手托天理三焦」「左右开弓似射雕」「两手攀足固肾腰」各 6-8 次'
+  }, {
+    day: '周三',
+    item: '休息',
+    tip: '轻度散步 10 分钟'
+  }, {
+    day: '周四',
+    item: '慢跑 1 分钟 + 快走 2 分钟交替，共 30 分钟',
+    tip: '慢跑速度约 5km/h'
+  }, {
+    day: '周五',
+    item: '简化版太极拳 24 式 30 分钟',
+    tip: '结束后拉伸 5 分钟'
+  }, {
+    day: '周六',
+    item: '游泳慢泳 30 分钟（蛙泳/自由泳）或快走 35 分钟（4.5km/h）',
+    tip: '按场地条件二选一'
+  }, {
+    day: '周日',
+    item: '休息',
+    tip: '轻度家务活动'
+  }],
+  adjust: ['头晕胸闷或收缩压 ≥170 mmHg 立即停止，下次降低强度并缩短时长', '肌肉酸痛明显则热身由 5 分钟增至 7 分钟、放松同步延长', '强度过低无疲劳感则提升（快走由 4km/h 增至 4.5km/h）']
+};
+
+// 2.2.5 中医情志 + 情绪调节：量表阈值与分层干预
+var MOOD_SCALES = {
+  sas: {
+    name: 'SAS 焦虑自评量表',
+    rule: '20 条目 4 级评分，≥50 提示焦虑',
+    levels: '轻度 50-59 / 中度 60-69 / 重度 ≥70'
+  },
+  sds: {
+    name: 'SDS 抑郁自评量表',
+    rule: '20 条目 4 级评分，≥53 提示抑郁',
+    levels: '轻度 53-62 / 中度 63-72 / 重度 ≥73'
+  },
+  freq: '每周 1 次，固定周一上午完成',
+  pss: 'PSS-4 压力自评量表每月推送',
+  mechanism: '情绪失调加重肝阳上亢，形成「情绪异常 → 血压升高 → 情绪更异常」恶性循环',
+  goals: [{
+    stage: '短期（1-4 周）',
+    goal: 'SAS <50、SDS <53'
+  }, {
+    stage: '中期（1-3 个月）',
+    goal: '建立情绪调节能力'
+  }, {
+    stage: '长期（3-6 个月）',
+    goal: '养成情绪管理习惯'
+  }],
+  tiers: [{
+    level: '轻度（SAS 50-59 或 SDS 53-62）',
+    action: '居家自我调节 + 每周问诊反馈'
+  }, {
+    level: '中度（SAS 60-69 或 SDS 63-72）',
+    action: '增加线上心理疏导，每两周 1 次，由专业心理师提供'
+  }, {
+    level: '重度（SAS ≥70 或 SDS ≥73）',
+    action: '立即分层转诊专业心理科，结合药物与心理干预，并同步线上医生'
+  }],
+  daily: ['晨起 7:30-7:45 正念冥想 15 分钟', '每晚睡前记录情绪日记（情绪状态、诱发因素、血压变化），每周汇总找关联', '下午 14:00-14:15 情志疏导深呼吸练习（吸气 4 秒、屏息 2 秒、呼气 6 秒）', '音乐疗法每日 2 次各 20 分钟（上午 10:00-10:20、晚上 20:00-20:20）', '培养兴趣爱好（养花、练字、看书），多与家人朋友沟通，每周 1 次户外散心']
+};
+
+// 2.2.6 生活方式管理：睡眠起居、居住环境、不良习惯
+var LIFESTYLE_RULES = {
+  sleep: {
+    time: '每晚 22:00 前入睡，晨起 6:30-7:00 起床，保证 7-8 小时有效睡眠',
+    forbid: '严禁 23:00 后入睡（23:00-凌晨 1:00 肝经当令，熬夜耗伤肝阴）',
+    before: '睡前 1 小时避免电子设备；温水泡脚 40-45℃ 共 10 分钟并按摩涌泉穴，或少量温牛奶',
+    avoid: '避免睡前剧烈运动、情绪激动、暴饮暴食、浓茶咖啡烈酒',
+    posture: '睡姿以仰卧或右侧卧为宜（利于肝脏气血运行），避免俯卧；枕头高度约 8-10cm',
+    monitor: '连续 3 天睡眠不足 6 小时或质量差（多梦易醒）需及时调整作息，必要时联系线上医生排除血压异常或情绪因素，可采用中医助眠（耳穴压豆、穴位按摩）'
+  },
+  environment: {
+    noise: '保持环境安静（噪音诱发烦躁并升高血压，可用耳塞、窗帘）',
+    light: '光线柔和自然，避免强光直射；夜间用柔和台灯，避免开灯睡觉',
+    climate: '温度 22-26℃、湿度 50%-60%（避免 >28℃ 或 <20℃，湿度 >70% 或 <40%）',
+    layout: '布局简洁整洁，可摆放绿萝、吊兰、菊花，避免刺激性气味物品'
+  },
+  habits: {
+    diet: '禁暴饮暴食与三餐不规律；禁高盐高脂高糖（油炸、烧烤、腌制如咸菜腊肉）；禁浓茶咖啡烈酒；避免久坐进食与边吃边看电子设备，养成细嚼慢咽',
+    exercise: '禁长期久坐（每日不超 8 小时，每坐 1 小时起身活动 5-10 分钟）；禁剧烈运动（快跑、高强度健身）；避免运动不规律；禁运动前不热身、后不放松',
+    other: '禁吸烟及二手烟（尼古丁收缩血管）；避免长期熬夜与过度劳累；避免长时间低头使用电子设备；禁擅自停用或减量降压药与中药'
+  },
+  monitor: '每周记录习惯改善情况，结合血压与体重变化分析；出现反弹时寻求家人或线上医生监督',
+  weightGoal: '分阶段目标：减重 10%、减盐至 5g/日，配合日历每日任务与可视化进度'
+};
+
+// 默认证型：示例用户为肝阳上亢证
+function tcmSyndrome(key) {
+  return TCM_SYNDROMES[key || 'gan_yang'] || TCM_SYNDROMES.gan_yang;
+}
+
+// 兼症加减：证候量表初筛结果 → 加减规则；未采集时按本证原方
+function tcmAddon(key) {
+  return TCM_ADDONS[key || 'yang_up'] || TCM_ADDONS.yang_up;
 }
 
 // 高血压评估判定
@@ -3689,6 +4327,9 @@ function hbpFlags(answers) {
   var lowMove = a.exercise === 'none' || a.exercise === 'low';
   var highMove = a.exercise === 'high';
 
+  // 中医证候初筛：兼症标签 → 证型 + 加减规则（未采集时按肝阳上亢本证）
+  var addon = tcmAddon(a.tcm_pattern);
+
   // 危险分层：血压分级 × 合并症/危险因素
   var tier = 1;
   if (cvd) tier = 4;else if (dmCkd) tier = g2 || g3 ? 4 : 3;else if (g3) tier = riskFactor ? 4 : 3;else if (g2) tier = riskFactor ? 3 : 2;else if (g1) tier = riskFactor ? 2 : 1;else tier = 0;
@@ -3711,6 +4352,12 @@ function hbpFlags(answers) {
     withLabel: cvd ? '伴临床合并症' : dmCkd ? '伴糖尿病/慢性肾病' : riskFactor ? '伴心血管危险因素' : '无合并症',
     // 药物类型（用于调药建议）
     medType: a.med_type || 'unknown',
+    // 中医辨证结论：证型 key + 兼症加减 key + 展示用标签
+    syndrome: addon.syndrome,
+    syndromeName: tcmSyndrome(addon.syndrome).name,
+    pattern: addon.key,
+    patternLabel: addon.label,
+    patternKnown: !!a.tcm_pattern,
     // 评估结果良好：血压1级或以下 + 用药依从 + 运动达标
     goodControl: (g1 || gUnknown) && !badMed && (highMove || a.exercise === 'medium')
   };
@@ -3761,12 +4408,13 @@ function withBasis(item, basis, patch) {
 }
 
 // 高血压：按评估结论改写当天日程
-function planHbp(items, f) {
+function planHbp(items, f, dayIndex) {
   var out = [];
+  var day = dayIndex || 0;
   for (var i = 0; i < items.length; i++) {
     var it = items[i];
     if (it.cat === 'monitor') {
-      out.push(withBasis(it, GUIDE_HBP + '推荐家庭血压监测：晨起排尿后、服药前，静坐 5 分钟再测' + (f.gUnknown ? '；分级待确认者需连续 7 天早晚各测以建立基线' : ''), f.gUnknown ? {
+      out.push(withBasis(it, basisForCat('monitor') + '推荐家庭血压监测：晨起排尿后、服药前，静坐 5 分钟再测，家庭血压控制目标 ' + HBP_TARGETS.bpHome.target + '（理想 ' + HBP_TARGETS.bpIdeal.target + '）' + (f.gUnknown ? '；分级待确认者需连续 7 天早晚各测以建立基线' : ''), f.gUnknown ? {
         desc: '连续 7 天早晚各测一次并记录，用于确认您的血压分级'
       } : null));
       continue;
@@ -3783,16 +4431,17 @@ function planHbp(items, f) {
           icon: 'fa-solid fa-user-doctor'
         });
       } else if (f.badMed) {
-        out.push(withBasis(it, GUIDE_HBP + '强调长期规律服药：自行停药或漏服会导致血压反弹，显著增加心脑血管事件风险', {
+        out.push(withBasis(it, basisForCat('medication') + '强调长期规律服药：自行停药或漏服会导致血压反弹，显著增加心脑血管事件风险' + (MISSED_DOSE_RULES[f.medType] ? '。漏服处理：' + MISSED_DOSE_RULES[f.medType].rule : ''), {
           desc: '按医嘱服药，血压降至正常也不可自行减量或停药；漏服请如实记录'
         }));
       } else {
-        out.push(withBasis(it, GUIDE_HBP + '推荐优先使用长效制剂，固定时间服药以平稳控制 24 小时血压'));
+        var se = DRUG_SIDE_EFFECTS[f.medType];
+        out.push(withBasis(it, basisForCat('medication') + '推荐优先使用长效制剂，固定时间服药以平稳控制 24 小时血压' + (se ? '。' + se.label + '需留意：' + se.effects + '；' + se.tip : '')));
       }
       continue;
     }
     if (it.cat === 'nutrition') {
-      out.push(withBasis(it, GUIDE_HBP + '推荐限盐：每日食盐 <5g（钠 <2000mg），并增加富钾蔬果摄入；' + GUIDE_NUTRI + '建议食物多样、谷薯为主，多吃蔬果奶类豆类', f.heavySalt ? {
+      out.push(withBasis(it, basisForCat('nutrition') + '推荐限盐控能：每日 ' + DIET_TARGETS.micros[3] + '、' + DIET_TARGETS.micros[1] + '、' + DIET_TARGETS.micros[0] + '；每日能量 ' + DIET_TARGETS.energy + '。中医调养：' + DIET_TARGETS.tcm + '。需回避：' + DIET_TARGETS.avoid, f.heavySalt ? {
         desc: it.desc + '；使用限盐勺定量，避免腌制品与加工肉',
         goods: recommendGoodsForCat('nutrition')
       } : f.naiveSalt ? {
@@ -3815,28 +4464,79 @@ function planHbp(items, f) {
           icon: 'fa-solid fa-spa'
         });
       } else if (f.lowMove) {
-        out.push(withBasis(it, GUIDE_HBP + '推荐每周 5-7 天、每次 30 分钟中等强度有氧运动；久坐者应循序渐进', {
+        out.push(withBasis(it, basisForCat('exercise') + '推荐每周 5-7 天、每次 30 分钟中等强度有氧运动；' + EXERCISE_PLAN.benefit + '。久坐者应循序渐进：' + EXERCISE_PLAN.stages[0].goal, {
           desc: '从 10 分钟起步，每周增加 5 分钟，逐步过渡到 30 分钟'
         }));
       } else {
-        out.push(withBasis(it, GUIDE_HBP + '推荐每周 5-7 天、每次 30 分钟中等强度有氧运动，并配合柔韧性练习'));
+        out.push(withBasis(it, basisForCat('exercise') + '推荐每周 5-7 天、每次 30 分钟中等强度有氧运动，并配合柔韧性练习。' + EXERCISE_PLAN.benefit + '；建议时段 ' + EXERCISE_PLAN.timing));
       }
       continue;
     }
     if (it.cat === 'psychology') {
-      out.push(withBasis(it, GUIDE_HBP + '将心理压力列为血压影响因素，推荐通过呼吸放松等方式进行压力管理'));
+      out.push(withBasis(it, basisForCat('psychology') + '将心理压力列为血压影响因素：' + MOOD_SCALES.mechanism + '。推荐每周自评（' + MOOD_SCALES.sas.rule + '；' + MOOD_SCALES.sds.rule + '），' + MOOD_SCALES.freq));
       continue;
     }
     if (it.cat === 'sleep') {
-      out.push(withBasis(it, GUIDE_HBP + '提示睡眠不足与睡眠呼吸暂停可致血压升高，应保证 7-8 小时规律睡眠'));
+      out.push(withBasis(it, basisForCat('sleep') + '提示睡眠不足与睡眠呼吸暂停可致血压升高：' + LIFESTYLE_RULES.sleep.time + '；' + LIFESTYLE_RULES.sleep.forbid));
       continue;
     }
     if (it.cat === 'assessment') {
-      out.push(withBasis(it, GUIDE_HBP + '推荐记录血压与症状变化，作为医生调整方案的依据'));
+      out.push(withBasis(it, basisForCat('assessment') + '推荐记录血压与症状变化，作为医生调整方案的依据。症状自评：' + SYMPTOM_SCALE.record));
       continue;
     }
-    out.push(withBasis(it, GUIDE_HBP + '综合管理建议'));
+    out.push(withBasis(it, basisForCat(it.cat)));
   }
+
+  // ===== 中医方案：按辨证结论追加中药、代茶饮、居家外治、起居条目 =====
+  var syn = tcmSyndrome(f.syndrome);
+  // 兼症加减：基础方 + 兼症加味，外治按兼症细化取穴
+  var addon = tcmAddon(f.pattern);
+  var herbs = syn.formula.herbs.concat(addon.herbs || []);
+
+  // 2.1.1 中药方案：辨证处方，早晚温服
+  out.push({
+    time: '08:00',
+    cat: 'tcm',
+    title: '中药 · ' + syn.formula.name,
+    desc: syn.formula.usage + '。组方：' + herbs.join('、') + (addon.herbs && addon.herbs.length ? '（末 ' + addon.herbs.length + ' 味为兼症加味）' : '') + '。' + syn.advice.medication,
+    basis: basisForCat('tcm') + '：' + syn.name + '（' + syn.disease + '）治法为' + syn.principle + '。' + (f.patternKnown ? '证候初筛为' + addon.label + '（' + addon.symptoms + '），' + addon.note + '。' : '') + syn.note,
+    icon: 'fa-solid fa-mortar-pestle',
+    pinned: true
+  });
+
+  // 2.2.3 代茶饮：2 种交替，每周更换 1 次避免单一食材耐受
+  var tea = syn.teas[day % syn.teas.length];
+  out.push({
+    time: '09:30',
+    cat: 'tea',
+    title: '代茶饮 · ' + tea.name,
+    desc: '配方：' + tea.herbs.join('、') + '。做法：' + tea.method + '。' + tea.usage,
+    basis: basisForCat('tea') + '：药食同源辅助' + syn.principle + '。注意事项：' + tea.cautions.join('；'),
+    icon: 'fa-solid fa-mug-hot',
+    goods: recommendGoodsForCat('tea')
+  });
+
+  // 2.2.4 中医外治居家自我调理：4 种每日 1 种循环，每周休息 1 天
+  var care = syn.homeCare[day % syn.homeCare.length];
+  out.push({
+    time: '19:30',
+    cat: 'external',
+    title: '居家外治 · ' + care.name,
+    desc: care.detail + '（' + care.freq + '）。功效：' + care.effect + (addon.points ? '。兼症取穴：' + addon.points : ''),
+    basis: basisForCat('external') + '：' + syn.name + '取穴以' + syn.principle + '为则' + (addon.points ? '，并按兼症（' + addon.symptoms + '）细化取穴' : '') + '。注意：' + care.caution,
+    icon: 'fa-solid fa-hand-holding-heart'
+  });
+
+  // 2.2.6 生活方式管理：睡眠起居与居住环境
+  out.push({
+    time: '21:30',
+    cat: 'lifestyle',
+    title: '起居调摄 · 睡前准备',
+    desc: LIFESTYLE_RULES.sleep.before + '。' + LIFESTYLE_RULES.sleep.avoid + '。' + LIFESTYLE_RULES.sleep.posture,
+    basis: basisForCat('lifestyle') + '：' + LIFESTYLE_RULES.sleep.forbid + '。居住环境宜' + LIFESTYLE_RULES.environment.climate + '，' + LIFESTYLE_RULES.environment.light,
+    icon: 'fa-solid fa-moon',
+    goods: recommendGoodsForCat('lifestyle')
+  });
 
   // 危险分层高者插入就诊安排
   if (f.tier >= 3 && !f.noMed) {
@@ -3992,7 +4692,8 @@ function planDm(items, f) {
 }
 
 // 裁剪优先级：越靠前越应保留（就诊、用药、监测优先）
-var CAT_PRIORITY = ['assessment', 'medication', 'monitor', 'nutrition', 'exercise', 'psychology', 'sleep'];
+// 中医条目（中药 > 代茶饮 > 外治）优先级高于起居，与「辨病 + 辨证」双轨方案一致
+var CAT_PRIORITY = ['assessment', 'medication', 'tcm', 'monitor', 'nutrition', 'exercise', 'tea', 'external', 'psychology', 'consult', 'sleep', 'lifestyle'];
 
 // 按类目轮转裁剪：每轮每个类目最多取 1 条。
 // 不用「按类目穷尽」，否则营养类会占满名额、把运动等类目整体挤掉，
@@ -4033,6 +4734,20 @@ function trimPlan(items, limit) {
  * @param {String} cat 计划类目 (nutrition/diet/tea/medication/sleep/exercise)
  * @returns {Array} 商城商品数组
  */
+// 从商城取商品的展示字段（避免推荐位与商城的价格、配图两处维护）
+function goodRef(id) {
+  for (var i = 0; i < SHOP_GOODS.length; i++) {
+    if (SHOP_GOODS[i].id === id) {
+      return {
+        id: id,
+        name: SHOP_GOODS[i].name,
+        price: SHOP_GOODS[i].price,
+        img: SHOP_GOODS[i].img
+      };
+    }
+  }
+  return null;
+}
 function recommendGoodsForCat(cat) {
   var map = {
     nutrition: [{
@@ -4057,11 +4772,27 @@ function recommendGoodsForCat(cat) {
       price: 159,
       img: '/static/img/mall/g6.jpg'
     }],
-    tea: [{
+    tea: [goodRef('g9'), {
       id: 'g6',
       name: '智能恒温杯',
       price: 159,
       img: '/static/img/mall/g6.jpg'
+    }],
+    // 中药方案：代茶饮配套 + 分装药盒（中西药需间隔服用，分格更好记）
+    tcm: [goodRef('g9'), {
+      id: 'g8',
+      name: '一周分装药盒',
+      price: 29,
+      img: '/static/img/mall/g8.jpg'
+    }],
+    // 居家外治：耳穴压豆、足浴包等中医适宜技术器具
+    external: [goodRef('g10'), goodRef('g11')],
+    // 起居调摄：改善睡眠环境与颈椎支撑，辅助夜间血压平稳
+    lifestyle: [goodRef('g12'), {
+      id: 'g4',
+      name: '助眠香薰精油',
+      price: 69,
+      img: '/static/img/mall/g4.jpg'
     }],
     medication: [{
       id: 'g8',
@@ -4093,7 +4824,9 @@ function recommendGoodsForCat(cat) {
       img: '/static/img/mall/g2.jpg'
     }]
   };
-  return map[cat] || [];
+  return (map[cat] || []).filter(function (g) {
+    return !!g;
+  });
 }
 
 /**
@@ -4113,19 +4846,19 @@ function buildDayPlan(pkgKey, answers, dayIndex, limit) {
     planned = items.map(function (it) {
       var item = Object.assign({}, it);
       // 为营养/饮食/养生条目自动挂载商城商品推荐
-      var goodsCats = ['nutrition', 'diet', 'tea', 'sleep', 'exercise', 'medication', 'monitor'];
+      var goodsCats = ['nutrition', 'diet', 'tea', 'tcm', 'external', 'lifestyle', 'sleep', 'exercise', 'medication', 'monitor'];
       if (goodsCats.indexOf(item.cat) >= 0) {
         item.goods = recommendGoodsForCat(item.cat);
       }
       return item;
     });
   } else {
-    planned = key === 'dm' ? planDm(items, dmFlags(answers)) : planHbp(items, hbpFlags(answers));
+    planned = key === 'dm' ? planDm(items, dmFlags(answers)) : planHbp(items, hbpFlags(answers), dayIndex || 0);
     // 评估后的条目也挂载商品推荐
     for (var i = 0; i < planned.length; i++) {
       var p = planned[i];
       if (p.goods && p.goods.length) continue;
-      var goodsCats = ['nutrition', 'diet', 'tea', 'sleep', 'exercise', 'medication', 'monitor'];
+      var goodsCats = ['nutrition', 'diet', 'tea', 'tcm', 'external', 'lifestyle', 'sleep', 'exercise', 'medication', 'monitor'];
       if (goodsCats.indexOf(p.cat) >= 0) {
         p.goods = recommendGoodsForCat(p.cat);
       }
@@ -4143,7 +4876,7 @@ function buildDayPlan(pkgKey, answers, dayIndex, limit) {
 // 改文案只需改 label，不会影响危险分层逻辑；v 一经确定不要随意变更。
 var QUESTIONS = [{
   id: 'bp_grade',
-  text: '您好！我是健康小助手。为了按《中国高血压防治指南 2024》为您做危险分层，先了解 6 项必要信息。第一个问题：近 1 个月您在家中测到的最高血压，落在哪一档？',
+  text: '您好！我是健康小助手。为了按《中国高血压防治指南 2024》为您做危险分层、并同步完成中医辨证，先了解 7 项必要信息。第一个问题：近 1 个月您在家中测到的最高血压，落在哪一档？',
   options: [{
     v: 'grade1',
     label: '1级：140-159 / 90-99 mmHg'
@@ -4229,7 +4962,7 @@ var QUESTIONS = [{
   }]
 }, {
   id: 'exercise',
-  text: '最后一个问题：指南建议每周至少 150 分钟中等强度有氧运动。您目前的运动量大概是？',
+  text: '指南建议每周至少 150 分钟中等强度有氧运动。您目前的运动量大概是？',
   options: [{
     v: 'none',
     label: '基本不运动'
@@ -4242,6 +4975,22 @@ var QUESTIONS = [{
   }, {
     v: 'high',
     label: '每周 5 次以上'
+  }]
+}, {
+  id: 'tcm_pattern',
+  text: '最后一个问题：中医方案需以「证型」为核心输入。参照标准化证候量表，以下哪一组症状与您近期感受最接近？（用于中药加减与外治取穴）',
+  options: [{
+    v: 'yang_up',
+    label: '头晕头痛、面红目赤、急躁易怒、口苦口干'
+  }, {
+    v: 'insomnia',
+    label: '在上述基础上，入睡困难、多梦易醒、心烦耳鸣'
+  }, {
+    v: 'phlegm',
+    label: '在上述基础上，头重如裹、胸闷痰多、身体沉重'
+  }, {
+    v: 'yin_def',
+    label: '在上述基础上，腰膝酸软、乏力、夜尿增多'
   }]
 }];
 var QUESTIONS_DM = [{
@@ -4367,6 +5116,40 @@ var KNOWLEDGE = [{
   icon: 'fa-solid fa-person-walking',
   title: '减少久坐、增加身体活动',
   desc: '每小时起身活动 5 分钟，每周累计 150 分钟以上'
+},
+// 《慢病管理综合服务包解决方案（原发性高血压示例）》合并内容
+{
+  icon: 'fa-solid fa-yin-yang',
+  title: '辨病 + 辨证双轨管理',
+  desc: '中医方案以「证型」为核心输入，证型缺失时先做证候量表辨证'
+}, {
+  icon: 'fa-solid fa-mortar-pestle',
+  title: '证型定基础方，兼症定加减',
+  desc: '肝阳上亢用天麻钩藤饮加减；伴失眠加酸枣仁、龙骨、牡蛎'
+}, {
+  icon: 'fa-solid fa-hand-dots',
+  title: '外治按症状细化取穴',
+  desc: '肝阳上亢取太冲、耳穴压豆；伴失眠加神门，伴头痛加太阳'
+}, {
+  icon: 'fa-solid fa-mug-hot',
+  title: '代茶饮遵药食同源',
+  desc: '天麻菊花枸杞茶平肝潜阳，每日 1 剂上午饮用，避开服药前后 1 小时'
+}, {
+  icon: 'fa-solid fa-triangle-exclamation',
+  title: '危急值须立即处置',
+  desc: '血压 ≥180/110 mmHg 或伴剧烈头痛、视物模糊、胸痛应即刻就医'
+}, {
+  icon: 'fa-solid fa-calendar-check',
+  title: '随访频率随控制情况调整',
+  desc: '达标稳定每 3 个月 1 次；未达标或调药期每 2-4 周 1 次'
+}, {
+  icon: 'fa-solid fa-clock-rotate-left',
+  title: '漏服不可随意补服双倍',
+  desc: 'ACEI/ARB 想起即补，接近下次则跳过；利尿剂晚间记起建议跳过'
+}, {
+  icon: 'fa-solid fa-music',
+  title: '情志调摄纳入方案',
+  desc: '五音疗法角调式疏肝，配合 SAS/SDS 量表定期评估情绪'
 }];
 
 // 首页"我的权益"入口（图标统一金色，与权益卡片金色装饰呼应）
@@ -4523,6 +5306,52 @@ var SHOP_GOODS = [{
   points: 99,
   tag: '积分特惠',
   img: '/static/img/mall/g8.jpg'
+},
+// 中医调理服务包配套（药食同源代茶饮、居家外治器具、起居调摄用品）
+{
+  id: 'g9',
+  name: '平肝代茶饮组合',
+  desc: '天麻·菊花·枸杞·决明子 · 独立茶包 30 日装',
+  icon: 'fa-solid fa-mug-saucer',
+  color: '#4ab89e',
+  bg: '#d8f8fa',
+  price: 128,
+  points: 559,
+  tag: '药食同源',
+  img: img('chinese herbal tea bags gift box with chrysanthemum goji berry gastrodia, clean product photo, soft light, beige background')
+}, {
+  id: 'g10',
+  name: '耳穴压豆套装',
+  desc: '王不留行籽贴 + 探棒 + 取穴图解 · 30 次量',
+  icon: 'fa-solid fa-circle-dot',
+  color: '#f15533',
+  bg: '#fdf4ed',
+  price: 49,
+  points: 199,
+  tag: '中医外治',
+  img: img('traditional chinese medicine auricular acupressure seed patch kit with probe and ear chart, clean product photo, beige background')
+}, {
+  id: 'g11',
+  name: '温阳活血足浴包',
+  desc: '艾叶·红花·川芎 · 每袋 1 次 · 20 袋装',
+  icon: 'fa-solid fa-hot-tub-person',
+  color: '#b8932e',
+  bg: '#faf3e0',
+  price: 88,
+  points: 379,
+  tag: '',
+  img: img('chinese herbal foot bath sachets with mugwort and safflower, wooden foot basin, warm soft light, clean product photo')
+}, {
+  id: 'g12',
+  name: '记忆棉护颈枕',
+  desc: '承托颈椎曲度 · 侧卧仰卧两用 · 助稳压安眠',
+  icon: 'fa-solid fa-bed',
+  color: '#8dcdd8',
+  bg: '#e2f2f6',
+  price: 179,
+  points: 769,
+  tag: '',
+  img: img('memory foam cervical support pillow on neat bed, minimal bedroom, soft morning light, clean product photo')
 }];
 function makeOrderNo() {
   var d = new Date();

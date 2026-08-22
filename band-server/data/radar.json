@@ -2,8 +2,8 @@
   "devices": {
     "867561088869642": {
       "deviceid": "867561088869642",
-      "name": "测试",
-      "model": "",
+      "name": "睡眠监测仪 - 毫米波雷达款",
+      "model": "SM-C03",
       "typeKey": "radar",
       "firstSeen": 1787320921389,
       "latest": {
@@ -235,8 +235,8 @@
           }
         }
       ],
-      "lastSeen": 1787327099456,
-      "boundAt": 1787320921389,
+      "lastSeen": 1787369476163,
+      "boundAt": 1787369476163,
       "struggleHistory": [
         {
           "count": 3,
@@ -251,8 +251,8 @@
           "ts": 1787320000000
         }
       ],
-      "state": 0,
-      "stateText": "正常",
+      "state": 2,
+      "stateText": "报警",
       "lastEvent": "心跳",
       "site": "未绑定安装点",
       "_lastInBed": "无人",
@@ -269,7 +269,10 @@
           "inBed": false,
           "ts": 1787324777535
         }
-      ]
+      ],
+      "platformDeviceId": 152166722,
+      "companyName": "叁陆伍智慧（北京）医疗科技有限公司",
+      "platformSyncAt": 1787369476163
     }
   }
 }

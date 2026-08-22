@@ -72,7 +72,7 @@
 
     <!-- 识别结果确认 -->
     <view v-if="result" class="sheet">
-      <view class="sheet__mask" @tap="result = null"></view>
+      <view class="sheet__mask" @tap="cancelResult"></view>
       <view class="sheet__card">
         <text class="sheet__t">识别到设备</text>
         <view class="sheet__dev">
@@ -89,7 +89,7 @@
           </view>
         </view>
         <view class="sheet__btns">
-          <view class="sheet__btn sheet__btn--cancel" @tap="result = null">取消</view>
+          <view class="sheet__btn sheet__btn--cancel" @tap="cancelResult">取消</view>
           <view class="sheet__btn" :style="{ background: result.color }" @tap="confirm">
             <text class="sheet__btn-t">确认添加</text>
           </view>
@@ -102,7 +102,7 @@
 <script>
 import { DEVICE_TYPES, deviceTypeStrict, isKnownRadarDeviceId } from '@/common/mock.js'
 import { bindBandDevice, extractDeviceId } from '@/common/band.js'
-import { verifyRadarDevice, verifyRadarDeviceEx, bindRadarDevice } from '@/common/radar.js'
+import { verifyRadarDevice, verifyRadarDeviceEx, bindRadarDeviceEx } from '@/common/radar.js'
 
 export default {
   data() {
@@ -403,7 +403,11 @@ export default {
       this.pickVisible = false
       this.pickDeviceId = ''
       const type = deviceTypeStrict(t && t.key)
-      if (!type) return
+      if (!type) {
+        // 理论上不会走到（选项来自 DEVICE_TYPES），兜底也要把循环还回去，别把页面留成"相机在转但不识别"
+        this.resumeScan()
+        return
+      }
       this.fakeDeviceId = deviceid
       this.platformInfo = null
       this.verifiedByPlatform = false
@@ -421,8 +425,19 @@ export default {
     cancelPick() {
       this.pickVisible = false
       this.pickDeviceId = ''
+      this.resumeScan()
+    },
+    // 关闭「识别到设备」弹层的统一入口：清状态 + 恢复截帧。
+    // 早前直接写 @tap="result = null"，漏了恢复循环，导致取消后相机画面在动却再也识别不出二维码。
+    cancelResult() {
+      this.result = null
+      this.platformInfo = null
+      this.verifiedByPlatform = false
+      this.resumeScan()
+    },
+    // 相机仍在工作时恢复定时截帧（H5 专用；非 H5 走 uni.scanCode，由原生自行管理）
+    resumeScan() {
       // #ifdef H5
-      // 相机仍在工作时恢复截帧循环，让用户可以直接重扫
       if (this.camState === 'on' && this.videoEl) this.startScanLoop()
       // #endif
     },
@@ -483,13 +498,21 @@ export default {
       // 雷达款：先向对接后端注册（后端会再回平台核验一次），注册失败则不入库，避免出现"绑了但永远没数据"的僵尸设备
       if (type.key === 'radar') {
         uni.showLoading({ title: '正在绑定…', mask: true })
-        const rec = await bindRadarDevice(deviceid, type.name)
+        const r = await bindRadarDeviceEx(deviceid, type.name)
         uni.hideLoading()
-        if (!rec) {
+        if (!r.ok) {
+          // 区分两类失败：平台明确否认（设备号问题，用户可自查）与接口不可达（环境问题，自查设备无用）
+          const content = r.reachable
+            ? '云平台未能确认该设备（设备号 ' + deviceid + '）。' + (r.message ? '平台返回：' + r.message + '。' : '') + '请确认设备已在平台注册并联网后重试。'
+            : '暂时连不上对接服务，无法完成绑定（设备号 ' + deviceid + '）。这不代表设备有问题，请检查网络或稍后重试。'
           uni.showModal({
             title: '绑定失败',
-            content: '云平台未能确认该设备（设备号 ' + deviceid + '）。请确认设备已在平台注册并联网后重试。',
-            showCancel: false
+            content: content,
+            showCancel: false,
+            success: () => {
+              // 弹层关掉后恢复截帧，用户可以直接把二维码再放进镜头重试
+              this.resumeScan()
+            }
           })
           return
         }

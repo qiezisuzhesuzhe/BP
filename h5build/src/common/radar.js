@@ -30,6 +30,15 @@ function _logReq(tag, url, resOrErr, extra) {
   } catch (e) { /* ignore */ }
 }
 
+// 判断响应体是否确实来自本项目的 JSON 接口。
+// 典型陷阱：H5 dev server 的 SPA history fallback 会对未代理的 /api/* 返回 200 + index.html，
+// 若把它当成"接口正常答复"，业务层会误以为"平台明确说查不到该设备"。
+function _isApiEnvelope(data) {
+  if (!data) return false
+  if (typeof data === 'string') return false // HTML / 纯文本一律视为非接口响应
+  return typeof data === 'object' && typeof data.code !== 'undefined'
+}
+
 // 统一请求封装：失败一律 resolve(fallback)，绝不 reject，也不弹 toast（会被轮询高频调用）
 function _req(tag, path, method, data, fallback) {
   return new Promise((resolve) => {
@@ -40,8 +49,9 @@ function _req(tag, path, method, data, fallback) {
       data: data || undefined,
       timeout: 20000,
       success(res) {
-        const ok = res.statusCode === 200 && res.data && res.data.code === 0
-        _logReq(tag, url, res, ok ? null : { message: (res.data && res.data.message) || null })
+        const envelope = _isApiEnvelope(res.data)
+        const ok = res.statusCode === 200 && envelope && res.data.code === 0
+        _logReq(tag, url, res, ok ? null : { message: (envelope && res.data.message) || (envelope ? null : '响应不是接口 JSON（可能未配置接口代理）') })
         resolve(ok ? res.data.data : fallback)
       },
       fail(err) {
@@ -89,15 +99,17 @@ export function verifyRadarDeviceEx(deviceid) {
       method: 'GET',
       timeout: 20000,
       success(res) {
-        const ok = res.statusCode === 200 && res.data && res.data.code === 0
-        _logReq(tag, url, res, ok ? null : { message: (res.data && res.data.message) || null })
+        const envelope = _isApiEnvelope(res.data)
+        const ok = res.statusCode === 200 && envelope && res.data.code === 0
+        _logReq(tag, url, res, ok ? null : { message: (envelope && res.data.message) || (envelope ? null : '响应不是接口 JSON（可能未配置接口代理）') })
         if (ok) {
           resolve({ reachable: true, device: res.data.data || null })
           return
         }
         // 后端答复了但业务失败：404 / 业务码非 0 视为"平台确认查不到该雷达"，属于可信结论；
-        // 5xx 属于服务端自身异常，不能当作结论。
-        const serverBroke = res.statusCode >= 500
+        // 5xx 属于服务端自身异常，不能当作结论；
+        // 拿不到接口信封（返回 HTML 等）说明请求根本没到 band-server，同样不可信。
+        const serverBroke = res.statusCode >= 500 || !envelope
         resolve({ reachable: !serverBroke, device: null })
       },
       fail(err) {
@@ -153,6 +165,42 @@ export function fetchRadarAttributes(model) {
 export function bindRadarDevice(deviceid, name) {
   if (!deviceid) return Promise.resolve(null)
   return _req('POST /api/radar/devices', '/api/radar/devices', 'POST', { deviceid: deviceid, name: name || '' }, null)
+}
+
+// bindRadarDevice 的增强版：把失败原因带回页面，便于弹层给出对症提示。
+// 返回 Promise<{ ok, record, reachable, message }>
+//  - ok=true：绑定成功，record 为设备记录
+//  - ok=false 且 reachable=true：对接后端答复了，但平台拒绝（设备号不存在 / 未注册），message 为后端原文
+//  - ok=false 且 reachable=false：请求没到后端（未启动 / 未配代理 / 断网 / 5xx），结论不可信
+export function bindRadarDeviceEx(deviceid, name) {
+  if (!deviceid) return Promise.resolve({ ok: false, record: null, reachable: false, message: '缺少设备号' })
+  const tag = 'POST /api/radar/devices'
+  const path = '/api/radar/devices'
+  return new Promise((resolve) => {
+    const url = bandApi(path)
+    uni.request({
+      url: url,
+      method: 'POST',
+      data: { deviceid: deviceid, name: name || '' },
+      timeout: 20000,
+      success(res) {
+        const envelope = _isApiEnvelope(res.data)
+        const ok = res.statusCode === 200 && envelope && res.data.code === 0
+        const message = envelope ? (res.data.message || null) : '响应不是接口 JSON（可能未配置接口代理）'
+        _logReq(tag, url, res, ok ? null : { message: message })
+        if (ok) {
+          resolve({ ok: true, record: res.data.data || null, reachable: true, message: null })
+          return
+        }
+        const serverBroke = res.statusCode >= 500 || !envelope
+        resolve({ ok: false, record: null, reachable: !serverBroke, message: message })
+      },
+      fail(err) {
+        _logReq(tag, url, Object.assign({ __fail: true }, err || {}))
+        resolve({ ok: false, record: null, reachable: false, message: (err && err.errMsg) || '网络请求失败' })
+      }
+    })
+  })
 }
 
 // 解绑：后端打 markedUnbound 标记而非真删，保住历史数据

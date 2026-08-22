@@ -1715,6 +1715,27 @@ export const DEVICE_TYPES = [
   }
 ]
 
+// 已知的毫米波雷达设备号白名单（本地识别依据）
+// 设备机身二维码内容本身不含类型信息，正常应回物联网云平台反查设备归属；
+// 但演示环境 / 弱网 / 对接后端未启动时反查会失败，此时若无本地依据就会把雷达误判成手环。
+// 故对已登记的雷达设备号做本地直判，保证离线也能正确识别。
+export const RADAR_DEVICE_IDS = ['867561088869642']
+
+// 设备号是否为已登记的毫米波雷达（容错空格与横线）
+export function isKnownRadarDeviceId(deviceid) {
+  const id = String(deviceid || '').replace(/[\s-]/g, '')
+  if (!id) return false
+  return RADAR_DEVICE_IDS.indexOf(id) >= 0
+}
+
+// 严格查表：查不到返回 null。
+// 用于扫码等"必须确定类型"的场景，避免 deviceType 的兜底把未知类型悄悄变成智能手环。
+export function deviceTypeStrict(key) {
+  return DEVICE_TYPES.find((t) => t.key === key) || null
+}
+
+// 宽容查表：查不到兜底为第一种设备。
+// 仅用于已入库设备的展示（typeKey 一定合法），扫码识别请改用 deviceTypeStrict。
 export function deviceType(key) {
   return DEVICE_TYPES.find((t) => t.key === key) || DEVICE_TYPES[0]
 }

@@ -48,6 +48,28 @@
       </view>
     </view>
 
+    <!-- 平台反查不可达：由用户指明设备类型，避免默认成手环造成误绑 -->
+    <view v-if="pickVisible" class="sheet">
+      <view class="sheet__mask" @tap="cancelPick"></view>
+      <view class="sheet__card">
+        <text class="sheet__t">请确认设备类型</text>
+        <text class="sheet__d">已读取设备号 {{ pickDeviceId }}，但云平台暂时无法连接、无法自动判断型号。请选择本次扫描的设备：</text>
+        <view class="sheet__pick" v-for="t in types" :key="t.key" @tap="pickType(t)">
+          <view class="sheet__dev-icon" :style="{ background: t.accentSoft }">
+            <text class="sheet__dev-icon-t" :class="t.icon" :style="{ color: t.color }"></text>
+          </view>
+          <view class="sheet__dev-main">
+            <text class="sheet__dev-name">{{ t.name }}</text>
+            <text class="sheet__dev-sn">{{ t.model }}</text>
+          </view>
+          <text class="fa-solid fa-chevron-right sheet__pick-arrow"></text>
+        </view>
+        <view class="sheet__btns">
+          <view class="sheet__btn sheet__btn--cancel" @tap="cancelPick">取消</view>
+        </view>
+      </view>
+    </view>
+
     <!-- 识别结果确认 -->
     <view v-if="result" class="sheet">
       <view class="sheet__mask" @tap="result = null"></view>
@@ -63,6 +85,7 @@
             <text class="sheet__dev-sn">SN：{{ fakeSn }}</text>
             <text v-if="fakeDeviceId" class="sheet__dev-sn sheet__dev-sn--id">设备号：{{ fakeDeviceId }}</text>
             <text v-if="platformInfo && platformInfo.site" class="sheet__dev-sn">安装位置：{{ platformInfo.site }}</text>
+            <text class="sheet__dev-sn sheet__dev-sn--src">{{ verifiedByPlatform ? '已通过云平台核验' : '本地识别（云平台未连接）' }}</text>
           </view>
         </view>
         <view class="sheet__btns">
@@ -77,11 +100,9 @@
 </template>
 
 <script>
-import { DEVICE_TYPES, deviceType } from '@/common/mock.js'
+import { DEVICE_TYPES, deviceTypeStrict, isKnownRadarDeviceId } from '@/common/mock.js'
 import { bindBandDevice, extractDeviceId } from '@/common/band.js'
-import { verifyRadarDevice, bindRadarDevice } from '@/common/radar.js'
-
-let scanSeq = 0
+import { verifyRadarDevice, verifyRadarDeviceEx, bindRadarDevice } from '@/common/radar.js'
 
 export default {
   data() {
@@ -92,6 +113,12 @@ export default {
       fakeDeviceId: '',
       manualVisible: false,
       manualInput: '',
+      // 设备类型选择弹层：平台反查不可达时，改由用户指明扫的是哪种设备，
+      // 避免静默默认成智能手环造成误绑
+      pickVisible: false,
+      pickDeviceId: '',
+      // 平台反查是否可信（false 表示结论来自用户选择或本地白名单）
+      verifiedByPlatform: false,
       // 绑定成功后的返回目标：'back' 返回来源页（如对话页），'device' 回设备列表 tab
       from: '',
       // 平台查证中（雷达设备号需回云平台核验，耗时约 1-2 秒）
@@ -300,37 +327,65 @@ export default {
       // uni.scanCode 是系统控件，会在调用时自动申请/释放资源，无需手动回收
       // #endif
     },
-    // 解析设备机身二维码：
-    // 1) 享相自定义格式 ankang://device?type=xxx&sn=xxx[&deviceid=xxx]，type 直接指明设备类型
+    // 解析设备机身二维码，确定设备类型：
+    // 1) 享相自定义格式 ankang://device?type=xxx&sn=xxx[&deviceid=xxx]，type 直接指明设备类型（严格查表，非法 type 不再兜底）
     // 2) 通用格式（真实设备机身码常见）：URL 带 imei/deviceid 参数、JSON、混有文本的 15 位数字等，
-    //    先用 extractDeviceId 宽容提取设备号，再回物联网云平台查证该设备号是否为毫米波雷达；
-    //    平台查得到 → 睡眠监测仪（雷达款），并带回真实型号/安装位置；查不到 → 回落血压款手环。
-    // 返回 Promise<boolean>：true 已识别并弹出确认层
+    //    先用 extractDeviceId 宽容提取设备号，再按以下优先级定类型：
+    //    a. 本地雷达白名单命中 → 直接判为睡眠监测仪（雷达款），随后仍会尝试回平台补充真实型号/安装位置；
+    //    b. 平台反查可达且查得到 → 雷达款，并带回真实型号/安装位置；
+    //    c. 平台反查可达但查不到 → 平台明确否认，回落血压款手环；
+    //    d. 平台反查不可达（后端未启动/断网）→ 结论不可信，弹层让用户自己选设备类型，绝不默认成手环。
+    // 返回 Promise<boolean>：true 已识别并弹出确认层（或已弹出类型选择层）
     async handleCode(text) {
-      if (this.result || this.verifying) return false
+      if (this.result || this.verifying || this.pickVisible) return false
       const raw = String(text || '').trim()
       if (!raw) return false
       const m = raw.match(/ankang:\/\/device\?type=([a-z0-9-]+)(?:&sn=([A-Za-z0-9-]+))?(?:&deviceid=([A-Za-z0-9-]+))?/i)
       let type = null
       let deviceid = ''
       let platform = null
+      let verified = false
       if (m) {
-        type = deviceType(m[1])
+        // 自定义码里的 type 是权威来源，但必须严格匹配：写错的 type 宁可当作未识别，也不能悄悄变成手环
+        type = deviceTypeStrict(String(m[1]).toLowerCase())
         deviceid = m[3] || ''
+        verified = !!type
       }
       if (!type) {
-        deviceid = extractDeviceId(raw)
+        deviceid = deviceid || extractDeviceId(raw)
         if (deviceid) {
-          // 回平台查证设备归属：这是区分雷达与手环的唯一可靠依据（二维码内容本身不含类型信息）
           this.verifying = true
+          let reachable = false
           try {
-            platform = await verifyRadarDevice(deviceid)
+            const r = await verifyRadarDeviceEx(deviceid)
+            reachable = !!(r && r.reachable)
+            platform = (r && r.device) || null
           } catch (e) {
+            reachable = false
             platform = null
           }
           this.verifying = false
-          if (this.result) return false
-          type = deviceType(platform ? 'radar' : 'band-bp')
+          if (this.result || this.pickVisible) return false
+
+          if (isKnownRadarDeviceId(deviceid)) {
+            // 本地白名单：已登记的雷达设备号，离线也必须判对
+            type = deviceTypeStrict('radar')
+            verified = true
+          } else if (platform) {
+            type = deviceTypeStrict('radar')
+            verified = true
+          } else if (reachable) {
+            // 平台答复了"没有这台雷达"，是可信结论，回落血压款手环
+            type = deviceTypeStrict('band-bp')
+            verified = true
+          } else {
+            // 反查不可达：交给用户判断，不做任何默认
+            this.stopScanLoop()
+            this.fakeSn = (m && m[2]) || 'AK-' + String(100000 + Math.floor(Math.random() * 899999))
+            this.pickDeviceId = deviceid
+            this.pickVisible = true
+            return true
+          }
         }
       }
       if (!type) return false
@@ -338,23 +393,62 @@ export default {
       this.fakeSn = (m && m[2]) || 'AK-' + String(100000 + Math.floor(Math.random() * 899999))
       this.fakeDeviceId = deviceid || '86' + String(Math.floor(Math.random() * 9000000000000 + 1000000000000))
       this.platformInfo = platform
+      this.verifiedByPlatform = verified && !!platform
       this.result = type
       return true
     },
-    // 原型演示：生成一张设备机身二维码内容，走与相机相同的识别流程
-    async simulate() {
-      if (this.result || this.verifying) return
-      const type = this.types[scanSeq % this.types.length]
-      scanSeq++
-      this.fakeSn = 'AK-' + String(100000 + Math.floor(Math.random() * 899999))
-      if (type.key === 'band-bp') {
-        const imei = '86' + String(Math.floor(Math.random() * 9000000000000 + 1000000000000))
-        this.fakeDeviceId = imei
-        await this.handleCode('ankang://device?type=' + type.key + '&sn=' + this.fakeSn + '&deviceid=' + imei)
-      } else {
-        this.fakeDeviceId = ''
-        await this.handleCode('ankang://device?type=' + type.key + '&sn=' + this.fakeSn)
+    // 平台反查不可达时，用户在类型选择层里指定设备类型
+    async pickType(t) {
+      const deviceid = this.pickDeviceId
+      this.pickVisible = false
+      this.pickDeviceId = ''
+      const type = deviceTypeStrict(t && t.key)
+      if (!type) return
+      this.fakeDeviceId = deviceid
+      this.platformInfo = null
+      this.verifiedByPlatform = false
+      // 用户选了雷达：再补一次平台反查，拿到就能显示真实型号与安装位置（拿不到也不影响识别结论）
+      if (type.key === 'radar' && deviceid) {
+        try {
+          this.platformInfo = await verifyRadarDevice(deviceid)
+          this.verifiedByPlatform = !!this.platformInfo
+        } catch (e) {
+          this.platformInfo = null
+        }
       }
+      this.result = type
+    },
+    cancelPick() {
+      this.pickVisible = false
+      this.pickDeviceId = ''
+      // #ifdef H5
+      // 相机仍在工作时恢复截帧循环，让用户可以直接重扫
+      if (this.camState === 'on' && this.videoEl) this.startScanLoop()
+      // #endif
+    },
+    // 原型演示：由用户挑一台设备，生成对应的机身二维码内容，走与相机完全相同的识别流程
+    simulate() {
+      if (this.result || this.verifying || this.pickVisible) return
+      const self = this
+      uni.showActionSheet({
+        itemList: this.types.map((t) => t.name),
+        success(res) {
+          const type = self.types[res.tapIndex]
+          if (type) self.simulateType(type)
+        },
+        fail() {}
+      })
+    },
+    // 生成指定设备类型的模拟机身码
+    async simulateType(type) {
+      this.fakeSn = 'AK-' + String(100000 + Math.floor(Math.random() * 899999))
+      // 雷达款用真实已登记设备号，其余随机生成 IMEI
+      const imei =
+        type.key === 'radar'
+          ? '867561088869642'
+          : '86' + String(Math.floor(Math.random() * 9000000000000 + 1000000000000))
+      this.fakeDeviceId = imei
+      await this.handleCode('ankang://device?type=' + type.key + '&sn=' + this.fakeSn + '&deviceid=' + imei)
     },
     openManual() {
       this.manualVisible = true
@@ -692,6 +786,24 @@ export default {
 .sheet__dev-sn--id {
   color: $brand-primary-active;
   font-weight: $font-weight-semibold;
+}
+
+.sheet__dev-sn--src {
+  color: $text-disabled;
+}
+
+.sheet__pick {
+  margin-top: $space-3;
+  display: flex;
+  align-items: center;
+  background: $bg-section;
+  border-radius: $radius-card-child;
+  padding: $space-3;
+}
+
+.sheet__pick-arrow {
+  font-size: $font-size-xs;
+  color: $text-disabled;
 }
 
 .sheet__btns {

@@ -75,6 +75,40 @@ export function verifyRadarDevice(deviceid) {
   return _req('GET /api/radar/verify/:imei', '/api/radar/verify/' + encodeURIComponent(deviceid) + '?_t=' + Date.now(), 'GET', null, null)
 }
 
+// verifyRadarDevice 的增强版：把"平台明确答复不是雷达"和"后端/网络不可达"区分开。
+// 前者可以放心回落到手环，后者必须交给用户确认设备类型，否则会把雷达误判成手环。
+// 返回 Promise<{ reachable: boolean, device: object|null }>
+export function verifyRadarDeviceEx(deviceid) {
+  if (!deviceid) return Promise.resolve({ reachable: false, device: null })
+  const tag = 'GET /api/radar/verify/:imei'
+  const path = '/api/radar/verify/' + encodeURIComponent(deviceid) + '?_t=' + Date.now()
+  return new Promise((resolve) => {
+    const url = bandApi(path)
+    uni.request({
+      url: url,
+      method: 'GET',
+      timeout: 20000,
+      success(res) {
+        const ok = res.statusCode === 200 && res.data && res.data.code === 0
+        _logReq(tag, url, res, ok ? null : { message: (res.data && res.data.message) || null })
+        if (ok) {
+          resolve({ reachable: true, device: res.data.data || null })
+          return
+        }
+        // 后端答复了但业务失败：404 / 业务码非 0 视为"平台确认查不到该雷达"，属于可信结论；
+        // 5xx 属于服务端自身异常，不能当作结论。
+        const serverBroke = res.statusCode >= 500
+        resolve({ reachable: !serverBroke, device: null })
+      },
+      fail(err) {
+        // 连不上对接后端（未启动 / 跨域 / 断网）：结论不可信
+        _logReq(tag, url, Object.assign({ __fail: true }, err || {}))
+        resolve({ reachable: false, device: null })
+      }
+    })
+  })
+}
+
 // 本地已绑定的雷达设备列表（不含 history）
 export function listRadarDevices() {
   return _req('GET /api/radar/devices', '/api/radar/devices?_t=' + Date.now(), 'GET', null, [])

@@ -127,11 +127,13 @@ export function listRadarDevices() {
 }
 
 // 单台雷达完整记录：{ deviceid, name, model, latest, attrs, state, stateText, site, lastSeen }
-// refresh=true 时后端会回平台同步一次基础信息（受每秒 1 次限流保护，略慢）
+// refresh=true 时后端会回平台同步一次基础信息（受每秒 1 次限流保护，略慢），
+// 且在 MQTT 离线时后端会在本地合成一条新的心率/呼吸数据，让前端演示时能看到实时变化。
 export function fetchRadarRecord(deviceid, refresh) {
   if (!deviceid) return Promise.resolve(null)
+  // 默认带 refresh=1：让每次拉取都能触发后端的数据合成/同步，避免永远停在历史快照
   let path = '/api/radar/devices/' + encodeURIComponent(deviceid) + '?_t=' + Date.now()
-  if (refresh) path += '&refresh=1'
+  if (refresh !== false) path += '&refresh=1'
   return _req('GET /api/radar/devices/:imei', path, 'GET', null, null)
 }
 

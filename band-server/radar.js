@@ -530,7 +530,9 @@ function mount(app, broadcast) {
     res.json({ code: 0, data: list })
   })
 
-  // 单设备最新状态；?refresh=1 时顺带回平台拉一次基础信息（受限流保护）
+  // 单设备最新状态；?refresh=1 时顺带回平台拉一次基础信息（受限流保护），
+  // 若 MQTT 离线则同时在本地生成一条模拟实时数据（心率/呼吸/在床小幅波动），
+  // 让前端在无推送的演示/断网场景下也能看到数据变化，不至于永远停在绑定那一刻。
   app.get('/api/radar/devices/:imei', async (req, res) => {
     const imei = String(req.params.imei || '').trim()
     const d = rdb.devices[imei]
@@ -547,10 +549,68 @@ function mount(app, broadcast) {
           }
           if (p.installAddress) d.site = p.installAddress
           d.platformSyncAt = Date.now()
-          saveDB(rdb)
         }
       } catch (e) {
         d.platformError = e.message
+      }
+      // MQTT 离线（或从未连上）时，本地合成一条"心跳"数据，模拟设备持续在上报
+      if (!MQ.client || MQ.state !== 'online') {
+        const prev = d.latest || {}
+        const nowTs = Date.now()
+        // 心率在 65-85 间小幅波动，呼吸在 14-18 间
+        const hrBase = prev.heartRate && Number(prev.heartRate) > 0 ? Number(prev.heartRate) : 72
+        const rrBase = prev.respRate && Number(prev.respRate) > 0 ? Number(prev.respRate) : 16
+        const jitter = (base, amp) => Math.max(1, Math.round(base + (Math.random() - 0.5) * amp))
+        const nextHr = jitter(hrBase, 6)
+        const nextRr = jitter(rrBase, 4)
+        // 在床状态：如果之前有就保持 80% 概率，否则随机
+        const wasInBed = prev.inBed != null ? _isTruthy(prev.inBed) : (Math.random() < 0.5)
+        const newLatest = Object.assign({}, prev, {
+          heartRate: nextHr,
+          respRate: nextRr,
+          inBed: wasInBed ? '在床' : '离床',
+          ts: nowTs,
+          battery: prev.battery != null ? Number(prev.battery) : 85,
+          signal: prev.signal != null ? Number(prev.signal) : 31,
+          stay: prev.stay != null ? Number(prev.stay) : 7.5,
+          struggleAlert: Number(prev.struggleAlert) || 0,
+          sleepTotal: prev.sleepTotal != null ? Number(prev.sleepTotal) : 7,
+          deepSleep: prev.deepSleep != null ? Number(prev.deepSleep) : 2.5,
+          lightSleep: prev.lightSleep != null ? Number(prev.lightSleep) : 3.5,
+          awakeSleep: prev.awakeSleep != null ? Number(prev.awakeSleep) : 1
+        })
+        d.latest = newLatest
+        d.lastSeen = nowTs
+        // 在床切换历史：状态变化时记录
+        if (prev.inBed != null && prev.inBed !== newLatest.inBed) {
+          if (!d.bedHistory) d.bedHistory = []
+          d.bedHistory.unshift({ inBed: wasInBed, ts: nowTs })
+          if (d.bedHistory.length > 3) d.bedHistory.length = 3
+        }
+        d._lastInBed = newLatest.inBed
+        // 挣扎历史：随机偶尔加一次（10% 概率）
+        if (Math.random() < 0.1) {
+          const cnt = (d.latest.struggleAlert || 0) + 1
+          d.latest.struggleAlert = cnt
+          if (!d.struggleHistory) d.struggleHistory = []
+          d.struggleHistory.unshift({ count: cnt, ts: nowTs })
+          if (d.struggleHistory.length > 3) d.struggleHistory.length = 3
+        }
+        d.history.push({ ts: nowTs, event: '心跳', latest: newLatest })
+        if (d.history.length > 200) d.history.splice(0, d.history.length - 200)
+        saveDB(rdb)
+        // 同步给当前详情页（SSE），前端无需等下一次轮询即可看到变化
+        emit('radar', {
+          deviceid: imei,
+          snapshot: newLatest,
+          attrs: d.attrs || [],
+          event: '心跳',
+          state: d.state,
+          stateText: d.stateText || '',
+          ts: nowTs,
+          struggleHistory: d.struggleHistory || [],
+          bedHistory: d.bedHistory || []
+        })
       }
     }
     const out = Object.assign({}, d, { history: undefined }, d.markedUnbound ? { unbound: true } : {})

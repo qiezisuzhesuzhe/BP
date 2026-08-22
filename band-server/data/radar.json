@@ -235,8 +235,8 @@
           }
         }
       ],
-      "lastSeen": 1787369476163,
-      "boundAt": 1787369476163,
+      "lastSeen": 1787369560614,
+      "boundAt": 1787369560614,
       "struggleHistory": [
         {
           "count": 3,
@@ -272,7 +272,7 @@
       ],
       "platformDeviceId": 152166722,
       "companyName": "叁陆伍智慧（北京）医疗科技有限公司",
-      "platformSyncAt": 1787369476163
+      "platformSyncAt": 1787369560614
     }
   }
 }

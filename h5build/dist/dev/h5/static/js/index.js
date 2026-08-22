@@ -2922,7 +2922,7 @@ global.UniApp && new global.UniApp();
 /*!****************************!*\
   !*** ./src/common/mock.js ***!
   \****************************/
-/*! exports provided: PACKAGES, TIMELINE, CAT_META, guideName, basisForCat, PROFILE_DOMAINS, PLAN_ENGINE_STEPS, TCM_SYNDROMES, TCM_ADDONS, HBP_TARGETS, HBP_ALERTS, HBP_FOLLOWUP, HBP_LABS, MISSED_DOSE_RULES, DRUG_SIDE_EFFECTS, SYMPTOM_SCALE, CONSULT_SERVICE, DIET_TARGETS, EXERCISE_PLAN, MOOD_SCALES, LIFESTYLE_RULES, tcmSyndrome, tcmAddon, hbpFlags, dmFlags, recommendGoodsForCat, buildDayPlan, QUESTIONS, QUESTIONS_DM, KNOWLEDGE, RIGHT_ENTRIES, SHOP_GOODS, makeOrderNo, DEVICE_TYPES, deviceType, makeDeviceSnapshot, HEALTH_MEMBERS, HEALTH_QUICK, HEALTH_SCORE, HEALTH_FOCUS, HEALTH_ACHIEVE, HEALTH_PLAN, HEALTH_PLAN_META, HEALTH_RISK_FORECAST, HEALTH_DISEASE_RISK, HEALTH_RECOMMEND */
+/*! exports provided: PACKAGES, TIMELINE, CAT_META, guideName, basisForCat, PROFILE_DOMAINS, PLAN_ENGINE_STEPS, TCM_SYNDROMES, TCM_ADDONS, HBP_TARGETS, HBP_ALERTS, HBP_FOLLOWUP, HBP_LABS, MISSED_DOSE_RULES, DRUG_SIDE_EFFECTS, SYMPTOM_SCALE, CONSULT_SERVICE, DIET_TARGETS, EXERCISE_PLAN, MOOD_SCALES, LIFESTYLE_RULES, tcmSyndrome, tcmAddon, hbpFlags, dmFlags, recommendGoodsForCat, buildDayPlan, QUESTIONS, QUESTIONS_DM, KNOWLEDGE, RIGHT_ENTRIES, SHOP_GOODS, makeOrderNo, DEVICE_TYPES, RADAR_DEVICE_IDS, isKnownRadarDeviceId, deviceTypeStrict, deviceType, makeDeviceSnapshot, HEALTH_MEMBERS, HEALTH_QUICK, HEALTH_SCORE, HEALTH_FOCUS, HEALTH_ACHIEVE, HEALTH_PLAN, HEALTH_PLAN_META, HEALTH_RISK_FORECAST, HEALTH_DISEASE_RISK, HEALTH_RECOMMEND */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -2961,6 +2961,9 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "SHOP_GOODS", function() { return SHOP_GOODS; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "makeOrderNo", function() { return makeOrderNo; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "DEVICE_TYPES", function() { return DEVICE_TYPES; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "RADAR_DEVICE_IDS", function() { return RADAR_DEVICE_IDS; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "isKnownRadarDeviceId", function() { return isKnownRadarDeviceId; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "deviceTypeStrict", function() { return deviceTypeStrict; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "deviceType", function() { return deviceType; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "makeDeviceSnapshot", function() { return makeDeviceSnapshot; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "HEALTH_MEMBERS", function() { return HEALTH_MEMBERS; });
@@ -2997,6 +3000,12 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var core_js_modules_es_object_keys_js__WEBPACK_IMPORTED_MODULE_10___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_object_keys_js__WEBPACK_IMPORTED_MODULE_10__);
 /* harmony import */ var core_js_modules_es_object_to_string_js__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! core-js/modules/es.object.to-string.js */ "07d7");
 /* harmony import */ var core_js_modules_es_object_to_string_js__WEBPACK_IMPORTED_MODULE_11___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_object_to_string_js__WEBPACK_IMPORTED_MODULE_11__);
+/* harmony import */ var core_js_modules_es_regexp_exec_js__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! core-js/modules/es.regexp.exec.js */ "rB9j");
+/* harmony import */ var core_js_modules_es_regexp_exec_js__WEBPACK_IMPORTED_MODULE_12___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_regexp_exec_js__WEBPACK_IMPORTED_MODULE_12__);
+/* harmony import */ var core_js_modules_es_string_replace_js__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(/*! core-js/modules/es.string.replace.js */ "UxlC");
+/* harmony import */ var core_js_modules_es_string_replace_js__WEBPACK_IMPORTED_MODULE_13___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_string_replace_js__WEBPACK_IMPORTED_MODULE_13__);
+
+
 
 
 
@@ -5485,6 +5494,30 @@ var DEVICE_TYPES = [{
     icon: 'fa-solid fa-moon'
   }]
 }];
+
+// 已知的毫米波雷达设备号白名单（本地识别依据）
+// 设备机身二维码内容本身不含类型信息，正常应回物联网云平台反查设备归属；
+// 但演示环境 / 弱网 / 对接后端未启动时反查会失败，此时若无本地依据就会把雷达误判成手环。
+// 故对已登记的雷达设备号做本地直判，保证离线也能正确识别。
+var RADAR_DEVICE_IDS = ['867561088869642'];
+
+// 设备号是否为已登记的毫米波雷达（容错空格与横线）
+function isKnownRadarDeviceId(deviceid) {
+  var id = String(deviceid || '').replace(/[\s-]/g, '');
+  if (!id) return false;
+  return RADAR_DEVICE_IDS.indexOf(id) >= 0;
+}
+
+// 严格查表：查不到返回 null。
+// 用于扫码等"必须确定类型"的场景，避免 deviceType 的兜底把未知类型悄悄变成智能手环。
+function deviceTypeStrict(key) {
+  return DEVICE_TYPES.find(function (t) {
+    return t.key === key;
+  }) || null;
+}
+
+// 宽容查表：查不到兜底为第一种设备。
+// 仅用于已入库设备的展示（typeKey 一定合法），扫码识别请改用 deviceTypeStrict。
 function deviceType(key) {
   return DEVICE_TYPES.find(function (t) {
     return t.key === key;

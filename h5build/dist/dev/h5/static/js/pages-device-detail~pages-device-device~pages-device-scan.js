@@ -46,7 +46,7 @@ function _asyncToGenerator(n) {
 /*!*****************************!*\
   !*** ./src/common/radar.js ***!
   \*****************************/
-/*! exports provided: lastRadarError, getLastRadarError, fetchRadarStatus, pingRadarPlatform, verifyRadarDevice, listRadarDevices, fetchRadarRecord, fetchRadarLatest, fetchRadarLatestBatch, fetchRadarAttributes, bindRadarDevice, unbindRadarDevice, RADAR_STATE_TEXT, radarStateText, radarInBed, respLevel, heartRateLevel, radarStruggleAlert */
+/*! exports provided: lastRadarError, getLastRadarError, fetchRadarStatus, pingRadarPlatform, verifyRadarDevice, verifyRadarDeviceEx, listRadarDevices, fetchRadarRecord, fetchRadarLatest, fetchRadarLatestBatch, fetchRadarAttributes, bindRadarDevice, bindRadarDeviceEx, unbindRadarDevice, RADAR_STATE_TEXT, radarStateText, radarInBed, respLevel, heartRateLevel, radarStruggleAlert */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -56,12 +56,14 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "fetchRadarStatus", function() { return fetchRadarStatus; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "pingRadarPlatform", function() { return pingRadarPlatform; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "verifyRadarDevice", function() { return verifyRadarDevice; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "verifyRadarDeviceEx", function() { return verifyRadarDeviceEx; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "listRadarDevices", function() { return listRadarDevices; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "fetchRadarRecord", function() { return fetchRadarRecord; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "fetchRadarLatest", function() { return fetchRadarLatest; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "fetchRadarLatestBatch", function() { return fetchRadarLatestBatch; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "fetchRadarAttributes", function() { return fetchRadarAttributes; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "bindRadarDevice", function() { return bindRadarDevice; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "bindRadarDeviceEx", function() { return bindRadarDeviceEx; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "unbindRadarDevice", function() { return unbindRadarDevice; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "RADAR_STATE_TEXT", function() { return RADAR_STATE_TEXT; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "radarStateText", function() { return radarStateText; });
@@ -70,41 +72,43 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "heartRateLevel", function() { return heartRateLevel; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "radarStruggleAlert", function() { return radarStruggleAlert; });
 /* harmony import */ var _workspace_h5build_node_modules_babel_runtime_helpers_esm_slicedToArray_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./node_modules/@babel/runtime/helpers/esm/slicedToArray.js */ "ODXe");
-/* harmony import */ var core_js_modules_es_array_filter_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! core-js/modules/es.array.filter.js */ "TeQF");
-/* harmony import */ var core_js_modules_es_array_filter_js__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_array_filter_js__WEBPACK_IMPORTED_MODULE_1__);
-/* harmony import */ var core_js_modules_es_array_index_of_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! core-js/modules/es.array.index-of.js */ "yXV3");
-/* harmony import */ var core_js_modules_es_array_index_of_js__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_array_index_of_js__WEBPACK_IMPORTED_MODULE_2__);
-/* harmony import */ var core_js_modules_es_array_map_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! core-js/modules/es.array.map.js */ "2B1R");
-/* harmony import */ var core_js_modules_es_array_map_js__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_array_map_js__WEBPACK_IMPORTED_MODULE_3__);
-/* harmony import */ var core_js_modules_es_date_to_json_js__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! core-js/modules/es.date.to-json.js */ "9LPj");
-/* harmony import */ var core_js_modules_es_date_to_json_js__WEBPACK_IMPORTED_MODULE_4___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_date_to_json_js__WEBPACK_IMPORTED_MODULE_4__);
-/* harmony import */ var core_js_modules_es_iterator_constructor_js__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! core-js/modules/es.iterator.constructor.js */ "6fVz");
-/* harmony import */ var core_js_modules_es_iterator_constructor_js__WEBPACK_IMPORTED_MODULE_5___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_iterator_constructor_js__WEBPACK_IMPORTED_MODULE_5__);
-/* harmony import */ var core_js_modules_es_iterator_filter_js__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! core-js/modules/es.iterator.filter.js */ "kQ2C");
-/* harmony import */ var core_js_modules_es_iterator_filter_js__WEBPACK_IMPORTED_MODULE_6___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_iterator_filter_js__WEBPACK_IMPORTED_MODULE_6__);
-/* harmony import */ var core_js_modules_es_iterator_for_each_js__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! core-js/modules/es.iterator.for-each.js */ "fVRX");
-/* harmony import */ var core_js_modules_es_iterator_for_each_js__WEBPACK_IMPORTED_MODULE_7___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_iterator_for_each_js__WEBPACK_IMPORTED_MODULE_7__);
-/* harmony import */ var core_js_modules_es_iterator_map_js__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! core-js/modules/es.iterator.map.js */ "q0NK");
-/* harmony import */ var core_js_modules_es_iterator_map_js__WEBPACK_IMPORTED_MODULE_8___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_iterator_map_js__WEBPACK_IMPORTED_MODULE_8__);
-/* harmony import */ var core_js_modules_es_json_stringify_js__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! core-js/modules/es.json.stringify.js */ "6cQw");
-/* harmony import */ var core_js_modules_es_json_stringify_js__WEBPACK_IMPORTED_MODULE_9___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_json_stringify_js__WEBPACK_IMPORTED_MODULE_9__);
-/* harmony import */ var core_js_modules_es_number_constructor_js__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! core-js/modules/es.number.constructor.js */ "qePV");
-/* harmony import */ var core_js_modules_es_number_constructor_js__WEBPACK_IMPORTED_MODULE_10___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_number_constructor_js__WEBPACK_IMPORTED_MODULE_10__);
-/* harmony import */ var core_js_modules_es_object_to_string_js__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! core-js/modules/es.object.to-string.js */ "07d7");
-/* harmony import */ var core_js_modules_es_object_to_string_js__WEBPACK_IMPORTED_MODULE_11___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_object_to_string_js__WEBPACK_IMPORTED_MODULE_11__);
-/* harmony import */ var core_js_modules_es_regexp_exec_js__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! core-js/modules/es.regexp.exec.js */ "rB9j");
-/* harmony import */ var core_js_modules_es_regexp_exec_js__WEBPACK_IMPORTED_MODULE_12___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_regexp_exec_js__WEBPACK_IMPORTED_MODULE_12__);
-/* harmony import */ var core_js_modules_es_regexp_test_js__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(/*! core-js/modules/es.regexp.test.js */ "ALS0");
-/* harmony import */ var core_js_modules_es_regexp_test_js__WEBPACK_IMPORTED_MODULE_13___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_regexp_test_js__WEBPACK_IMPORTED_MODULE_13__);
-/* harmony import */ var core_js_modules_es_string_iterator_js__WEBPACK_IMPORTED_MODULE_14__ = __webpack_require__(/*! core-js/modules/es.string.iterator.js */ "PKPk");
-/* harmony import */ var core_js_modules_es_string_iterator_js__WEBPACK_IMPORTED_MODULE_14___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_string_iterator_js__WEBPACK_IMPORTED_MODULE_14__);
-/* harmony import */ var core_js_modules_es_string_trim_js__WEBPACK_IMPORTED_MODULE_15__ = __webpack_require__(/*! core-js/modules/es.string.trim.js */ "SYor");
-/* harmony import */ var core_js_modules_es_string_trim_js__WEBPACK_IMPORTED_MODULE_15___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_string_trim_js__WEBPACK_IMPORTED_MODULE_15__);
-/* harmony import */ var core_js_modules_web_dom_collections_for_each_js__WEBPACK_IMPORTED_MODULE_16__ = __webpack_require__(/*! core-js/modules/web.dom-collections.for-each.js */ "FZtP");
-/* harmony import */ var core_js_modules_web_dom_collections_for_each_js__WEBPACK_IMPORTED_MODULE_16___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_web_dom_collections_for_each_js__WEBPACK_IMPORTED_MODULE_16__);
-/* harmony import */ var core_js_modules_web_dom_collections_iterator_js__WEBPACK_IMPORTED_MODULE_17__ = __webpack_require__(/*! core-js/modules/web.dom-collections.iterator.js */ "3bBZ");
-/* harmony import */ var core_js_modules_web_dom_collections_iterator_js__WEBPACK_IMPORTED_MODULE_17___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_web_dom_collections_iterator_js__WEBPACK_IMPORTED_MODULE_17__);
-/* harmony import */ var _band_js__WEBPACK_IMPORTED_MODULE_18__ = __webpack_require__(/*! ./band.js */ "YNKN");
+/* harmony import */ var _workspace_h5build_node_modules_babel_runtime_helpers_esm_typeof_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./node_modules/@babel/runtime/helpers/esm/typeof.js */ "U8pU");
+/* harmony import */ var core_js_modules_es_array_filter_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! core-js/modules/es.array.filter.js */ "TeQF");
+/* harmony import */ var core_js_modules_es_array_filter_js__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_array_filter_js__WEBPACK_IMPORTED_MODULE_2__);
+/* harmony import */ var core_js_modules_es_array_index_of_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! core-js/modules/es.array.index-of.js */ "yXV3");
+/* harmony import */ var core_js_modules_es_array_index_of_js__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_array_index_of_js__WEBPACK_IMPORTED_MODULE_3__);
+/* harmony import */ var core_js_modules_es_array_map_js__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! core-js/modules/es.array.map.js */ "2B1R");
+/* harmony import */ var core_js_modules_es_array_map_js__WEBPACK_IMPORTED_MODULE_4___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_array_map_js__WEBPACK_IMPORTED_MODULE_4__);
+/* harmony import */ var core_js_modules_es_date_to_json_js__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! core-js/modules/es.date.to-json.js */ "9LPj");
+/* harmony import */ var core_js_modules_es_date_to_json_js__WEBPACK_IMPORTED_MODULE_5___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_date_to_json_js__WEBPACK_IMPORTED_MODULE_5__);
+/* harmony import */ var core_js_modules_es_iterator_constructor_js__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! core-js/modules/es.iterator.constructor.js */ "6fVz");
+/* harmony import */ var core_js_modules_es_iterator_constructor_js__WEBPACK_IMPORTED_MODULE_6___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_iterator_constructor_js__WEBPACK_IMPORTED_MODULE_6__);
+/* harmony import */ var core_js_modules_es_iterator_filter_js__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! core-js/modules/es.iterator.filter.js */ "kQ2C");
+/* harmony import */ var core_js_modules_es_iterator_filter_js__WEBPACK_IMPORTED_MODULE_7___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_iterator_filter_js__WEBPACK_IMPORTED_MODULE_7__);
+/* harmony import */ var core_js_modules_es_iterator_for_each_js__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! core-js/modules/es.iterator.for-each.js */ "fVRX");
+/* harmony import */ var core_js_modules_es_iterator_for_each_js__WEBPACK_IMPORTED_MODULE_8___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_iterator_for_each_js__WEBPACK_IMPORTED_MODULE_8__);
+/* harmony import */ var core_js_modules_es_iterator_map_js__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! core-js/modules/es.iterator.map.js */ "q0NK");
+/* harmony import */ var core_js_modules_es_iterator_map_js__WEBPACK_IMPORTED_MODULE_9___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_iterator_map_js__WEBPACK_IMPORTED_MODULE_9__);
+/* harmony import */ var core_js_modules_es_json_stringify_js__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! core-js/modules/es.json.stringify.js */ "6cQw");
+/* harmony import */ var core_js_modules_es_json_stringify_js__WEBPACK_IMPORTED_MODULE_10___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_json_stringify_js__WEBPACK_IMPORTED_MODULE_10__);
+/* harmony import */ var core_js_modules_es_number_constructor_js__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! core-js/modules/es.number.constructor.js */ "qePV");
+/* harmony import */ var core_js_modules_es_number_constructor_js__WEBPACK_IMPORTED_MODULE_11___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_number_constructor_js__WEBPACK_IMPORTED_MODULE_11__);
+/* harmony import */ var core_js_modules_es_object_to_string_js__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! core-js/modules/es.object.to-string.js */ "07d7");
+/* harmony import */ var core_js_modules_es_object_to_string_js__WEBPACK_IMPORTED_MODULE_12___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_object_to_string_js__WEBPACK_IMPORTED_MODULE_12__);
+/* harmony import */ var core_js_modules_es_regexp_exec_js__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(/*! core-js/modules/es.regexp.exec.js */ "rB9j");
+/* harmony import */ var core_js_modules_es_regexp_exec_js__WEBPACK_IMPORTED_MODULE_13___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_regexp_exec_js__WEBPACK_IMPORTED_MODULE_13__);
+/* harmony import */ var core_js_modules_es_regexp_test_js__WEBPACK_IMPORTED_MODULE_14__ = __webpack_require__(/*! core-js/modules/es.regexp.test.js */ "ALS0");
+/* harmony import */ var core_js_modules_es_regexp_test_js__WEBPACK_IMPORTED_MODULE_14___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_regexp_test_js__WEBPACK_IMPORTED_MODULE_14__);
+/* harmony import */ var core_js_modules_es_string_iterator_js__WEBPACK_IMPORTED_MODULE_15__ = __webpack_require__(/*! core-js/modules/es.string.iterator.js */ "PKPk");
+/* harmony import */ var core_js_modules_es_string_iterator_js__WEBPACK_IMPORTED_MODULE_15___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_string_iterator_js__WEBPACK_IMPORTED_MODULE_15__);
+/* harmony import */ var core_js_modules_es_string_trim_js__WEBPACK_IMPORTED_MODULE_16__ = __webpack_require__(/*! core-js/modules/es.string.trim.js */ "SYor");
+/* harmony import */ var core_js_modules_es_string_trim_js__WEBPACK_IMPORTED_MODULE_16___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_string_trim_js__WEBPACK_IMPORTED_MODULE_16__);
+/* harmony import */ var core_js_modules_web_dom_collections_for_each_js__WEBPACK_IMPORTED_MODULE_17__ = __webpack_require__(/*! core-js/modules/web.dom-collections.for-each.js */ "FZtP");
+/* harmony import */ var core_js_modules_web_dom_collections_for_each_js__WEBPACK_IMPORTED_MODULE_17___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_web_dom_collections_for_each_js__WEBPACK_IMPORTED_MODULE_17__);
+/* harmony import */ var core_js_modules_web_dom_collections_iterator_js__WEBPACK_IMPORTED_MODULE_18__ = __webpack_require__(/*! core-js/modules/web.dom-collections.iterator.js */ "3bBZ");
+/* harmony import */ var core_js_modules_web_dom_collections_iterator_js__WEBPACK_IMPORTED_MODULE_18___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_web_dom_collections_iterator_js__WEBPACK_IMPORTED_MODULE_18__);
+/* harmony import */ var _band_js__WEBPACK_IMPORTED_MODULE_19__ = __webpack_require__(/*! ./band.js */ "YNKN");
+
 
 
 
@@ -162,19 +166,29 @@ function _logReq(tag, url, resOrErr, extra) {
   } catch (e) {/* ignore */}
 }
 
+// 判断响应体是否确实来自本项目的 JSON 接口。
+// 典型陷阱：H5 dev server 的 SPA history fallback 会对未代理的 /api/* 返回 200 + index.html，
+// 若把它当成"接口正常答复"，业务层会误以为"平台明确说查不到该设备"。
+function _isApiEnvelope(data) {
+  if (!data) return false;
+  if (typeof data === 'string') return false; // HTML / 纯文本一律视为非接口响应
+  return Object(_workspace_h5build_node_modules_babel_runtime_helpers_esm_typeof_js__WEBPACK_IMPORTED_MODULE_1__["default"])(data) === 'object' && typeof data.code !== 'undefined';
+}
+
 // 统一请求封装：失败一律 resolve(fallback)，绝不 reject，也不弹 toast（会被轮询高频调用）
 function _req(tag, path, method, data, fallback) {
   return new Promise(function (resolve) {
-    var url = Object(_band_js__WEBPACK_IMPORTED_MODULE_18__["bandApi"])(path);
+    var url = Object(_band_js__WEBPACK_IMPORTED_MODULE_19__["bandApi"])(path);
     uni.request({
       url: url,
       method: method || 'GET',
       data: data || undefined,
       timeout: 20000,
       success: function success(res) {
-        var ok = res.statusCode === 200 && res.data && res.data.code === 0;
+        var envelope = _isApiEnvelope(res.data);
+        var ok = res.statusCode === 200 && envelope && res.data.code === 0;
         _logReq(tag, url, res, ok ? null : {
-          message: res.data && res.data.message || null
+          message: envelope && res.data.message || (envelope ? null : '响应不是接口 JSON（可能未配置接口代理）')
         });
         resolve(ok ? res.data.data : fallback);
       },
@@ -211,28 +225,86 @@ function verifyRadarDevice(deviceid) {
   return _req('GET /api/radar/verify/:imei', '/api/radar/verify/' + encodeURIComponent(deviceid) + '?_t=' + Date.now(), 'GET', null, null);
 }
 
+// verifyRadarDevice 的增强版：把"平台明确答复不是雷达"和"后端/网络不可达"区分开。
+// 前者可以放心回落到手环，后者必须交给用户确认设备类型，否则会把雷达误判成手环。
+// 返回 Promise<{ reachable: boolean, device: object|null }>
+function verifyRadarDeviceEx(deviceid) {
+  if (!deviceid) return Promise.resolve({
+    reachable: false,
+    device: null
+  });
+  var tag = 'GET /api/radar/verify/:imei';
+  var path = '/api/radar/verify/' + encodeURIComponent(deviceid) + '?_t=' + Date.now();
+  return new Promise(function (resolve) {
+    var url = Object(_band_js__WEBPACK_IMPORTED_MODULE_19__["bandApi"])(path);
+    uni.request({
+      url: url,
+      method: 'GET',
+      timeout: 20000,
+      success: function success(res) {
+        var envelope = _isApiEnvelope(res.data);
+        var ok = res.statusCode === 200 && envelope && res.data.code === 0;
+        _logReq(tag, url, res, ok ? null : {
+          message: envelope && res.data.message || (envelope ? null : '响应不是接口 JSON（可能未配置接口代理）')
+        });
+        if (ok) {
+          resolve({
+            reachable: true,
+            device: res.data.data || null
+          });
+          return;
+        }
+        // 后端答复了但业务失败：404 / 业务码非 0 视为"平台确认查不到该雷达"，属于可信结论；
+        // 5xx 属于服务端自身异常，不能当作结论；
+        // 拿不到接口信封（返回 HTML 等）说明请求根本没到 band-server，同样不可信。
+        var serverBroke = res.statusCode >= 500 || !envelope;
+        resolve({
+          reachable: !serverBroke,
+          device: null
+        });
+      },
+      fail: function fail(err) {
+        // 连不上对接后端（未启动 / 跨域 / 断网）：结论不可信
+        _logReq(tag, url, Object.assign({
+          __fail: true
+        }, err || {}));
+        resolve({
+          reachable: false,
+          device: null
+        });
+      }
+    });
+  });
+}
+
 // 本地已绑定的雷达设备列表（不含 history）
 function listRadarDevices() {
   return _req('GET /api/radar/devices', '/api/radar/devices?_t=' + Date.now(), 'GET', null, []);
 }
 
 // 单台雷达完整记录：{ deviceid, name, model, latest, attrs, state, stateText, site, lastSeen }
-// refresh=true 时后端会回平台同步一次基础信息（受每秒 1 次限流保护，略慢）
+// refresh=true 时后端会回平台同步一次基础信息（受每秒 1 次限流保护，略慢），
+// 且在 MQTT 离线时后端会在本地合成一条新的心率/呼吸数据，让前端演示时能看到实时变化。
 function fetchRadarRecord(deviceid, refresh) {
   if (!deviceid) return Promise.resolve(null);
+  // 默认带 refresh=1：让每次拉取都能触发后端的数据合成/同步，避免永远停在历史快照
   var path = '/api/radar/devices/' + encodeURIComponent(deviceid) + '?_t=' + Date.now();
-  if (refresh) path += '&refresh=1';
+  if (refresh !== false) path += '&refresh=1';
   return _req('GET /api/radar/devices/:imei', path, 'GET', null, null);
 }
 
 // 只取最新快照（给设备列表页用）
+// 返回 { ...latest, lastSeen }：把后端"最后一次访问时间"一起带过来，供列表页在没有生命体征数据时兜底判定在线
 function fetchRadarLatest(deviceid) {
   return fetchRadarRecord(deviceid).then(function (rec) {
-    return rec && rec.latest ? rec.latest : null;
+    if (!rec) return null;
+    var latest = rec.latest ? Object.assign({}, rec.latest) : {};
+    if (rec.lastSeen != null) latest.lastSeen = rec.lastSeen;
+    return latest;
   });
 }
 
-// 批量拉取多台雷达最新快照，返回 { [deviceid]: latest | null }
+// 批量拉取多台雷达最新快照，返回 { [deviceid]: latest+lastSeen | null }
 function fetchRadarLatestBatch(deviceids) {
   var ids = Array.isArray(deviceids) ? deviceids.filter(Boolean) : [];
   if (ids.length === 0) return Promise.resolve({});
@@ -269,6 +341,69 @@ function bindRadarDevice(deviceid, name) {
     deviceid: deviceid,
     name: name || ''
   }, null);
+}
+
+// bindRadarDevice 的增强版：把失败原因带回页面，便于弹层给出对症提示。
+// 返回 Promise<{ ok, record, reachable, message }>
+//  - ok=true：绑定成功，record 为设备记录
+//  - ok=false 且 reachable=true：对接后端答复了，但平台拒绝（设备号不存在 / 未注册），message 为后端原文
+//  - ok=false 且 reachable=false：请求没到后端（未启动 / 未配代理 / 断网 / 5xx），结论不可信
+function bindRadarDeviceEx(deviceid, name) {
+  if (!deviceid) return Promise.resolve({
+    ok: false,
+    record: null,
+    reachable: false,
+    message: '缺少设备号'
+  });
+  var tag = 'POST /api/radar/devices';
+  var path = '/api/radar/devices';
+  return new Promise(function (resolve) {
+    var url = Object(_band_js__WEBPACK_IMPORTED_MODULE_19__["bandApi"])(path);
+    uni.request({
+      url: url,
+      method: 'POST',
+      data: {
+        deviceid: deviceid,
+        name: name || ''
+      },
+      timeout: 20000,
+      success: function success(res) {
+        var envelope = _isApiEnvelope(res.data);
+        var ok = res.statusCode === 200 && envelope && res.data.code === 0;
+        var message = envelope ? res.data.message || null : '响应不是接口 JSON（可能未配置接口代理）';
+        _logReq(tag, url, res, ok ? null : {
+          message: message
+        });
+        if (ok) {
+          resolve({
+            ok: true,
+            record: res.data.data || null,
+            reachable: true,
+            message: null
+          });
+          return;
+        }
+        var serverBroke = res.statusCode >= 500 || !envelope;
+        resolve({
+          ok: false,
+          record: null,
+          reachable: !serverBroke,
+          message: message
+        });
+      },
+      fail: function fail(err) {
+        _logReq(tag, url, Object.assign({
+          __fail: true
+        }, err || {}));
+        resolve({
+          ok: false,
+          record: null,
+          reachable: false,
+          message: err && err.errMsg || '网络请求失败'
+        });
+      }
+    });
+  });
 }
 
 // 解绑：后端打 markedUnbound 标记而非真删，保住历史数据

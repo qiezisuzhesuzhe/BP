@@ -1,28 +1,27 @@
 #!/usr/bin/env bash
 # =============================================================================
-#  内网穿透一键启动脚本（ngrok / frp 自动选择）
-#  暴露 band-server 的 8091 端口到公网，供叁陆伍智慧云平台回调 HTTP 数据
+#  公网暴露脚本 — 暴露 band-server 到公网，供叁陆伍智慧云平台回调
+#
+#  【发现】Trae 预览代理 (port 16000) 已自动将 /api/* 路由到 band-server:8091
+#  因此首选方案是利用预览代理的公网 URL 直接暴露 API
+#  备选方案：ngrok / frp 隧道
 #
 #  用法:
-#    bash tunnel.sh              # 自动选择（优先 ngrok，再 frp）
-#    bash tunnel.sh ngrok         # 强制使用 ngrok
-#    bash tunnel.sh frp           # 强制使用 frp
-#    bash tunnel.sh status        # 查看状态
-#    bash tunnel.sh stop          # 停止所有隧道
-#
-#  环境变量（ngrok）:
-#    NGROK_AUTH_TOKEN=xxx         # ngrok 授权 token
-#    NGROK_REGION=cn              # cn | us | eu
-#
-#  环境变量（frp）:
-#    FRPS_ADDR=xxx                # frps 服务器地址
-#    FRPS_TOKEN=xxx               # frps 鉴权 token
+#    bash tunnel.sh              # 自动检测（预览代理 → ngrok → frp）
+#    bash tunnel.sh preview      # 使用 Trae 预览代理（推荐）
+#    bash tunnel.sh ngrok        # 使用 ngrok 隧道
+#    bash tunnel.sh frp          # 使用 frp 隧道
+#    bash tunnel.sh status       # 查看所有通道状态
+#    bash tunnel.sh stop         # 停止所有隧道
 # =============================================================================
 set -euo pipefail
 
 SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
 TUNNEL_NGROK="${SCRIPT_DIR}/ngrok-setup.sh"
 TUNNEL_FRP="${SCRIPT_DIR}/frp-setup.sh"
+
+PREVIEW_PORT="${PREVIEW_PROXY_PUBLIC_PORT:-16000}"
+BAND_PORT=8091
 
 RED='\033[0;31m'; GREEN='\033[0;32m'; YELLOW='\033[1;33m'; CYAN='\033[0;36m'; NC='\033[0m'
 log()  { echo -e "${GREEN}[tunnel]${NC} $*"; }
@@ -32,40 +31,50 @@ info() { echo -e "${CYAN}[info]${NC} $*"; }
 
 usage() {
   cat <<EOF
-内网穿透 — 暴露 band-server 到公网
-==============================================
+公网暴露 — 让叁陆伍智慧云平台能回调 band-server
+====================================================
 
   bash tunnel.sh [MODE]
 
   MODE:
-    (默认)    自动选择：先检查 ngrok 认证配置，再检查 frp 配置
-    ngrok     强制使用 ngrok（需 NGROK_AUTH_TOKEN）
-    frp       强制使用 frp（需 FRPS_ADDR）
-    status    查看隧道状态
-    stop      停止所有隧道
-    help      显示本帮助
+    (默认)     自动检测：预览代理 → ngrok → frp
+    preview    使用 Trae 预览代理（推荐，无需额外工具）
+    ngrok      使用 ngrok 隧道（需 NGROK_AUTH_TOKEN）
+    frp        使用 frp 隧道（需 FRPS_ADDR）
+    status     查看状态
+    stop       停止所有隧道
+    help       显示本帮助
 
-  ngrok 快速开始:
-    # 1. 注册 https://ngrok.com 获取免费账号
-    # 2. 获取 token: https://dashboard.ngrok.com/get-started/your-authtoken
-    # 3. 启动:
-       export NGROK_AUTH_TOKEN=你的token
-       bash tunnel.sh ngrok
+  ┌──────────────────────────────────────────────────────────────┐
+  │  方案 A：Trae 预览代理（推荐，当前已就绪）                    │
+  │                                                              │
+  │  Trae IDE 已内置预览代理，自动将 /api/* 路由到后端服务        │
+  │  只需获取工作空间的公网 URL 即可：                            │
+  │                                                              │
+  │  1. 在 Trae IDE 中点击右上角 "预览" 或 "分享" 按钮            │
+  │  2. 复制公网 URL（格式: https://xxx.trae.ai/）              │
+  │  3. 在叁陆伍智慧云平台后台配置推送 URL 为:                    │
+  │     https://你的公网域名/api/radar/push                      │
+  │                                                              │
+  │  当前预览代理状态:                                           │
+  │    端口: ${PREVIEW_PORT}                                     │
+  │    API 路径: /api/* → band-server:${BAND_PORT}               │
+  │    回调接口: /api/radar/push                                 │
+  └──────────────────────────────────────────────────────────────┘
 
-  frp 快速开始:
-    # 1. 你需要一台已部署 frps 的公网服务器
-    # 2. 启动:
-       export FRPS_ADDR=你的frps服务器
-       export FRPS_TOKEN=你的token
-       bash tunnel.sh frp
+  ┌──────────────────────────────────────────────────────────────┐
+  │  方案 B：ngrok 隧道（需额外配置）                             │
+  │                                                              │
+  │  export NGROK_AUTH_TOKEN=你的token                           │
+  │  bash tunnel.sh ngrok                                        │
+  └──────────────────────────────────────────────────────────────┘
 
-  平台配置（两种方式通用）:
-    复制启动脚本输出的公网 URL
-    → 在叁陆伍智慧云平台后台配置推送 URL 为:
-      公网URL/api/radar/push
-
-  本地 band-server 端口: 8091
-  回调路径:             /api/radar/push
+  ┌──────────────────────────────────────────────────────────────┐
+  │  方案 C：frp 隧道（需公网服务器）                             │
+  │                                                              │
+  │  export FRPS_ADDR=你的frps服务器                             │
+  │  bash tunnel.sh frp                                          │
+  └──────────────────────────────────────────────────────────────┘
 EOF
 }
 
@@ -88,12 +97,35 @@ stop_all() {
 # ---- 状态检查 ----
 check_status() {
   echo ""
-  info "===== 隧道状态 ====="
+  info "===== 通道状态 ====="
   echo ""
 
-  local ngrok_running=0 frp_running=0
+  # 检查预览代理
+  local preview_ok=0
+  local preview_msg=""
+  if curl -fsSL "http://127.0.0.1:${PREVIEW_PORT}/api/radar/status" > /dev/null 2>&1; then
+    preview_ok=1
+    local preview_data
+    preview_data=$(curl -s "http://127.0.0.1:${PREVIEW_PORT}/api/radar/status" 2>/dev/null)
+    preview_msg=$(echo "${preview_data}" | python3 -c "
+import sys,json
+try:
+    d = json.load(sys.stdin)
+    p = d.get('data',{}).get('push',{})
+    print(f'{p.get(\"mode\",\"?\")} | {p.get(\"msgCount\",0)} 报文')
+except: print('ok')
+" 2>/dev/null)
+    echo -e "${GREEN}  预览代理: ✓ 运行中 (${PREVIEW_PORT} → band-server)${NC}"
+    echo "    API 路径: /api/* → band-server:${BAND_PORT}"
+    echo "    回调接口: /api/radar/push"
+    echo "    Push 信息: ${preview_msg}"
+    echo "    公网 URL:  需从 Trae IDE 获取（预览/分享按钮）"
+  else
+    echo -e "${YELLOW}  预览代理: 未运行${NC}"
+  fi
 
   # ngrok
+  local ngrok_running=0
   if curl -fsSL http://127.0.0.1:4040/api/tunnels > /dev/null 2>&1; then
     ngrok_running=1
     echo -e "${GREEN}  ngrok:  运行中${NC}"
@@ -116,7 +148,6 @@ except: print('  获取状态失败')
 
   # frp
   if pgrep -x frpc > /dev/null 2>&1; then
-    frp_running=1
     echo -e "${GREEN}  frpc:   运行中 (PID=$(pgrep -x frpc | tr '\n' ' '))${NC}"
     if [[ -f "${HOME}/.frp/frpc.log" ]]; then
       echo "  最近日志:"
@@ -129,7 +160,7 @@ except: print('  获取状态失败')
   echo ""
   info "===== band-server HTTP Push 状态 ====="
   local push_status
-  push_status=$(curl -s http://127.0.0.1:8091/api/radar/status 2>/dev/null || echo '{}')
+  push_status=$(curl -s "http://127.0.0.1:${BAND_PORT}/api/radar/status" 2>/dev/null || echo '{}')
   echo "${push_status}" | python3 -c "
 import sys,json
 try:
@@ -147,25 +178,48 @@ try:
 except: print('  band-server 未响应')
 " 2>/dev/null
 
-  if [[ ${ngrok_running} -eq 0 && ${frp_running} -eq 0 ]]; then
-    echo ""
-    warn "无隧道在运行。执行 bash tunnel.sh 启动"
-  fi
+  echo ""
+  info "===== 平台回调配置 ====="
+  echo "  在叁陆伍智慧云平台后台配置推送 URL:"
+  echo "    https://<公网域名>/api/radar/push"
+  echo ""
+  echo "  获取公网域名:"
+  echo "    1. Trae IDE: 点击右上角 预览 / 分享 按钮"
+  echo "    2. ngrok:    查看本脚本输出的公网 URL"
+  echo "    3. frp:      查看 frpc 配置中的 customDomains"
   echo ""
 }
 
 # ---- 自动选择 ----
 auto_detect() {
-  info "自动选择隧道方案 ..."
+  info "自动检测最佳方案 ..."
 
-  # 优先 ngrok（如果已配置 token）
+  # 优先：Trae 预览代理（已内置，无需额外工具）
+  if curl -fsSL "http://127.0.0.1:${PREVIEW_PORT}/api/radar/status" > /dev/null 2>&1; then
+    log "检测到 Trae 预览代理已运行"
+    log "端口 ${PREVIEW_PORT} → band-server:${BAND_PORT} 路由正常"
+    echo ""
+    info "✓ 预览代理已就绪！"
+    echo ""
+    info "下一步："
+    echo "  1. 在 Trae IDE 中点击 预览 / 分享 按钮"
+    echo "  2. 复制公网 URL"
+    echo "  3. 配置叁陆伍智慧云平台推送 URL:"
+    echo "     https://你的公网域名/api/radar/push"
+    echo ""
+    info "  本地验证: bash tunnel.sh status"
+    echo ""
+    return
+  fi
+
+  # 其次：ngrok（如果已配置 token）
   if [[ -n "${NGROK_AUTH_TOKEN:-}" ]] || [[ -f "${HOME}/.ngrok/ngrok.yml" ]]; then
     log "检测到 ngrok 配置，使用 ngrok"
     bash "${TUNNEL_NGROK}" "${NGROK_AUTH_TOKEN:-}" start
     return
   fi
 
-  # 其次 frp
+  # 再次：frp
   if [[ -n "${FRPS_ADDR:-}" ]]; then
     log "检测到 frp 配置，使用 frp"
     bash "${TUNNEL_FRP}" start
@@ -173,17 +227,49 @@ auto_detect() {
   fi
 
   # 都没有 → 提示
-  warn "未检测到任何隧道配置"
+  warn "预览代理未运行，且未检测到 ngrok/frp 配置"
   echo ""
-  echo "  ngrok 方式（推荐新手）:"
+  echo "  请先启动 Trae 预览代理或配置隧道："
+  echo ""
+  echo "  方案 A（推荐）: 启动 Trae 预览代理"
+  echo "    在 Trae IDE 中点击 预览 按钮即可启动"
+  echo ""
+  echo "  方案 B: ngrok"
   echo "    export NGROK_AUTH_TOKEN=你的token"
   echo "    bash tunnel.sh ngrok"
   echo ""
-  echo "  frp 方式（需公网服务器）:"
+  echo "  方案 C: frp"
   echo "    export FRPS_ADDR=你的frps服务器"
   echo "    bash tunnel.sh frp"
   echo ""
   echo "  详细帮助: bash tunnel.sh help"
+}
+
+# ---- 预览代理模式 ----
+start_preview() {
+  info "检测 Trae 预览代理状态 ..."
+  if curl -fsSL "http://127.0.0.1:${PREVIEW_PORT}/api/radar/status" > /dev/null 2>&1; then
+    log "✓ 预览代理已在运行 (port ${PREVIEW_PORT})"
+    log "✓ /api/* 已路由到 band-server:${BAND_PORT}"
+  else
+    warn "预览代理未运行，请在 Trae IDE 中启动"
+    warn "点击右上角 预览 按钮启动预览代理"
+    exit 1
+  fi
+  echo ""
+  info "===== 预览代理配置 ====="
+  echo ""
+  info "  本地 API 测试: http://127.0.0.1:${PREVIEW_PORT}/api/radar/status"
+  info "  平台回调 URL: https://<公网域名>/api/radar/push"
+  echo ""
+  info "  获取公网域名:"
+  echo "    Trae IDE 右上角 → 预览 / 分享"
+  echo "    复制显示的公网 URL"
+  echo ""
+  info "  配置到叁陆伍智慧云平台:"
+  echo "    推送 URL: https://你的域名/api/radar/push"
+  echo "    Token:    yguvogy8g976t79gy9"
+  echo ""
 }
 
 # ---- 主入口 ----
@@ -193,6 +279,7 @@ case "${mode}" in
   help|-h|--help)   usage; exit 0 ;;
   status)           check_status ;;
   stop)             stop_all ;;
+  preview)          start_preview ;;
   ngrok)            bash "${TUNNEL_NGROK}" "${NGROK_AUTH_TOKEN:-}" start ;;
   frp)              bash "${TUNNEL_FRP}" start ;;
   auto)             auto_detect ;;

@@ -8,9 +8,9 @@
       "firstSeen": 1787320921389,
       "latest": {
         "struggleAlert": 36,
-        "ts": 1787371840000,
-        "heartRate": 72,
-        "respRate": 15,
+        "ts": 1787373382816,
+        "heartRate": 78,
+        "respRate": 16,
         "inBed": "在床",
         "stay": 7.5,
         "battery": 85,
@@ -23,13 +23,13 @@
       "attrs": [
         {
           "name": "心率",
-          "value": 72,
+          "value": 78,
           "unit": "",
           "key": "heartRate"
         },
         {
           "name": "呼吸次数",
-          "value": 15,
+          "value": 16,
           "unit": "",
           "key": "respRate"
         },
@@ -38,93 +38,9 @@
           "value": "在床",
           "unit": "",
           "key": "inBed"
-        },
-        {
-          "name": "信号强度",
-          "value": 31,
-          "unit": "",
-          "key": "signal"
-        },
-        {
-          "name": "电量",
-          "value": 85,
-          "unit": "",
-          "key": "battery"
         }
       ],
       "history": [
-        {
-          "ts": 1787371578504,
-          "event": "心跳",
-          "latest": {
-            "struggleAlert": 14,
-            "ts": 1787371578504,
-            "heartRate": 84,
-            "respRate": 25,
-            "inBed": "离床",
-            "stay": 7.5,
-            "battery": 85,
-            "signal": 31,
-            "deepSleep": 2.5,
-            "lightSleep": 3.5,
-            "awakeSleep": 1,
-            "sleepTotal": 7
-          }
-        },
-        {
-          "ts": 1787371580698,
-          "event": "心跳",
-          "latest": {
-            "struggleAlert": 14,
-            "ts": 1787371580698,
-            "heartRate": 84,
-            "respRate": 27,
-            "inBed": "离床",
-            "stay": 7.5,
-            "battery": 85,
-            "signal": 31,
-            "deepSleep": 2.5,
-            "lightSleep": 3.5,
-            "awakeSleep": 1,
-            "sleepTotal": 7
-          }
-        },
-        {
-          "ts": 1787371581795,
-          "event": "心跳",
-          "latest": {
-            "struggleAlert": 15,
-            "ts": 1787371581795,
-            "heartRate": 85,
-            "respRate": 28,
-            "inBed": "离床",
-            "stay": 7.5,
-            "battery": 85,
-            "signal": 31,
-            "deepSleep": 2.5,
-            "lightSleep": 3.5,
-            "awakeSleep": 1,
-            "sleepTotal": 7
-          }
-        },
-        {
-          "ts": 1787371582908,
-          "event": "心跳",
-          "latest": {
-            "struggleAlert": 15,
-            "ts": 1787371582908,
-            "heartRate": 88,
-            "respRate": 28,
-            "inBed": "离床",
-            "stay": 7.5,
-            "battery": 85,
-            "signal": 31,
-            "deepSleep": 2.5,
-            "lightSleep": 3.5,
-            "awakeSleep": 1,
-            "sleepTotal": 7
-          }
-        },
         {
           "ts": 1787371584029,
           "event": "心跳",
@@ -3638,9 +3554,40 @@
             "signal": 31,
             "battery": 85
           }
+        },
+        {
+          "ts": 1787371860000,
+          "event": "",
+          "latest": {
+            "heartRate": 70,
+            "respRate": 13
+          }
+        },
+        {
+          "ts": 1787371860000,
+          "event": "",
+          "latest": {
+            "heartRate": 70
+          }
+        },
+        {
+          "ts": 1787371860000,
+          "event": "",
+          "latest": {
+            "heartRate": 70
+          }
+        },
+        {
+          "ts": 1787373382816,
+          "event": "设备实时数据上报",
+          "latest": {
+            "heartRate": 78,
+            "respRate": 16,
+            "inBed": "在床"
+          }
         }
       ],
-      "lastSeen": 1787371852073,
+      "lastSeen": 1787373382841,
       "boundAt": 1787370221713,
       "struggleHistory": [
         {
@@ -3677,7 +3624,7 @@
       ],
       "platformDeviceId": 152166722,
       "companyName": "叁陆伍智慧（北京）医疗科技有限公司",
-      "platformSyncAt": 1787371796353
+      "platformSyncAt": 1787373377126
     }
   }
 }

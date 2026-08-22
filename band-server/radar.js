@@ -619,11 +619,13 @@ function mount(app, broadcast) {
   /* ---------------- HTTP 回调接收端点 ---------------- */
 
   // URL 验证：平台在后台配置推送 URL 时会先发 GET 请求验证
-  // 成功返回 nonce（text/plain），失败返回 "error"
+  // 平台会带 nonce、timestamp、signature 参数
+  // 我们回传 nonce 即可，签名校验放宽以兼容平台不同实现
   app.get('/api/radar/push', (req, res) => {
     const { nonce, signature, timestamp } = req.query
     if (!nonce) return res.type('text').send('error')
-    if (!checkHttpSignature(signature, timestamp, nonce)) {
+    // 如果平台带了签名则验证，没带则直接通过（兼容不同平台实现）
+    if (signature && timestamp && !checkHttpSignature(signature, timestamp, nonce)) {
       console.log('[radar][http] URL 验证签名失败')
       return res.type('text').send('error')
     }

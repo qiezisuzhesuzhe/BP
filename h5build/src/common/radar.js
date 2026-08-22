@@ -136,11 +136,17 @@ export function fetchRadarRecord(deviceid, refresh) {
 }
 
 // 只取最新快照（给设备列表页用）
+// 返回 { ...latest, lastSeen }：把后端"最后一次访问时间"一起带过来，供列表页在没有生命体征数据时兜底判定在线
 export function fetchRadarLatest(deviceid) {
-  return fetchRadarRecord(deviceid).then((rec) => (rec && rec.latest ? rec.latest : null))
+  return fetchRadarRecord(deviceid).then((rec) => {
+    if (!rec) return null
+    const latest = rec.latest ? Object.assign({}, rec.latest) : {}
+    if (rec.lastSeen != null) latest.lastSeen = rec.lastSeen
+    return latest
+  })
 }
 
-// 批量拉取多台雷达最新快照，返回 { [deviceid]: latest | null }
+// 批量拉取多台雷达最新快照，返回 { [deviceid]: latest+lastSeen | null }
 export function fetchRadarLatestBatch(deviceids) {
   const ids = Array.isArray(deviceids) ? deviceids.filter(Boolean) : []
   if (ids.length === 0) return Promise.resolve({})

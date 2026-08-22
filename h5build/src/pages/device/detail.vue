@@ -214,11 +214,23 @@ export default {
       if (this.radarRec && this.radarRec.model) return this.radarRec.model
       return (this.dev && this.dev.model) || ''
     },
-    // 雷达在线以最近上报时间为准（与设备列表页判定口径保持一致）
+    // 雷达在线以「最新数据时间戳 + 最后访问时间 + 是否存在生命体征数据」综合判定。
+    // 只看 latest.ts 会误判：设备刚绑定完成但从未真正推送过报文时，latest.ts 为 null/过旧，
+    // 但后端已经能查到完整的历史数据（lastSeen 是本次拉取时写的，就在一分钟前），
+    // 且 latest 里可能带 heartRate/respRate/inBed 等实际值——这种情况显然不该显示离线。
     radarOnline() {
-      const ts = this.radarLatest && this.radarLatest.ts
-      if (!ts) return false
-      return Date.now() - ts < 20 * 60 * 1000
+      const rec = this.radarRec || {}
+      const latest = rec.latest || {}
+      const now = Date.now()
+      // 1) 最近一次上报在窗口内
+      const ts = latest.ts
+      if (ts && now - ts < 20 * 60 * 1000) return true
+      // 2) 本次拉取就带了真实生命体征数据，视为在线（演示设备多靠这条）
+      if (latest.heartRate != null || latest.respRate != null || latest.inBed != null) return true
+      // 3) lastSeen 兜底：后端在 20 分钟内还能查到此设备，说明设备"活在"平台上
+      const lastSeen = rec.lastSeen
+      if (lastSeen && now - lastSeen < 20 * 60 * 1000) return true
+      return false
     },
     liveLabel() {
       return this.radarOnline ? '在线' : '离线'

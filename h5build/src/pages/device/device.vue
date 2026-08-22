@@ -175,14 +175,16 @@ export default {
         if (l.updatedAt) return Date.now() - l.updatedAt < 20 * 60 * 1000
         return false
       }
-      // 雷达款：与详情页一致——有生命体征数据即视为在线，无数据再看时间窗口
+      // 雷达款：与详情页口径保持一致——最近 20min 有报文 / 有生命体征数据 / lastSeen 在窗口内，任一满足即视为在线
       if (dev.typeKey === 'radar' && dev.deviceid) {
         const l = this.radarLive[dev.deviceid]
         if (!l) return dev.online === true
         // 有心率/呼吸/在床数据即视为在线
         if (l.heartRate != null || l.breathRate != null || l.inBed != null) return true
-        // 无测量数据时，按 ts 时间窗口判定
-        if (l.ts) return Date.now() - l.ts < 20 * 60 * 1000
+        // 有 ts 且在窗口内
+        if (l.ts && Date.now() - l.ts < 20 * 60 * 1000) return true
+        // 后端 lastSeen 在窗口内，兜底视为在线
+        if (l.lastSeen && Date.now() - l.lastSeen < 20 * 60 * 1000) return true
         return false
       }
       return dev.online === true

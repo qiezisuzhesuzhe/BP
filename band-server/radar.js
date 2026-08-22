@@ -189,16 +189,28 @@ function normalizePush(msg) {
   const imei = String(msg.imei || msg.deviceImei || (msg.body && msg.body.deviceImei) || '').trim()
   if (!imei) return null
   const body = msg.body || {}
-  // 两种承载：2.1.1 推送用 items[{attrName,value}]；3.7.3 用 body.attrList[{attrName,attrValue,unit}]
+  // 承载格式（多种协议兼容）：
+  //   1. MQTT 2.1.1 推送：items[{attrName,value}]
+  //   2. MQTT 3.7.3：body.attrList[{attrName,attrValue,unit}]
+  //   3. HTTP 回调：顶层 attrList 或 body.attrList
+  //   4. 通用：直接在顶层的 attrList
   const rawList = []
   if (Array.isArray(msg.items)) {
-    for (const it of msg.items) rawList.push({ name: it.attrName, value: it.value, unit: '' })
+    for (const it of msg.items) rawList.push({ name: it.attrName, value: it.value, unit: it.unit || '' })
   }
   if (Array.isArray(body.attrList)) {
     for (const it of body.attrList) rawList.push({ name: it.attrName, value: it.attrValue, unit: it.unit || '' })
   }
   if (Array.isArray(msg.attrList)) {
     for (const it of msg.attrList) rawList.push({ name: it.attrName, value: it.attrValue, unit: it.unit || '' })
+  }
+  // HTTP 回调可能把属性直接放在 body 里（键值对形式）
+  if (body && !Array.isArray(body.attrList) && !Array.isArray(body.items)) {
+    for (const [key, val] of Object.entries(body)) {
+      if (typeof val === 'object' && val !== null) continue
+      if (key === 'eventName' || key === 'eventCode' || key === 'deviceImei') continue
+      rawList.push({ name: key, value: val, unit: '' })
+    }
   }
 
   const latest = {}
@@ -371,18 +383,18 @@ function mount(app, broadcast) {
   function handlePush(msg) {
     const n = normalizePush(msg)
     if (!n) {
-      console.log('[radar][mq] 报文缺少 imei，已忽略')
+      console.log('[radar] 报文缺少 imei，已忽略')
       return
     }
-    // mqPushType：1 设备事件上报 / 2 设备增删改 / 3 报警工单确认 / 4 故障工单确认 / 5 故障工单创建 / 6 隔离人员
+    // mqPushType：1 设备事件上报（原有 MQTT 协议字段，HTTP 推送可能不带）
     if (n.mqPushType != null && n.mqPushType !== 1) {
-      console.log('[radar][mq] mqPushType=' + n.mqPushType + ' 非设备事件，跳过 ' + n.imei)
+      console.log('[radar] mqPushType=' + n.mqPushType + ' 非设备事件，跳过 ' + n.imei)
       return
     }
     // 只处理已绑定设备，避免同 topic 下其他单位/型号设备污染本地库
     const known = rdb.devices[n.imei]
     if (!known) {
-      console.log('[radar][mq] 未绑定设备 ' + n.imei + '，忽略')
+      console.log('[radar] 未绑定设备 ' + n.imei + '，忽略')
       return
     }
     const d = touchDev(n.imei)
@@ -439,19 +451,11 @@ function mount(app, broadcast) {
         appKey: CFG.appKey,
         apiBase: CFG.apiBase,
         modelName: CFG.modelName || null,
-        mq: {
-          kind: MQ.kind,
-          url: mqBrokerUrl(),
-          topic: CFG.mqTopic,
-          state: MQ.state,
-          error: MQ.error,
-          connectedAt: MQ.connectedAt,
-          msgCount: MQ.msgCount,
-          lastMsgAt: MQ.lastMsgAt
-        },
-        http: {
-          path: '/api/radar/push',
-          token: CFG.httpPushToken ? '已配置' : null,
+        push: {
+          // MQTT 已废弃，仅保留 HTTP 回调通道
+          mode: 'http',
+          httpUrl: '/api/radar/push',
+          httpToken: CFG.httpPushToken ? '已配置' : null,
           msgCount: HTTP_PUSH.count,
           lastMsgAt: HTTP_PUSH.lastMsgAt
         },
@@ -530,9 +534,9 @@ function mount(app, broadcast) {
     res.json({ code: 0, data: list })
   })
 
-  // 单设备最新状态；?refresh=1 时顺带回平台拉一次基础信息（受限流保护），
-  // 若 MQTT 离线则同时在本地生成一条模拟实时数据（心率/呼吸/在床小幅波动），
-  // 让前端在无推送的演示/断网场景下也能看到数据变化，不至于永远停在绑定那一刻。
+  // 单设备最新状态；数据来源：平台 HTTP 回调（/api/radar/push）实时写入，
+  // 本接口仅做读取。?refresh=1 时顺带回平台拉一次基础信息（型号/状态/安装位置），
+  // 真实生命体征数据（心率/呼吸/在床等）必须由平台 HTTP 回调推送进来。
   app.get('/api/radar/devices/:imei', async (req, res) => {
     const imei = String(req.params.imei || '').trim()
     const d = rdb.devices[imei]
@@ -552,65 +556,6 @@ function mount(app, broadcast) {
         }
       } catch (e) {
         d.platformError = e.message
-      }
-      // MQTT 离线（或从未连上）时，本地合成一条"心跳"数据，模拟设备持续在上报
-      if (!MQ.client || MQ.state !== 'online') {
-        const prev = d.latest || {}
-        const nowTs = Date.now()
-        // 心率在 65-85 间小幅波动，呼吸在 14-18 间
-        const hrBase = prev.heartRate && Number(prev.heartRate) > 0 ? Number(prev.heartRate) : 72
-        const rrBase = prev.respRate && Number(prev.respRate) > 0 ? Number(prev.respRate) : 16
-        const jitter = (base, amp) => Math.max(1, Math.round(base + (Math.random() - 0.5) * amp))
-        const nextHr = jitter(hrBase, 6)
-        const nextRr = jitter(rrBase, 4)
-        // 在床状态：如果之前有就保持 80% 概率，否则随机
-        const wasInBed = prev.inBed != null ? _isTruthy(prev.inBed) : (Math.random() < 0.5)
-        const newLatest = Object.assign({}, prev, {
-          heartRate: nextHr,
-          respRate: nextRr,
-          inBed: wasInBed ? '在床' : '离床',
-          ts: nowTs,
-          battery: prev.battery != null ? Number(prev.battery) : 85,
-          signal: prev.signal != null ? Number(prev.signal) : 31,
-          stay: prev.stay != null ? Number(prev.stay) : 7.5,
-          struggleAlert: Number(prev.struggleAlert) || 0,
-          sleepTotal: prev.sleepTotal != null ? Number(prev.sleepTotal) : 7,
-          deepSleep: prev.deepSleep != null ? Number(prev.deepSleep) : 2.5,
-          lightSleep: prev.lightSleep != null ? Number(prev.lightSleep) : 3.5,
-          awakeSleep: prev.awakeSleep != null ? Number(prev.awakeSleep) : 1
-        })
-        d.latest = newLatest
-        d.lastSeen = nowTs
-        // 在床切换历史：状态变化时记录
-        if (prev.inBed != null && prev.inBed !== newLatest.inBed) {
-          if (!d.bedHistory) d.bedHistory = []
-          d.bedHistory.unshift({ inBed: wasInBed, ts: nowTs })
-          if (d.bedHistory.length > 3) d.bedHistory.length = 3
-        }
-        d._lastInBed = newLatest.inBed
-        // 挣扎历史：随机偶尔加一次（10% 概率）
-        if (Math.random() < 0.1) {
-          const cnt = (d.latest.struggleAlert || 0) + 1
-          d.latest.struggleAlert = cnt
-          if (!d.struggleHistory) d.struggleHistory = []
-          d.struggleHistory.unshift({ count: cnt, ts: nowTs })
-          if (d.struggleHistory.length > 3) d.struggleHistory.length = 3
-        }
-        d.history.push({ ts: nowTs, event: '心跳', latest: newLatest })
-        if (d.history.length > 200) d.history.splice(0, d.history.length - 200)
-        saveDB(rdb)
-        // 同步给当前详情页（SSE），前端无需等下一次轮询即可看到变化
-        emit('radar', {
-          deviceid: imei,
-          snapshot: newLatest,
-          attrs: d.attrs || [],
-          event: '心跳',
-          state: d.state,
-          stateText: d.stateText || '',
-          ts: nowTs,
-          struggleHistory: d.struggleHistory || [],
-          bedHistory: d.bedHistory || []
-        })
       }
     }
     const out = Object.assign({}, d, { history: undefined }, d.markedUnbound ? { unbound: true } : {})
@@ -693,14 +638,36 @@ function mount(app, broadcast) {
     HTTP_PUSH.count++
     HTTP_PUSH.lastMsgAt = Date.now()
     console.log('[radar][http] 收到推送 #' + HTTP_PUSH.count + ' keys=' + Object.keys(body).join(','))
-    // 走与 MQTT 完全相同的处理链路：归一化 → 落库 → SSE 广播
+    // 走统一处理链路：归一化 → 落库 → SSE 广播
     handlePush(body)
     // 平台只要求 200 响应即可，body 任意
     res.send('ok')
   })
 
-  startMqtt(handlePush)
-  console.log('[radar] 路由已挂载：/api/radar/status /ping /verify/:imei /devices /attributes /push')
+  // 调试用：手动向指定设备注入一条 HTTP 回调格式的报文，便于验证推送链路
+  // 用法: POST /api/radar/push/test  body={deviceid, items:[{attrName,value}]}
+  app.post('/api/radar/push/test', (req, res) => {
+    const body = req.body || {}
+    const imei = String(body.deviceid || body.imei || body.deviceImei || '').trim()
+    if (!imei) return res.status(400).json({ code: 400, message: 'deviceid/imei 必填' })
+    // 构造与平台 HTTP 回调一致的报文结构
+    const fake = {
+      deviceImei: imei,
+      timestamp: Date.now(),
+      items: body.items || [{ attrName: '测试数据', value: String(body.value || 'test') }],
+      eventName: body.eventName || '测试推送',
+      dataType: 1
+    }
+    HTTP_PUSH.count++
+    HTTP_PUSH.lastMsgAt = Date.now()
+    console.log('[radar][http][测试] 手动推送 imei=' + imei + ' items=' + JSON.stringify(fake.items))
+    handlePush(fake)
+    res.json({ code: 0, message: '已注入测试报文', payload: fake })
+  })
+
+  // HTTP 回调已作为唯一数据通道，MQTT 已废弃，不再启动
+  // startMqtt(handlePush)  // MQTT 已废弃，保留注释以便回溯
+  console.log('[radar] 路由已挂载：/api/radar/status /ping /verify/:imei /devices /attributes /push（HTTP 回调模式，MQTT 已废弃）')
 }
 
 module.exports = { mount, CFG, normalizePush, matchAttrKey, STATE_TEXT }

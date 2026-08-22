@@ -159,7 +159,10 @@ const ATTR_RULES = [
   { key: 'deepSleep', unit: '', kw: ['深睡', '深睡眠', 'deepSleep', 'deep_sleep'] },
   { key: 'lightSleep', unit: '', kw: ['浅睡', '浅睡眠', 'lightSleep', 'light_sleep'] },
   { key: 'awakeSleep', unit: '', kw: ['清醒次数', '清醒时长', 'awakeSleep', 'awake_duration', 'wake_duration'] },
-  { key: 'sleepTotal', unit: '', kw: ['总睡眠', '总睡眠时长', 'sleepTotal', 'sleep_total'] }
+  { key: 'sleepTotal', unit: '', kw: ['总睡眠', '总睡眠时长', 'sleepTotal', 'sleep_total'] },
+  { key: 'sleepStage', unit: '', kw: ['睡眠阶段', 'sleepStage', 'stage'] },
+  { key: 'temperature', unit: '°C', kw: ['体温', 'temperature', 'temp'] },
+  { key: 'breathRate', unit: '次/分', kw: ['呼吸率', 'breathRate'] }
 ]
 
 function matchAttrKey(attrName) {

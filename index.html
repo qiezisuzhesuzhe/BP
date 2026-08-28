@@ -1,0 +1,1812 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+<title>血压健康管理 · AI助手</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;500;600;700&family=Manrope:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --teal-900: #0d4f52;
+    --teal-800: #14666a;
+    --teal-700: #1a7d82;
+    --teal-500: #2da5aa;
+    --teal-300: #7dc8cc;
+    --teal-100: #e0f4f5;
+    --sage-500: #6ba584;
+    --sage-300: #b5d8c3;
+    --sage-100: #e8f4ec;
+    --coral-500: #e07a5f;
+    --coral-300: #f2a89a;
+    --coral-100: #fde8e3;
+    --warm-50: #fbfaf7;
+    --warm-100: #f5f3ee;
+    --warm-200: #ebe7df;
+    --ink-900: #1a2b2c;
+    --ink-700: #3d5456;
+    --ink-500: #6b8082;
+    --ink-400: #94a8aa;
+    --ink-300: #c4d2d3;
+    --shadow-sm: 0 2px 8px rgba(20,10,10,0.06);
+    --shadow-md: 0 6px 24px rgba(20,10,10,0.08);
+    --shadow-lg: 0 12px 40px rgba(20,10,10,0.12);
+    --radius-sm: 10px;
+    --radius-md: 14px;
+    --radius-lg: 20px;
+    --radius-xl: 28px;
+    --font-serif: 'Noto Serif SC', 'Songti SC', serif;
+    --font-sans: 'Manrope', -apple-system, 'PingFang SC', 'Hiragino Sans GB', sans-serif;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+  
+  html, body {
+    height: 100%;
+    font-family: var(--font-sans);
+    background: var(--warm-50);
+    color: var(--ink-900);
+    overflow: hidden;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  body {
+    background: 
+      radial-gradient(ellipse at 10% 0%, rgba(125,200,204,0.18) 0%, transparent 50%),
+      radial-gradient(ellipse at 90% 100%, rgba(107,165,132,0.14) 0%, transparent 45%),
+      var(--warm-50);
+  }
+
+  .app {
+    max-width: 480px;
+    margin: 0 auto;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    overflow: hidden;
+  }
+
+  /* ─────── Header ─────── */
+  .header {
+    padding: 16px 20px 12px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: rgba(251,250,247,0.85);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border-bottom: 1px solid rgba(20,10,10,0.05);
+    z-index: 10;
+    flex-shrink: 0;
+  }
+  .header-left { display: flex; align-items: center; gap: 12px; }
+  .avatar {
+    width: 44px; height: 44px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, var(--teal-700), var(--sage-500));
+    display: flex; align-items: center; justify-content: center;
+    color: white; font-size: 20px;
+    box-shadow: 0 4px 12px rgba(20,125,130,0.35);
+    position: relative;
+  }
+  .avatar::after {
+    content: '';
+    position: absolute;
+    bottom: 0; right: 0;
+    width: 12px; height: 12px;
+    background: #4ade80;
+    border-radius: 50%;
+    border: 2px solid var(--warm-50);
+  }
+  .header-info h1 {
+    font-family: var(--font-serif);
+    font-size: 16px;
+    font-weight: 600;
+    color: var(--ink-900);
+    letter-spacing: 0.02em;
+  }
+  .header-info .status {
+    font-size: 12px;
+    color: var(--ink-500);
+    display: flex; align-items: center; gap: 4px;
+  }
+  .status-dot {
+    width: 6px; height: 6px;
+    border-radius: 50%;
+    background: #4ade80;
+    animation: pulse 2s infinite;
+  }
+  @keyframes pulse {
+    0%, 100% { opacity: 1; transform: scale(1); }
+    50% { opacity: 0.6; transform: scale(0.85); }
+  }
+  .header-actions { display: flex; gap: 8px; }
+  .icon-btn {
+    width: 36px; height: 36px;
+    border-radius: 50%;
+    background: var(--warm-100);
+    border: none;
+    display: flex; align-items: center; justify-content: center;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    color: var(--ink-700);
+  }
+  .icon-btn:active { transform: scale(0.92); background: var(--warm-200); }
+  .icon-btn svg { width: 18px; height: 18px; }
+  .icon-btn.active { background: var(--teal-100); color: var(--teal-700); }
+
+  /* ─────── Voice Picker ─────── */
+  .voice-picker {
+    display: none;
+    padding: 14px 16px 16px;
+    background: var(--warm-50);
+    border-bottom: 1px solid var(--warm-200);
+    animation: slideDown 0.25s ease;
+  }
+  .voice-picker.show { display: block; }
+  @keyframes slideDown {
+    from { opacity: 0; transform: translateY(-8px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  .voice-picker-title {
+    font-size: 12px;
+    color: var(--ink-500);
+    margin-bottom: 10px;
+    letter-spacing: 0.02em;
+  }
+  .voice-options {
+    display: flex;
+    gap: 8px;
+    overflow-x: auto;
+    padding-bottom: 2px;
+  }
+  .voice-options::-webkit-scrollbar { display: none; }
+  .voice-chip {
+    flex-shrink: 0;
+    padding: 8px 14px;
+    border-radius: var(--radius-xl);
+    background: #fff;
+    border: 1.5px solid var(--warm-200);
+    font-size: 13px;
+    color: var(--ink-700);
+    cursor: pointer;
+    transition: all 0.2s ease;
+    white-space: nowrap;
+    font-family: var(--font-sans);
+  }
+  .voice-chip:active { transform: scale(0.95); }
+  .voice-chip.selected {
+    background: var(--teal-700);
+    border-color: var(--teal-700);
+    color: #fff;
+    box-shadow: var(--shadow-sm);
+  }
+
+  /* ─────── Chat Area ─────── */
+  .chat-area {
+    flex: 1;
+    overflow-y: auto;
+    padding: 16px 16px 20px;
+    scroll-behavior: smooth;
+    -webkit-overflow-scrolling: touch;
+  }
+  .chat-area::-webkit-scrollbar { display: none; }
+
+  .msg-group {
+    margin-bottom: 16px;
+    animation: fadeUp 0.4s ease;
+  }
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(12px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .msg {
+    display: flex;
+    gap: 10px;
+    align-items: flex-end;
+  }
+  .msg.bot { flex-direction: row; }
+  .msg.user { flex-direction: row-reverse; }
+
+  .msg-avatar {
+    width: 32px; height: 32px;
+    border-radius: 50%;
+    flex-shrink: 0;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 14px;
+  }
+  .msg.bot .msg-avatar {
+    background: linear-gradient(135deg, var(--teal-700), var(--sage-500));
+    color: white;
+  }
+  .msg.user .msg-avatar {
+    background: linear-gradient(135deg, var(--coral-500), var(--coral-300));
+    color: white;
+  }
+
+  .bubble-wrap { max-width: 75%; display: flex; flex-direction: column; gap: 4px; }
+  .msg.user .bubble-wrap { align-items: flex-end; }
+  .msg.bot .bubble-wrap { align-items: flex-start; }
+
+  .bubble {
+    padding: 12px 16px;
+    border-radius: 18px;
+    font-size: 15px;
+    line-height: 1.55;
+    word-break: break-word;
+    white-space: pre-wrap;
+    position: relative;
+  }
+  .msg.bot .bubble {
+    background: white;
+    color: var(--ink-900);
+    border-bottom-left-radius: 6px;
+    box-shadow: var(--shadow-sm);
+  }
+  .msg.user .bubble {
+    background: linear-gradient(135deg, var(--teal-700), var(--teal-500));
+    color: white;
+    border-bottom-right-radius: 6px;
+  }
+
+  .bubble-time {
+    font-size: 11px;
+    color: var(--ink-400);
+    padding: 0 4px;
+  }
+
+  /* Bot typing indicator */
+  .typing .bubble {
+    padding: 14px 18px;
+    display: flex;
+    gap: 4px;
+    align-items: center;
+  }
+  .typing-dot {
+    width: 6px; height: 6px;
+    background: var(--ink-400);
+    border-radius: 50%;
+    animation: typing 1.4s infinite;
+  }
+  .typing-dot:nth-child(2) { animation-delay: 0.2s; }
+  .typing-dot:nth-child(3) { animation-delay: 0.4s; }
+  @keyframes typing {
+    0%, 60%, 100% { transform: translateY(0); opacity: 0.4; }
+    30% { transform: translateY(-6px); opacity: 1; }
+  }
+
+  /* Voice indicator on bot bubble */
+  .voice-indicator {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    margin-top: 4px;
+    padding: 4px 8px;
+    background: var(--teal-100);
+    border-radius: 99px;
+    font-size: 11px;
+    color: var(--teal-800);
+    cursor: pointer;
+    transition: all 0.2s ease;
+  }
+  .voice-indicator:hover { background: var(--teal-300); color: white; }
+  .voice-bar { display: flex; gap: 2px; align-items: center; }
+  .voice-bar span {
+    display: block;
+    width: 2px;
+    height: 8px;
+    background: currentColor;
+    border-radius: 1px;
+    animation: voiceBar 0.8s ease-in-out infinite;
+  }
+  .voice-bar span:nth-child(2) { animation-delay: 0.1s; height: 12px; }
+  .voice-bar span:nth-child(3) { animation-delay: 0.2s; height: 6px; }
+  @keyframes voiceBar {
+    0%, 100% { transform: scaleY(0.4); }
+    50% { transform: scaleY(1); }
+  }
+
+  /* ─────── Quick Reply Chips ─────── */
+  .quick-replies {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-top: 10px;
+    padding-left: 42px;
+  }
+  .quick-chip {
+    padding: 8px 16px;
+    border-radius: 99px;
+    background: white;
+    border: 1.5px solid var(--teal-300);
+    color: var(--teal-800);
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    box-shadow: var(--shadow-sm);
+    white-space: nowrap;
+  }
+  .quick-chip:active {
+    transform: scale(0.95);
+    background: var(--teal-700);
+    color: white;
+    border-color: var(--teal-700);
+  }
+  .quick-chip.primary {
+    background: var(--teal-700);
+    color: white;
+    border-color: var(--teal-700);
+  }
+  .quick-chip.secondary {
+    background: var(--sage-100);
+    color: var(--sage-500);
+    border-color: var(--sage-300);
+  }
+
+  /* ─────── Input Area ─────── */
+  .input-area {
+    flex-shrink: 0;
+    padding: 12px 16px 20px;
+    background: rgba(251,250,247,0.92);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border-top: 1px solid rgba(20,10,10,0.06);
+  }
+  .voice-capture {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 10px 14px;
+    background: white;
+    border-radius: 99px;
+    box-shadow: var(--shadow-md);
+    border: 1.5px solid transparent;
+    transition: all 0.3s ease;
+    position: relative;
+  }
+  .voice-capture.listening {
+    border-color: var(--coral-500);
+    background: var(--coral-100);
+  }
+  .voice-capture.listening::before {
+    content: '';
+    position: absolute;
+    inset: -4px;
+    border-radius: 99px;
+    border: 2px solid var(--coral-300);
+    animation: ringPulse 1.5s ease-out infinite;
+    pointer-events: none;
+  }
+  @keyframes ringPulse {
+    0% { transform: scale(1); opacity: 1; }
+    100% { transform: scale(1.1); opacity: 0; }
+  }
+  .text-input {
+    flex: 1;
+    border: none;
+    outline: none;
+    background: transparent;
+    font-family: var(--font-sans);
+    font-size: 15px;
+    color: var(--ink-900);
+    min-width: 0;
+  }
+  .text-input::placeholder { color: var(--ink-400); }
+  .mic-btn {
+    width: 44px; height: 44px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, var(--coral-500), var(--coral-300));
+    border: none;
+    color: white;
+    display: flex; align-items: center; justify-content: center;
+    cursor: pointer;
+    transition: all 0.25s ease;
+    flex-shrink: 0;
+    box-shadow: 0 4px 14px rgba(224,122,95,0.35);
+  }
+  .mic-btn:active { transform: scale(0.92); }
+  .mic-btn.active {
+    background: linear-gradient(135deg, var(--coral-500), #c95a40);
+    animation: micPulse 1.5s ease-in-out infinite;
+  }
+  @keyframes micPulse {
+    0%, 100% { box-shadow: 0 4px 14px rgba(224,122,95,0.35); }
+    50% { box-shadow: 0 4px 24px rgba(224,122,95,0.6); }
+  }
+  .mic-btn svg { width: 20px; height: 20px; }
+  .voice-hint {
+    position: absolute;
+    bottom: calc(100% + 8px);
+    left: 50%;
+    transform: translateX(-50%);
+    background: var(--ink-900);
+    color: white;
+    padding: 8px 16px;
+    border-radius: 12px;
+    font-size: 13px;
+    white-space: nowrap;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.2s ease;
+  }
+  .voice-hint.show { opacity: 1; }
+
+  /* ─────── Timeline Card ─────── */
+  .timeline-card {
+    margin: 12px 0 8px;
+    background: white;
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-md);
+    overflow: hidden;
+    animation: cardIn 0.5s cubic-bezier(0.22, 1, 0.36, 1);
+  }
+  @keyframes cardIn {
+    from { opacity: 0; transform: translateY(16px) scale(0.98); }
+    to { opacity: 1; transform: translateY(0) scale(1); }
+  }
+  .timeline-header {
+    padding: 16px 18px 12px;
+    background: linear-gradient(135deg, var(--teal-700) 0%, var(--teal-500) 100%);
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .timeline-header h3 {
+    font-family: var(--font-serif);
+    font-size: 16px;
+    font-weight: 600;
+    margin-bottom: 2px;
+  }
+  .timeline-header p {
+    font-size: 12px;
+    opacity: 0.85;
+  }
+  .timeline-badge {
+    width: 42px; height: 42px;
+    background: rgba(255,255,255,0.2);
+    border-radius: 12px;
+    display: flex; align-items: center; justify-content: center;
+  }
+
+  .day-tabs {
+    display: flex;
+    padding: 12px 12px 0;
+    gap: 6px;
+    border-bottom: 1px solid var(--warm-200);
+  }
+  .day-tab {
+    flex: 1;
+    padding: 8px 6px;
+    border-radius: 12px 12px 0 0;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.25s ease;
+    background: var(--warm-100);
+    border: none;
+    font-family: var(--font-sans);
+    position: relative;
+  }
+  .day-tab .day-label {
+    font-size: 11px;
+    color: var(--ink-500);
+    margin-bottom: 2px;
+  }
+  .day-tab .day-date {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--ink-700);
+  }
+  .day-tab.active {
+    background: white;
+    box-shadow: 0 -2px 8px rgba(20,10,10,0.04);
+  }
+  .day-tab.active .day-label { color: var(--teal-700); }
+  .day-tab.active .day-date { color: var(--teal-800); }
+  .day-tab.active::after {
+    content: '';
+    position: absolute;
+    bottom: -1px;
+    left: 20%;
+    right: 20%;
+    height: 2px;
+    background: var(--teal-700);
+    border-radius: 1px;
+  }
+
+  .timeline-body {
+    padding: 12px 14px 16px;
+    max-height: 320px;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+  .timeline-body::-webkit-scrollbar { display: none; }
+
+  .tl-item {
+    display: flex;
+    gap: 12px;
+    padding: 10px 0;
+    position: relative;
+    animation: itemIn 0.4s ease both;
+  }
+  .tl-item-content { animation-delay: 0.05s; }
+  @keyframes itemIn {
+    from { opacity: 0; transform: translateX(-8px); }
+    to { opacity: 1; transform: translateX(0); }
+  }
+  .tl-time-col {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 48px;
+    flex-shrink: 0;
+  }
+  .tl-time {
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--teal-800);
+    font-variant-numeric: tabular-nums;
+  }
+  .tl-dot {
+    width: 10px; height: 10px;
+    border-radius: 50%;
+    margin: 6px 0 2px;
+    flex-shrink: 0;
+    position: relative;
+  }
+  .tl-dot::after {
+    content: '';
+    position: absolute;
+    inset: -4px;
+    border-radius: 50%;
+    border: 2px solid currentColor;
+    opacity: 0.25;
+  }
+  .tl-line {
+    width: 2px;
+    flex: 1;
+    min-height: 18px;
+    background: var(--warm-200);
+  }
+  .tl-item:last-child .tl-line { display: none; }
+
+  .tl-content {
+    flex: 1;
+    padding: 8px 12px;
+    background: var(--warm-100);
+    border-radius: var(--radius-md);
+    border: 1px solid rgba(20,10,10,0.04);
+    transition: all 0.2s ease;
+  }
+  .tl-content:active { transform: scale(0.98); }
+  .tl-title-row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 4px;
+  }
+  .tl-icon {
+    width: 22px; height: 22px;
+    border-radius: 6px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 13px;
+  }
+  .tl-title {
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--ink-900);
+  }
+  .tl-desc {
+    font-size: 12.5px;
+    color: var(--ink-500);
+    line-height: 1.5;
+  }
+  .tl-tag {
+    display: inline-block;
+    margin-top: 6px;
+    padding: 2px 8px;
+    border-radius: 99px;
+    font-size: 11px;
+    font-weight: 500;
+  }
+
+  /* Category colors */
+  .cat-medication .tl-dot { background: var(--coral-500); color: var(--coral-500); }
+  .cat-medication .tl-icon { background: var(--coral-100); }
+  .cat-medication .tl-tag { background: var(--coral-100); color: var(--coral-500); }
+
+  .cat-monitor .tl-dot { background: var(--teal-700); color: var(--teal-700); }
+  .cat-monitor .tl-icon { background: var(--teal-100); }
+  .cat-monitor .tl-tag { background: var(--teal-100); color: var(--teal-800); }
+
+  .cat-exercise .tl-dot { background: var(--sage-500); color: var(--sage-500); }
+  .cat-exercise .tl-icon { background: var(--sage-100); }
+  .cat-exercise .tl-tag { background: var(--sage-100); color: var(--sage-500); }
+
+  .cat-nutrition .tl-dot { background: #d4a843; color: #d4a843; }
+  .cat-nutrition .tl-icon { background: #fdf5dc; }
+  .cat-nutrition .tl-tag { background: #fdf5dc; color: #a07d20; }
+
+  .cat-psychology .tl-dot { background: #9b7bbf; color: #9b7bbf; }
+  .cat-psychology .tl-icon { background: #efe6f7; }
+  .cat-psychology .tl-tag { background: #efe6f7; color: #7a569b; }
+
+  .cat-sleep .tl-dot { background: #4a6fa5; color: #4a6fa5; }
+  .cat-sleep .tl-icon { background: #e0e8f5; }
+  .cat-sleep .tl-tag { background: #e0e8f5; color: #3a5885; }
+
+  .cat-assessment .tl-dot { background: #e8a54a; color: #e8a54a; }
+  .cat-assessment .tl-icon { background: #fef0dc; }
+  .cat-assessment .tl-tag { background: #fef0dc; color: #c08330; }
+
+  /* ─────── Welcome Screen ─────── */
+  .welcome {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(160deg, var(--teal-800) 0%, var(--teal-700) 40%, var(--sage-500) 100%);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 40px 32px;
+    z-index: 100;
+    transition: opacity 0.5s ease, transform 0.6s ease;
+  }
+  .welcome.hidden {
+    opacity: 0;
+    transform: scale(1.05);
+    pointer-events: none;
+  }
+  .welcome-logo {
+    width: 80px; height: 80px;
+    background: rgba(255,255,255,0.15);
+    border-radius: 24px;
+    display: flex; align-items: center; justify-content: center;
+    margin-bottom: 28px;
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255,255,255,0.2);
+  }
+  .welcome-logo svg { width: 44px; height: 44px; color: white; }
+  .welcome h1 {
+    font-family: var(--font-serif);
+    font-size: 28px;
+    color: white;
+    text-align: center;
+    margin-bottom: 10px;
+    letter-spacing: 0.04em;
+  }
+  .welcome p {
+    color: rgba(255,255,255,0.8);
+    font-size: 15px;
+    text-align: center;
+    line-height: 1.6;
+    margin-bottom: 36px;
+    max-width: 280px;
+  }
+  .welcome-btn {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 14px 32px;
+    background: white;
+    color: var(--teal-800);
+    border: none;
+    border-radius: 99px;
+    font-family: var(--font-sans);
+    font-size: 15px;
+    font-weight: 600;
+    cursor: pointer;
+    box-shadow: 0 8px 28px rgba(0,0,0,0.2);
+    transition: all 0.25s ease;
+  }
+  .welcome-btn:active { transform: scale(0.96); }
+  .welcome-btn svg { width: 18px; height: 18px; }
+  .welcome-tip {
+    margin-top: 20px;
+    font-size: 12px;
+    color: rgba(255,255,255,0.6);
+  }
+
+  /* ─────── Fade animations ─────── */
+  .fade-in { animation: fadeIn 0.35s ease; }
+  @keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+  }
+
+  /* ─────── Scrollbar for webkit ─────── */
+  .chat-area.fade-scroll::-webkit-scrollbar { width: 0; }
+
+  /* ─────── Status bar simulation ─────── */
+  .status-bar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 6px 20px 0;
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--ink-900);
+    flex-shrink: 0;
+  }
+  .status-bar .right { display: flex; gap: 4px; align-items: center; }
+
+  /* Small screen */
+  @media (max-height: 700px) {
+    .welcome { padding: 32px 24px; }
+    .welcome-logo { width: 64px; height: 64px; margin-bottom: 20px; }
+    .welcome h1 { font-size: 24px; }
+  }
+</style>
+</head>
+<body>
+<div class="app">
+
+  <!-- Status Bar -->
+  <div class="status-bar">
+    <span id="clock">9:41</span>
+    <div class="right">
+      <svg width="16" height="10" viewBox="0 0 16 10" fill="currentColor"><rect x="0" y="3" width="2" height="4" rx="0.5"/><rect x="4" y="2" width="2" height="6" rx="0.5"/><rect x="8" y="0" width="2" height="8" rx="0.5"/><rect x="12" y="0" width="2" height="8" rx="0.5" opacity="0.4"/></svg>
+      <svg width="14" height="10" viewBox="0 0 14 10" fill="none" stroke="currentColor" stroke-width="1.2"><path d="M1 5a6 6 0 0112 0"/><circle cx="7" cy="8" r="0.8" fill="currentColor"/></svg>
+      <svg width="22" height="10" viewBox="0 0 22 10" fill="none"><rect x="0.5" y="1" width="18" height="8" rx="2" stroke="currentColor"/><rect x="2" y="2.5" width="14" height="5" rx="1" fill="currentColor"/><rect x="20" y="3.5" width="1.5" height="3" rx="0.5" fill="currentColor" opacity="0.5"/></svg>
+    </div>
+  </div>
+
+  <!-- Header -->
+  <div class="header">
+    <div class="header-left">
+      <div class="avatar">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z"/></svg>
+      </div>
+      <div class="header-info">
+        <h1>享相 · 血压健康助手</h1>
+        <div class="status"><span class="status-dot"></span>AI 顾问在线</div>
+      </div>
+    </div>
+    <div class="header-actions">
+      <button class="icon-btn" onclick="toggleVoicePicker()" id="voiceBtn" title="切换音色">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 1a3 3 0 00-3 3v8a3 3 0 006 0V4a3 3 0 00-3-3z"/><path d="M19 10v2a7 7 0 01-14 0v-2"/><line x1="12" y1="19" x2="12" y2="23"/><line x1="8" y1="23" x2="16" y2="23"/></svg>
+      </button>
+      <button class="icon-btn" onclick="toggleSpeech()" id="muteBtn" title="开启/关闭语音">
+        <svg id="muteIcon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 5L6 9H2v6h4l5 4V5z"/><path d="M15.54 8.46a5 5 0 010 7.07"/><path d="M19.07 4.93a10 10 0 010 14.14"/></svg>
+      </button>
+      <button class="icon-btn" onclick="resetChat()" title="重新开始">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 019-9 9.75 9.75 0 016.74 2.74L21 8"/><path d="M21 3v5h-5"/><path d="M21 12a9 9 0 01-9 9 9.75 9.75 0 01-6.74-2.74L3 16"/><path d="M8 16H3v5"/></svg>
+      </button>
+    </div>
+  </div>
+
+  <div class="voice-picker" id="voicePicker">
+    <div class="voice-picker-title">选择播报音色</div>
+    <div class="voice-options" id="voiceOptions"></div>
+  </div>
+
+  <!-- Chat Area -->
+  <div class="chat-area" id="chatArea"></div>
+
+  <!-- Input Area -->
+  <div class="input-area">
+    <div class="voice-capture" id="voiceCapture">
+      <input type="text" class="text-input" id="textInput" placeholder="点击麦克风说话，或输入文字..." autocomplete="off" />
+      <button class="mic-btn" id="micBtn" title="按住说话">
+        <svg id="micIcon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="2" width="6" height="12" rx="3"/><path d="M5 10a7 7 0 0014 0"/><line x1="12" y1="19" x2="12" y2="22"/></svg>
+      </button>
+      <div class="voice-hint" id="voiceHint">正在聆听...</div>
+    </div>
+  </div>
+
+  <!-- Welcome Screen -->
+  <div class="welcome" id="welcome">
+    <div class="welcome-logo">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg>
+    </div>
+    <h1>享相 · 血压健康助手</h1>
+    <p>我将陪你管理每日血压健康<br/>从评估到行动，一步一步来</p>
+    <button class="welcome-btn" onclick="startAssessment()">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+      开启健康之旅
+    </button>
+    <div class="welcome-tip">点击后将进行简短健康评估</div>
+  </div>
+
+</div>
+
+<script>
+/* ═════════════════════════════════════════════
+   Hypertension Knowledge Base (from chl-bha.org.cn)
+   ═════════════════════════════════════════════ */
+const knowledgeBase = {
+  overview: {
+    title: '高血压防治核心知识',
+    points: [
+      '我国成人高血压患病率约27.5%，患者人数已达2.45亿',
+      '高血压是心脑血管疾病的首要危险因素',
+      '有效控制血压可显著降低脑卒中、冠心病等并发症风险',
+      '血压目标：一般成年人 <140/90 mmHg，理想 <130/80 mmHg'
+    ]
+  },
+  medication: {
+    title: '用药指导',
+    principles: [
+      '遵从医嘱，按时按量服药，不可自行停药或减量',
+      '优选长效降压药，每日一次，24小时平稳控压',
+      '常用类别：CCB、ACEI/ARB、利尿剂、β受体阻滞剂',
+      '注意观察药物不良反应：咳嗽、水肿、头晕等'
+    ],
+    tip: '提示：服药时间建议选择早晨起床后，或遵医嘱。'
+  },
+  diet: {
+    title: '饮食管理（DASH饮食）',
+    rules: [
+      '低盐：每日食盐 <5g（约一啤酒盖），控制酱油、咸菜、味精',
+      '高钾：多吃新鲜蔬菜水果（每日 >400g），特别是绿叶菜',
+      '优质蛋白：鱼肉、豆制品、去皮禽肉',
+      '低脂：减少红肉（猪牛羊肉），限制动物内脏',
+      '限制饮酒：最好戒酒，男性每日酒精 <25g，女性 <15g',
+      '喝牛奶：每日1杯，补充钙质'
+    ]
+  },
+  exercise: {
+    title: '运动处方',
+    prescription: [
+      '频率：每周 3-5 次，每次 30-45 分钟',
+      '强度：中等强度有氧（心率达到最大心率的50-70%）',
+      '方式：快走、慢跑、游泳、太极拳、八段锦',
+      '时段：避免清晨（6-10点）和傍晚（4-6点）血压高峰',
+      '热身5-10分钟 + 主运动 + 整理5-10分钟',
+      '高血压1级：可正常运动；2级：建议医生评估后进行'
+    ]
+  },
+  psychology: {
+    title: '心理调适',
+    techniques: [
+      '慢性压力可导致血压持续升高',
+      '练习正念呼吸：吸气4秒，屏息4秒，呼气6秒，循环5分钟',
+      '渐进式肌肉放松：从头到脚逐段绷紧-放松',
+      '保持规律作息，避免过度疲劳',
+      '培养兴趣爱好，增加社交活动',
+      '必要时寻求专业心理咨询支持'
+    ]
+  },
+  monitoring: {
+    title: '血压监测',
+    tips: [
+      '使用经过标准化验证的上臂式电子血压计',
+      '测量前静坐5-10分钟，避免吸烟、饮酒、咖啡',
+      '坐位测量，手臂与心脏同一水平',
+      '建议早晚各测1次，每次测2遍取平均值',
+      '定期校准血压计（至少每年1次）',
+      '家庭血压 ≥135/85 mmHg 提示可能异常'
+    ]
+  },
+  sleep: {
+    title: '睡眠与血压',
+    tips: [
+      '保证每晚 7-8 小时高质量睡眠',
+      '固定作息时间，尽量不熬夜',
+      '睡眠呼吸暂停（打鼾）与高血压关系密切，需关注',
+      '睡前避免剧烈运动、饱餐、饮咖啡',
+      '卧室温度 18-22°C 为宜',
+      '使用白噪音或正念冥想助眠'
+    ]
+  }
+};
+
+/* ═════════════════════════════════════════════
+   State & Session
+   ═════════════════════════════════════════════ */
+const state = {
+  assessmentDone: false,
+  speechOn: true,
+  currentQuestionIndex: 0,
+  answers: {},
+  currentDayIndex: 0,
+  recognition: null,
+  synth: window.speechSynthesis || window.webkitSpeechSynthesis,
+  isListening: false,
+  generatingPlan: false
+};
+
+/* ═════════════════════════════════════════════
+   Assessment Questions
+   ═════════════════════════════════════════════ */
+const questions = [
+  {
+    id: 'medication',
+    text: '您好！我是享相，您的AI血压健康助手。在开始之前，我想先了解一下您的基本情况。第一个问题：您目前是否有服用降压药物？',
+    options: ['是，按时服药', '偶尔服用', '没有服药', '记不清了']
+  },
+  {
+    id: 'bp_range',
+    text: '好的。那您平时自测的血压大概在什么范围？',
+    options: ['偏低或正常 (<130/80)', '正常偏高 (130-140/80-90)', '较高 (>140/90)', '不太清楚']
+  },
+  {
+    id: 'salt_intake',
+    text: '了解了。接下来想问问您的饮食习惯：您每天的盐分摄入量大概是多少？',
+    options: ['很清淡 (<5g/天)', '适中 (5-10g/天)', '口味偏重 (>10g/天)', '不太注意']
+  },
+  {
+    id: 'exercise',
+    text: '好的。运动方面：您每周大概进行几次有氧运动？比如快走、慢跑、太极拳等。',
+    options: ['从不运动', '每周1-2次', '每周3-4次', '几乎每天']
+  },
+  {
+    id: 'sleep',
+    text: '最后一个问题：您最近的睡眠质量怎么样？',
+    options: ['睡得很好', '一般，偶尔失眠', '经常失眠', '严重睡眠问题']
+  }
+];
+
+/* ═════════════════════════════════════════════
+   Chat Engine
+   ═════════════════════════════════════════════ */
+const chatArea = document.getElementById('chatArea');
+const textInput = document.getElementById('textInput');
+const micBtn = document.getElementById('micBtn');
+const micIcon = document.getElementById('micIcon');
+const voiceCapture = document.getElementById('voiceCapture');
+const voiceHint = document.getElementById('voiceHint');
+
+function updateClock() {
+  const now = new Date();
+  document.getElementById('clock').textContent = 
+    now.getHours().toString().padStart(2, '0') + ':' + 
+    now.getMinutes().toString().padStart(2, '0');
+}
+updateClock();
+setInterval(updateClock, 30000);
+
+function scrollToBottom() {
+  requestAnimationFrame(() => {
+    chatArea.scrollTop = chatArea.scrollHeight;
+  });
+}
+
+function addMessage(role, text, opts = {}) {
+  const group = document.createElement('div');
+  group.className = 'msg-group fade-in';
+  
+  const msg = document.createElement('div');
+  msg.className = `msg ${role}`;
+  
+  const avatar = document.createElement('div');
+  avatar.className = 'msg-avatar';
+  avatar.innerHTML = role === 'bot' 
+    ? '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z"/></svg>'
+    : '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"/><path d="M4 21a8 8 0 0116 0"/></svg>';
+  
+  const bubbleWrap = document.createElement('div');
+  bubbleWrap.className = 'bubble-wrap';
+  
+  const bubble = document.createElement('div');
+  bubble.className = 'bubble';
+  bubble.textContent = text;
+  
+  bubbleWrap.appendChild(bubble);
+  
+  if (role === 'bot' && opts.showVoice !== false) {
+    const voiceBtn = document.createElement('div');
+    voiceBtn.className = 'voice-indicator';
+    voiceBtn.innerHTML = `
+      <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3A4.5 4.5 0 0014 7.97v8.05c1.48-.73 2.5-2.25 2.5-4.02z"/></svg>
+      <div class="voice-bar"><span></span><span></span><span></span></div>
+      <span>点击重播</span>
+    `;
+    voiceBtn.addEventListener('click', () => speakText(text));
+    bubbleWrap.appendChild(voiceBtn);
+  }
+  
+  msg.appendChild(avatar);
+  msg.appendChild(bubbleWrap);
+  group.appendChild(msg);
+  
+  if (opts.chips && opts.chips.length) {
+    const chipsContainer = document.createElement('div');
+    chipsContainer.className = 'quick-replies';
+    opts.chips.forEach(chipText => {
+      const chip = document.createElement('button');
+      chip.className = 'quick-chip' + (opts.primaryChip && chipText === opts.primaryChip ? ' primary' : '') + 
+                       (opts.secondaryChips && opts.secondaryChips.includes(chipText) ? ' secondary' : '');
+      chip.textContent = chipText;
+      chip.addEventListener('click', () => handleChipClick(chipText));
+      chipsContainer.appendChild(chip);
+    });
+    group.appendChild(chipsContainer);
+  }
+  
+  chatArea.appendChild(group);
+  scrollToBottom();
+  return bubble;
+}
+
+function addTyping() {
+  const group = document.createElement('div');
+  group.className = 'msg-group fade-in';
+  group.id = 'typingIndicator';
+  group.innerHTML = `
+    <div class="msg bot">
+      <div class="msg-avatar">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z"/></svg>
+      </div>
+      <div class="bubble-wrap"><div class="bubble typing"><div class="typing-dot"></div><div class="typing-dot"></div><div class="typing-dot"></div></div></div>
+    `;
+  chatArea.appendChild(group);
+  scrollToBottom();
+}
+
+function removeTyping() {
+  const el = document.getElementById('typingIndicator');
+  if (el) el.remove();
+}
+
+/* ═════════════════════════════════════════════
+   Speech Synthesis
+   ═════════════════════════════════════════════ */
+function cleanTextForSpeech(text) {
+  return text
+    .replace(/\*\*/g, '')
+    .replace(/[•·▪◆●○■□]/g, '。')
+    .replace(/[📚📖💊🩺🥣🥗🍲🧘🚶🌱🌙📋📊🏊🏃🕉️🍵🍱🥐🥘😴💪👏💯🔥⭐⚠️✅❌➕➡️]/gu, '')
+    .replace(/(\d+)\./g, '$1，')
+    .replace(/[；;]/g, '。')
+    .replace(/\n{2,}/g, '。')
+    .replace(/\n/g, '。')
+    .replace(/[，。][，。]+/g, '。')
+    .replace(/\s+/g, ' ')
+    .trim();
+}
+
+function splitSentences(text) {
+  return text
+    .split(/(?<=[。！？!?])/)
+    .map(s => s.trim())
+    .filter(Boolean);
+}
+
+/* ── Edge Neural TTS ───────────────────────── */
+const EDGE_TTS = {
+  token: '6A5AA1D4EAFF4E9FB37E23D68491D6F4',
+  get wss() {
+    return 'wss://speech.platform.bing.com/consumer/speech/synthesize/readaloud/edge/v1'
+      + '?TrustedClientToken=' + this.token;
+  },
+  voices: {
+    xiaoxiao: { name: 'zh-CN-XiaoxiaoNeural', label: '晓晓 · 温柔女声', style: 'gentle' },
+    xiaoyi:   { name: 'zh-CN-XiaoyiNeural',   label: '晓伊 · 亲切女声', style: 'gentle' },
+    yunxi:    { name: 'zh-CN-YunxiNeural',    label: '云希 · 阳光男声', style: 'friendly' },
+    yunyang:  { name: 'zh-CN-YunyangNeural',  label: '云扬 · 沉稳男声', style: 'friendly' },
+    yunxia:   { name: 'zh-CN-YunxiaNeural',   label: '云夏 · 活泼少年', style: 'cheerful' }
+  },
+  current: 'xiaoxiao',
+  available: true
+};
+
+function escapeXml(s) {
+  return s.replace(/&/g, '&amp;').replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;').replace(/"/g, '&quot;').replace(/'/g, '&apos;');
+}
+
+function buildSSML(text, voiceKey) {
+  const v = EDGE_TTS.voices[voiceKey] || EDGE_TTS.voices.xiaoxiao;
+  const sentences = splitSentences(text);
+  const body = sentences.map(s => {
+    const isQ = /[？?]$/.test(s);
+    const pause = s.length <= 10 ? '180ms' : '320ms';
+    return '<s>' + (isQ ? '<prosody pitch="+6%">' : '')
+      + escapeXml(s) + (isQ ? '</prosody>' : '')
+      + '</s><break time="' + pause + '"/>';
+  }).join('');
+  return '<speak version="1.0" xmlns="http://www.w3.org/2001/10/synthesis" '
+    + 'xmlns:mstts="https://www.w3.org/2001/mstts" xml:lang="zh-CN">'
+    + '<voice name="' + v.name + '">'
+    + '<mstts:express-as style="' + v.style + '" styledegree="1.1">'
+    + '<prosody rate="-4%" pitch="+2%" volume="+0%">'
+    + body
+    + '</prosody></mstts:express-as></voice></speak>';
+}
+
+function edgeConnectId() {
+  let s = '';
+  for (let i = 0; i < 32; i++) s += Math.floor(Math.random() * 16).toString(16);
+  return s;
+}
+
+function synthViaEdge(text, voiceKey) {
+  return new Promise((resolve, reject) => {
+    let ws;
+    try {
+      ws = new WebSocket(EDGE_TTS.wss + '&ConnectionId=' + edgeConnectId());
+    } catch (e) { return reject(e); }
+    ws.binaryType = 'arraybuffer';
+    const chunks = [];
+    const timer = setTimeout(() => { try { ws.close(); } catch (e) {} reject(new Error('timeout')); }, 12000);
+
+    ws.onopen = () => {
+      const ts = new Date().toString();
+      ws.send('X-Timestamp:' + ts + '\r\nContent-Type:application/json; charset=utf-8\r\n'
+        + 'Path:speech.config\r\n\r\n'
+        + '{"context":{"synthesis":{"audio":{"metadataoptions":{'
+        + '"sentenceBoundaryEnabled":false,"wordBoundaryEnabled":false},'
+        + '"outputFormat":"audio-24khz-48kbitrate-mono-mp3"}}}}');
+      ws.send('X-RequestId:' + edgeConnectId() + '\r\nContent-Type:application/ssml+xml\r\n'
+        + 'X-Timestamp:' + ts + 'Z\r\nPath:ssml\r\n\r\n' + buildSSML(text, voiceKey));
+    };
+
+    ws.onmessage = (ev) => {
+      if (typeof ev.data === 'string') {
+        if (ev.data.includes('Path:turn.end')) {
+          clearTimeout(timer);
+          try { ws.close(); } catch (e) {}
+          if (!chunks.length) return reject(new Error('no audio'));
+          resolve(new Blob(chunks, { type: 'audio/mpeg' }));
+        }
+        return;
+      }
+      const bytes = new Uint8Array(ev.data);
+      const header = new TextDecoder().decode(bytes.slice(0, Math.min(1024, bytes.length)));
+      const marker = header.indexOf('Path:audio\r\n');
+      if (marker !== -1) chunks.push(bytes.slice(marker + 12));
+    };
+
+    ws.onerror = () => { clearTimeout(timer); reject(new Error('ws error')); };
+    ws.onclose = () => clearTimeout(timer);
+  });
+}
+
+/* ── Playback controller ───────────────────── */
+let ttsSession = 0;
+let currentAudio = null;
+
+async function speakText(text) {
+  if (!state.speechOn) return;
+  stopSpeaking();
+  const session = ++ttsSession;
+  const cleaned = cleanTextForSpeech(text);
+  if (!cleaned) return;
+
+  if (EDGE_TTS.available) {
+    try {
+      const blob = await synthViaEdge(cleaned, EDGE_TTS.current);
+      if (session !== ttsSession) return;
+      const url = URL.createObjectURL(blob);
+      const audio = new Audio(url);
+      currentAudio = audio;
+      audio.onended = audio.onerror = () => URL.revokeObjectURL(url);
+      await audio.play();
+      return;
+    } catch (e) {
+      EDGE_TTS.available = false;
+      if (session !== ttsSession) return;
+    }
+  }
+  speakViaWebSpeech(cleaned, session);
+}
+
+/* ── Fallback: Web Speech API ──────────────── */
+function pickZhVoice() {
+  const voices = state.synth ? state.synth.getVoices() : [];
+  const zh = voices.filter(v => v.lang && v.lang.toLowerCase().startsWith('zh'));
+  if (!zh.length) return null;
+  const natural = zh.find(v => /natural|online|neural/i.test(v.name));
+  if (natural) return natural;
+  const pref = ['xiaoxiao', 'yunxi', 'yunyang', 'xiaoyi', 'huihui', 'yaoyao', 'tingting', 'meijia'];
+  for (const n of pref) {
+    const hit = zh.find(v => v.name.toLowerCase().replace(/[\s_-]/g, '').includes(n));
+    if (hit) return hit;
+  }
+  return zh.find(v => v.lang.toLowerCase().includes('zh-cn')) || zh[0];
+}
+
+function speakViaWebSpeech(cleaned, session) {
+  if (!state.synth) return;
+  const sentences = splitSentences(cleaned);
+  if (!sentences.length) return;
+  const voice = pickZhVoice();
+  const next = (i) => {
+    if (session !== ttsSession || i >= sentences.length) return;
+    const s = sentences[i];
+    const u = new SpeechSynthesisUtterance(s);
+    u.lang = 'zh-CN';
+    u.rate = 0.92 + Math.random() * 0.08;
+    u.pitch = /[？?]$/.test(s) ? 1.12 : 1.0 + (Math.random() - 0.5) * 0.06;
+    if (voice) u.voice = voice;
+    u.onend = () => setTimeout(() => next(i + 1), s.length <= 8 ? 180 : 280);
+    u.onerror = () => next(i + 1);
+    state.synth.speak(u);
+  };
+  next(0);
+}
+
+function setVoice(key) {
+  if (!EDGE_TTS.voices[key]) return;
+  EDGE_TTS.current = key;
+  stopSpeaking();
+  renderVoiceOptions();
+  speakText('您好，我是' + EDGE_TTS.voices[key].label.split(' · ')[0] + '，接下来由我为您播报健康建议。');
+}
+
+function renderVoiceOptions() {
+  const box = document.getElementById('voiceOptions');
+  if (!box) return;
+  box.innerHTML = Object.keys(EDGE_TTS.voices).map(key => {
+    const sel = key === EDGE_TTS.current ? ' selected' : '';
+    return '<button class="voice-chip' + sel + '" onclick="setVoice(\'' + key + '\')">'
+      + EDGE_TTS.voices[key].label + '</button>';
+  }).join('');
+}
+
+function toggleVoicePicker() {
+  const picker = document.getElementById('voicePicker');
+  const btn = document.getElementById('voiceBtn');
+  if (!picker) return;
+  const show = !picker.classList.contains('show');
+  picker.classList.toggle('show', show);
+  if (btn) btn.classList.toggle('active', show);
+  if (show) renderVoiceOptions();
+}
+
+function stopSpeaking() {
+  ttsSession++;
+  if (currentAudio) {
+    try { currentAudio.pause(); } catch (e) {}
+    currentAudio = null;
+  }
+  if (state.synth) state.synth.cancel();
+}
+
+function toggleSpeech() {
+  state.speechOn = !state.speechOn;
+  const muteIcon = document.getElementById('muteIcon');
+  if (!state.speechOn) {
+    muteIcon.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="1" y1="1" x2="23" y2="23"/><path d="M9 9v3a3 3 0 005.12 2.12M15 9.34V4a3 3 0 00-5.94-.6"/><path d="M17 16.95A7 7 0 015 12v-2m14 0v2a7 7 0 01-.11 1.23"/><line x1="12" y1="19" x2="12" y2="22"/></svg>';
+    stopSpeaking();
+  } else {
+    muteIcon.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 5L6 9H2v6h4l5 4V5z"/><path d="M15.54 8.46a5 5 0 010 7.07"/><path d="M19.07 4.93a10 10 0 010 14.14"/></svg>';
+  }
+}
+
+/* ═════════════════════════════════════════════
+   Speech Recognition
+   ═════════════════════════════════════════════ */
+function initRecognition() {
+  const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+  if (!SpeechRecognition) {
+    console.warn('Speech recognition not supported');
+    return null;
+  }
+  const rec = new SpeechRecognition();
+  rec.lang = 'zh-CN';
+  rec.continuous = false;
+  rec.interimResults = false;
+  rec.maxAlternatives = 1;
+  
+  rec.onstart = () => {
+    state.isListening = true;
+    voiceCapture.classList.add('listening');
+    micBtn.classList.add('active');
+    voiceHint.classList.add('show');
+  };
+  
+  rec.onresult = (e) => {
+    const text = e.results[0][0].transcript;
+    textInput.value = text;
+    handleUserInput(text);
+  };
+  
+  rec.onerror = () => {
+    state.isListening = false;
+    voiceCapture.classList.remove('listening');
+    micBtn.classList.remove('active');
+    voiceHint.classList.remove('show');
+  };
+  
+  rec.onend = () => {
+    state.isListening = false;
+    voiceCapture.classList.remove('listening');
+    micBtn.classList.remove('active');
+    voiceHint.classList.remove('show');
+  };
+  
+  return rec;
+}
+
+function startListening() {
+  if (!state.recognition) {
+    state.recognition = initRecognition();
+  }
+  if (state.recognition) {
+    stopSpeaking();
+    try {
+      state.recognition.start();
+    } catch (e) {
+      console.log(e);
+    }
+  } else {
+    handleUserInput(textInput.value || '');
+  }
+}
+
+function stopListening() {
+  if (state.recognition) {
+    try { state.recognition.stop(); } catch (e) {}
+  }
+}
+
+micBtn.addEventListener('click', () => {
+  if (state.isListening) {
+    stopListening();
+  } else {
+    startListening();
+  }
+});
+
+textInput.addEventListener('keydown', (e) => {
+  if (e.key === 'Enter' && textInput.value.trim()) {
+    handleUserInput(textInput.value.trim());
+    textInput.value = '';
+  }
+});
+
+/* ═════════════════════════════════════════════
+   Assessment Flow
+   ═════════════════════════════════════════════ */
+function startAssessment() {
+  const welcome = document.getElementById('welcome');
+  welcome.classList.add('hidden');
+  
+  state.assessmentDone = false;
+  state.currentQuestionIndex = 0;
+  state.answers = {};
+  state.currentDayIndex = 0;
+  
+  setTimeout(() => askQuestion(), 600);
+}
+
+function askQuestion() {
+  if (state.currentQuestionIndex >= questions.length) {
+    finishAssessment();
+    return;
+  }
+  
+  const q = questions[state.currentQuestionIndex];
+  addMessage('bot', q.text, { chips: q.options });
+  speakText(q.text);
+}
+
+function handleUserInput(text) {
+  const trimmed = text.trim();
+  if (!trimmed) return;
+  
+  addMessage('user', trimmed);
+  processResponse(trimmed);
+}
+
+function handleChipClick(chipText) {
+  addMessage('user', chipText);
+  processResponse(chipText);
+}
+
+function processResponse(response) {
+  if (state.generatingPlan) return;
+  
+  const currentQ = questions[state.currentQuestionIndex];
+  if (!currentQ || state.assessmentDone) {
+    handleFreeChat(response);
+    return;
+  }
+  
+  const matchedOption = matchOption(response, currentQ.options);
+  state.answers[currentQ.id] = matchedOption || response;
+  
+  addTyping();
+  
+  setTimeout(() => {
+    removeTyping();
+    state.currentQuestionIndex++;
+    askQuestion();
+  }, 800 + Math.random() * 600);
+}
+
+function matchOption(text, options) {
+  const normalized = text.toLowerCase();
+  for (const opt of options) {
+    if (text.includes(opt) || opt.includes(text) || 
+        text.length > 0 && opt.split('').every(c => text.includes(c))) {
+      return opt;
+    }
+  }
+  const keywords = {
+    '是': 0, '有': 0, '服药': 0, '用药': 0, '吃': 0,
+    '否': 2, '没有': 2, '不吃': 2, '不服': 2,
+    '偶尔': 1,
+    '记不清': 3, '不清楚': 3, '不知道': 3,
+    '正常': 0, '偏低': 0,
+    '偏高': 1,
+    '较高': 2, '高': 2,
+    '清淡': 0, '低盐': 0,
+    '偏重': 2, '口味': 2, '重': 2,
+    '适中': 1, '一般': 1,
+    '从不': 0, '不运动': 0,
+    '1次': 1, '一': 1, '次': 1,
+    '3次': 2, '经常': 2,
+    '每天': 3, '天天': 3,
+    '很好': 0, '不错': 0,
+    '一般': 1, '偶尔': 1,
+    '失眠': 2, '不好': 2, '差': 2,
+    '严重': 3, '很差': 3
+  };
+  for (const [kw, idx] of Object.entries(keywords)) {
+    if (normalized.includes(kw) && options[idx]) return options[idx];
+  }
+  return text;
+}
+
+/* ═════════════════════════════════════════════
+   Finish Assessment & Generate Plan
+   ═════════════════════════════════════════════ */
+function finishAssessment() {
+  state.assessmentDone = true;
+  state.generatingPlan = true;
+  
+  addTyping();
+  
+  setTimeout(() => {
+    removeTyping();
+    
+    const summary = generateAssessmentSummary();
+    addMessage('bot', summary.intro);
+    speakText(summary.intro);
+    
+    setTimeout(() => {
+      addMessage('bot', summary.knowledge);
+      speakText(summary.knowledge);
+      
+      setTimeout(() => {
+        addMessage('bot', summary.planIntro);
+        speakText(summary.planIntro);
+        
+        setTimeout(() => {
+          renderTimelineCard();
+          state.generatingPlan = false;
+          
+          setTimeout(() => {
+            addMessage('bot', '这就是为您定制的未来三天健康管理方案。您可以点击顶部的日期切换查看，有任何问题随时问我~', 
+                      { chips: ['了解用药方案', '饮食建议', '运动指导', '心理调适', '睡眠建议'] });
+            speakText('这就是为您定制的未来三天健康管理方案。您可以点击顶部的日期切换查看，有任何问题随时问我。');
+          }, 500);
+        }, 400);
+      }, 1200);
+    }, 1000);
+  }, 1500);
+}
+
+function generateAssessmentSummary() {
+  const a = state.answers;
+  const bpLevel = getBpLevel(a.bp_range);
+  const riskLevel = assessRisk(a);
+  
+  let intro = `好的，我已经完成了您的初步健康评估。`;
+  
+  if (riskLevel === 'high') {
+    intro += `需要提醒您：根据您目前的血压情况和生活习惯，存在一定的健康风险，建议您尽快就医并严格遵医嘱。`;
+  } else if (riskLevel === 'medium') {
+    intro += `您的血压情况需要关注，但通过科学管理是可以有效控制的。`;
+  } else {
+    intro += `您的基础情况不错，继续保持良好习惯即可。`;
+  }
+  
+  intro += `现在让我为您分享一些高血压防治的核心知识。`;
+  
+  const knowledge = `📚 核心要点：\n\n• 我国成人高血压患病率约27.5%，有效控压可显著降低并发症风险\n• 建议目标血压 <140/90 mmHg\n• DASH饮食原则：低盐(<5g/天)、高钾、低脂\n• 每周3-5次中等强度有氧运动\n• 保持心理健康和充足睡眠`;
+  
+  const planIntro = `接下来，我将根据您的评估结果，为您生成一份未来3天的个性化健康管理方案，包含用药提醒、血压监测、营养饮食、运动建议、心理调适、睡眠冥想等内容。`;
+  
+  return { intro, knowledge, planIntro };
+}
+
+function getBpLevel(bpAnswer) {
+  if (!bpAnswer) return 'unknown';
+  if (bpAnswer.includes('偏低') || bpAnswer.includes('正常')) return 'normal';
+  if (bpAnswer.includes('偏高') || bpAnswer.includes('140')) return 'high';
+  if (bpAnswer.includes('较高')) return 'very_high';
+  return 'unknown';
+}
+
+function assessRisk(answers) {
+  let score = 0;
+  const bp = answers.bp_range || '';
+  if (bp.includes('较高')) score += 3;
+  else if (bp.includes('偏高')) score += 2;
+  else if (bp.includes('不清楚')) score += 1;
+  
+  const med = answers.medication || '';
+  if (med.includes('没有') || med.includes('偶尔')) score += 2;
+  
+  const salt = answers.salt_intake || '';
+  if (salt.includes('偏重')) score += 2;
+  else if (salt.includes('适中') || salt.includes('不太注意')) score += 1;
+  
+  const ex = answers.exercise || '';
+  if (ex.includes('从不')) score += 2;
+  else if (ex.includes('1-2')) score += 1;
+  
+  const sleep = answers.sleep || '';
+  if (sleep.includes('严重') || sleep.includes('经常')) score += 2;
+  else if (sleep.includes('偶尔')) score += 1;
+  
+  if (score >= 6) return 'high';
+  if (score >= 3) return 'medium';
+  return 'low';
+}
+
+/* ═════════════════════════════════════════════
+   Timeline Card
+   ═════════════════════════════════════════════ */
+function getDateLabel(offset) {
+  const d = new Date();
+  d.setDate(d.getDate() + offset);
+  const weekdays = ['周日', '周一', '周二', '周三', '周四', '周五', '周六'];
+  return {
+    label: offset === 0 ? '今天' : (offset === 1 ? '明天' : '后天'),
+    date: `${d.getMonth() + 1}月${d.getDate()}日`,
+    weekday: weekdays[d.getDay()]
+  };
+}
+
+const timelineData = {
+  0: [ // Today
+    { time: '07:00', cat: 'monitor', title: '晨起血压监测', desc: '晨起静坐5分钟后测量血压，记录数值', tag: '每日监测', icon: '🩺' },
+    { time: '07:30', cat: 'medication', title: '降压药物服用', desc: '按时服用医生开具的降压药，不可自行停药', tag: '用药提醒', icon: '💊' },
+    { time: '08:00', cat: 'nutrition', title: '营养早餐建议', desc: '燕麦粥+水煮蛋+凉拌菠菜，控制盐分<2g', tag: '饮食管理', icon: '🥣' },
+    { time: '10:00', cat: 'exercise', title: '太极拳练习', desc: '24式简化太极拳，在舒缓音乐中练习30分钟', tag: '运动处方', icon: '🧘' },
+    { time: '12:30', cat: 'nutrition', title: '低盐午餐', desc: '糙米饭+清蒸鲈鱼+西兰花，使用限盐勺', tag: '饮食管理', icon: '🥗' },
+    { time: '15:00', cat: 'psychology', title: '正念呼吸练习', desc: '吸气4秒-屏息4秒-呼气6秒，循环5分钟', tag: '心理调适', icon: '🌱' },
+    { time: '18:00', cat: 'exercise', title: '快走运动', desc: '傍晚凉爽时段快走30分钟，步速适中', tag: '运动处方', icon: '🚶' },
+    { time: '19:00', cat: 'nutrition', title: '清淡晚餐', desc: '杂粮饭+番茄豆腐汤+炒时蔬，少油少盐', tag: '饮食管理', icon: '🍲' },
+    { time: '20:30', cat: 'assessment', title: '康复情况评估', desc: '记录今日血压值、身体感受和情绪状态', tag: '康复评估', icon: '📋' },
+    { time: '22:00', cat: 'sleep', title: '睡前正念冥想', desc: '10分钟睡前引导冥想，帮助身心放松入眠', tag: '睡眠管理', icon: '🌙' }
+  ],
+  1: [ // Tomorrow
+    { time: '07:00', cat: 'monitor', title: '晨起血压监测', desc: '晨起静坐5分钟后测量血压，记录数值', tag: '每日监测', icon: '🩺' },
+    { time: '07:30', cat: 'medication', title: '降压药物服用', desc: '按时服用降压药，注意药物副作用', tag: '用药提醒', icon: '💊' },
+    { time: '08:00', cat: 'nutrition', title: '营养早餐', desc: '全麦面包+无糖豆浆+水煮蛋，健康开启新一天', tag: '饮食管理', icon: '🥐' },
+    { time: '09:30', cat: 'exercise', title: '八段锦练习', desc: '传统养生功法八段锦全套，强身健体', tag: '运动处方', icon: '🧘' },
+    { time: '12:30', cat: 'nutrition', title: '午餐营养搭配', desc: '杂粮饭+番茄牛腩+清炒芦笋，营养均衡', tag: '饮食管理', icon: '🍱' },
+    { time: '14:30', cat: 'psychology', title: '渐进式肌肉放松', desc: '从头到脚逐段绷紧再放松，释放身心压力', tag: '心理调适', icon: '🧘‍♀️' },
+    { time: '17:30', cat: 'exercise', title: '游泳或散步', desc: '30分钟中等强度有氧运动，避免血压高峰', tag: '运动处方', icon: '🏊' },
+    { time: '19:00', cat: 'nutrition', title: '低盐晚餐', desc: '紫薯+冬瓜汤+白灼菜心，清淡易消化', tag: '饮食管理', icon: '🥘' },
+    { time: '20:00', cat: 'monitor', title: '晚间血压监测', desc: '睡前1小时测量血压，记录并对比早间数值', tag: '每日监测', icon: '🩺' },
+    { time: '21:00', cat: 'assessment', title: '每日康复评估', desc: '总结当日身体状况，记录血压和情绪变化', tag: '康复评估', icon: '📋' },
+    { time: '22:00', cat: 'sleep', title: '助眠冥想', desc: '15分钟深度放松冥想，改善睡眠质量', tag: '睡眠管理', icon: '🌙' }
+  ],
+  2: [
+    { time: '07:00', cat: 'monitor', title: '晨起血压监测', desc: '晨起静坐5分钟后测量血压，连续监测对比', tag: '每日监测', icon: '🩺' },
+    { time: '07:30', cat: 'medication', title: '降压药物服用', desc: '按时服药，如有不适及时记录', tag: '用药提醒', icon: '💊' },
+    { time: '08:00', cat: 'nutrition', title: '营养早餐', desc: '小米南瓜粥+蒸蛋+凉拌苦瓜，清爽开胃', tag: '饮食管理', icon: '🍵' },
+    { time: '10:00', cat: 'exercise', title: '慢跑或快走', desc: '公园慢跑30分钟，感受清晨新鲜空气', tag: '运动处方', icon: '🏃' },
+    { time: '12:30', cat: 'nutrition', title: '营养午餐', desc: '糙米饭+清蒸带鱼+蒜蓉西兰花，低油低盐', tag: '饮食管理', icon: '🍲' },
+    { time: '15:00', cat: 'psychology', title: '正念冥想练习', desc: '引导式正念冥想10分钟，提升觉察力', tag: '心理调适', icon: '🧘' },
+    { time: '18:00', cat: 'exercise', title: '舒缓瑜伽', desc: '基础瑜伽30分钟，拉伸筋骨，平静心绪', tag: '运动处方', icon: '🕉️' },
+    { time: '19:00', cat: 'nutrition', title: '健康晚餐', desc: '藜麦沙拉+鸡胸肉蔬菜卷，营养低脂', tag: '饮食管理', icon: '🥗' },
+    { time: '20:30', cat: 'assessment', title: '阶段性康复评估', desc: '三日总结评估，对比前后变化，调整方案', tag: '康复评估', icon: '📊' },
+    { time: '22:00', cat: 'sleep', title: '睡前放松冥想', desc: '引导式入眠冥想，帮助快速入睡', tag: '睡眠管理', icon: '🌙' }
+  ]
+};
+
+function renderTimelineCard() {
+  const existingCard = document.getElementById('timelineCard');
+  if (existingCard) existingCard.remove();
+  
+  const card = document.createElement('div');
+  card.id = 'timelineCard';
+  card.className = 'timeline-card';
+  
+  const labels = [getDateLabel(0), getDateLabel(1), getDateLabel(2)];
+  
+  card.innerHTML = `
+    <div class="timeline-header">
+      <div>
+        <h3>个性化健康方案</h3>
+        <p>未来3天健康管理日程</p>
+      </div>
+      <div class="timeline-badge">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+      </div>
+    </div>
+    <div class="day-tabs" id="dayTabs">
+      ${labels.map((l, i) => `
+        <button class="day-tab ${i === 0 ? 'active' : ''}" data-day="${i}">
+          <div class="day-label">${l.label}</div>
+          <div class="day-date">${l.date}</div>
+        </button>
+      `).join('')}
+    </div>
+    <div class="timeline-body" id="timelineBody">
+      ${renderDayItems(0)}
+    </div>
+  `;
+  
+  const group = document.createElement('div');
+  group.className = 'msg-group fade-in';
+  const msg = document.createElement('div');
+  msg.className = 'msg bot';
+  msg.innerHTML = `
+    <div class="msg-avatar">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z"/></svg>
+    </div>
+    <div class="bubble-wrap" style="max-width: 100%; width: 100%;"></div>
+  `;
+  msg.querySelector('.bubble-wrap').appendChild(card);
+  group.appendChild(msg);
+  chatArea.appendChild(group);
+  
+  card.querySelectorAll('.day-tab').forEach(tab => {
+    tab.addEventListener('click', () => {
+      const day = parseInt(tab.dataset.day);
+      card.querySelectorAll('.day-tab').forEach(t => t.classList.remove('active'));
+      tab.classList.add('active');
+      card.querySelector('#timelineBody').innerHTML = renderDayItems(day);
+      const items = card.querySelectorAll('.tl-item');
+      items.forEach((item, i) => {
+        item.style.animationDelay = (i * 0.04) + 's';
+        item.style.animation = 'none';
+        item.offsetHeight;
+        item.style.animation = '';
+      });
+    });
+  });
+  
+  scrollToBottom();
+}
+
+function renderDayItems(dayIndex) {
+  const items = timelineData[dayIndex] || [];
+  return items.map((item, i) => `
+    <div class="tl-item ${item.cat}" style="animation-delay: ${i * 0.04}s">
+      <div class="tl-time-col">
+        <div class="tl-time">${item.time}</div>
+        <div class="tl-dot"></div>
+        <div class="tl-line"></div>
+      </div>
+      <div class="tl-content">
+        <div class="tl-title-row">
+          <div class="tl-icon">${item.icon}</div>
+          <div class="tl-title">${item.title}</div>
+        </div>
+        <div class="tl-desc">${item.desc}</div>
+        <span class="tl-tag">${item.tag}</span>
+      </div>
+    </div>
+  `).join('');
+}
+
+function handleFreeChat(response) {
+  const lower = response.toLowerCase();
+  
+  if (response.includes('用药') || response.includes('药')) {
+    respondWithMedication(response);
+  } else if (response.includes('饮食') || response.includes('吃') || response.includes('营养')) {
+    respondWithNutrition(response);
+  } else if (response.includes('运动') || response.includes('锻炼')) {
+    respondWithExercise(response);
+  } else if (response.includes('心理') || response.includes('压力') || response.includes('焦虑')) {
+    respondWithPsychology(response);
+  } else if (response.includes('睡眠') || response.includes('失眠') || response.includes('冥想')) {
+    respondWithSleep(response);
+  } else if (response.includes('血压') || response.includes('监测') || response.includes('测量')) {
+    respondWithMonitoring(response);
+  } else if (response.includes('康复') || response.includes('评估')) {
+    respondWithAssessment(response);
+  } else {
+    respondGeneral(response);
+  }
+}
+
+function respondWithMedication(text) {
+  const { medication } = knowledgeBase;
+  addTyping();
+  setTimeout(() => {
+    removeTyping();
+    const response = `${medication.title}\n\n${medication.principles.map((p, i) => `${i+1}. ${p}`).join('\n')}\n\n${medication.tip}`;
+    addMessage('bot', response, { chips: ['了解更多', '我的用药提醒'] });
+    speakText(response);
+  }, 900);
+}
+
+function respondWithNutrition(text) {
+  const { diet } = knowledgeBase;
+  addTyping();
+  setTimeout(() => {
+    removeTyping();
+    const response = `${diet.title}（DASH饮食原则）\n\n${diet.rules.map((r, i) => `${i+1}. ${r}`).join('\n')}`;
+    addMessage('bot', response, { chips: ['今日食谱', '低盐小贴士'] });
+    speakText(response);
+  }, 900);
+}
+
+function respondWithExercise(text) {
+  const { exercise } = knowledgeBase;
+  addTyping();
+  setTimeout(() => {
+    removeTyping();
+    const response = `${exercise.title}\n\n${exercise.prescription.map((p, i) => `${i+1}. ${p}`).join('\n')}`;
+    addMessage('bot', response, { chips: ['推荐运动', '注意事项'] });
+    speakText(response);
+  }, 900);
+}
+
+function respondWithPsychology(text) {
+  const { psychology } = knowledgeBase;
+  addTyping();
+  setTimeout(() => {
+    removeTyping();
+    const response = `${psychology.title}\n\n${psychology.techniques.map((t, i) => `${i+1}. ${t}`).join('\n')}`;
+    addMessage('bot', response, { chips: ['正念练习', '放松技巧'] });
+    speakText(response);
+  }, 900);
+}
+
+function respondWithSleep(text) {
+  const { sleep } = knowledgeBase;
+  addTyping();
+  setTimeout(() => {
+    removeTyping();
+    const response = `${sleep.title}\n\n${sleep.tips.map((t, i) => `${i+1}. ${t}`).join('\n')}`;
+    addMessage('bot', response, { chips: ['助眠冥想', '睡眠小贴士'] });
+    speakText(response);
+  }, 900);
+}
+
+function respondWithMonitoring(text) {
+  const { monitoring } = knowledgeBase;
+  addTyping();
+  setTimeout(() => {
+    removeTyping();
+    const response = `${monitoring.title}\n\n${monitoring.tips.map((t, i) => `${i+1}. ${t}`).join('\n')}`;
+    addMessage('bot', response, { chips: ['记录血压', '异常处理'] });
+    speakText(response);
+  }, 900);
+}
+
+function respondWithAssessment(text) {
+  addTyping();
+  setTimeout(() => {
+    removeTyping();
+    const response = '康复情况评估是健康管理的重要环节。建议您每天记录以下内容：\n\n1. 今日血压值（早/晚各一次）\n2. 身体感受（头晕、胸闷等）\n3. 情绪状态\n4. 运动和饮食完成情况\n5. 用药情况\n\n您可以点击健康方案卡片中的时间线查看已安排的评估任务。';
+    addMessage('bot', response, { chips: ['查看我的方案', '如何记录'] });
+    speakText(response);
+  }, 900);
+}
+
+function respondGeneral(text) {
+  const { overview } = knowledgeBase;
+  const response = `关于您的问题，我可以为您提供以下方面的帮助：\n\n${overview.points.map((p, i) => `• ${p}`).join('\n')}\n\n您可以问我关于用药、饮食、运动、心理调适、睡眠管理、血压监测等任何方面的问题。`;
+  addMessage('bot', response, { 
+    chips: ['用药指导', '饮食建议', '运动处方', '心理调适', '睡眠建议', '血压监测'],
+    primaryChip: '用药指导'
+  });
+  speakText(response);
+}
+
+function resetChat() {
+  stopSpeaking();
+  chatArea.innerHTML = '';
+  state.assessmentDone = false;
+  state.currentQuestionIndex = 0;
+  state.answers = {};
+  state.generatingPlan = false;
+  const welcome = document.getElementById('welcome');
+  welcome.classList.remove('hidden');
+}
+
+if (state.synth) {
+  state.synth.getVoices();
+  state.synth.onvoiceschanged = () => state.synth.getVoices();
+}
+</script>
+</body>
+</html>

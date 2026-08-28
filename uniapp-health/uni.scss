@@ -1,0 +1,180 @@
+/* 享相健康+ · 设计令牌
+   来源：/workspace/DESIGN.md
+   方案：rpx + SCSS 变量（1px = 2rpx，基于 750rpx 设计基准） */
+
+/* ---------- 品牌色 ---------- */
+$brand-primary: #7dd4bc;
+$brand-primary-hover: #4ab89e;
+$brand-primary-active: #389a82;
+$brand-soft: #d4f5ee;
+
+$label-soft-bg: rgba(212, 245, 238, 0.72);
+$label-soft-border: rgba(56, 154, 130, 0.12);
+$label-soft-text: $brand-primary-active;
+
+$brand-cyan: #61e0e5;
+$brand-cyan-soft: #d8f8fa;
+$brand-green: #84e8c2;
+$brand-green-soft: #ddf7ed;
+
+/* ---------- 头像 ---------- */
+$avatar-default-bg-start: #f2f4f7;
+$avatar-default-bg-end: #d9dee7;
+$avatar-default-shape: #aab2bf;
+
+/* ---------- 语义状态色 ---------- */
+$info: #8dcdd8;
+$info-soft: #e2f2f6;
+$warm: #e8c4a4;
+$warm-soft: #fdf4ed;
+$success: #27ae60;
+$warning: #f2c94c;
+$danger: #eb5757;
+$badge: #f15533;
+
+/* ---------- 金色（尊享装饰） ---------- */
+$gold: #b8932e;
+$gold-deep: #9a7420;
+$gold-soft: #faf3e0;
+$gold-line: rgba(184, 147, 46, 0.35);
+$gold-glow: rgba(184, 147, 46, 0.14);
+
+/* ---------- 背景 ---------- */
+/* 斜向两色渐变：左上(#ddf7ed) → 右下(#f3f3f3)，末端即底色；
+   配合 App.vue 中 background-attachment: fixed 铺满视口固定，不随页面滚动/变长 */
+$bg-page: linear-gradient(135deg, #ddf7ed, #f3f3f3);
+$bg-page-fade: linear-gradient(180deg, rgba(243, 243, 243, 0) 0%, #f3f3f3 88%);
+$bg-page-height: 3200rpx;
+$bg-page-base: #f3f3f3;
+$bg-surface: #ffffff;
+$bg-glass-nav: rgba(255, 255, 255, 0.78);
+$bg-subtle: #edf5f2;
+$bg-section: #f2f7fa;
+
+$back-subpage-bg: $bg-page-base;
+$back-subpage-header-bg: $bg-surface;
+$back-subpage-back-bg: $bg-surface;
+
+/* ---------- 文字 ---------- */
+$text-primary: #1a2a3c;
+$text-secondary: #334155;
+$text-muted: #64748b;
+$text-disabled: #94a3b8;
+$text-hint: #c6d2de;
+$text-inverse: #ffffff;
+$icon-ink: rgba(0, 0, 0, 0.1);
+$back-subpage-back-text: $text-primary;
+
+/* ---------- 描边 / 遮罩 ---------- */
+$border-subtle: rgba(15, 61, 53, 0.06);
+$overlay: rgba(15, 61, 53, 0.1);
+
+/* ---------- 字体 ---------- */
+/* 英文/数字优先匹配 DIN Pro（Mac 自带 DIN Alternate 作为备选），中文回退苹方/雅黑 */
+$font-family-en: "DIN Pro", "DIN Alternate", "Helvetica Neue", Arial, sans-serif;
+$font-family-base: "DIN Pro", "DIN Alternate", "PingFang SC", -apple-system, BlinkMacSystemFont, "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+
+$font-size-2xs: 20rpx;
+$font-size-xs: 24rpx;
+$font-size-sm: 28rpx;
+$font-size-md: 32rpx;
+$font-size-lg: 36rpx;
+$font-size-xl: 44rpx;
+$font-size-2xl: 56rpx;
+$font-size-3xl: 72rpx;
+$font-size-4xl: 120rpx;
+
+/* 移动端最小舒适字号（可读正文下限）：
+   说明/入口/数据标签等可读文字不得小于 12px(24rpx)；
+   $font-size-2xs(10px) 仅限角标、徽标、装饰性元素 */
+$font-size-min: 24rpx;
+
+$line-height-tight: 1.1;
+$line-height-normal: 1.4;
+$line-height-relaxed: 1.6;
+
+$font-weight-regular: 400;
+$font-weight-medium: 500;
+$font-weight-semibold: 600;
+$font-weight-bold: 700;
+$font-weight-heavy: 800;
+
+/* ---------- 语义排版 ---------- */
+$page-title-size: $font-size-2xl;
+$page-title-line-height: $line-height-tight;
+$page-title-weight: $font-weight-heavy;
+$page-title-color: $text-primary;
+$page-title-inverse-color: $text-inverse;
+
+/* ---------- 间距 ---------- */
+$space-1: 8rpx;
+$space-2: 16rpx;
+$space-3: 24rpx;
+$space-4: 32rpx;
+$space-5: 40rpx;
+$space-6: 48rpx;
+$space-8: 64rpx;
+$space-10: 80rpx;
+$space-12: 96rpx;
+$space-data-list-gap: $space-4;
+
+/* ---------- 区块标题 ---------- */
+/* 标题下间距 = 列表间距；上间距 = 下间距 × 2 */
+$space-sec-head-top: $space-8;
+$space-sec-head-bottom: $space-4;
+
+/* ---------- 尺寸 ---------- */
+$size-page-max-width: 960rpx;
+$size-header-height: 128rpx;
+$size-tab-height: 96rpx;
+$size-bottom-nav-height: 144rpx;
+
+$size-icon-xs: 32rpx;
+$size-icon-sm: 36rpx;
+$size-icon-md: 48rpx;
+$size-icon-lg: 64rpx;
+$size-icon-xl: 88rpx;
+
+$size-back-subpage-back: 84rpx;
+$size-back-subpage-header-min-height: 84rpx;
+
+$size-avatar-sm: 64rpx;
+$size-product-user-avatar: 56rpx;
+$size-avatar-md: 96rpx;
+$size-avatar-lg: 128rpx;
+
+$size-badge-sm: 12rpx;
+$size-badge-md: 36rpx;
+$size-input-height: 88rpx;
+$size-stat-card-height: 180rpx;
+$size-hero-image-height: 420rpx;
+$size-detail-image-height: 320rpx;
+
+/* ---------- 圆角（已减半，更克制干净） ---------- */
+$radius-xs: 6rpx;
+$radius-sm: 12rpx;
+$radius-md: 20rpx;
+$radius-lg: 24rpx;
+$radius-xl: 24rpx;
+$radius-card: $radius-lg;
+$radius-card-child: $radius-md;
+$radius-control: $radius-sm;
+$radius-full: 999rpx;
+
+/* ---------- 阴影 ---------- */
+$shadow-sm: 0 4rpx 24rpx rgba(15, 61, 53, 0.06);
+$shadow-md: 0 12rpx 48rpx rgba(125, 212, 188, 0.18);
+$shadow-lg: 0 16rpx 96rpx rgba(15, 61, 53, 0.1);
+$glass-nav-blur: blur(18px) saturate(180%);
+
+/* ---------- 层级 ---------- */
+$z-base: 0;
+$z-nav: 3000;
+$z-modal: 4000;
+
+/* ---------- 动效 ---------- */
+$duration-fast: 120ms;
+$duration-normal: 200ms;
+$duration-slow: 320ms;
+$ease-standard: cubic-bezier(0.2, 0, 0, 1);
+$ease-emphasized: cubic-bezier(0.2, 0, 0, 1.2);

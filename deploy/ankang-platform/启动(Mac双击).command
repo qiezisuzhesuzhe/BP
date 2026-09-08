@@ -7,3 +7,4 @@
 DIR="$( cd "$( dirname "$0" )" && pwd )"
 cd "$DIR"
 exec bash "$DIR/start.sh"
+

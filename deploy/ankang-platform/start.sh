@@ -32,9 +32,13 @@ echo "✅ Node.js 版本: $NODE_VER"
 if [ ! -d "node_modules" ] || [ ! -f "node_modules/express/index.js" ]; then
     echo ""
     echo "📦 首次运行，正在安装依赖（约 1~3 分钟）..."
-    npm install --no-audit --no-fund --loglevel=error 2>&1 | tail -5
-    if [ $? -ne 0 ]; then
-        echo "❌ 依赖安装失败，请检查网络后重试"
+    # 用临时文件捕获输出，避免管道掩盖 npm 的真实退出码
+    npm install --no-audit --no-fund --loglevel=error > "$TMPDIR/npm-install.log" 2>&1
+    NPM_RC=$?
+    tail -5 "$TMPDIR/npm-install.log"
+    if [ $NPM_RC -ne 0 ]; then
+        echo "❌ 依赖安装失败（退出码 $NPM_RC），请检查网络后重试"
+        echo "   完整日志: $TMPDIR/npm-install.log"
         read -p "按 Enter 退出" _
         exit 1
     fi
@@ -124,5 +128,9 @@ fi
 # 保持窗口打开，显示服务日志
 echo "📝 实时日志（按 Ctrl+C 退出查看，服务仍在后台运行）:"
 echo "============================================"
-trap "echo ''; echo '已退出查看模式，服务 PID=$SERVER_PID 仍在后台运行'; exit 0" INT
-tail -f "$LOG_FILE"
+# 使用 -n 0 只显示新日志，避免刷屏
+tail -n 0 -f "$LOG_FILE" 2>/dev/null || true
+echo ""
+echo "已退出查看模式，服务 PID=$SERVER_PID 仍在后台运行"
+echo "如需停止服务，请执行: kill $SERVER_PID"
+read -p "按 Enter 关闭窗口" _

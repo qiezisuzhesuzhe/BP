@@ -1,0 +1,15 @@
+<h1>一、健康管理服务包购买链路</h1>
+<p>从首页服务包卡片展示，到服务详情浏览，到下单支付，到权益开通生效的完整顺序流程。</p>
+<h2>1.1 首页 · 服务包卡片展示</h2>
+<p>首页顶部为「我的权益」区（此时为<b>基础会员</b>、剩余积分 500 的未购买初始态），向下滚动即可看到「健康管理服务包」卡片区。</p>
+<img path="@./01-home-top.png" width="330" caption="01 首页顶部：基础会员 + 8 项权益 + 在线问诊入口"/>
+<img path="@./02-home-package-card.png" width="330" caption="02 首页服务包卡片区：高血压调理计划 ¥699（原价 ¥1299）、高血糖调理计划 ¥899"/>
+<h2>1.2 服务详情页</h2>
+<p>点击「高血压调理计划」卡片进入服务详情，页面自上而下依次为主图与价格区、服务亮点、服务内容清单、服务详情说明、常见问题，底部常驻购买栏。</p>
+<img path="@./03-service-detail-hero.png" width="330" caption="03 详情页主图与价格：¥699 限时省 600 元，4.9 分 · 已服务 2847 人"/>
+<img path="@./04-service-detail-intro.png" width="330" caption="04 服务亮点（5 项核心能力）：指南级危险分层、每日时间线方案、六大类用药答疑等"/>
+<img path="@./05-service-detail-highlights.png" width="330" caption="05 服务亮点续：双周方案迭代、互联网医院调药"/>
+<img path="@./06-service-detail-services.png" width="330" caption="06 服务内容清单：逐项规格与次数"/>
+<img path="@./07-service-detail-detail.png" width="330" caption="07 服务详情说明"/>
+<img path="@./08-service-detail-faq.png" width="330" caption="08 常见问题 FAQ"/>
+<img path="@./09-service-detail-buybar.png" width="330" caption="09 底部购买栏：立即购买"/>

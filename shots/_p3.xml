@@ -1,0 +1,9 @@
+<h1>二、全站其他主要页面</h1>
+<p>Tab 栏与主要二级页面概览，均以移动端 Pixel 7 视口展示。</p>
+<img path="@./20-health.png" width="330" caption="20 我的健康：健康评分 88 分、今日重点建议、上传报告/健康饮食/健康记录等功能入口"/>
+<img path="@./21-mall.png" width="330" caption="21 健康商城"/>
+<img path="@./22-chat.png" width="330" caption="22 健康小助手对话"/>
+<img path="@./23-message.png" width="330" caption="23 消息中心"/>
+<img path="@./24-mine.png" width="330" caption="24 我的页面：个人信息、我的订单、用户协议等入口"/>
+<img path="@./25-mine-profile.png" width="330" caption="25 个人资料"/>
+<img path="@./26-mine-agreement.png" width="330" caption="26 用户协议"/>

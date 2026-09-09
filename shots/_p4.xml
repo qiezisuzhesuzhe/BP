@@ -1,15 +1,15 @@
 <h1>三、设备绑定链路</h1>
 <p>以睡眠监测仪（毫米波雷达款 SM-C03，设备号 867561088869642）为例，展示从空态到绑定成功、再到实时数据详情的完整流程。设备信息经云平台核验后写入本地设备列表。</p>
 <h2>3.1 空态 → 扫码 → 识别</h2>
-<img path="@./27-device-empty.png" width="330" caption="27 我的设备 · 空态：暂无绑定设备，扫描二维码添加"/>
-<img path="@./28-device-scan.png" width="330" caption="28 扫描设备页：模拟扫码识别 / 手动输入设备号"/>
-<img path="@./29-device-manual-input.png" width="330" caption="29 手动输入设备号弹层：输入设备号后点「绑定设备」提交查询"/>
-<img path="@./30-device-recognized.png" width="330" caption="30 识别到设备：睡眠监测仪 - 毫米波雷达款 SM-C03，已通过云平台核验"/>
+<img path="@./27-device-empty.png" width="330" caption="43 我的设备 · 空态：暂无绑定设备，扫描二维码添加"/>
+<img path="@./28-device-scan.png" width="330" caption="44 扫描设备页：模拟扫码识别 / 手动输入设备号"/>
+<img path="@./29-device-manual-input.png" width="330" caption="45 手动输入设备号弹层：输入设备号后点「绑定设备」提交查询"/>
+<img path="@./30-device-recognized.png" width="330" caption="46 识别到设备：睡眠监测仪 - 毫米波雷达款 SM-C03，已通过云平台核验"/>
 <h2>3.2 绑定成功与实时数据</h2>
-<img path="@./31-device-binding.png" width="330" caption="31 确认添加 · 绑定中"/>
-<img path="@./32-device-list.png" width="330" caption="32 我的设备 · 绑定后：睡眠监测仪 - 毫米波雷达款 SM-C03，在线，电量 85%"/>
-<img path="@./33-device-detail.png" width="330" caption="33 设备详情 · 上半部分：心率 76 bpm、呼吸 18 次/分、在床状态、睡眠时长与分期"/>
-<img path="@./34-device-detail-more.png" width="330" caption="34 设备详情 · 下半部分：异常挣扎次数与时间线、数据来源说明"/>
-<img path="@./35-band-status.png" width="330" caption="35 智能手环状态页：实时心率、血氧、体温、血压、心电图等 8 项体征模块"/>
+<img path="@./31-device-binding.png" width="330" caption="47 确认添加 · 绑定中"/>
+<img path="@./32-device-list.png" width="330" caption="48 我的设备 · 绑定后：睡眠监测仪 - 毫米波雷达款 SM-C03，在线，电量 85%"/>
+<img path="@./33-device-detail.png" width="330" caption="49 设备详情 · 上半部分：心率 76 bpm、呼吸 18 次/分、在床状态、睡眠时长与分期"/>
+<img path="@./34-device-detail-more.png" width="330" caption="50 设备详情 · 下半部分：异常挣扎次数与时间线、数据来源说明"/>
+<img path="@./35-band-status.png" width="330" caption="51 智能手环状态页：实时心率、血氧、体温、血压、心电图等 8 项体征模块"/>
 <hr/>
-<p>以上截图均为自动脚本采集，数据来自真实业务链路（支付订单、权益开通、设备绑定均已实际走通），像素为 Pixel 7 移动端视口（412 × 915，DPR 2.625）。</p>
+<p>以上截图均为自动化脚本采集，数据来自真实业务链路（购买支付、首次评估、方案生成、设备绑定均已实际走通），像素为 Pixel 7 移动端视口（412 × 915，DPR 2.625）。其中第一章 35 张为同一会话内连续完成的完整主链路：首页卡片 → 详情页 → 购买 → 模拟首次评估 → 对话中提示已生成方案 → 首页出现时间轴。</p>
